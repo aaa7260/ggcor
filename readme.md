@@ -1,4 +1,6 @@
 # install
-
-if(!require(ggcor))
+```
+if(!require(ggcor)) {
   devtools::install_github("houyunhuang/ggcor")
+  }
+```
