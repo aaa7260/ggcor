@@ -1,27 +1,36 @@
-Package: gghpcc
+Package: ggcor
 Type: Package
-Title: High Performance Combination Charts
-Version: 0.1.0
+Title: Extented tools for correlation analysis and visualization.
+Version: 0.7.3
 Authors@R: c(
-    person("Houyun", "Huang", , "houyunhuang@163.com", c("aut", "cre")),
-    person("Lei", "Zhou", , role = "aut"))
-Description: A simple tools to draw combination charts. Now it just can draw
-    mantel's test plot.
+    person("Houyun", "Huang", email = "houyunhuang@163.com", role = c("aut", "cre")),
+    person("Lei", "Zhou", email = "zhoulei@scau.edu.cn", role = "aut"),
+    person("Jian", "Chen", email = "cafchenjian@163.com", role = "aut"),
+    person("Taiyun", "Wei", email = "weitaiyun@gmail.com", role = "aut"))
+Maintainer: Houyun Huang <houyunhuang@163.com>
+Description: The 'ggcor' package can be used to visualize simply and directly a
+    correlation matrix based on 'ggplot2'. It provides a solution for reordering the 
+    correlation matrix, displaying the different significance level on the plot and 
+    other details. The most important parts, It also provides a graphical display of 
+    any correlation analysis and their combination (such as Mantel test, Partial 
+    correlation analysis, and so on).
 License: GPL-2
-URL: https://github.com/houyunhuang/gghpcc
+URL: https://github.com/houyunhuang/ggcor
+BugReports: https://github.com/houyunhuang/ggcor/issues
 LazyData: TRUE
 Encoding: UTF-8
 Depends:
     R (>= 3.3.0),
-    ggplot2 (>= 3.0.0),
-    ggcorrr
+    ggplot2 (>= 3.0.0)
 Imports:
     stats,
-    grid,
-    dplyr,
-    purrr,
     scales,
-    vegan
+    purrr,
+    dplyr,
+    vegan,
+    ade4,
+    seriation
 Suggests:
-    knitr
+    knitr,
+    latex2expr
 RoxygenNote: 6.1.1
