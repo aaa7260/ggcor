@@ -7,6 +7,13 @@ get_diaglab_data <- function(drop = FALSE) {
     type <- cor_tbl_type(data)
     show.diag <- cor_tbl_showdiag(data)
     yname <- cor_tbl_yname(data)
+    if(inherits(data, "cor_tbl_name")) {
+      data <- purrr::map_df(data, function(x) {
+        if(is.factor(x)) {
+          as.integer(x)
+        } else x
+      })
+    }
     n <- length(yname)
     y <- 1:n
     lab <- yname

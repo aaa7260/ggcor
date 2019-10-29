@@ -94,25 +94,6 @@ new_data_frame <- function(x = list(), n = NULL) {
 }
 
 #' @noRd
-appro_lq <- function(x, y, accur = NULL) {
-  if(is.null(accur)) {
-    digits <- getOption("digits")
-    accur <- 10 ^ (- digits)
-  }
-  ii <- (x < y) | (abs(x - y) < accur)
-  ii
-}
-#' @noRd
-appro_gq <- function(x, y, accur = NULL) {
-  if(is.null(accur)) {
-    digits <- getOption("digits")
-    accur <- 10 ^ (- digits)
-  }
-  ii <- (x > y) | (abs(x - y) < accur)
-  ii
-}
-
-#' @noRd
 format_number <- function(x, digits = 2, nsmall = 2) {
   if(!is.numeric(x))
     stop("`x` must be a numeric vector.", call. = FALSE)

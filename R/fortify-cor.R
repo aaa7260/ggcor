@@ -12,6 +12,7 @@ fortify_cor <- function(
   cluster.type = c("none", "all", "row", "col"),
   cluster.method = "HC",
   cluster.absolute = FALSE,
+  keep.name = FALSE,
   ...   # pass to cor( )
   )
 {
@@ -19,7 +20,6 @@ fortify_cor <- function(
     stop("Need a matrix or data.frame.", call. = FALSE)
   type <- match.arg(type)
   if(inherits(x, "cor_tbl")) {
-    cor_tbl_check(x)
     df <- x
   }
   x <- make_matrix_name(x)
@@ -39,7 +39,7 @@ fortify_cor <- function(
   }
   as_cor_tbl(x = m, type = type, show.diag = show.diag, p = p, low = low,
             upp = upp, cluster.type = cluster.type, cluster.method = cluster.method,
-            absolute = cluster.absolute)
+            absolute = cluster.absolute, keep.name = keep.name)
 }
 
 

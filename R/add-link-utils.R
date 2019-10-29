@@ -17,7 +17,7 @@ handle_link_data <- function(
   type <- cor_tbl_type(y)
   show.diag <- cor_tbl_showdiag(y)
   group.name <- unique(x$x)
-  y <- cor_tbl_namebind(y)
+  y <- cor_tbl_namebind(y, keep.factor = FALSE)
   corrmat_data <- link_corrmat_data(yname = yname,
                                     n.row = length(yname),
                                     n.col = length(xname),

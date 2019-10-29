@@ -10,6 +10,7 @@ as_cor_tbl.matrix <- function(x,
                               low = NULL,
                               upp = NULL,
                               cluster.type = c("none", "all", "row", "col"),
+                              keep.name = FALSE,
                               ...) {
   x <- make_matrix_name(x)
   type <- match.arg(type)
@@ -63,18 +64,28 @@ as_cor_tbl.matrix <- function(x,
     upp <- upp[row_ord, col_ord]
     df$upp <- as.vector(upp)
   }
-  df <- purrr::map_df(df, as.numeric)
+  if(!keep.name) {
+    df <- purrr::map_df(df, function(x) {
+      if(is.factor(x)) {
+        as.integer(x)
+      } else x
+    })
+  }
   if(type == "full")
     show.diag <- TRUE
+  if(keep.name) {
+    class <- c("cor_tbl", "cor_tbl_name", class(df))
+  } else {
+    class <- c("cor_tbl", class(df))
+  }
   out <- structure(
     .Data = df,
     xname = xname,
     yname = yname,
     type = type,
     show.diag = show.diag,
-    class = c("cor_tbl", class(df))
+    class = class
   )
-  cor_tbl_check(out)
   switch (type,
           full = out,
           upper = get_upper_data(out, show.diag = show.diag),
@@ -87,14 +98,15 @@ as_cor_tbl.data.frame <- function(x,
                                   low = NULL,
                                   upp = NULL,
                                   cluster.type = c("none", "all", "row", "col"),
+                                  keep.name = FALSE,
                                   ...) {
   x <- as.matrix(x)
   as_cor_tbl.matrix(x, p = p, low = low, upp = upp,
-                    cluster.type = cluster.type, ...)
+                    cluster.type = cluster.type, keep.name = keep.name, ...)
 }
 
 #' @export
-as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE) {
+as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, keep.name = FALSE, ...) {
   env.name <- unique(x$env)
   spec.name <- unique(x$spec)
   r <- x$r
@@ -102,46 +114,34 @@ as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE) {
   if(byrow) {
     xname <- env.name
     yname <- spec.name
-    xx <- as.integer(factor(x$env, levels = xname))
-    yy <- as.integer(factor(x$spec, levels = rev(yname)))
+    xx <- factor(x$env, levels = xname)
+    yy <- factor(x$spec, levels = rev(yname))
   } else {
     xname <- spec.name
     yname <- env.name
-    xx <- as.integer(factor(x$spec, levels = xname))
-    yy <- as.integer(factor(x$env, levels = rev(yname)))
+    xx <- factor(x$spec, levels = xname)
+    yy <- factor(x$env, levels = rev(yname))
   }
   df <- tibble::tibble(x = xx, y = yy, r = r, p = p)
+  if(!keep.name) {
+    df <- purrr::map_df(df, function(x) {
+      if(is.factor(x)) {
+        as.integer(x)
+      } else x
+    })
+  }
+  if(keep.name) {
+    class <- c("cor_tbl", "cor_tbl_name", class(df))
+  } else {
+    class <- c("cor_tbl", class(df))
+  }
   out <- structure(
     .Data = df,
     xname = xname,
     yname = yname,
     type = "full",
     show.diag = "none",
-    class = c("cor_tbl", class(df))
+    class = class
   )
-  cor_tbl_check(out)
   out
-}
-
-#' @export
-print.cor_tbl <- function(x, nmax = 5, width = 60) {
-  xx <- purrr::map_df(x, function(x) {if(is.numeric(x))
-    format(x, digits = 1, nsmall = 2)})
-  n <- nrow(x)
-  nn <- min(nmax, nrow(x))
-  lapply(0:(nn + 1), function(i) {
-    if(i == 0) cat_line(names(x), collapse = "\t", width = width)
-    if(i == nn + 1 && nn < n) cat("# ... with", n - nn, " more rows\n")
-    if(i > 0 && i < nn + 1) cat_line(xx[i, ], collapse = "\t")
-  })
-  cat("Extra attributes:\n")
-  cat_line(cor_tbl_xname(x), name = "xname:", width = width)
-  cat_line(cor_tbl_yname(x), name = "yname:", width = width)
-  cat_line(cor_tbl_showdiag(x), name = "show.diag:", width = width)
-}
-
-
-#' @noRd
-plot.cor_tbl <- function(x, ...) {
-  ggcor(x, ...) + geom_raster()
 }

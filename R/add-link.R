@@ -105,26 +105,31 @@ add_link.data.frame <- function(x,
 
 #' @export
 add_link.mantel_tbl <- function(x,
-                       on.left = FALSE,
-                       diag.label = FALSE,
-                       r.breaks = c(0.25, 0.5),
-                       r.labels = c("<= 0.25", "0.25 - 0.5", "> 0.5"),
-                       p.breaks = c(0.001, 0.01, 0.05),
-                       p.labels = c("<= 0.001", "0.001 - 0.01", "0.01 - 0.05", "> 0.05"),
-                       link.line.colours = NULL,
-                       link.line.size = c(0.5, 1.5, 4),
-                       legend.title.scale.size = "Mantel's r",
-                       legend.title.scale.colour = "p value",
-                       legend.drop = FALSE,
-                       ...)
+                                mapping = NULL,
+                                on.left = FALSE,
+                                diag.label = FALSE,
+                                r.breaks = c(0.25, 0.5),
+                                r.labels = c("<= 0.25", "0.25 - 0.5", "> 0.5"),
+                                p.breaks = c(0.001, 0.01, 0.05),
+                                p.labels = c("<= 0.001", "0.001 - 0.01", "0.01 - 0.05", "> 0.05"),
+                                link.line.colours = NULL,
+                                link.line.size = c(0.5, 1.5, 4),
+                                legend.title.scale.size = "Mantel's r",
+                                legend.title.scale.colour = "p value",
+                                legend.drop = FALSE,
+                                ...)
 {
   mantel <- rename_mantel(x)
-  mapping <- aes_string(size = "r", colour = "p")
+  if(is.null(mapping)) {
+    mapping <- aes_string(size = "rr", colour = "pp")
+  } else {
+    mapping <- modifyList(aes_string(size = "rr", colour = "pp"), mapping)
+  }
   r.breaks <- unique(sort(c(-1, r.breaks, 1)))
   p.breaks <- unique(sort(c(0, p.breaks, 1)))
-  mantel$r <- cut(mantel$r, breaks = r.breaks, labels = r.labels,
+  mantel$rr <- cut(mantel$r, breaks = r.breaks, labels = r.labels,
                      include.lowest = FALSE)
-  mantel$p <- cut(mantel$p, breaks = p.breaks, labels = p.labels,
+  mantel$pp <- cut(mantel$p, breaks = p.breaks, labels = p.labels,
                      include.lowest = FALSE)
   if(is.null(link.line.colours))
     link.line.colours <- link_colour_pal(length(p.breaks) - 1)
@@ -146,35 +151,38 @@ add_link.mantel_tbl <- function(x,
 
 #' @export
 add_link.cor_tbl <- function(x,
+                             mapping = NULL,
                              on.left = FALSE,
                              diag.label = FALSE,
-                             r.breaks = c(0.25, 0.5),
-                             r.labels = c("<= 0.25", "0.25 - 0.5", "> 0.5"),
-                             p.breaks = c(0.001, 0.01, 0.05),
-                             p.labels = c("<= 0.001", "0.001 - 0.01", "0.01 - 0.05", "> 0.05"),
-                             link.line.colours = NULL,
-                             link.line.size = c(0.5, 1.5, 4),
-                             legend.title.scale.size = "correlation",
-                             legend.title.scale.colour = "p value",
+                             r.breaks = 0,
+                             r.labels = c("<= 0", "> 0"),
+                             p.breaks = 0.05,
+                             p.labels = c("<= 0.05", "> 0.05"),
+                             link.line.colours = c("#E31A1C", "#33A02C"),
+                             link.line.linetype = c("solid", "dashed"),
+                             legend.title.scale.linetype = "p value",
+                             legend.title.scale.colour = "r",
                              legend.drop = FALSE,
                              ...)
 {
   cor_tbl <- cor_tbl_namebind(x)
-  mapping <- aes_string(size = "r", colour = "p")
+  if(is.null(mapping)) {
+    mapping <- aes_string(colour = "rr", linetype = "pp")
+  } else {
+    mapping <- modifyList(aes_string(colour = "rr", linetype = "pp"), mapping)
+  }
   r.breaks <- unique(sort(c(-1, r.breaks, 1)))
   p.breaks <- unique(sort(c(0, p.breaks, 1)))
-  cor_tbl$r <- cut(cor_tbl$r, breaks = r.breaks, labels = r.labels,
-                  include.lowest = FALSE)
-  cor_tbl$p <- cut(cor_tbl$p, breaks = p.breaks, labels = p.labels,
-                  include.lowest = FALSE)
-  if(is.null(link.line.colours))
-    link.line.colours <- link_colour_pal(length(p.breaks) - 1)
+  cor_tbl$rr <- cut(cor_tbl$r, breaks = r.breaks, labels = r.labels,
+                  include.lowest = TRUE)
+  cor_tbl$pp <- cut(cor_tbl$p, breaks = p.breaks, labels = p.labels,
+                  include.lowest = TRUE)
   scale <- list(link.line.colour = scale_colour_manual(drop = legend.drop, values = link.line.colours),
-                link.line.size   = scale_size_manual(drop = legend.drop, values = link.line.size),
+                link.line.linetype   = scale_linetype_manual(drop = legend.drop, values = link.line.linetype),
                 link.line.guide  = guides(
                   colour = guide_legend(title = legend.title.scale.colour,
                                         override.aes = list(size = 2), order = 2),
-                  size = guide_legend(title = legend.title.scale.size,
+                  linetype = guide_legend(title = legend.title.scale.linetype,
                                       override.aes = list(colour = "grey35"), order = 1)))
   link <- add_link.data.frame(x = cor_tbl,
                               mapping = mapping,

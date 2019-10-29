@@ -19,7 +19,7 @@ ggcor <- function(
   legend.position = "auto",
   legend.breaks = NULL,
   legend.labels = NULL,
-  coor.fixed = TRUE,
+  coord.fixed = TRUE,
   xlim = NULL,
   ylim = NULL,
   ...
@@ -37,6 +37,10 @@ ggcor <- function(
     }
   } else {
     data <- x
+  }
+  if(inherits(data, "cor_tbl_name")) {
+    data$x <- as.integer(data$x)
+    data$y <- as.integer(data$y)
   }
   name <- names(data)
   type <- cor_tbl_type(data)
@@ -136,7 +140,7 @@ ggcor <- function(
   if(is.null(ylim)) {
     ylim <- c(0.5, length(yname) + 0.5)
   }
-  if(coor.fixed) {
+  if(coord.fixed) {
     p <- p + coord_fixed(expand = FALSE, xlim = xlim, ylim = ylim)
   } else {
     p <- p + coord_cartesian(expand = FALSE, xlim = xlim, ylim = ylim)
