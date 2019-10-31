@@ -1,6 +1,6 @@
 Package: ggcor
 Type: Package
-Title: Extented tools for correlation analysis and visualization.
+Title: Extended tools for correlation analysis and visualization.
 Version: 0.7.6
 Authors@R: c(
     person("Houyun", "Huang", email = "houyunhuang@163.com", role = c("aut", "cre")),
