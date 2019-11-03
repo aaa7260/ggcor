@@ -1,4 +1,26 @@
-#' @noRd
+#' Significance Test for Correlattion.
+#' @description Significance test which produces p-values and confidence intervals for
+#'     each pair of input features.
+#' @param x a matrix object.
+#' @param y a matrix object or NULL.
+#' @param alternative indicates the alternative hypothesis and must be one of "two.sided",
+#'     "greater" or "less".
+#' @param method a character string indicating which correlation coefficient is to be used
+#'     for the test. One of "pearson", "kendall", or "spearman".
+#' @param ... extra params passing to `cor.test()`.
+#' @details The columns of 'x' will be tested for each pair when y is NULL(the default),
+#'     otherwise each column in 'x' and each column in 'y' is tested for each pair.
+#' @return a list with P values matrix, upper of confidence intervals matrix and lower of
+#'     confidence intervals matrix.
+#' @importFrom stats cor.test
+#' @export
+#' @examples
+#' cor_test(mtcars)
+#' m1 <- matrix(rnorm(100), nrow = 10)
+#' m2 <- matrix(rnorm(60), nrow = 10)
+#' cor_test(m1, m2)
+#' @seealso \code{\link[stats]{cor.test}}.
+#' @author Houyun Huang
 cor_test <- function(x,
                      y = NULL,
                      alternative = "two.sided",

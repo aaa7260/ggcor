@@ -1,8 +1,42 @@
+#' Coerce to a cor_tbl object.
+#' @description Functions to coerce a object to cor_tbl if possible.
+#' @param x Any \code{R} object.
+#' @param type A string, "full" (default), "upper" or "lower", display full
+#'     matrix, lower triangular or upper triangular matrix.
+#' @param show.diag A logical value indicating whether keep the diagonal.
+#' @param p Matrix of p value.
+#' @param low Matrix of the lower bound of confidence interval.
+#' @param upp Matrix of the upper bound of confidence interval.
+#' @param cluster.type A string, the ordering type of the correlation matrix.
+#'     \itemize{
+#'   \item{\code{"none"} for original order (default).}
+#'   \item{\code{"all"} for reordering rows and columns at the same time.}
+#'   \item{\code{"row"} for reordering rows, just supports the symmetry correlation matrix.}
+#'   \item{\code{"col"} for reordering columns, just supports the symmetry correlation matrix.}
+#' }
+#' @param keep.name A logical value indicating whether keep the x/y column name.
+#' @param ... Extra params, see Details.
+#' @details The method of coerce a \code{matrix} object to a cor_tbl object is the
+#'     fundamental function. In the earth, other methods is call the \code{as_cor_tbl.matrix}
+#'     coerce to cor_tbl except \code{as_cor_tbl.mantel_tbl}.
+#'     For \code{as_cor_tbl.matrix}, \code{...} params pass to \code{\link[ggcor]{matrix_order}},
+#'     and for \code{as_cor_tbl.data.frame}, \code{...} params pass to \code{as_cor_tbl.matrix}.
+#' @return A cor_tbl object.
+#' @rdname as-cor-tbl
 #' @export
+#' @examples
+#' corr <- cor(mtcars)
+#' as_cor_tbl(corr)
+#' @author Houyun Huang
+#' @author Lei Zhou
+#' @author Jian Chen
+#' @author Taiyun Wei
 as_cor_tbl <- function(x, ...) {
   UseMethod("as_cor_tbl")
 }
+#' @rdname  as-cor-tbl
 #' @export
+#' @method as_cor_tbl matrix
 as_cor_tbl.matrix <- function(x,
                               type = c("full", "upper", "lower"),
                               show.diag = TRUE,
@@ -92,7 +126,9 @@ as_cor_tbl.matrix <- function(x,
           lower = get_lower_data(out, show.diag = show.diag)
   )
 }
+#' @rdname  as-cor-tbl
 #' @export
+#' @method as_cor_tbl data.frame
 as_cor_tbl.data.frame <- function(x,
                                   p = NULL,
                                   low = NULL,
@@ -105,7 +141,9 @@ as_cor_tbl.data.frame <- function(x,
                     cluster.type = cluster.type, keep.name = keep.name, ...)
 }
 
+#' @rdname  as-cor-tbl
 #' @export
+#' @method as_cor_tbl mantel_tbl
 as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, keep.name = FALSE, ...) {
   env.name <- unique(x$env)
   spec.name <- unique(x$spec)
@@ -145,3 +183,11 @@ as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, keep.name = FALSE, ...) {
   )
   out
 }
+
+#' @rdname as-cor-tbl
+#' @export
+#' @method as_cor_tbl default
+as_cor_tbl.default <- function(x, ...) {
+  stop(class(x), " hasn't been realized yet.", call. = FALSE)
+}
+

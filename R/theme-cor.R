@@ -1,3 +1,14 @@
+#' Create the default ggcor theme
+#' @details The theme_cor, with no axis title, no background, no grid,
+#'     made some adjustments to the x-axis label.
+#' @param legend.position the position of legends ("none", "left", "right",
+#'     "bottom", "top", or two-element numeric vector).
+#' @param ... extra params passing to \code{\link[ggplot2]{theme}}.
+#' @return The theme.
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_rect
 #' @export
 theme_cor <- function(legend.position = "right",
                       ...)
@@ -14,45 +25,4 @@ theme_cor <- function(legend.position = "right",
     ...
   )
 }
-
-#' @export
-remove_axis <- function(index = c("all", "x", "y")) {
-  index <- match.arg(index)
-  thm_mv_x <- ggplot2::theme(
-    axis.title.x = element_blank(),
-    axis.title.x.top = element_blank(),
-    axis.title.x.bottom = element_blank(),
-    axis.text.x = element_blank(),
-    axis.text.x.top = element_blank(),
-    axis.text.x.bottom = element_blank(),
-    axis.ticks.x = element_blank(),
-    axis.ticks.x.top = element_blank(),
-    axis.ticks.x.bottom = element_blank(),
-    axis.line.x = element_blank(),
-    axis.line.x.top = element_blank(),
-    axis.line.x.bottom = element_blank()
-  )
-  thm_mv_y <- ggplot2::theme(
-    axis.title.y = element_blank(),
-    axis.title.y.left = element_blank(),
-    axis.title.y.right = element_blank(),
-    axis.text.y = element_blank(),
-    axis.text.y.left = element_blank(),
-    axis.text.y.right = element_blank(),
-    axis.ticks.y = element_blank(),
-    axis.ticks.y.left = element_blank(),
-    axis.ticks.y.right = element_blank(),
-    axis.line.y = element_blank(),
-    axis.line.y.left = element_blank(),
-    axis.line.y.right = element_blank()
-  )
-  if(index == "all") {
-    thm_mv_x + thm_mv_y
-  } else if (index == "x"){
-    thm_mv_x
-  } else {
-    thm_mv_y
-  }
-}
-
 

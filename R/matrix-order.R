@@ -1,4 +1,19 @@
-#' @export
+#' Reorder Matrices
+#' @description  Tries to find an linear order for matrix by different cluster methods.
+#' @param x a matrix object.
+#' @param cluster.type a character string with the name of reorder type.
+#' @param cluster.method a character string with the name of the seriation method.
+#' @param absolute logical, if TRUE will transform x using abs().
+#' @param ... extra params passing to \code{\link[seriation]{seriate}}.
+#' @details All cluster methods in \code{\link[seriation]{seriate}} are supported，and the
+#'     default cluster method is "HC". other methods please see `?seriation::seriate`.
+#' @return a list of two numeric vector. The 'row_ord' is the order of rows, and
+#'     the 'col_ord' is the order of columns.
+#' @examples
+#' m <- matrix(rnorm(20), nrow = 4)
+#' matrix_order(m, cluster.type = "all")
+#' @seealso \code{\link[seriation]{seriate}}.
+#' @author Houyun Huang
 matrix_order <- function(x,
                          cluster.type   = c("none", "all", "row", "col"),
                          cluster.method = "HC",
