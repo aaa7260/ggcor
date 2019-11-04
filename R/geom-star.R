@@ -33,6 +33,8 @@ GeomStar <- ggproto(
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre", r0 = 0.48) {
     aesthetics <- setdiff(names(data), c("x", "y"))
     star <- lapply(split(data, seq_len(nrow(data))), function(row) {
+      if(row$n <= 2)
+        return(grid::nullGrob())
       dd <- point_to_star(row$x, row$y, row$n, row$r, r0, row$ratio)
       aes <- new_data_frame(row[aesthetics])[rep(1, 2 * row$n + 1), ]
       GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
