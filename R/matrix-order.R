@@ -14,6 +14,10 @@
 #' matrix_order(m, cluster.type = "all")
 #' @seealso \code{\link[seriation]{seriate}}.
 #' @author Houyun Huang
+#' @author Lei Zhou
+#' @author Jian Chen
+#' @author Taiyun Wei
+#' @export
 matrix_order <- function(x,
                          cluster.type   = c("none", "all", "row", "col"),
                          cluster.method = "HC",

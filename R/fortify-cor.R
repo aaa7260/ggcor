@@ -37,7 +37,7 @@ fortify_cor <- function(
       upp <- NULL
     }
   }
-  as_cor_tbl(x = m, type = type, show.diag = show.diag, p = p, low = low,
+  as_cor_tbl(corr = m, type = type, show.diag = show.diag, p = p, low = low,
             upp = upp, cluster.type = cluster.type, cluster.method = cluster.method,
             absolute = cluster.absolute, keep.name = keep.name)
 }

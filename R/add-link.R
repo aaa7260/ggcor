@@ -15,8 +15,11 @@ add_link.data.frame <- function(x,
                              ...)
 {
   link_fun <- function(corr) {
-    if(!inherits(corr, "cor_tbl"))
-      stop("'corr' need a cor_tbl.", call. = FALSE)
+    if(!is_cor_tbl(corr)) {
+      warning("'corr' need a cor_tbl.", call. = FALSE)
+      return()
+    }
+
     type <- cor_tbl_type(corr)
     show.diag <- cor_tbl_showdiag(corr)
     n <- length(cor_tbl_xname(corr))
@@ -109,11 +112,11 @@ add_link.mantel_tbl <- function(x,
                                 on.left = FALSE,
                                 diag.label = FALSE,
                                 r.breaks = c(0.25, 0.5),
-                                r.labels = c("<= 0.25", "0.25 - 0.5", "> 0.5"),
+                                r.labels = c("< 0.25", "< 0.5", ">= 0.5"),
                                 p.breaks = c(0.001, 0.01, 0.05),
-                                p.labels = c("<= 0.001", "0.001 - 0.01", "0.01 - 0.05", "> 0.05"),
+                                p.labels = c("< 0.001", "< 0.01", "< 0.05", ">= 0.05"),
                                 link.line.colours = NULL,
-                                link.line.size = c(0.5, 1.5, 4),
+                                link.line.size = c(0.3, 1.5, 4),
                                 legend.title.scale.size = "Mantel's r",
                                 legend.title.scale.colour = "p value",
                                 legend.drop = FALSE,
@@ -128,9 +131,9 @@ add_link.mantel_tbl <- function(x,
   r.breaks <- unique(sort(c(-1, r.breaks, 1)))
   p.breaks <- unique(sort(c(0, p.breaks, 1)))
   mantel$rr <- cut(mantel$r, breaks = r.breaks, labels = r.labels,
-                     include.lowest = FALSE)
+                     include.lowest = FALSE, right = FALSE)
   mantel$pp <- cut(mantel$p, breaks = p.breaks, labels = p.labels,
-                     include.lowest = FALSE)
+                     include.lowest = FALSE, right = FALSE)
   if(is.null(link.line.colours))
     link.line.colours <- link_colour_pal(length(p.breaks) - 1)
   scale <- list(link.line.colour = scale_colour_manual(drop = legend.drop, values = link.line.colours),
@@ -150,14 +153,14 @@ add_link.mantel_tbl <- function(x,
 
 
 #' @export
-add_link.cor_tbl <- function(x,
+add_link.cor_tbl_fct <- function(x,
                              mapping = NULL,
                              on.left = FALSE,
                              diag.label = FALSE,
                              r.breaks = 0,
-                             r.labels = c("<= 0", "> 0"),
+                             r.labels = c("< 0", ">= 0"),
                              p.breaks = 0.05,
-                             p.labels = c("<= 0.05", "> 0.05"),
+                             p.labels = c("< 0.05", ">= 0.05"),
                              link.line.colours = c("#E31A1C", "#33A02C"),
                              link.line.linetype = c("solid", "dashed"),
                              legend.title.scale.linetype = "p value",
@@ -165,7 +168,6 @@ add_link.cor_tbl <- function(x,
                              legend.drop = FALSE,
                              ...)
 {
-  cor_tbl <- cor_tbl_namebind(x)
   if(is.null(mapping)) {
     mapping <- aes_string(colour = "rr", linetype = "pp")
   } else {
@@ -173,10 +175,10 @@ add_link.cor_tbl <- function(x,
   }
   r.breaks <- unique(sort(c(-1, r.breaks, 1)))
   p.breaks <- unique(sort(c(0, p.breaks, 1)))
-  cor_tbl$rr <- cut(cor_tbl$r, breaks = r.breaks, labels = r.labels,
-                  include.lowest = TRUE)
-  cor_tbl$pp <- cut(cor_tbl$p, breaks = p.breaks, labels = p.labels,
-                  include.lowest = TRUE)
+  x$rr <- cut(x$r, breaks = r.breaks, labels = r.labels,
+                  include.lowest = TRUE, right = FALSE)
+  x$pp <- cut(x$p, breaks = p.breaks, labels = p.labels,
+                  include.lowest = TRUE, right = FALSE)
   scale <- list(link.line.colour = scale_colour_manual(drop = legend.drop, values = link.line.colours),
                 link.line.linetype   = scale_linetype_manual(drop = legend.drop, values = link.line.linetype),
                 link.line.guide  = guides(
@@ -184,7 +186,7 @@ add_link.cor_tbl <- function(x,
                                         override.aes = list(size = 2), order = 2),
                   linetype = guide_legend(title = legend.title.scale.linetype,
                                       override.aes = list(colour = "grey35"), order = 1)))
-  link <- add_link.data.frame(x = cor_tbl,
+  link <- add_link.data.frame(x = x,
                               mapping = mapping,
                               on.left = on.left,
                               diag.label = diag.label,
@@ -192,6 +194,11 @@ add_link.cor_tbl <- function(x,
   list(link, scale)
 }
 
+#' @export
+add_link.cor_tbl <- function(x, ...) {
+  x <- as_cor_tbl_fct(x)
+  add_link.cor_tbl_fct(x, ...)
+}
 #' @export
 add_link.default <- function(x, ...) {
   stop(class(x), " hasn't been realized yet.", call. = FALSE)

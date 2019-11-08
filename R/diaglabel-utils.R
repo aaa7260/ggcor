@@ -1,19 +1,17 @@
-#' @export
+#' @noRd
 get_diaglab_data <- function(drop = FALSE) {
   function(data) {
-    if(!inherits(data, "cor_tbl"))
-      stop("Need a cor_tbl.", call. = FALSE)
-    stopifnot(is_symmet(data))
+    if(!is_cor_tbl(data)) {
+      warning("'add_diaglab()' just supports for cor_tbl.", call. = FALSE)
+      return(data.frame(x = numeric(0), y = numeric(0), label = character(0)))
+    }
+    if(!is_symmet(data)) {
+      warning("'add_diaglab()' just supports for symmetrical correlation matrxi.", call. = FALSE)
+      return(data.frame(x = numeric(0), y = numeric(0), label = character(0)))
+    }
     type <- cor_tbl_type(data)
     show.diag <- cor_tbl_showdiag(data)
     yname <- cor_tbl_yname(data)
-    if(inherits(data, "cor_tbl_name")) {
-      data <- purrr::map_df(data, function(x) {
-        if(is.factor(x)) {
-          as.integer(x)
-        } else x
-      })
-    }
     n <- length(yname)
     y <- 1:n
     lab <- yname

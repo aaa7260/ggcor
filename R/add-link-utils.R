@@ -10,14 +10,15 @@ handle_link_data <- function(
   on.left = FALSE,
   diag.label = FALSE)
 {
-  if(!inherits(y, "cor_tbl"))
+  if(!is_cor_tbl(y))
     stop("'y' need a cor_tbl.", call. = FALSE)
   xname <- cor_tbl_xname(y)
   yname <- cor_tbl_yname(y)
   type <- cor_tbl_type(y)
   show.diag <- cor_tbl_showdiag(y)
+  y$x <- xname[corr$x]
+  y$y <- yname[corr$y]
   group.name <- unique(x$x)
-  y <- cor_tbl_namebind(y, keep.factor = FALSE)
   corrmat_data <- link_corrmat_data(yname = yname,
                                     n.row = length(yname),
                                     n.col = length(xname),
@@ -166,12 +167,12 @@ rename_mantel <- function(mantel) {
 #' @noRd
 link_colour_pal <- function(n)
 {
-  stopifnot(n <= 7)
-  colors <- c("#7A0177", "#D95F02", "#1B9E77", "#7570B3",
+  stopifnot(n <= 6)
+  colors <- c("#D95F02", "#1B9E77", "#7570B3",
               "#E7298A", "#A6761D", "#CCCCCC")
   if(n == 1)
     return(colors[1])
-  col <- c(colors[1:(n - 1)], colors[7])
+  col <- c(colors[1:(n - 1)], colors[6])
   col
 
 }

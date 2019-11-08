@@ -92,6 +92,11 @@ mantel_test <- function(spec.list,
   out
 }
 
+#' @export
+is_mantel_tbl <- function(x) {
+  inherits(x, "mantel_tbl")
+}
+
 #' @noRd
 handle_mantel_data <- function(spec, # df
                                env, # df

@@ -13,7 +13,6 @@
 #' @return a list with P values matrix, upper of confidence intervals matrix and lower of
 #'     confidence intervals matrix.
 #' @importFrom stats cor.test
-#' @export
 #' @examples
 #' cor_test(mtcars)
 #' m1 <- matrix(rnorm(100), nrow = 10)
@@ -21,6 +20,10 @@
 #' cor_test(m1, m2)
 #' @seealso \code{\link[stats]{cor.test}}.
 #' @author Houyun Huang
+#' @author Lei Zhou
+#' @author Jian Chen
+#' @author Taiyun Wei
+#' @export
 cor_test <- function(x,
                      y = NULL,
                      alternative = "two.sided",

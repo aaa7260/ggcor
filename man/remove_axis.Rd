@@ -13,6 +13,15 @@ remove_axis(index = c("all", "x", "y"))
 The theme.
 }
 \description{
-A simple wrapper of the `theme()` function to quickly 
+A simple wrapper of the `theme()` function to quickly
     remove axis elements.
+}
+\author{
+Houyun Huang
+
+Lei Zhou
+
+Jian Chen
+
+Taiyun Wei
 }

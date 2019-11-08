@@ -1,14 +1,14 @@
 #' @export
 get_lower_data <- function(x, show.diag = TRUE)
 {
-  if(!inherits(x, "cor_tbl"))
-    x <- as_cor_tbl(x)
+  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
   if(!is_symmet(x)) {
-    stop("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    return(x)
   }
-  if(inherits(x, "cor_tbl_name")) {
+  if(is_cor_tbl_fct(x)) {
     xx <- as.integer(x$x)
-    yy = as.integer(x$y)
+    yy <- as.integer(x$y)
   } else {
     xx <- x$x
     yy <- x$y
@@ -26,14 +26,14 @@ get_lower_data <- function(x, show.diag = TRUE)
 #' @export
 get_upper_data <- function(x, show.diag = TRUE)
 {
-  if(!inherits(x, "cor_tbl"))
-    x <- as_cor_tbl(x)
+  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
   if(!is_symmet(x)) {
-    stop("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    return(x)
   }
-  if(inherits(x, "cor_tbl_name")) {
+  if(is_cor_tbl_fct(x)) {
     xx <- as.integer(x$x)
-    yy = as.integer(x$y)
+    yy <- as.integer(x$y)
   } else {
     xx <- x$x
     yy <- x$y
@@ -52,14 +52,14 @@ get_upper_data <- function(x, show.diag = TRUE)
 #' @export
 get_diag_tri <- function(x)
 {
-  if(!inherits(x, "cor_tbl"))
-    x <- as_cor_tbl(x)
+  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
   if(!is_symmet(x)) {
-    stop("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    return(x)
   }
-  if(inherits(x, "cor_tbl_name")) {
+  if(is_cor_tbl_fct(x)) {
     xx <- as.integer(x$x)
-    yy = as.integer(x$y)
+    yy <- as.integer(x$y)
   } else {
     xx <- x$x
     yy <- x$y
@@ -74,14 +74,14 @@ get_diag_tri <- function(x)
 #' @export
 get_diag_data <- function(x)
 {
-  if(!inherits(x, "cor_tbl"))
-    x <- as_cor_tbl(x)
+  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
   if(!is_symmet(x)) {
-    stop("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    return(x)
   }
-  if(inherits(x, "cor_tbl_name")) {
+  if(is_cor_tbl_fct(x)) {
     xx <- as.integer(x$x)
-    yy = as.integer(x$y)
+    yy <- as.integer(x$y)
   } else {
     xx <- x$x
     yy <- x$y
@@ -107,29 +107,51 @@ get_data <- function(..., type = "full", show.diag = TRUE)
 
 #' @noRd
 get_grid_data <- function(x) {
-  if(!inherits(x, "cor_tbl"))
-    stop("Need a cor_tbl.", call. = FALSE)
+  if(!is_cor_tbl(x) && !is_cor_tbl_fct(x))
+    stop("Need a cor_tbl or cor_tbl_fct.", call. = FALSE)
   n <- length(cor_tbl_xname(x))
   m <- length(cor_tbl_yname(x))
   type <- cor_tbl_type(x)
   show.diag <- cor_tbl_showdiag(x)
   dd <- expand.grid(1:n, 1:m)
   names(dd) <- c("x", "y")
-  if(type == "full") {
-    dd <- dd
-  } else if(type == "upper") {
-    idx <- if(show.diag) dd$x + dd$y >= n + 1 else dd$x + dd$y > n + 1
-    dd <- dd[idx, ]
+  if(is_cor_tbl(x)) {
+    if(type == "upper") {
+      idx <- if(show.diag) dd$x + dd$y >= n + 1 else dd$x + dd$y > n + 1
+      dd <- dd[idx, , drop = FALSE]
+    }
+    if(type == "lower"){
+      idx <- if(show.diag) dd$x + dd$y <= n + 1 else dd$x + dd$y < n + 1
+      dd <- dd[idx, , drop = FALSE]
+    }
   } else {
-    idx <- if(show.diag) dd$x + dd$y <= n + 1 else dd$x + dd$y < n + 1
-    dd <- dd[idx, ]
+      if(type == "upper") {
+        idx <- if(show.diag) {
+          dd$x + dd$y < n + 1
+        } else {
+          dd <- expand.grid(1:(n - 1), 1:(m -1))
+          names(dd) <- c("x", "y")
+          dd$x + dd$y <= n - 1
+        }
+        dd <- dd[idx, , drop = FALSE]
+      }
+    if(type == "lower") {
+        idx <- if(show.diag) {
+          dd$x + dd$y >= n + 2
+        } else {
+          dd <- expand.grid(1:(n - 1), 1:(m -1))
+          names(dd) <- c("x", "y")
+          dd$x + dd$y >= n + 1
+        }
+        dd <- dd[idx, , drop = FALSE]
+    }
   }
   dd
 }
 
 #' @noRd
 is_symmet <- function(x) {
-  stopifnot(inherits(x, "cor_tbl"))
+  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
   xname <- cor_tbl_xname(x)
   yname <- cor_tbl_yname(x)
   if((length(xname) != length(yname)) || !all(xname == rev(yname))) {

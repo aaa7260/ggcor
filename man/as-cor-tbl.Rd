@@ -4,28 +4,33 @@
 \alias{as_cor_tbl}
 \alias{as_cor_tbl.matrix}
 \alias{as_cor_tbl.data.frame}
+\alias{as_cor_tbl.rcorr}
+\alias{as_cor_tbl.cor_tbl_fct}
 \alias{as_cor_tbl.mantel_tbl}
 \alias{as_cor_tbl.default}
 \title{Coerce to a cor_tbl object.}
 \usage{
-as_cor_tbl(x, ...)
+as_cor_tbl(corr, ...)
 
-\method{as_cor_tbl}{matrix}(x, type = c("full", "upper", "lower"),
+\method{as_cor_tbl}{matrix}(corr, type = c("full", "upper", "lower"),
   show.diag = TRUE, p = NULL, low = NULL, upp = NULL,
   cluster.type = c("none", "all", "row", "col"), keep.name = FALSE,
   ...)
 
-\method{as_cor_tbl}{data.frame}(x, p = NULL, low = NULL, upp = NULL,
-  cluster.type = c("none", "all", "row", "col"), keep.name = FALSE,
-  ...)
+\method{as_cor_tbl}{data.frame}(corr, p = NULL, low = NULL,
+  upp = NULL, cluster.type = c("none", "all", "row", "col"),
+  keep.name = FALSE, ...)
 
-\method{as_cor_tbl}{mantel_tbl}(x, byrow = TRUE, keep.name = FALSE,
-  ...)
+\method{as_cor_tbl}{rcorr}(corr, fill.diag.p = 0, ...)
 
-\method{as_cor_tbl}{default}(x, ...)
+\method{as_cor_tbl}{cor_tbl_fct}(corr, ...)
+
+\method{as_cor_tbl}{mantel_tbl}(corr, byrow = TRUE, ...)
+
+\method{as_cor_tbl}{default}(corr, ...)
 }
 \arguments{
-\item{x}{Any \code{R} object.}
+\item{corr}{Any \code{R} object.}
 
 \item{...}{Extra params, see Details.}
 

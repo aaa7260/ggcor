@@ -43,4 +43,10 @@ cor_test(m1, m2)
 }
 \author{
 Houyun Huang
+
+Lei Zhou
+
+Jian Chen
+
+Taiyun Wei
 }

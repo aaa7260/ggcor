@@ -38,4 +38,10 @@ matrix_order(m, cluster.type = "all")
 }
 \author{
 Houyun Huang
+
+Lei Zhou
+
+Jian Chen
+
+Taiyun Wei
 }
