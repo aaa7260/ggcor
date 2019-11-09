@@ -16,8 +16,9 @@ ggcor <- function(
 {
 
   # handle data
-  if(!is_cor_tbl(x) && !is_cor_tbl_fct(x) && !is_mantel_tbl(x)) {
-    data <- fortify_cor(x = x,
+  if(!is_cor_tbl(x) && !is_cor_tbl_fct(x) && !is_mantel_tbl(x)
+     && !inherits(x, "rcorr")) {
+    x <- fortify_cor(x = x,
                         y = y,
                         type = type,
                         show.diag = show.diag,
@@ -28,9 +29,7 @@ ggcor <- function(
                         cluster.method = cluster.method,
                         cluster.absolute = cluster.absolute,
                         keep.name = keep.name)
-  } else {
-    data <- x
   }
-  ggcor_(data, keep.name = keep.name, ...)
+  ggcor_(x, keep.name = keep.name, ...)
 }
 

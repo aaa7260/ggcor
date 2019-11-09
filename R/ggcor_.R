@@ -263,6 +263,16 @@ ggcor_.mantel_tbl <- function(x, byrow = TRUE, keep.name = FALSE,
 }
 
 #' @export
+ggcor_.rcorr <- function(x, keep.name = FALSE, legend.title = "corr", ...) {
+  if(keep.name) {
+    x <- as_cor_tbl_fct(x)
+  } else {
+    x <- as_cor_tbl(x)
+  }
+  ggcor_(x, legend.title = legend.title, ...)
+}
+
+#' @export
 ggcor_.default <- function(x, ...) {
   stop(class(x), " hasn't been realized yet.", call. = FALSE)
 }

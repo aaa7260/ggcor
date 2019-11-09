@@ -16,6 +16,8 @@ handle_link_data <- function(
   yname <- cor_tbl_yname(y)
   type <- cor_tbl_type(y)
   show.diag <- cor_tbl_showdiag(y)
+  x$x <- as.character(x$x)
+  x$y <- as.character(x$y)
   y$x <- xname[corr$x]
   y$y <- yname[corr$y]
   group.name <- unique(x$x)
