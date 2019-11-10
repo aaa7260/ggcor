@@ -43,12 +43,18 @@ as_cor_tbl.matrix <- function(corr,
                               p = NULL,
                               low = NULL,
                               upp = NULL,
+                              row.names = NULL,
+                              col.names = NULL,
                               cluster.type = c("none", "all", "row", "col"),
                               keep.name = FALSE,
                               ...) {
-  corr <- make_matrix_name(corr)
   type <- match.arg(type)
   cluster.type <- match.arg(cluster.type)
+  if(!is.null(row.names))
+    rownames(corr) <- row.names
+  if(!is.null(col.names))
+    rownames(corr) <- col.names
+  corr <- make_matrix_name(corr)
   if(!is.null(p)) {
     if(!is.matrix(p))
       p <- as.matrix(p)

@@ -2,7 +2,7 @@
 get_diaglab_data <- function(drop = FALSE) {
   function(data) {
     if(!is_cor_tbl(data)) {
-      warning("'add_diaglab()' just supports for cor_tbl.", call. = FALSE)
+      warning("Need a cor_tbl.", call. = FALSE)
       return(data.frame(x = numeric(0), y = numeric(0), label = character(0)))
     }
     if(!is_symmet(data)) {
