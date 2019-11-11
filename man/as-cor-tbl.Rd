@@ -5,6 +5,7 @@
 \alias{as_cor_tbl.matrix}
 \alias{as_cor_tbl.data.frame}
 \alias{as_cor_tbl.rcorr}
+\alias{as_cor_tbl.corr.test}
 \alias{as_cor_tbl.cor_tbl_fct}
 \alias{as_cor_tbl.mantel_tbl}
 \alias{as_cor_tbl.default}
@@ -14,14 +15,16 @@ as_cor_tbl(corr, ...)
 
 \method{as_cor_tbl}{matrix}(corr, type = c("full", "upper", "lower"),
   show.diag = TRUE, p = NULL, low = NULL, upp = NULL,
-  cluster.type = c("none", "all", "row", "col"), keep.name = FALSE,
-  ...)
+  row.names = NULL, col.names = NULL, cluster.type = c("none", "all",
+  "row", "col"), keep.name = FALSE, ...)
 
 \method{as_cor_tbl}{data.frame}(corr, p = NULL, low = NULL,
   upp = NULL, cluster.type = c("none", "all", "row", "col"),
   keep.name = FALSE, ...)
 
 \method{as_cor_tbl}{rcorr}(corr, fill.diag.p = 0, ...)
+
+\method{as_cor_tbl}{corr.test}(corr, ...)
 
 \method{as_cor_tbl}{cor_tbl_fct}(corr, ...)
 

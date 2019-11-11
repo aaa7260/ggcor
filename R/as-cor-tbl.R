@@ -162,6 +162,13 @@ as_cor_tbl.rcorr <- function(corr, fill.diag.p = 0, ...)
   df
 }
 
+#' @rdname  as-cor-tbl
+#' @export
+#' @method as_cor_tbl corr.test
+as_cor_tbl.corr.test <- function(corr, ...)
+{
+  df <- as_cor_tbl.matrix(corr$r, p = corr$p, keep.name = FALSE, ...)
+}
 
 #' @rdname  as-cor-tbl
 #' @export
@@ -235,6 +242,12 @@ as_cor_tbl_fct.rcorr <- function(corr, fill.diag.p = 0, ...)
   }
   df <- as_cor_tbl.matrix(corr$r, p = p, keep.name = TRUE, ...)
   df
+}
+
+#' @export
+as_cor_tbl_fct.corr.test <- function(corr, ...)
+{
+  df <- as_cor_tbl.matrix(corr$r, p = corr$p, keep.name = TRUE, ...)
 }
 
 #' @export
