@@ -151,17 +151,17 @@ handle_mantel_data <- function(spec, # df
   env.name <- names(env)
   n <- length(spec)
   m <- if(is.pair) env.col else length(env)
-  spec <- rep(spec, m)
-  names(spec) <- rep(spec.name, m)
+  spec <- rep(spec, each = m)
+  names(spec) <- rep(spec.name, each = m)
   if(is.pair) {
     env <- flatten_list(env)
-    names(env) <- rep(env.colname, each = n)
+    names(env) <- rep(env.colname, n)
   } else {
     env <- rep(env, each = n)
-    names(env) <- rep(env.name, each = n)
+    names(env) <- rep(env.name, n)
   }
   if(mantel.fun == "mantel.partial") {
-    env.ctrl <- rep(env.ctrl, each = n)
+    env.ctrl <- rep(env.ctrl, n)
   }
   list(spec = spec, env = env, env.ctrl = env.ctrl)
 }
