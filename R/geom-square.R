@@ -1,8 +1,7 @@
-#' Square based on center and radius
+#' Square Geom
 #'
 #'
 #' @eval rd_aesthetics("geom", "square")
-#' @param r0 the radius of circle, defualt value is 0.48.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
 #' @rdname geom_square
@@ -43,30 +42,29 @@ geom_square <- function(mapping = NULL, data = NULL,
 #' @export
 GeomSquare <- ggproto(
   "GeomSquare", Geom,
-  default_aes = aes(colour = "grey35", fill = NA, size = 0.25, linetype = 1,
+  default_aes = aes(r = 0.25, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
-  required_aes = c("x", "y", "r"),
-  draw_panel = function(self, data, panel_params, coord, r0 = 0.48, linejoin = "mitre") {
-    aesthetics <- setdiff(names(data), c("x", "y", "r"))
+  required_aes = c("x", "y"),
+  draw_panel = function(self, data, panel_params, coord, linejoin = "mitre") {
+    aesthetics <- setdiff(names(data), c("x", "y"))
     polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      square <- point_to_square(row$x, row$y, row$r, r0)
+      square <- point_to_square(row$x, row$y, row$r)
       aes <- new_data_frame(row[aesthetics])[rep(1, 5), ]
       GeomPolygon$draw_panel(cbind(square, aes), panel_params, coord)
     })
 
-    ggplot2:::ggname("square", do.call("grobTree", polys))
+    ggplot2:::ggname("geom_square", do.call("grobTree", polys))
   },
 
-  draw_key = draw_key_polygon
+  draw_key = draw_key_square
 )
 
 #' @noRd
-point_to_square <- function(x, y, r, r0 = 0.48) {
-  rr <- r0 * sqrt(abs(r))
-  xmin <- - rr + x
-  xmax <- rr + x
-  ymin <- - rr + y
-  ymax <- rr + y
+point_to_square <- function(x, y, r) {
+  xmin <- - r + x
+  xmax <- r + x
+  ymin <- - r + y
+  ymax <- r + y
   new_data_frame(list(
     y = c(ymax, ymax, ymin, ymin, ymax),
     x = c(xmin, xmax, xmax, xmin, xmin)
