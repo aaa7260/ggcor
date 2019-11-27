@@ -1,4 +1,15 @@
 #' @export
+draw_key_circle <- function(data, params, size) {
+  grid::circleGrob(0.5, 0.5, r = data$r %||% 0.5,
+                   gp = gpar(
+                     col = alpha(data$colour %||% "grey50", data$alpha),
+                     fill = alpha(data$fill %||% NA, data$alpha),
+                     lty = data$linetype %||% 1,
+                     lwd = (data$size %||% 0.5) * .pt
+                   ))
+}
+)
+#' @export
 draw_key_ellipse <- function(data, params, size) {
   ellipseGrob(0.5, 0.5, data$r %||% 0,
               gp = gpar(
