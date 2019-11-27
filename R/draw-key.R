@@ -1,4 +1,16 @@
 #' @export
+draw_key_square <- function(data, params, size) {
+  grid::rectGrob(0.5, 0.5,
+                 width = 2 * abs(data$r),
+                 height = 2 * abs(data$r),
+                 gp = gpar(
+                   col = scales::alpha(data$colour, data$alpha),
+                   fill = scales::alpha(data$fill, data$alpha),
+                   lwd = (data$size %||% 0.5) * ggplot2::.pt,
+                   linetype = data$linetype %||% 1
+                 ))
+}
+#' @export
 draw_key_pie <- function(data, params, size){
   pieGrob(0.5, 0.5, data$r %||% 0, params$n %||% 100)
 }
