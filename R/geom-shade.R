@@ -1,4 +1,4 @@
-#' Shade based on center
+#' Shade Geom
 #'
 #'
 #' @eval rd_aesthetics("geom", "shade")
@@ -21,6 +21,7 @@
 geom_shade <- function(mapping = NULL, data = NULL,
                         stat = "identity", position = "identity",
                         ...,
+                        sign = 1,
                         linejoin = "mitre",
                         na.rm = FALSE,
                         show.legend = NA,
@@ -34,6 +35,7 @@ geom_shade <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      sign = sign,
       linejoin = linejoin,
       na.rm = na.rm,
       ...
@@ -74,7 +76,7 @@ GeomShade <- ggproto(
       }
     })
 
-    ggplot2:::ggname("shade", do.call("grobTree", polys))
+    ggplot2:::ggname("geom_shade", do.call("grobTree", polys))
   },
   draw_key = draw_key_blank
 )
