@@ -1,5 +1,4 @@
-#' Confident box based on center and confidence interval.
-#'
+#' Confident-Box Geom
 #'
 #' @eval rd_aesthetics("geom", "confbox")
 #'
@@ -18,6 +17,7 @@
 geom_confbox <- function(mapping = NULL, data = NULL,
                         stat = "identity", position = "identity",
                         ...,
+                        width = 0.5,
                         linejoin = "mitre",
                         na.rm = FALSE,
                         show.legend = NA,
@@ -31,6 +31,7 @@ geom_confbox <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      width = width,
       linejoin = linejoin,
       na.rm = na.rm,
       ...
@@ -44,24 +45,24 @@ geom_confbox <- function(mapping = NULL, data = NULL,
 #' @export
 GeomConfbox <- ggproto(
   "GeomConfbox", Geom,
-  default_aes = aes(confline_col = "grey30", midline_col = "grey50",
+  default_aes = aes(confline.col = "grey30", midline.col = "grey50",
                     colour = NA, fill = "grey60", size = 0.5,
-                    midline_type = "dotted", linetype = 1,
+                    midline.type = "dotted", linetype = 1,
                     alpha = NA),
-  required_aes = c("x", "y", "r", "low", "upp"),
-  draw_panel = function(self, data, panel_params, coord, linejoin = "mitre") {
+  required_aes = c("x", "y", "r", "lower.ci", "upper.ci"),
+  draw_panel = function(self, data, panel_params, coord, width = 0.5, linejoin = "mitre") {
     aesthetics <- setdiff(
-      names(data), c("x", "y", "r", "low", "upp")
+      names(data), c("x", "y", "r", "lower.ci", "upper.ci")
     )
-    polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      d <- point_to_confbox(row$x, row$y, row$r, row$low, row$upp)
+    grobs <- lapply(split(data, seq_len(nrow(data))), function(row) {
+      d <- point_to_confbox(row$x, row$y, row$r, row$lower.ci, row$upper.ci, width)
       confbox <- d$conf_box
       confline <- d$conf_line
       midline <- d$mid_line
       ## draw mid line
       mid_aes <- cbind(midline, new_data_frame(row[aesthetics]))
-      mid_aes$colour <- row$midline_col
-      mid_aes$linetype <- row$midline_type
+      mid_aes$colour <- row$midline.col
+      mid_aes$linetype <- row$midline.type
       mid <- GeomSegment$draw_panel(mid_aes, panel_params, coord)
       ## draw conf box
       confbox_aes <- cbind(confbox,
@@ -71,27 +72,25 @@ GeomConfbox <- ggproto(
       ## draw conf line
       confline_aes <- cbind(confline,
                             new_data_frame(row[aesthetics])[rep(1, 3), ])
-      confline_aes$colour <- row$confline_col
+      confline_aes$colour <- row$confline.col
       line <- GeomSegment$draw_panel(confline_aes, panel_params, coord)
       grid::gList(mid, box, line)
     })
-    ggplot2:::ggname("confbox", do.call("grobTree", polys))
+    ggplot2:::ggname("geom_confbox", do.call("grobTree", grobs))
   },
   draw_key = draw_key_polygon
 )
 
 #' @noRd
-point_to_confbox <- function(x, y, r, low, upp, width = 0.5) {
-  to <- c(y - 0.5, y + 0.5)
-  from <- c(-1, 1)
+point_to_confbox <- function(x, y, r, lower.ci, upper.ci, width = 0.5) {
   r <- r / 2
-  low <- low / 2
-  upp <- upp / 2
+  lower.ci <- lower.ci / 2
+  upper.ci <- upper.ci / 2
   ## confidence box
   xmin <- - 0.5 * width  + x
   xmax <-  0.5 * width  + x
-  ymin <- low + y
-  ymax <- upp + y
+  ymin <- lower.ci + y
+  ymax <- upper.ci + y
   conf_box <- new_data_frame(list(
     y = c(ymax, ymax, ymin, ymin, ymax),
     x = c(xmin, xmax, xmax, xmin, xmin)
@@ -99,8 +98,8 @@ point_to_confbox <- function(x, y, r, low, upp, width = 0.5) {
   ## confidence line
   xx <- rep_len(xmin, 3)
   xend <- rep_len(xmax, 3)
-  yy <- c(low, r, upp) + y
-  yend <- c(low, r, upp) + y
+  yy <- c(lower.ci, r, upper.ci) + y
+  yend <- c(lower.ci, r, upper.ci) + y
 
   conf_line <- new_data_frame(list(
     x = xx,
