@@ -1,4 +1,4 @@
-#' Significant marks based on center.
+#' Significant marks Geom
 #'
 #'
 #' @eval rd_aesthetics("geom", "mark")
@@ -25,6 +25,13 @@ geom_mark <- function(mapping = NULL, data = NULL,
                      ...,
                      nudge_x = 0,
                      nudge_y = 0,
+                     digits = 2,
+                     nsmall = 2,
+                     sig.level = c(0.05, 0.01, 0.001),
+                     mark = c("*", "**", "***"),
+                     sig.thres = NULL,
+                     sep = "",
+                     parse = FALSE,
                      na.rm = FALSE,
                      show.legend = NA,
                      inherit.aes = TRUE)
@@ -45,6 +52,13 @@ geom_mark <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      digits = digits,
+      nsmall = nsmall,
+      sig.level = sig.level,
+      mark = mark,
+      sig.thres = sig.thres,
+      sep = sep,
+      parse = parse,
       na.rm = na.rm,
       ...
     )
@@ -59,7 +73,7 @@ GeomMark <- ggproto("GeomMark", GeomText,
                    required_aes = c("x", "y", "p"),
 
                    default_aes = aes(
-                     r = NA, colour = "black", size = 3.88, angle = 0, hjust = 0.5,
+                     coef = NA, colour = "black", size = 3.88, angle = 0, hjust = 0.5,
                      vjust = 0.5, alpha = NA, family = "", fontface = 1, lineheight = 1.2
                    ),
 
@@ -71,12 +85,8 @@ GeomMark <- ggproto("GeomMark", GeomText,
                      if(!is.null(sig.thres))
                        data <- dplyr::filter(data, p <= sig.thres)
                      star <- sig_mark(data$p, sig.level, mark)
-                     na_idx <- is.na(data$r)
-                     if(!all(na_idx)) {
-                       num <- format_number(data$r, digits, nsmall)
-                     } else {
-                       num <- ""
-                     }
+                     na_idx <- is.na(data$coef)
+                     num <- ifelse(na_idx, "", format_number(data$r, digits, nsmall))
                      if(parse) {
                        label <- paste(num, paste0("{", star, "}"), sep = sep)
                        data$label <- latex2exp::TeX(label, output = "text")
