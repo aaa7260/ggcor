@@ -2,7 +2,6 @@
 geom_star <- function(mapping = NULL, data = NULL,
                           stat = "identity", position = "identity",
                           ...,
-                          r0 = 0.48,
                           linejoin = "mitre",
                           na.rm = FALSE,
                           show.legend = NA,
@@ -16,7 +15,6 @@ geom_star <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      r0 = r0,
       linejoin = linejoin,
       na.rm = na.rm,
       ...
@@ -30,12 +28,12 @@ GeomStar <- ggproto(
   default_aes = aes(n = 5, r = 0.5, ratio = 0.618, colour = "grey35", fill = NA,
                     size = 0.25, linetype = 1, alpha = NA),
   required_aes = c("x", "y"),
-  draw_panel = function(self, data, panel_params, coord, linejoin = "mitre", r0 = 0.48) {
+  draw_panel = function(self, data, panel_params, coord, linejoin = "mitre") {
     aesthetics <- setdiff(names(data), c("x", "y"))
     star <- lapply(split(data, seq_len(nrow(data))), function(row) {
       if(row$n <= 2)
         return(grid::nullGrob())
-      dd <- point_to_star(row$x, row$y, row$n, row$r, r0, row$ratio)
+      dd <- point_to_star(row$x, row$y, row$n, row$r, row$ratio)
       aes <- new_data_frame(row[aesthetics])[rep(1, 2 * row$n + 1), ]
       GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
     })
@@ -45,13 +43,12 @@ GeomStar <- ggproto(
 )
 
 #' @noRd
-point_to_star <- function(x, y, n, r, r0 = 0.48, ratio = 0.618) {
-  rr <- r0 * sqrt(abs(r))
+point_to_star <- function(x, y, n, r, ratio = 0.618) {
   p <- 0:n / n
   if (n %% 2 == 0) p <- p + p[2] / 2
   pos <- p * 2 * pi
-  x_tmp <- sin(pos) * rr
-  y_tmp <- cos(pos) * rr
+  x_tmp <- sin(pos) * r
+  y_tmp <- cos(pos) * r
   angle <- pi / n
   xx <- numeric(2 * n + 2)
   yy <- numeric(2 * n + 2)
