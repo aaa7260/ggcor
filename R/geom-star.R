@@ -25,7 +25,7 @@ geom_star <- function(mapping = NULL, data = NULL,
 #' @export
 GeomStar <- ggproto(
   "GeomStar", Geom,
-  default_aes = aes(n = 5, r = 0.5, ratio = 0.618, colour = "grey35", fill = NA,
+  default_aes = aes(n = 5, r0 = 0.5, ratio = 0.618, colour = "grey35", fill = NA,
                     size = 0.25, linetype = 1, alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre") {
@@ -33,22 +33,22 @@ GeomStar <- ggproto(
     star <- lapply(split(data, seq_len(nrow(data))), function(row) {
       if(row$n <= 2)
         return(grid::nullGrob())
-      dd <- point_to_star(row$x, row$y, row$n, row$r, row$ratio)
+      dd <- point_to_star(row$x, row$y, row$n, row$r0, row$ratio)
       aes <- new_data_frame(row[aesthetics])[rep(1, 2 * row$n + 1), ]
       GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
     })
     ggplot2:::ggname("star", do.call("grobTree", star))
   },
-  draw_key = draw_key_polygon
+  draw_key = draw_key_star
 )
 
 #' @noRd
-point_to_star <- function(x, y, n, r, ratio = 0.618) {
+point_to_star <- function(x, y, n, r0, ratio = 0.618) {
   p <- 0:n / n
   if (n %% 2 == 0) p <- p + p[2] / 2
   pos <- p * 2 * pi
-  x_tmp <- sin(pos) * r
-  y_tmp <- cos(pos) * r
+  x_tmp <- sin(pos) * r0
+  y_tmp <- cos(pos) * r0
   angle <- pi / n
   xx <- numeric(2 * n + 2)
   yy <- numeric(2 * n + 2)

@@ -1,9 +1,28 @@
 #' @export
+draw_key_star <- function(data, params, size) {
+  starGrob(0.5, 0.5, data$r0 %||% 1, params$ratio %||% 0.618,
+              gp = gpar(
+                col = scales::alpha(data$colour %||% NA),
+                fill = scales::alpha(data$fill %||% "grey90", data$alpha),
+                lty = data$linetype %||% 1,
+                lwd = (data$size %||% 0.5) * .pt
+              ))
+}
+
+#' @noRd
+starGrob <- function(x = 0.5, y = 0.5, r0 = 1, ratio = 0.618,
+                        gp = gpar(colour = "grey50", fill = "grey90"),
+                        default.units = "native", ...) {
+  dd <- point_to_ellipse(x, y, r0, n)
+  grid::polygonGrob(dd$x, dd$y, default.units = default.units, gp = gp, ...)
+}
+
+#' @export
 draw_key_circle <- function(data, params, size) {
   grid::circleGrob(0.5, 0.5, r = data$r %||% 0.5,
                    gp = gpar(
                      col = alpha(data$colour %||% "grey50", data$alpha),
-                     fill = alpha(data$fill %||% NA, data$alpha),
+                     fill = alpha(data$fill %||% "grey90", data$alpha),
                      lty = data$linetype %||% 1,
                      lwd = (data$size %||% 0.5) * .pt
                    ))
@@ -14,7 +33,7 @@ draw_key_ellipse <- function(data, params, size) {
   ellipseGrob(0.5, 0.5, data$r %||% 0,
               gp = gpar(
                 col = scales::alpha(data$colour %||% NA),
-                fill = scales::alpha(data$fill %||% "grey20", data$alpha),
+                fill = scales::alpha(data$fill %||% "grey90", data$alpha),
                 lty = data$linetype %||% 1,
                 lwd = (data$size %||% 0.5) * .pt
               ))
@@ -39,14 +58,20 @@ draw_key_square <- function(data, params, size) {
                  height = 2 * abs(data$r),
                  gp = gpar(
                    col = scales::alpha(data$colour, data$alpha),
-                   fill = scales::alpha(data$fill, data$alpha),
+                   fill = scales::alpha(data$fill %||% "grey90", data$alpha),
                    lwd = (data$size %||% 0.5) * ggplot2::.pt,
                    linetype = data$linetype %||% 1
                  ))
 }
 #' @export
 draw_key_pie <- function(data, params, size){
-  pieGrob(0.5, 0.5, data$r %||% 0, params$n %||% 100)
+  pieGrob(0.5, 0.5, data$r %||% 0, params$n %||% 100,
+          gp = gpar(
+            col = scales::alpha(data$colour, data$alpha),
+            fill = scales::alpha(data$fill %||% "grey90", data$alpha),
+            lwd = (data$size %||% 0.5) * ggplot2::.pt,
+            linetype = data$linetype %||% 1
+          ))
 }
 #' @noRd
 pieGrob <- function(x = 0.5, y = 0.5, r = 0.5, n = 100,
