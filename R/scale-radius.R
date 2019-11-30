@@ -1,6 +1,6 @@
 #' @export
 scale_abs_area_radius <- function(name = waiver(), breaks = waiver(), labels = waiver(),
-                                  limits = NULL, range = c(-0.5, 0.5), mid = 0,
+                                  limits = NULL, range = c(-1, 1), mid = 0,
                                   trans = "identity", guide = NULL) {
   continuous_scale("r0", "radius", abs_area_pal(range), name = name, rescaler = mid_rescale2(mid),
                    breaks = breaks, labels = labels, limits = limits, trans = trans,
@@ -10,7 +10,7 @@ scale_abs_area_radius <- function(name = waiver(), breaks = waiver(), labels = w
 scale_area_radius <- function(name = waiver(), breaks = waiver(), labels = waiver(),
                                   limits = NULL, max = 1, mid = 0,
                                   trans = "identity", guide = NULL) {
-  continuous_scale("r", "radius", area_pal(max), name = name, rescaler = mid_rescale2(mid),
+  continuous_scale("r0", "radius", area_pal(max), name = name, rescaler = mid_rescale2(mid),
                    breaks = breaks, labels = labels, limits = limits, trans = trans,
                    guide = guide)
 }
@@ -26,7 +26,7 @@ scale_rho <- function(name = waiver(), breaks = waiver(), labels = waiver(),
 }
 
 #' @noRd
-abs_area_pal <- function (range = c(-0.5, 0.5)) 
+abs_area_pal <- function (range = c(-1, 1)) 
 {
   force(range)
   function(x) {
@@ -35,7 +35,7 @@ abs_area_pal <- function (range = c(-0.5, 0.5))
 }
 
 #' @noRd
-area_pal <- function (max = 0.5) 
+area_pal <- function (max = 1) 
 {
   force(max)
   function(x) {
