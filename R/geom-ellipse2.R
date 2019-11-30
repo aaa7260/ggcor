@@ -45,14 +45,14 @@ geom_ellipse2 <- function(mapping = NULL, data = NULL,
 #' @export
 GeomEllipse2 <- ggproto(
   "GeomEllipse2", Geom,
-  default_aes = aes(r = 1, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
+  default_aes = aes(rho = 1, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord,
                         n = 60, linejoin = "mitre") {
     aesthetics <- setdiff(names(data), c("x", "y"))
     polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      ell <- point_to_ellipse(row$x, row$y, row$r, n)
+      ell <- point_to_ellipse(row$x, row$y, row$rho, n)
       aes <- new_data_frame(row[aesthetics])[rep(1,n), ]
       GeomPolygon$draw_panel(cbind(ell, aes), panel_params, coord)
     })
@@ -62,10 +62,10 @@ GeomEllipse2 <- ggproto(
 )
 
 #' @noRd
-point_to_ellipse <- function(x, y, r, n = 60) {
+point_to_ellipse <- function(x, y, rho, n = 60) {
   t <- seq(0, 2 * pi, length = n)
-  xx <- 0.5 * cos(t + acos(r) / 2)  + x
-  yy <- 0.5 * cos(t - acos(r) / 2)  + y
+  xx <- 0.5 * cos(t + acos(rho) / 2)  + x
+  yy <- 0.5 * cos(t - acos(rho) / 2)  + y
   new_data_frame(list(
     x = xx,
     y = yy
