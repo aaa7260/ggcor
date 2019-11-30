@@ -46,13 +46,13 @@ geom_circle2 <- function(mapping = NULL,
 #' @export
 GeomCircle2 <- ggproto(
   "GeomCircle2", Geom,
-  default_aes = aes(r = 1, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
+  default_aes = aes(r0 = 1, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord, n = 60, linejoin = "mitre") {
     aesthetics <- setdiff(names(data), c("x", "y"))
     polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      circle <- point_to_circle(row$x, row$y, row$r, n)
+      circle <- point_to_circle(row$x, row$y, row$r0, n)
       aes <- new_data_frame(row[aesthetics])[rep(1, n), ]
       GeomPolygon$draw_panel(cbind(circle, aes), panel_params, coord)
     })
@@ -63,10 +63,10 @@ GeomCircle2 <- ggproto(
 
 #' @noRd
 
-point_to_circle <- function(x, y, r, n = 60) {
+point_to_circle <- function(x, y, r0, n = 60) {
   t <- seq(0, 2*pi, length.out = n)
-  xx <- r * cos(t) + x
-  yy <- r * sin(t) + y
+  xx <- 0.5 * r0 * cos(t) + x
+  yy <- 0.5 * r0 * sin(t) + y
   new_data_frame(list(
     x = xx,
     y = yy

@@ -19,7 +19,7 @@ starGrob <- function(x = 0.5, y = 0.5, n = 5, r0 = 0.5, ratio = 0.618,
 
 #' @export
 draw_key_circle <- function(data, params, size) {
-  grid::circleGrob(0.5, 0.5, r = data$r %||% 0.5,
+  grid::circleGrob(0.5, 0.5, r = 0.5 * (data$r0 %||% 0.5),
                    gp = gpar(
                      col = alpha(data$colour %||% "grey50", data$alpha),
                      fill = alpha(data$fill %||% "grey90", data$alpha),
@@ -27,7 +27,6 @@ draw_key_circle <- function(data, params, size) {
                      lwd = (data$size %||% 0.5) * .pt
                    ))
 }
-)
 #' @export
 draw_key_ellipse <- function(data, params, size) {
   ellipseGrob(0.5, 0.5, data$r %||% 0,
