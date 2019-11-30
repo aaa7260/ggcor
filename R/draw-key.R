@@ -1,8 +1,8 @@
 #' @export
 draw_key_star <- function(data, params, size) {
-  starGrob(0.5, 0.5, data$r0 %||% 1, params$ratio %||% 0.618,
+  starGrob(0.5, 0.5, params$n, data$r0 %||% 0.5, params$ratio %||% 0.618,
               gp = gpar(
-                col = scales::alpha(data$colour %||% NA),
+                col = scales::alpha(data$colour %||% "grey50"),
                 fill = scales::alpha(data$fill %||% "grey90", data$alpha),
                 lty = data$linetype %||% 1,
                 lwd = (data$size %||% 0.5) * .pt
@@ -10,10 +10,10 @@ draw_key_star <- function(data, params, size) {
 }
 
 #' @noRd
-starGrob <- function(x = 0.5, y = 0.5, r0 = 1, ratio = 0.618,
+starGrob <- function(x = 0.5, y = 0.5, n = 5, r0 = 0.5, ratio = 0.618,
                         gp = gpar(colour = "grey50", fill = "grey90"),
                         default.units = "native", ...) {
-  dd <- point_to_ellipse(x, y, r0, n)
+  dd <- point_to_star(x, y, n, r0, ratio)
   grid::polygonGrob(dd$x, dd$y, default.units = default.units, gp = gp, ...)
 }
 
@@ -54,12 +54,12 @@ ellipseGrob <- function(x = 0.5, y = 0.5, r = 1, n = 100,
 #' @export
 draw_key_square <- function(data, params, size) {
   grid::rectGrob(0.5, 0.5,
-                 width = 2 * abs(data$r),
-                 height = 2 * abs(data$r),
-                 gp = gpar(
+                 width = abs(data$r0),
+                 height = abs(data$r0),
+                 gp = grid::gpar(
                    col = scales::alpha(data$colour, data$alpha),
                    fill = scales::alpha(data$fill %||% "grey90", data$alpha),
-                   lwd = (data$size %||% 0.5) * ggplot2::.pt,
+                   lwd = (data$size %||% 0.25) * ggplot2::.pt,
                    linetype = data$linetype %||% 1
                  ))
 }

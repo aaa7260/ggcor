@@ -47,8 +47,8 @@ point_to_star <- function(x, y, n, r0, ratio = 0.618) {
   p <- 0:n / n
   if (n %% 2 == 0) p <- p + p[2] / 2
   pos <- p * 2 * pi
-  x_tmp <- sin(pos) * r0
-  y_tmp <- cos(pos) * r0
+  x_tmp <- 0.5 * r0 * sin(pos)
+  y_tmp <- 0.5 * r0 * cos(pos)
   angle <- pi / n
   xx <- numeric(2 * n + 2)
   yy <- numeric(2 * n + 2)
