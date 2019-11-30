@@ -68,7 +68,7 @@ draw_key_pie <- function(data, params, size){
           gp = gpar(
             col = scales::alpha(data$colour, data$alpha),
             fill = scales::alpha(data$fill %||% "grey90", data$alpha),
-            lwd = (data$size %||% 0.5) * ggplot2::.pt,
+            lwd = (data$size %||% 0.25) * ggplot2::.pt,
             linetype = data$linetype %||% 1
           ))
 }
@@ -77,7 +77,7 @@ pieGrob <- function(x = 0.5, y = 0.5, r = 0.5, n = 100,
                     gp = gpar(colour = "grey50", fill = "grey90"),
                     default.units = "npc", ...) {
   line <- point_to_line(x, y, r, n)
-  sector <- point_to_sector(x, y, r, n)
+  sector <- point_to_sector(x, y, r, n - 2)
   grid::grobTree(
     grid::linesGrob(line$x, line$y, default.units = default.units, gp = gp, ...),
     grid::polygonGrob(sector$x, sector$y, default.units = default.units, gp = gp, ...)
