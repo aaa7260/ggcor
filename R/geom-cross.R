@@ -1,9 +1,10 @@
-#' Circles based on center and radius
+#' Cross Geom
 #'
 #'
 #' @eval rd_aesthetics("geom", "cross")
-#' @param r0 the radius of an outer circle, defualt value is sqrt(2)/2.
-#' @param sig_thres significance threshold.
+#' @param r0 the radius of outer circle, defualt value is 0.6.
+#' @param conf.level confidence level.
+#' @param labels labels for the levels of different confidence levels.
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_segment
@@ -21,7 +22,8 @@
 geom_cross <- function(mapping = NULL, data = NULL,
                        stat = "identity", position = "identity",
                        ...,
-                       linejoin = "mitre",
+                       conf.level = 0.05,
+                       r0 = 0.6,
                        na.rm = FALSE,
                        show.legend = NA,
                        inherit.aes = TRUE) {
@@ -34,7 +36,8 @@ geom_cross <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      linejoin = linejoin,
+      conf.level = conf.level,
+      r0 = r0,
       na.rm = na.rm,
       ...
     )
@@ -49,28 +52,24 @@ GeomCross <- ggproto(
   "GeomCross", Geom,
   default_aes = aes(colour = "red", fill = NA,
                     size = 0.5, linetype = 1, alpha = NA),
-  required_aes = c("x", "y", "p"),
+  required_aes = c("x", "y", "p.value"),
 
-  draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
-                        sig.thres = 0.05, r0 = 0.6) {
-    if (!coord$is_linear()) {
-      warning("geom_cross is not implemented for non-linear coordinates",
-              call. = FALSE)
-    }
-    aesthetics <- setdiff(names(data), c("x", "y", "p"))
-    data <- dplyr::filter(data, p > sig.thres)
+  draw_panel = function(self, data, panel_params, coord, conf.level = 0.05, r0 = 0.6) {
+    data <- dplyr::filter(data, p.value >= conf.level)
     dd <- point_to_cross(data$x, data$y, r0)
-    GeomSegment$draw_panel(cbind(dd, data[, aesthetics]), panel_params, coord)
+    aesthetics <- setdiff(names(data), c("x", "y", "p.value"))
+    GeomSegment$draw_panel(cbind(dd, data[rep(1:nrow(data), each = 2), aesthetics]),
+                           panel_params, coord)
   },
-  draw_key = draw_key_cross
+  draw_key = draw_key_blank
 )
 
 #' @noRd
-point_to_cross <- function(x, y, r = 0.6) {
-  xx <- c(x - 0.5 * r, x - 0.5 * r)
-  xend <- c(x + 0.5 * r, x + 0.5 * r)
-  yy <- c(y - 0.5 * r, y + 0.5 * r)
-  yend <- c(y + 0.5 * r, y - 0.5 * r)
+point_to_cross <- function(x, y, r0 = 0.6) {
+  xx <- c(x - 0.5 * r0, x - 0.5 * r0)
+  xend <- c(x + 0.5 * r0, x + 0.5 * r0)
+  yy <- c(y - 0.5 * r0, y + 0.5 * r0)
+  yend <- c(y + 0.5 * r0, y - 0.5 * r0)
 
   new_data_frame(list(
     x = xx,

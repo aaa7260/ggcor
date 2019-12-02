@@ -29,24 +29,20 @@ draw_key_circle <- function(data, params, size) {
 }
 #' @export
 draw_key_ellipse <- function(data, params, size) {
-  ellipseGrob(0.5, 0.5, data$r %||% 0,
+  ellipseGrob(0.5, 0.5, data$rho %||% 0,
               gp = gpar(
-                col = scales::alpha(data$colour %||% NA),
+                col = scales::alpha(data$colour %||% "grey50", data$alpha),
                 fill = scales::alpha(data$fill %||% "grey90", data$alpha),
                 lty = data$linetype %||% 1,
-                lwd = (data$size %||% 0.5) * .pt
+                lwd = (data$size %||% 0.25) * .pt
               ))
 }
 #' @noRd
-ellipseGrob <- function(x = 0.5, y = 0.5, r = 1, n = 100,
+ellipseGrob <- function(x = 0.5, y = 0.5, rho = 1, n = 100,
                         gp = gpar(colour = "grey50", fill = "grey90"),
                         default.units = "native", ...) {
-  no_na_r <- r[!is.na(r)]
-  if(any(no_na_r > 1 | no_na_r < -1)) {
-    warning("'r' needs to be in the range -1 to 1.", call. = FALSE)
-    r <- ifelse(r > 1 | r < -1, NA, r)
   }
-  dd <- point_to_ellipse(x, y, r, n)
+  dd <- point_to_ellipse(x, y, rho, n)
   grid::polygonGrob(dd$x, dd$y, default.units = default.units, gp = gp, ...)
 }
 
@@ -82,13 +78,4 @@ pieGrob <- function(x = 0.5, y = 0.5, r = 0.5, n = 100,
     grid::linesGrob(line$x, line$y, default.units = default.units, gp = gp, ...),
     grid::polygonGrob(sector$x, sector$y, default.units = default.units, gp = gp, ...)
   )
-}
-#' @export
-draw_key_cross <- function(data, params, size) {
-  grid::segmentsGrob(c(0.15, 0.15), c(0.15, 0.85), c(0.85, 0.85), c(0.85, 0.15),
-                     gp = grid::gpar(
-                       col = data$colour %||% "red",
-                       lwd = (data$size %||% 0.5) * ggplot2::.pt,
-                       lty = data$linetype %||% 1
-                     ))
 }
