@@ -38,18 +38,16 @@ as_cor_tbl <- function(corr, ...) {
 #' @export
 #' @method as_cor_tbl matrix
 as_cor_tbl.matrix <- function(corr,
-                              type = c("full", "upper", "lower"),
+                              type = "full",
                               show.diag = TRUE,
-                              p = NULL,
-                              low = NULL,
-                              upp = NULL,
+                              p.value = NULL,
+                              lower.ci = NULL,
+                              upper.ci = NULL,
                               row.names = NULL,
                               col.names = NULL,
-                              cluster.type = c("none", "all", "row", "col"),
-                              keep.name = FALSE,
+                              cluster = TRUE,
                               ...) {
-  type <- match.arg(type)
-  cluster.type <- match.arg(cluster.type)
+  type <- match.arg(type, c("full", "upper", "lower"))
   if(!is.null(row.names))
     rownames(corr) <- row.names
   if(!is.null(col.names))
@@ -281,4 +279,14 @@ as_cor_tbl_fct.mantel_tbl <- function(corr, byrow = TRUE, ...) {
 #' @export
 as_cor_tbl_fct.default <- function(corr, ...) {
   stop(class(corr), " hasn't been realized yet.", call. = FALSE)
+}
+
+#' @noRd
+check_dimension <- function(x, y) {
+  x_nm <- as.character(match.call()[["x"]])
+  y_nm <- as.character(match.call()[["y"]])
+  if(any(dim(x) != dim(y))) {
+    msg <- paste0(" Dimension error: ", y_nm, " must have same dimension as ", x_nm)
+    stop(msg, call. = FALSE)
+  }
 }
