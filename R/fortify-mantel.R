@@ -1,5 +1,6 @@
 #' @export
-#' @importFrom vegan vegdist
+#' @importFrom vegan vegdist mantel mantel.partial
+#' @importFrom ade4 mantel.randtest mantel.rtest
 #' @importFrom stats dist
 fortify_mantel <- function(spec,
                            env,
@@ -39,7 +40,7 @@ fortify_mantel <- function(spec,
   res
 }
 
-#' @export
+#' @noRd
 mantel_test <- function(spec.list,
                         env.list,
                         env.ctrl.list = NULL,
@@ -193,10 +194,9 @@ flatten_list <- function(x) {
 }
 
 #' @noRd
-extract_mantel <- function(x,
-                           FUN = c("mantel", "mantel.partial",
-                                   "mantel.randtest", "mantel.rtest")) {
-  FUN <- match.arg(FUN)
+extract_mantel <- function(x, FUN = "mantel") {
+  FUN <- match.arg(FUN, c("mantel", "mantel.partial",
+                          "mantel.randtest", "mantel.rtest"))
   if(FUN %in% c("mantel", "mantel.partial")) {
     res <- purrr::map(x, function(m) c(r = m$statistic, p = m$signif))
   } else {
