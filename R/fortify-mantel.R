@@ -157,7 +157,7 @@ handle_mantel_data <- function(spec, # df
     env <- flatten_list(env)
     names(env) <- rep(env.colname, n)
   } else {
-    env <- rep(env, each = n)
+    env <- rep(env, n)
     names(env) <- rep(env.name, n)
   }
   if(mantel.fun == "mantel.partial") {
