@@ -22,7 +22,7 @@ matrix_order <- function(x,
 {
   if(!is.matrix(x))
     x <- as.matrix(x)
-  d <- do.call("as.dist", list(m = cluster.dist))
+  d <- as.dist(eval(substitute(cluster.dist)))
   cluster <- hclust(d, cluster.method, ...)
   cluster$order
 }

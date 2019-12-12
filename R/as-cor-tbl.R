@@ -103,7 +103,7 @@ as_cor_tbl.data.frame <- function(corr,
                                   cluster = FALSE,
                                   ...) {
   corr <- as.matrix(corr)
-  as_cor_tbl.matrix(corr, p.value = p.value, lower.ci = lower.ci,
+  as_cor_tbl(corr, p.value = p.value, lower.ci = lower.ci,
                     upper.ci = upper.ci, cluster = cluster, ...)
 }
 
@@ -114,7 +114,7 @@ as_cor_tbl.rcorr <- function(corr, ...)
 {
   p.value <- corr$P
   diag(p.value) <- 0
-  as_cor_tbl.matrix(corr$r, p.value = p.value, ...)
+  as_cor_tbl(corr$r, p.value = p.value, ...)
 }
 
 #' @rdname  as-cor-tbl
@@ -122,7 +122,7 @@ as_cor_tbl.rcorr <- function(corr, ...)
 #' @method as_cor_tbl corr.test
 as_cor_tbl.corr.test <- function(corr, ...)
 {
-  as_cor_tbl.matrix(corr$r, p.value = corr$p, ...)
+  as_cor_tbl(corr$r, p.value = corr$p, ...)
 }
 
 #' @rdname  as-cor-tbl

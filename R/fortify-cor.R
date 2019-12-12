@@ -1,45 +1,27 @@
 
 #' @export
-
 fortify_cor <- function(
   x,
   y = NULL,
-  type = c("full", "upper", "lower"),
+  type = "full",
   show.diag = FALSE,
   cor.test = FALSE,
-  cor.test.alt = "two.sided",
-  cor.test.method = "pearson",
-  cluster.type = c("none", "all", "row", "col"),
-  cluster.method = "HC",
-  cluster.absolute = FALSE,
-  keep.name = FALSE,
-  ...   # pass to cor( )
+  cluster = FALSE,
+  cluster.method = "complete",
+  cluster.dist = 1 - x,
+  ...
   )
 {
   if(!(is.matrix(x) || is.data.frame(x)))
     stop("Need a matrix or data.frame.", call. = FALSE)
-  type <- match.arg(type)
+  type <- match.arg(type, c("full", "upper", "lower"))
   if(inherits(x, "cor_tbl")) {
-    df <- x
+    return(x)
   }
-  x <- make_matrix_name(x)
-  m <- cor(x, y = y, ...)
-  p <- NULL
-  low <- NULL
-  upp <- NULL
-  if(cor.test) {
-    conf <- cor_test(x = x, y = y, alternative = cor.test.alt, method = cor.test.method)
-    p <- conf$p
-    low <- conf$low
-    upp <- conf$upp
-    if(cor.test.method != "pearson") {
-      low <- NULL
-      upp <- NULL
-    }
-  }
-  as_cor_tbl(corr = m, type = type, show.diag = show.diag, p = p, low = low,
-            upp = upp, cluster.type = cluster.type, cluster.method = cluster.method,
-            absolute = cluster.absolute, keep.name = keep.name)
+  corr <- correlate(x, y, cor.test, ...)
+  as_cor_tbl(corr = corr, type = type, show.diag = show.diag, p = p, low = low,
+            upp = upp, cluster = cluster, cluster.method = cluster.method,
+            cluster.dist = cluster.dist)
 }
 
 
