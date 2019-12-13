@@ -8,20 +8,18 @@ fortify_cor <- function(
   cor.test = FALSE,
   cluster = FALSE,
   cluster.method = "complete",
-  cluster.dist = 1 - x,
   ...
   )
 {
-  if(!(is.matrix(x) || is.data.frame(x)))
-    stop("Need a matrix or data.frame.", call. = FALSE)
-  type <- match.arg(type, c("full", "upper", "lower"))
   if(inherits(x, "cor_tbl")) {
     return(x)
   }
+  type <- match.arg(type, c("full", "upper", "lower"))
+  if(!(is.matrix(x) || is.data.frame(x)))
+    stop("Need a matrix or data.frame.", call. = FALSE)
   corr <- correlate(x, y, cor.test, ...)
-  as_cor_tbl(corr = corr, type = type, show.diag = show.diag, p = p, low = low,
-            upp = upp, cluster = cluster, cluster.method = cluster.method,
-            cluster.dist = cluster.dist)
+  as_cor_tbl(corr, type = type, show.diag = show.diag, cluster = cluster,
+             cluster.method = cluster.method)
 }
 
 

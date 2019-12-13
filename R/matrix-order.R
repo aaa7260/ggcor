@@ -2,7 +2,6 @@
 #' @description  Tries to find an linear order for matrix by different cluster methods.
 #' @param x a matrix object.
 #' @param cluster.method a character string with the name of agglomeration method.
-#' @param cluster.dist function of trans correlation matrix to dist.
 #' @param ... extra params passing to \code{\link[stats]{hclust}}.
 #' @details Now it just supports for square matrix.
 #' @return a numeric vector of new order..
@@ -17,12 +16,10 @@
 #' @export
 matrix_order <- function(x,
                          cluster.method = "complete",
-                         cluster.dist = 1-x,
                          ...)
 {
   if(!is.matrix(x))
     x <- as.matrix(x)
-  d <- as.dist(eval(substitute(cluster.dist)))
-  cluster <- hclust(d, cluster.method, ...)
+  cluster <- hclust(as.dist(1 - x), cluster.method, ...)
   cluster$order
 }

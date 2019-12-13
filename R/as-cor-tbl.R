@@ -60,7 +60,7 @@ as_cor_tbl.matrix <- function(corr,
       upper.ci <- as.matrix(upper.ci)
     check_dimension(corr, upper.ci)
   }
-  if(!isSymmetric(corr) || any(xname) != rev(yname)) {
+  if(!isSymmetric(corr) || any(xname != rev(yname))) {
     if(type != "full") {
       warning("'type=", type, "' just supports for symmetric correlation matrix.", call. = FALSE)
       type <- "full"
@@ -105,6 +105,14 @@ as_cor_tbl.data.frame <- function(corr,
   corr <- as.matrix(corr)
   as_cor_tbl(corr, p.value = p.value, lower.ci = lower.ci,
                     upper.ci = upper.ci, cluster = cluster, ...)
+}
+
+#' @rdname  as-cor-tbl
+#' @export
+#' @method as_cor_tbl data.frame
+as_cor_tbl.correlation <- function(corr, ...) {
+  as_cor_tbl(corr$r, p.value = corr$p.value, lower.ci = corr$lower.ci,
+             upper.ci = corr$upper.ci, ...)
 }
 
 #' @rdname  as-cor-tbl

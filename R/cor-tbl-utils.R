@@ -32,7 +32,7 @@ cor_tbl_yname <- function(x) {
 #' @rdname cor-tbl-attr
 #' @export
 cor_tbl_type <- function(x) {
-  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
+  stopifnot(is_cor_tbl(x))
   attr(x, "type")
 }
 #' @rdname cor-tbl-attr

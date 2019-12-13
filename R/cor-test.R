@@ -39,8 +39,8 @@ correlate <- function(x,
   n <- ncol(x)
   m <- ncol(y)
   r <- cor(x, y, use = use, method = method)
-  p.value <- lower.ci <- upper.ci <- matrix(NA, ncol = m, nrow = n)
   if(cor.test) {
+    p.value <- lower.ci <- upper.ci <- matrix(NA, ncol = m, nrow = n)
     df <- expand.grid(1:n, 1:m)
     purrr::walk2(df$Var1, df$Var2, function(.idx, .idy) {
       tmp <- cor.test(x = x[ , .idx], y = y[ , .idy], method = method, ...)
@@ -55,12 +55,18 @@ correlate <- function(x,
       }
     })
   }
+  if(cor.test) {
+    lower.ci <- if(method == "pearson") lower.ci else NULL
+    upper.ci <- if(method == "pearson") upper.ci else NULL
+  } else {
+    p.value <- lower.ci <- upper.ci <- NULL
+  }
   structure(
     .Data = list(
       r = r,
       p.value = p.value,
-      lower.ci = lower.ci,
-      upper.ci = upper.ci
+      lower.ci = if(method == "pearson") lower.ci else NULL,
+      upper.ci = if(method == "pearson") upper.ci else NULL
     ), class = "correlation"
   )
 }
