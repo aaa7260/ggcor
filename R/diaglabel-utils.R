@@ -6,7 +6,7 @@ get_diaglab_data <- function(drop = FALSE) {
       return(data.frame(x = numeric(0), y = numeric(0), label = character(0)))
     }
     if(!is_symmet(data)) {
-      warning("'add_diaglab()' just supports for symmetrical correlation matrxi.", call. = FALSE)
+      warning("'add_diaglab' just supports for symmetrical correlation matrxi.", call. = FALSE)
       return(data.frame(x = numeric(0), y = numeric(0), label = character(0)))
     }
     type <- cor_tbl_type(data)
@@ -40,7 +40,7 @@ get_diaglab_data <- function(drop = FALSE) {
     } else {
       x <- n - y + 1
     }
-    dd <- data.frame(x = x, y = y, label = lab, stringsAsFactors = FALSE)
+    dd <- tibble::tibble(x = x, y = y, label = lab)
     dd
   }
 }
