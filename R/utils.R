@@ -34,7 +34,7 @@ make_matrix_name <- function(mat)
   mat
 }
 #' @noRd
-make_list_names <- function(x, pre = "X", sep = "_")
+make_list_names <- function(x, pre = "X", sep = "")
 {
   stopifnot(is.list(x))
   n <- length(x)
