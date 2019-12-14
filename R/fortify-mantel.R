@@ -112,6 +112,7 @@ mantel_test <- function(spec,
                                      env = env.name,
                                      r = rp$r,
                                      p.value = rp$p.value),
+              grouped = FALSE,
               class = c("mantel_tbl", "tbl_df", "tbl", "data.frame"))
 }
 
