@@ -6,9 +6,7 @@ ggcor <- function(data,
                   axis.label.drop = TRUE,
                   ...)
 {
-  if(!is_cor_tbl(data)) data <- as_cor_tbl(data)
-  axis.x.position <- match.arg(axis.x.position, c("auto", "bottom", "top"))
-  axis.y.position <- match.arg(axis.y.position, c("auto", "left", "right"))
+  data <- fortify_cor(data, ...)
   type <- cor_tbl_type(data)
   show.diag <- cor_tbl_showdiag(data)
   xname <- cor_tbl_xname(data)
@@ -16,6 +14,8 @@ ggcor <- function(data,
   base_map <- aes_string("x", "y")
   mapping <- if(is.null(mapping)) base_map else modifyList(base_map, mapping)
   # handle axis setting
+  axis.x.position <- match.arg(axis.x.position, c("auto", "bottom", "top"))
+  axis.y.position <- match.arg(axis.y.position, c("auto", "left", "right"))
   if(axis.x.position == "auto") {
     axis.x.position <- switch (type,
                                full = "bottom",

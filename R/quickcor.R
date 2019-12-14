@@ -1,9 +1,9 @@
 #' Plot Correlation Matrix Quickly
-#' @description quickcor is convenient wrapper for creating a number of different types 
+#' @description quickcor is convenient wrapper for creating a number of different types
 #' of correlation matrix plots because of adding some extra settings by default.
 #' @param x,y matrix or data frame.
 #' @param is.cor logical value
-#' 
+#'
 quickcor <- function(x,
                      y = NULL,
                      is.cor = FALSE,
@@ -26,17 +26,7 @@ quickcor <- function(x,
                      ylim = NULL,
                      ...)
 {
-  axis.x.position <- match.arg(axis.x.position, c("auto", "bottom", "top"))
-  axis.y.position <- match.arg(axis.y.position, c("auto", "left", "right"))
-  if(is_cor_tbl(x)) {
-    data <- x
-  } else {
-    if(is.cor) {
-      data <- as_cor_tbl(x, ...)
-    } else {
-      data <- fortify_cor(x, y, ...)
-    }
-  }
+  data <- fortify_cor(data, ...)
   type <- cor_tbl_type(data)
   show.diag <- cor_tbl_showdiag(data)
   xname <- cor_tbl_xname(data)
@@ -74,6 +64,8 @@ quickcor <- function(x,
       }
     }
   }
+  axis.x.position <- match.arg(axis.x.position, c("auto", "bottom", "top"))
+  axis.y.position <- match.arg(axis.y.position, c("auto", "left", "right"))
   if(axis.x.position == "auto") {
     axis.x.position <- switch (type,
                                full = "bottom",

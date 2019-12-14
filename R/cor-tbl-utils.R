@@ -80,13 +80,5 @@ print.cor_tbl <- function(x, n = 5, width = 60, ...) {
   cat_line(cor_tbl_showdiag(x), name = "show.diag:", width = width)
 }
 
-#' Draw a cor_tbl object
-#' @param x A cor_tbl object.
-#' @param ... Extra params passing to `ggcor()` function.
-#' @export
-#' @method plot cor_tbl
-#' @author Houyun Huang
-plot.cor_tbl <- function(x, ...) {
-  ggcor(x, ...) + geom_raster()
-}
+
 
