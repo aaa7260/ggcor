@@ -49,7 +49,8 @@ fortify_mantel <- function(spec,
     df <- mantel_test(spec, env, env.ctrl, mantel.fun, ...)
   }
   grouped <- if(!is.null(group)) TRUE else FALSE
-  structure(.Data = df, grouped = grouped)
+  attr(df, "grouped") <- grouped
+  df
 }
 #' @noRd
 mantel_test <- function(spec,
