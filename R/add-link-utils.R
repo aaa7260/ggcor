@@ -1,14 +1,14 @@
 #' @noRd
 #' @importFrom dplyr %>%
-handle_link_data <- function(
-  x,
-  y,
-  corrmat.point.hjust = NULL,
-  corrmat.point.vjust = NULL,
-  group.point.hjust = NULL,
-  group.point.vjust = NULL,
-  on.left = FALSE,
-  diag.label = FALSE)
+handle_link_data <- function(x,
+                             y,
+                             corrmat.point.hjust = NULL,
+                             corrmat.point.vjust = NULL,
+                             group.point.hjust = NULL,
+                             group.point.vjust = NULL,
+                             on.left = FALSE,
+                             diag.label = FALSE)
+
 {
   if(!is_cor_tbl(y))
     stop("'y' need a cor_tbl.", call. = FALSE)
@@ -16,10 +16,6 @@ handle_link_data <- function(
   yname <- cor_tbl_yname(y)
   type <- cor_tbl_type(y)
   show.diag <- cor_tbl_showdiag(y)
-  x$x <- as.character(x$x)
-  x$y <- as.character(x$y)
-  y$x <- xname[corr$x]
-  y$y <- yname[corr$y]
   group.name <- unique(x$x)
   corrmat_data <- link_corrmat_data(yname = yname,
                                     n.row = length(yname),
@@ -47,7 +43,13 @@ handle_link_data <- function(
 }
 
 #' @noRd
-link_group_data <- function(group.name, n.row, n.col, type, hjust = NULL, vjust = NULL, on.left = FALSE)
+link_group_data <- function(group.name,
+                            n.row,
+                            n.col,
+                            type,
+                            hjust = NULL,
+                            vjust = NULL,
+                            on.left = FALSE)
 {
   len <- length(group.name)
   if(!is.null(hjust) && length(hjust) != len)
@@ -96,15 +98,21 @@ link_group_data <- function(group.name, n.row, n.col, type, hjust = NULL, vjust 
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  data.frame(group_x = x,
-             group_y = y,
-             group_name = group.name,
-             stringsAsFactors = FALSE)
+  tibble::tibble(group_x = x,
+                 group_y = y,
+                 group_name = group.name)
 }
 
 #' @noRd
-link_corrmat_data <- function(yname, n.row, n.col, type = "upper", show.diag = FALSE,
-                              hjust = NULL, vjust = NULL, on.left = FALSE, diag.label = FALSE)
+link_corrmat_data <- function(yname,
+                              n.row,
+                              n.col,
+                              type = "upper",
+                              show.diag = FALSE,
+                              hjust = NULL,
+                              vjust = NULL,
+                              on.left = FALSE,
+                              diag.label = FALSE)
 {
   if(!is.null(hjust) && length(hjust) != n.row)
     hjust <- rep_len(hjust, n.row)
@@ -149,10 +157,9 @@ link_corrmat_data <- function(yname, n.row, n.col, type = "upper", show.diag = F
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  data.frame(corr_x = x,
-             corr_y = y,
-             corr_yname = yname,
-             stringsAsFactors = FALSE)
+  tibble::tibble(corr_x = x,
+                 corr_y = y,
+                 corr_yname = yname)
 }
 
 

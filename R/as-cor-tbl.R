@@ -85,6 +85,7 @@ as_cor_tbl.matrix <- function(corr,
     yname = yname,
     type = type,
     show.diag = show.diag,
+    grouped = FALSE,
     class = c("cor_tbl", class(df))
   )
   switch (type,
