@@ -226,6 +226,8 @@ check_cor_matrix <- function(corr,
   if(!all(corr >= -1 & corr <= 1))
     stop("'corr' not in range -1 to 1.", call. = FALSE)
   if(!is.null(p.value)) {
+    if(!is.numeric(p.value))
+      stop("'p.value' needs a numeric matrix.", call. = FALSE)
     p.value <- p.value[is.finite(p.value)]
     if(!all(p.value >= 0 & p.value <= 1))
       stop("'p.value' not in range 0 to 1.", call. = FALSE)
