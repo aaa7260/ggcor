@@ -35,7 +35,8 @@ as_cor_tbl.matrix <- function(corr,
                               upper.ci = NULL,
                               row.names = NULL,
                               col.names = NULL,
-                              cluster = TRUE,
+                              cluster = FALSE,
+                              check = TRUE,
                               ...) {
   type <- match.arg(type, c("full", "upper", "lower"))
   if(!is.null(row.names))
@@ -48,6 +49,10 @@ as_cor_tbl.matrix <- function(corr,
   if(!is.null(p.value)) {
     if(!is.matrix(p.value))
       p.value <- as.matrix(p.value)
+  }
+  if(check) {
+    check_cor_matrix(corr, p.value)
+  } else {
     check_dimension(corr, p.value)
   }
   if(!is.null(lower.ci)) {
@@ -157,16 +162,41 @@ as_cor_tbl.mantel_tbl <- function(corr, byrow = TRUE, ...) {
   }
   df <- tibble::tibble(idx = idx, idy = idy, r = corr$r,
                        p.value = corr$p.value, x = x, y = y)
+  if(attr(corr, "grouped"))
+    df$group <- corr$group
   structure(
     .Data = df,
     xname = xname,
     yname = yname,
     type = "full",
     show.diag = TRUE,
+    grouped = attr(corr, "grouped"),
     class = c("cor_tbl", setdiff(class(df), "mantel_tbl"))
   )
 }
 
+#' @rdname as-cor-tbl
+#' @export
+#' @method as_cor_tbl default
+as_cor_tbl.list <- function(corr, keys = NULL, check = TRUE, ...)
+{
+  if(is.null(keys)) {
+    r <- corr$r %||% corr$cor %||% corr$corr
+    p <- corr$p %||% corr$pvalue %||% corr$p.value
+  } else {
+    nm <- names(keys)
+    if(is.null(nm))
+      stop("'keys' must be a named character vector.", call. = FALSE)
+    if(!"r" %in% nm )
+      stop("'keys' must contained 'r' column.", call. = FALSE)
+    r <- corr[[keys["r"]]]
+    p <- if(is.null(keys["p.value"])) NULL else corr[[keys["p.value"]]]
+  }
+  if(is.null(r)) {
+    stop("Not find correlation matrix.", call. = FALSE)
+  }
+  as_cor_tbl(r, p.value = p, check = check, ...)
+}
 #' @rdname as-cor-tbl
 #' @export
 #' @method as_cor_tbl default
@@ -181,6 +211,24 @@ check_dimension <- function(x, y) {
   if(any(dim(x) != dim(y))) {
     msg <- paste0(" Dimension error: ", y_nm, " must have same dimension as ", x_nm)
     stop(msg, call. = FALSE)
+  }
+}
+
+#' @noRd
+check_cor_matrix <- function(corr,
+                             p.value = NULL)
+{
+  if(!is.numeric(corr))
+    stop("'corr' needs a numeric matrix.", call. = FALSE)
+  if(!is.null(p.value))
+    check_dimension(corr, p.value)
+  corr <- corr[is.finite(corr)]
+  if(!all(corr >= -1 & corr <= 1))
+    stop("'corr' not in range -1 to 1.", call. = FALSE)
+  if(!is.null(p.value)) {
+    p.value <- p.value[is.finite(p.value)]
+    if(!all(p.value >= 0 & p.value <= 1))
+      stop("'p.value' not in range 0 to 1.", call. = FALSE)
   }
 }
 
