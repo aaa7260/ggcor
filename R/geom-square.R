@@ -56,7 +56,7 @@ GeomSquare <- ggproto(
     ggplot2:::ggname("geom_square", do.call("grobTree", polys))
   },
 
-  draw_key = draw_key_square
+  draw_key = draw_key_polygon
 )
 
 #' @noRd
