@@ -4,11 +4,11 @@
 \name{geom_circle2}
 \alias{geom_circle2}
 \alias{GeomCircle2}
-\title{Circles based on center and radius}
+\title{Circle Geom}
 \usage{
 geom_circle2(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., linejoin = "mitre", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., n = 60, linejoin = "mitre",
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -55,11 +55,9 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{r0}{the radius of circle, defualt value is 0.48.}
 }
 \description{
-Circles based on center and radius
+Circle Geom
 }
 \section{Aesthetics}{
 
@@ -72,7 +70,7 @@ Circles based on center and radius
   \item \code{fill}
   \item \code{group}
   \item \code{linetype}
-  \item \code{r}
+  \item \code{r0}
   \item \code{size}
 }
 Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.

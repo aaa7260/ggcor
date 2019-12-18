@@ -41,7 +41,6 @@ draw_key_ellipse <- function(data, params, size) {
 ellipseGrob <- function(x = 0.5, y = 0.5, rho = 1, n = 100,
                         gp = gpar(colour = "grey50", fill = "grey90"),
                         default.units = "native", ...) {
-  }
   dd <- point_to_ellipse(x, y, rho, n)
   grid::polygonGrob(dd$x, dd$y, default.units = default.units, gp = gp, ...)
 }

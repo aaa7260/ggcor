@@ -58,15 +58,16 @@ GeomCircle2 <- ggproto(
     })
     ggplot2:::ggname("geom_circle", do.call("grobTree", polys))
   },
-  draw_key = draw_key_circle
+  draw_key = draw_key_polygon
 )
 
 #' @noRd
 
 point_to_circle <- function(x, y, r0, n = 60) {
   t <- seq(0, 2*pi, length.out = n)
-  xx <- 0.5 * r0 * cos(t) + x
-  yy <- 0.5 * r0 * sin(t) + y
+  r0 <- 0.5 * sign(r0) * sqrt(abs(r0))
+  xx <- r0 * cos(t) + x
+  yy <- r0 * sin(t) + y
   new_data_frame(list(
     x = xx,
     y = yy

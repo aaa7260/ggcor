@@ -3,10 +3,8 @@
 #' of correlation matrix plots because of adding some extra settings by default.
 #' @param x,y matrix or data frame.
 #' @param is.cor logical value
-#'
-quickcor <- function(x,
-                     y = NULL,
-                     is.cor = FALSE,
+#' @export
+quickcor <- function(data,
                      mapping = NULL,
                      fill.colours = NULL,
                      fill.bin = FALSE, # if TRUE, using scale_fill_steps2n(), else scale_fill_gradient2n()

@@ -32,5 +32,6 @@ Imports:
     ade4
 Suggests:
     knitr,
+    WGCNA,
     latex2expr
 RoxygenNote: 6.1.1

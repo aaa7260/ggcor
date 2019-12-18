@@ -6,7 +6,6 @@
 \alias{cor_tbl_type}
 \alias{cor_tbl_showdiag}
 \alias{is_cor_tbl}
-\alias{is_cor_tbl_fct}
 \title{Get attributes of cor_tbl}
 \usage{
 cor_tbl_xname(x)
@@ -18,8 +17,6 @@ cor_tbl_type(x)
 cor_tbl_showdiag(x)
 
 is_cor_tbl(x)
-
-is_cor_tbl_fct(x)
 }
 \arguments{
 \item{x}{a cor_tbl.}

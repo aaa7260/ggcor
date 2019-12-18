@@ -39,7 +39,7 @@ GeomStar <- ggproto(
     })
     ggplot2:::ggname("star", do.call("grobTree", star))
   },
-  draw_key = draw_key_star
+  draw_key = draw_key_polygon
 )
 
 #' @noRd
@@ -47,8 +47,8 @@ point_to_star <- function(x, y, n, r0, ratio = 0.618) {
   p <- 0:n / n
   if (n %% 2 == 0) p <- p + p[2] / 2
   pos <- p * 2 * pi
-  x_tmp <- 0.5 * r0 * sin(pos)
-  y_tmp <- 0.5 * r0 * cos(pos)
+  x_tmp <- 0.5 * sign(r0) * sqrt(abs(r0)) * sin(pos)
+  y_tmp <- 0.5 * sign(r0) * sqrt(abs(r0)) * cos(pos)
   angle <- pi / n
   xx <- numeric(2 * n + 2)
   yy <- numeric(2 * n + 2)

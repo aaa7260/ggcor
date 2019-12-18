@@ -2,7 +2,7 @@
 #' @description \code{correlate} uses \code{cor} to find the correlations and use \code{cor.test} to find
 #'     the p values, confidence intervals for all possible pairs of columns ofmatrix.
 #' @param x, y a matrix object or NULL.
-#' @cor.test logical, if \code{TRUE} (default) will test for correlation.
+#' @param cor.test logical, if \code{TRUE} (default) will test for correlation.
 #' @param method a character string indicating which correlation coefficient is to be used
 #'     for the test. One of "pearson", "kendall", or "spearman".
 #' @param use an optional character string giving a method for computing covariances in the presence of missing values.

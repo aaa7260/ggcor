@@ -4,10 +4,10 @@
 \name{geom_cross}
 \alias{geom_cross}
 \alias{GeomCross}
-\title{Circles based on center and radius}
+\title{Cross Geom}
 \usage{
 geom_cross(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., linejoin = "mitre", na.rm = FALSE,
+  position = "identity", ..., sig.level = 0.05, na.rm = FALSE,
   show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
@@ -42,8 +42,6 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
-\item{linejoin}{Line join style (round, mitre, bevel).}
-
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -58,12 +56,10 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{r0}{the radius of an outer circle, defualt value is sqrt(2)/2.}
-
-\item{sig_thres}{significance threshold.}
+\item{conf.level}{confidence level.}
 }
 \description{
-Circles based on center and radius
+Cross Geom
 }
 \section{Aesthetics}{
 
@@ -71,13 +67,14 @@ Circles based on center and radius
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
-  \item \strong{\code{p}}
+  \item \strong{\code{p.value}}
   \item \code{alpha}
   \item \code{colour}
   \item \code{fill}
   \item \code{group}
-  \item \code{linetype}
+  \item \code{shape}
   \item \code{size}
+  \item \code{stroke}
 }
 Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
 }

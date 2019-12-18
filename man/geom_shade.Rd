@@ -4,11 +4,11 @@
 \name{geom_shade}
 \alias{geom_shade}
 \alias{GeomShade}
-\title{Shade based on center}
+\title{Shade Geom}
 \usage{
 geom_shade(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., linejoin = "mitre", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., sign = 1, linejoin = "mitre",
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -42,6 +42,11 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
+\item{sign}{scalar numeric value. If less than 0, add shade on cells with
+negtive \code{r} values. If larger than 0, add shade on cells with positive
+\code{r} values. If equals 0, add shade on cells except where \code{r}  values
+equals 0.}
+
 \item{linejoin}{Line join style (round, mitre, bevel).}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
@@ -57,14 +62,9 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{sign}{scalar numeric value. If less than 0, add shade on cells with
-negtive \code{r} values. If larger than 0, add shade on cells with positive
-\code{r} values. If equals 0, add shade on cells except where \code{r}  values
-equals 0.}
 }
 \description{
-Shade based on center
+Shade Geom
 }
 \section{Aesthetics}{
 
@@ -72,7 +72,7 @@ Shade based on center
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
-  \item \strong{\code{r}}
+  \item \strong{\code{r0}}
   \item \code{alpha}
   \item \code{colour}
   \item \code{fill}

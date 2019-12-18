@@ -177,7 +177,7 @@ as_cor_tbl.mantel_tbl <- function(corr, byrow = TRUE, ...) {
 
 #' @rdname as-cor-tbl
 #' @export
-#' @method as_cor_tbl default
+#' @method as_cor_tbl list
 as_cor_tbl.list <- function(corr, keys = NULL, check = TRUE, ...)
 {
   if(is.null(keys)) {

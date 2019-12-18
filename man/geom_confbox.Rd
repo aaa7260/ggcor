@@ -4,11 +4,11 @@
 \name{geom_confbox}
 \alias{geom_confbox}
 \alias{GeomConfbox}
-\title{Confident box based on center and confidence interval.}
+\title{Confident-Box Geom}
 \usage{
 geom_confbox(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., linejoin = "mitre", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., width = 0.5, linejoin = "mitre",
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -57,7 +57,7 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 }
 \description{
-Confident box based on center and confidence interval.
+Confident-Box Geom
 }
 \section{Aesthetics}{
 
@@ -66,16 +66,16 @@ Confident box based on center and confidence interval.
   \item \strong{\code{x}}
   \item \strong{\code{y}}
   \item \strong{\code{r}}
-  \item \strong{\code{low}}
-  \item \strong{\code{upp}}
+  \item \strong{\code{lower.ci}}
+  \item \strong{\code{upper.ci}}
   \item \code{alpha}
   \item \code{colour}
-  \item \code{confline_col}
+  \item \code{confline.col}
   \item \code{fill}
   \item \code{group}
   \item \code{linetype}
-  \item \code{midline_col}
-  \item \code{midline_type}
+  \item \code{midline.col}
+  \item \code{midline.type}
   \item \code{size}
 }
 Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.

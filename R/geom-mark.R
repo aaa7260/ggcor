@@ -70,10 +70,10 @@ geom_mark <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomMark <- ggproto("GeomMark", GeomText,
-                   required_aes = c("x", "y", "p"),
+                   required_aes = c("x", "y", "p.value"),
 
                    default_aes = aes(
-                     coef = NA, colour = "black", size = 3.88, angle = 0, hjust = 0.5,
+                     r = NA, colour = "black", size = 3.88, angle = 0, hjust = 0.5,
                      vjust = 0.5, alpha = NA, family = "", fontface = 1, lineheight = 1.2
                    ),
 
@@ -83,10 +83,15 @@ GeomMark <- ggproto("GeomMark", GeomText,
                                          sep = "", parse = FALSE, na.rm = FALSE) {
                      stopifnot(length(sig.level) == length(mark))
                      if(!is.null(sig.thres))
-                       data <- dplyr::filter(data, p <= sig.thres)
-                     star <- sig_mark(data$p, sig.level, mark)
-                     na_idx <- is.na(data$coef)
+                       data <- dplyr::filter(data, p.value <= sig.thres)
+                     star <- sig_mark(data$p.value, sig.level, mark)
+                     na_idx <- is.na(data$r)
                      num <- ifelse(na_idx, "", format_number(data$r, digits, nsmall))
+                     if(parse) {
+                       if(!requireNamespace("latex2exp", quietly = TRUE))
+                         warning("Need latex2exp package.", call. = FALSE)
+                       parse <- FALSE
+                     }
                      if(parse) {
                        label <- paste(num, paste0("{", star, "}"), sep = sep)
                        data$label <- latex2exp::TeX(label, output = "text")
@@ -95,22 +100,21 @@ GeomMark <- ggproto("GeomMark", GeomText,
                      }
                      GeomText$draw_panel(data, panel_params, coord)
                    },
-
                    draw_key = draw_key_text
 )
 
 #' @noRd
-sig_mark <- function(p,
+sig_mark <- function(p.value,
                      sig.level = c(0.05, 0.01, 0.001),
                      mark = c("*", "**", "***")) {
-  if(!is.numeric(p))
-    p <- as.numeric(p)
+  if(!is.numeric(p.value))
+    p.value <- as.numeric(p.value)
   ord <- order(sig.level)
   sig.level <- sig.level[ord]
   mark <- mark[ord]
   brks <- c(0, sig.level, 1)
   lbs <- c(mark, "")
-  pp <- cut(p, breaks = brks, labels = lbs, include.lowest = FALSE, right = TRUE)
-  ifelse(p == 0, mark[1], as.character(pp))
+  pp <- cut(p.value, breaks = brks, labels = lbs, include.lowest = FALSE, right = TRUE)
+  ifelse(p.value == 0, mark[1], as.character(pp))
 }
 

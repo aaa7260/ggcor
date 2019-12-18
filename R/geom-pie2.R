@@ -45,22 +45,22 @@ geom_pie2 <- function(mapping = NULL, data = NULL,
 #' @export
 GeomPie2 <- ggproto(
   "GeomPie2", Geom,
-  default_aes = aes(rho = 1, colour = "grey60", fill = NA, size = 0.25, linetype = 1,
-                    alpha = NA),
+  default_aes = aes(r0 = 1, colour = "grey60", fill = NA, size = 0.25,
+                    linetype = 1, alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord, n = 60, linejoin = "mitre") {
     aesthetics <- setdiff(names(data), c("x", "y"))
     polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      s <- point_to_sector(x = row$x, y = row$y, r = row$rho, n - 2)
-      l <- point_to_line(x = row$x, y = row$y, r = row$rho, n)
-      if(row$rho == 0) {
+      s <- point_to_sector(x = row$x, y = row$y, r = row$r0, n - 2)
+      l <- point_to_line(x = row$x, y = row$y, r = row$r0, n)
+      if(row$r0 == 0) {
         aes_sector <- new_data_frame(row[aesthetics])[rep(1, 3), ]
         sector <- GeomPolygon$draw_panel(cbind(s, aes_sector), panel_params, coord)
       } else {
         aes_sector <- new_data_frame(row[aesthetics])[rep(1, n), ]
         sector <- GeomPolygon$draw_panel(cbind(s, aes_sector), panel_params, coord)
       }
-      if(row$rho == 1) {
+      if(row$r0 == 1) {
         line <- grid::nullGrob()
       } else {
         aes_line <- new_data_frame(row[aesthetics])[rep(1, n), ]
@@ -68,19 +68,17 @@ GeomPie2 <- ggproto(
       }
       grid::gList(sector, line)
     })
-
     ggplot2:::ggname("geom_pie2", do.call("grobTree", polys))
   },
-
-  draw_key = draw_key_pie
+  draw_key = draw_key_polygon
 )
 #' @noRd
-point_to_sector <- function(x, y, rho, n = 58) {
-  if(rho == 0) {
+point_to_sector <- function(x, y, r0, n = 58) {
+  if(r0 == 0) {
     xx <- c(x, x, x)
     yy <- c(y, y + 0.5, y)
   } else {
-    t <- seq(pi / 2, 2 * rho * pi + pi / 2, length.out = n)
+    t <- seq(pi / 2, 2 * r0 * pi + pi / 2, length.out = n)
     xx <- c(x, 0.5 * cos(t) + x, x)
     yy <- c(y, 0.5 * sin(t) + y, y)
   }
@@ -91,9 +89,9 @@ point_to_sector <- function(x, y, rho, n = 58) {
 }
 
 #' @noRd
-point_to_line <- function(x, y, rho, n = 60) {
-  sign <- ifelse(sign(rho) == 0, 1, sign(rho))
-  t <- seq(2 * rho * pi + pi / 2, sign * 2 * pi + pi/2, length.out = n)
+point_to_line <- function(x, y, r0, n = 60) {
+  sign <- ifelse(sign(r0) == 0, 1, sign(r0))
+  t <- seq(2 * r0 * pi + pi / 2, sign * 2 * pi + pi/2, length.out = n)
   xx <- 0.5 * cos(t) + x
   yy <- 0.5 * sin(t) + y
   new_data_frame(list(

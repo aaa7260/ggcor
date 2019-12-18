@@ -19,7 +19,7 @@
 geom_cross <- function(mapping = NULL, data = NULL,
                        stat = "identity", position = "identity",
                        ...,
-                       conf.level = 0.05,
+                       sig.level = 0.05,
                        na.rm = FALSE,
                        show.legend = NA,
                        inherit.aes = TRUE) {
@@ -49,8 +49,8 @@ GeomCross <- ggproto(
                     alpha = NA, stroke = 0.5),
   required_aes = c("x", "y", "p.value"),
 
-  draw_panel = function(self, data, panel_params, coord, conf.level = 0.05) {
-    data <- dplyr::filter(data, p.value >= conf.level)
+  draw_panel = function(self, data, panel_params, coord, sig.level = 0.05) {
+    data <- dplyr::filter(data, p.value >= sig.level)
     data$p.value <- NULL
     GeomPoint$draw_panel(data, panel_params, coord)
   },

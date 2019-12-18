@@ -51,26 +51,26 @@ GeomShade <- ggproto(
   "GeomShade", Geom,
   default_aes = aes(colour = "white", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
-  required_aes = c("x", "y", "r"),
+  required_aes = c("x", "y", "r0"),
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
                         sign = 1) {
-    aesthetics <- setdiff(names(data), c("x", "y", "r"))
+    aesthetics <- setdiff(names(data), c("x", "y", "r0"))
     polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
       if(sign < 0) {
-        if(row$r >= 0) return(grid::nullGrob())
-        shade <- point_to_shade(row$x, row$y, row$r)
+        if(row$r0 >= 0) return(grid::nullGrob())
+        shade <- point_to_shade(row$x, row$y, row$r0)
         aes <- new_data_frame(row[aesthetics])[rep(1, 3), ]
         return(GeomSegment$draw_panel(cbind(shade, aes), panel_params, coord))
       }
       if(sign > 0) {
-        if(row$r <= 0) return(grid::nullGrob())
-        shade <- point_to_shade(row$x, row$y, row$r)
+        if(row$r0 <= 0) return(grid::nullGrob())
+        shade <- point_to_shade(row$x, row$y, row$r0)
         aes <- new_data_frame(row[aesthetics])[rep(1, 3), ]
         return(GeomSegment$draw_panel(cbind(shade, aes), panel_params, coord))
       }
       if(sign == 0) {
-        if(row$r == 0) return(grid::nullGrob())
-        shade <- point_to_shade(row$x, row$y, row$r)
+        if(row$r0 == 0) return(grid::nullGrob())
+        shade <- point_to_shade(row$x, row$y, row$r0)
         aes <- new_data_frame(row[aesthetics])[rep(1, 3), ]
         return(GeomSegment$draw_panel(cbind(shade, aes), panel_params, coord))
       }

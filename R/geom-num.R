@@ -1,7 +1,6 @@
 #' Format number Geom
 #'
-#'
-#' @eval rd_aesthetics("geom", "num")
+#' @eval rd_aesthetics("geom", "number")
 #' @param digits integer indicating the number of decimal places (round) or
 #'     significant digits (signif) to be used, the default value is 2.
 #' @param nsmall the minimum number of digits to the right of the decimal
@@ -10,7 +9,7 @@
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_text
-#' @rdname geom_num
+#' @rdname geom_number
 #' @export
 #' @importFrom ggplot2 layer
 #' @importFrom ggplot2 ggproto
@@ -52,25 +51,20 @@ geom_number <- function(mapping = NULL, data = NULL,
   )
 }
 
-#' @rdname geom_num
+#' @rdname geom_number
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomNumber <- ggproto("GeomNumber",
-                   GeomText,
-                   required_aes = c("x", "y", "number"),
-
-                   default_aes = aes(
-                     colour = "black", size = 3.88, angle = 0, hjust = 0.5,
+GeomNumber <- ggproto("GeomNumber", GeomText,
+                   required_aes = c("x", "y", "num"),
+                   default_aes = aes(colour = "black", size = 3.88, angle = 0, hjust = 0.5,
                      vjust = 0.5, alpha = NA, family = "", fontface = 1, lineheight = 1.2),
-
-                   draw_panel = function(data, panel_params, coord, digits = 2, nsmall = 2,
-                                         na.rm = FALSE) {
-                     data$label <- format_number(data$number, digits, nsmall)
+                   draw_panel = function(data, panel_params, coord, digits = 2,
+                                         nsmall = 2, na.rm = FALSE) {
+                     data$label <- format_number(data$num, digits, nsmall)
                      GeomText$draw_panel(data, panel_params, coord)
                     },
-
-                    draw_key = draw_key_text
+                   draw_key = draw_key_text
 )
 
 
