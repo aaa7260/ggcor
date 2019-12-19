@@ -71,7 +71,7 @@ Cross Geom
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
-  \item \strong{\code{p}}
+  \item \strong{\code{p.value}}
   \item \code{alpha}
   \item \code{colour}
   \item \code{fill}

@@ -22,11 +22,11 @@ as_cor_tbl(corr, ...)
 \method{as_cor_tbl}{data.frame}(corr, p.value = NULL, lower.ci = NULL,
   upper.ci = NULL, cluster = FALSE, ...)
 
-\method{as_cor_tbl}{data.frame}(corr, ...)
+\method{as_cor_tbl}{data.frame}(corr, check = FALSE, ...)
 
-\method{as_cor_tbl}{rcorr}(corr, ...)
+\method{as_cor_tbl}{rcorr}(corr, check = FALSE, ...)
 
-\method{as_cor_tbl}{corr.test}(corr, ...)
+\method{as_cor_tbl}{corr.test}(corr, check = FALSE, ...)
 
 \method{as_cor_tbl}{mantel_tbl}(corr, byrow = TRUE, ...)
 

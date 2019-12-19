@@ -54,26 +54,6 @@ make_list_names <- function(x, pre = "X", sep = "")
   return(x)
 }
 
-
-#' @noRd
-matrix_to_df <- function(x, val.name = "v")
-{
-  if(!is.matrix(x))
-    x <- as.matrix(x)
-  # make name
-  x <- make_matrix_name(x)
-  row_name <- rownames(x)
-  col_name <- colnames(x)
-  vv <- as.vector(x)
-  xx <- rep(col_name, each = nrow(x))
-  yy <- rep(row_name, ncol(x))
-  m <- tibble::tibble(x = factor(xx, levels = col_name),
-                      y = factor(yy, levels = rev(row_name)),
-                      v = vv)
-  names(m) <- c("x", "y", val.name)
-  m
-}
-
 #' @noRd
 new_data_frame <- function(x = list(), n = NULL) {
   if (length(x) != 0 && is.null(names(x))) stop("Elements must be named", call. = FALSE)

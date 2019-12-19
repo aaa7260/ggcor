@@ -116,27 +116,27 @@ as_cor_tbl.data.frame <- function(corr,
 #' @rdname  as-cor-tbl
 #' @export
 #' @method as_cor_tbl data.frame
-as_cor_tbl.correlation <- function(corr, ...) {
+as_cor_tbl.correlation <- function(corr, check = FALSE, ...) {
   as_cor_tbl(corr$r, p.value = corr$p.value, lower.ci = corr$lower.ci,
-             upper.ci = corr$upper.ci, ...)
+             upper.ci = corr$upper.ci, check = FALSE, ...)
 }
 
 #' @rdname  as-cor-tbl
 #' @export
 #' @method as_cor_tbl rcorr
-as_cor_tbl.rcorr <- function(corr, ...)
+as_cor_tbl.rcorr <- function(corr, check = FALSE, ...)
 {
   p.value <- corr$P
   diag(p.value) <- 0
-  as_cor_tbl(corr$r, p.value = p.value, ...)
+  as_cor_tbl(corr$r, p.value = p.value, check = FALSE, ...)
 }
 
 #' @rdname  as-cor-tbl
 #' @export
 #' @method as_cor_tbl corr.test
-as_cor_tbl.corr.test <- function(corr, ...)
+as_cor_tbl.corr.test <- function(corr, check = FALSE, ...)
 {
-  as_cor_tbl(corr$r, p.value = corr$p, ...)
+  as_cor_tbl(corr$r, p.value = corr$p, check = FALSE, ...)
 }
 
 #' @rdname  as-cor-tbl

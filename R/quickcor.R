@@ -102,7 +102,7 @@ quickcor <- function(x,
     p <- p + scale_fill_steps2n(breaks = legend.breaks,
                                 labels = legend.labels,
                                 expand = TRUE,
-                                colours = fill.colours %||% .default_colors,
+                                colours = fill.colours %||% red_blue(),
                                 limits = c(-1, 1)) +
       guides(fill = guide_colorsteps(even.steps = FALSE,
                                      show.limits = FALSE,
@@ -111,7 +111,7 @@ quickcor <- function(x,
     p <- p + scale_fill_gradient2n(breaks = legend.breaks,
                                    labels = legend.labels,
                                    expand = TRUE,
-                                   colours = fill.colours %||% .default_colors,
+                                   colours = fill.colours %||% red_blue(),
                                    limits = c(-1, 1)) +
       guides(fill = guide_colourbar(title = legend.title,
                                     nbin  = 40))
