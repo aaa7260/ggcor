@@ -31,7 +31,7 @@ quickcor <- function(data,
   yname <- cor_tbl_yname(data)
   name <- names(data)
   # handle mapping setting
-  map_base <- aes_string(x = "x", y = "y", r0 = "r", fill = "r")
+  map_base <- aes_string(x = "x", y = "y", r = "r", r0 = "r", fill = "r")
   if("p.value" %in% name)
     map_base <- modifyList(map_base, aes_string(p.value = "p.value"))
   if(all (c("lower.ci", "upper.ci") %in% name))

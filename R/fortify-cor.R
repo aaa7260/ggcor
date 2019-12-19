@@ -19,12 +19,11 @@ fortify_cor <- function(x,
       lower = get_lower_data(x, show.diag)
     ))
   }
-  clss <- c("cor_tbl", "correlation", "rcorr", "corr.test", "mantel_tbl")
-  if(any(clss %in% class(x))) {
+  clss <- c("correlation", "rcorr", "corr.test", "mantel_tbl")
+  if(any(clss %in% class(x)) || (is.list(x) && !is.data.frame(x))) {
     return(as_cor_tbl(x, type = type, show.diag = show.diag, cluster = cluster,
                       cluster.method = cluster.method, ...))
   }
-
   y <- y %||% x
   if(!is.data.frame(x))
      x <- as.data.frame(x)
