@@ -51,7 +51,7 @@ GeomCross <- ggproto(
   "GeomCross", Geom,
   default_aes = aes(colour = "red", fill = NA,
                     size = 0.5, linetype = 1, alpha = NA),
-  required_aes = c("x", "y", "p"),
+  required_aes = c("x", "y", "p.value"),
 
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
                         sig.level = 0.05, r0 = 0.6) {
@@ -60,7 +60,7 @@ GeomCross <- ggproto(
               call. = FALSE)
     }
     aesthetics <- setdiff(names(data), c("x", "y", "p"))
-    data <- dplyr::filter(data, p > sig.level)
+    data <- dplyr::filter(data, p.value > sig.level)
     dd <- point_to_cross(data$x, data$y, r0)
     GeomSegment$draw_panel(cbind(dd, data[, aesthetics]), panel_params, coord)
   },
