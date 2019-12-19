@@ -4,13 +4,14 @@
 \alias{quickcor}
 \title{Plot Correlation Matrix Quickly}
 \usage{
-quickcor(data, mapping = NULL, fill.colours = NULL, fill.bin = FALSE,
-  panel.backgroud = NA, grid.colour = "grey50", grid.size = 0.25,
-  grid.linetype = "solid", axis.x.position = "auto",
-  axis.y.position = "auto", axis.label.drop = TRUE,
-  legend.title = "corr", legend.position = "auto",
-  legend.breaks = NULL, legend.labels = NULL, coord.fixed = TRUE,
-  xlim = NULL, ylim = NULL, ...)
+quickcor(x, y = NULL, mapping = NULL, fill.colours = NULL,
+  fill.bin = FALSE, panel.backgroud = NA, grid.colour = "grey50",
+  grid.size = 0.25, grid.linetype = "solid",
+  axis.x.position = "auto", axis.y.position = "auto",
+  axis.label.drop = TRUE, legend.title = "corr",
+  legend.position = "auto", legend.breaks = NULL,
+  legend.labels = NULL, coord.fixed = TRUE, xlim = NULL,
+  ylim = NULL, ...)
 }
 \arguments{
 \item{x, y}{matrix or data frame.}

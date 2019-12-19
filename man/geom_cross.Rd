@@ -7,8 +7,8 @@
 \title{Cross Geom}
 \usage{
 geom_cross(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., sig.level = 0.05, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., sig.level = 0.05, linejoin = "mitre",
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -42,6 +42,10 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
+\item{sig.level}{significance threshold.}
+
+\item{linejoin}{Line join style (round, mitre, bevel).}
+
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -56,7 +60,7 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{conf.level}{confidence level.}
+\item{r0}{the radius of an outer circle, defualt value is sqrt(2)/2.}
 }
 \description{
 Cross Geom
@@ -67,14 +71,13 @@ Cross Geom
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
-  \item \strong{\code{p.value}}
+  \item \strong{\code{p}}
   \item \code{alpha}
   \item \code{colour}
   \item \code{fill}
   \item \code{group}
-  \item \code{shape}
+  \item \code{linetype}
   \item \code{size}
-  \item \code{stroke}
 }
 Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
 }

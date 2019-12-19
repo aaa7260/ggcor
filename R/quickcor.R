@@ -4,7 +4,8 @@
 #' @param x,y matrix or data frame.
 #' @param is.cor logical value
 #' @export
-quickcor <- function(data,
+quickcor <- function(x,
+                     y = NULL,
                      mapping = NULL,
                      fill.colours = NULL,
                      fill.bin = FALSE, # if TRUE, using scale_fill_steps2n(), else scale_fill_gradient2n()
@@ -24,7 +25,7 @@ quickcor <- function(data,
                      ylim = NULL,
                      ...)
 {
-  data <- fortify_cor(data, ...)
+  data <- fortify_cor(x, y, ...)
   type <- cor_tbl_type(data)
   show.diag <- cor_tbl_showdiag(data)
   xname <- cor_tbl_xname(data)

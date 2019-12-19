@@ -6,7 +6,8 @@ ggcor <- function(data,
                   axis.label.drop = TRUE,
                   ...)
 {
-  data <- fortify_cor(data, ...)
+  if(!is_cor_tbl(data))
+    stop("'data' needs a cor_tbl.", call. = FALSE)
   type <- cor_tbl_type(data)
   show.diag <- cor_tbl_showdiag(data)
   xname <- cor_tbl_xname(data)
