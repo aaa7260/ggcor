@@ -2,16 +2,15 @@
 #' @importFrom dplyr %>% left_join
 #' @importFrom stats setNames
 tidy_link_data <- function(df,
-                             cor_tbl,
-                             spec.key = "spec",
-                             env.key = "env",
-                             env.point.hjust = NULL,
-                             env.point.vjust = NULL,
-                             spec.point.hjust = NULL,
-                             spec.point.vjust = NULL,
-                             on.left = FALSE,
-                             diag.label = FALSE)
-
+                           cor_tbl,
+                           spec.key = "spec",
+                           env.key = "env",
+                           env.point.hjust = NULL,
+                           env.point.vjust = NULL,
+                           spec.point.hjust = NULL,
+                           spec.point.vjust = NULL,
+                           on.left = FALSE,
+                           diag.label = FALSE)
 {
   if(!is_cor_tbl(cor_tbl))
     stop("Need a cor_tbl.", call. = FALSE)
@@ -29,7 +28,7 @@ tidy_link_data <- function(df,
                             vjust = env.point.vjust,
                             on.left = on.left,
                             diag.label = diag.label)
-  group_data <- link_spec_data(spec.name = spec.name,
+  spec_data <- link_spec_data(spec.name = spec.name,
                                n.row = length(yname),
                                n.col = length(xname),
                                type = type,
@@ -38,7 +37,7 @@ tidy_link_data <- function(df,
                                on.left = on.left)
   link_data <- df %>%
     dplyr::left_join(env_data, by = setNames("env.key", env.key)) %>%
-    dplyr::left_join(group_data, by = setNames("spec.key", spec.key))
+    dplyr::left_join(spec_data, by = setNames("spec.key", spec.key))
   structure(.Data = link_data, class = c("link_tbl", class(link_data)))
 }
 
@@ -98,8 +97,8 @@ link_spec_data <- function(spec.name,
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  tibble::tibble(x = x,
-                 y = y,
+  tibble::tibble(link.x = x,
+                 link.y = y,
                  spec.key = spec.name)
 }
 
@@ -157,8 +156,8 @@ link_env_data <- function(yname,
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  tibble::tibble(xend = x,
-                 yend = y,
+  tibble::tibble(link.xend = x,
+                 link.yend = y,
                  env.key = yname)
 }
 
