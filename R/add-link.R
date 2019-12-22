@@ -1,3 +1,4 @@
+#' @importFrom ggplot2 aes_
 #' @export
 add_link <- function(df,
                      mapping = NULL,
@@ -33,7 +34,7 @@ add_link <- function(df,
                                 diag.label = diag.label)
     spec.point.data <- link.data[!duplicated(link.data[[spec.key]]), , drop = FALSE]
     env.point.data <- link.data[!duplicated(link.data[[env.key]]), , drop = FALSE]
-    map_base <- aes_string(x = "link.x", y = "link.y", xend = "link.xend", yend = "link.yend")
+    map_base <- aes_(x = ~link.x, y = ~link.y, xend = ~link.xend, yend = ~link.yend)
     mapping <- if(!is.null(mapping)) modifyList(map_base, mapping) else map_base
     curvature <- curvature %||% switch (type,
                                         full = 0,
@@ -53,7 +54,7 @@ add_link <- function(df,
                                       inherit.aes = FALSE, ...),
                if(!is.null(extra.params$spec.point)) {
                  spec.point <- geom_point(
-                   aes_string(x = "link.x", y = "link.y"), spec.point.data,
+                   aes_(x = ~link.x, y = ~link.y), spec.point.data,
                    alpha = extra.params$spec.point$alpha,
                    colour = extra.params$spec.point$colour,
                    fill = extra.params$spec.point$fill,
@@ -64,7 +65,7 @@ add_link <- function(df,
                },
                if(!is.null(extra.params$env.point)) {
                  env.point = geom_point(
-                   aes_string(x = "link.xend", y = "link.yend"), data = env.point.data,
+                   aes_(x = ~link.xend, y = ~link.yend), env.point.data,
                    alpha = extra.params$env.point$alpha,
                    colour = extra.params$env.point$colour,
                    fill = extra.params$env.point$fill,
@@ -79,7 +80,7 @@ add_link <- function(df,
                    y = spec.point.data$link.y + spec.label.vspace,
                    label = spec.point.data[[spec.key]])
                  spec.label <- geom_text(
-                   aes_string(x = "x", y = "y", label = "label"), spec.label.data,
+                   aes_(x = ~x, y = ~y, label = ~label), spec.label.data,
                    family = extra.params$spec.label$family,
                    fontface = extra.params$spec.label$fontface,
                    colour = extra.params$spec.label$colour,

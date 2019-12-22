@@ -1,6 +1,6 @@
-#' @noRd
 #' @importFrom dplyr %>% left_join
 #' @importFrom stats setNames
+#' @noRd
 tidy_link_data <- function(df,
                            cor_tbl,
                            spec.key = "spec",
