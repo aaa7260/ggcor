@@ -68,6 +68,7 @@ correlate <- function(x,
 }
 
 #' @noRd
+#' @export
 print.correlation <- function(x, all = FALSE, ...) {
   if(all) print(x, ...) else print(x$r, ...)
 }
