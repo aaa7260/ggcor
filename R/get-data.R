@@ -78,32 +78,6 @@ get_data <- function(..., type = "full", show.diag = TRUE)
 }
 
 #' @noRd
-get_grid_data <- function(x) {
-  if(!is_cor_tbl(x))
-    stop("Need a cor_tbl.", call. = FALSE)
-  n <- length(cor_tbl_xname(x))
-  m <- length(cor_tbl_yname(x))
-  type <- cor_tbl_type(x)
-  show.diag <- cor_tbl_showdiag(x)
-  df <- tibble::tibble(x = rep(1:n, m), y = rep(1:m, each = n))
-  if(type == "upper") {
-    if(isTRUE(show.diag)) {
-      df <- dplyr::filter(df, x + y >= n + 1)
-    } else {
-      df <- dplyr::filter(df, x + y > n + 1)
-    }
-  }
-  if(type == "lower"){
-    if(isTRUE(show.diag)) {
-      df <- dplyr::filter(df, x + y <= n + 1)
-    } else {
-      df <- dplyr::filter(df, x + y < n + 1)
-    }
-  }
-  df
-}
-
-#' @noRd
 is_symmet <- function(x) {
   stopifnot(is_cor_tbl(x))
   xname <- cor_tbl_xname(x)

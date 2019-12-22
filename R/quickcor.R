@@ -9,10 +9,8 @@ quickcor <- function(x,
                      mapping = NULL,
                      fill.colours = NULL,
                      fill.bin = FALSE, # if TRUE, using scale_fill_steps2n(), else scale_fill_gradient2n()
-                     panel.backgroud = NA,
                      grid.colour = "grey50",
                      grid.size = 0.25,
-                     grid.linetype = "solid",
                      axis.x.position = "auto",
                      axis.y.position = "auto",
                      axis.label.drop = TRUE,
@@ -86,9 +84,7 @@ quickcor <- function(x,
     legend.labels <- legend.breaks
   envir <- parent.frame()
   p <- ggplot(data = data, mapping = mapping, environment = envir) +
-    geom_tile(aes_string("x", "y"), data = get_grid_data(data),
-              fill = panel.backgroud, colour = grid.colour,
-              size = grid.size, linetype = grid.linetype, inherit.aes = FALSE) +
+    add_grid(grid.colour, grid.size) +
     scale_x_continuous(breaks = axis.x.breaks, labels = axis.x.labels,
                        position = axis.x.position)+
     scale_y_continuous(breaks = axis.y.breaks, labels = axis.y.labels,

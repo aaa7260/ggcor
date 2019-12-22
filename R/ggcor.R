@@ -55,8 +55,8 @@ ggcor <- function(data,
                        position = axis.x.position)+
     scale_y_continuous(breaks = axis.y.breaks, labels = axis.y.labels,
                        position = axis.y.position) +
-    expand_limits(xlim = c(0.5, length(xname) + 0.5),
-                  ylim = c(0.5, length(yname) + 0.5))
+    expand_axis(x = c(0.5, length(xname) + 0.5),
+                y = c(0.5, length(yname) + 0.5))
   class(p) <- c("ggcor", class(p))
   p
 }
