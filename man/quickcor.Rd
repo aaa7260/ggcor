@@ -5,8 +5,7 @@
 \title{Plot Correlation Matrix Quickly}
 \usage{
 quickcor(x, y = NULL, mapping = NULL, fill.colours = NULL,
-  fill.bin = FALSE, panel.backgroud = NA, grid.colour = "grey50",
-  grid.size = 0.25, grid.linetype = "solid",
+  fill.bin = FALSE, grid.colour = "grey50", grid.size = 0.25,
   axis.x.position = "auto", axis.y.position = "auto",
   axis.label.drop = TRUE, legend.title = "corr",
   legend.position = "auto", legend.breaks = NULL,

@@ -1,7 +1,7 @@
 Package: ggcor
 Type: Package
 Title: Extended tools for correlation analysis and visualization.
-Version: 1.0.0
+Version: 0.9.0
 Authors@R: c(
     person("Houyun", "Huang", email = "houyunhuang@163.com", role = c("aut", "cre")),
     person("Lei", "Zhou", email = "zhoulei@scau.edu.cn", role = "aut"),
@@ -20,8 +20,8 @@ BugReports: https://github.com/houyunhuang/ggcor/issues
 LazyData: TRUE
 Encoding: UTF-8
 Depends:
-    R (>= 3.3.0),
-    ggplot2 (>= 3.0.0)
+    R (>= 3.5.0),
+    ggplot2 (>= 3.2.0)
 Imports:
     stats,
     RColorBrewer,
