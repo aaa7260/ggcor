@@ -10,8 +10,7 @@ quickcor(x, y = NULL, mapping = NULL, fill.colours = NULL,
   axis.x.position = "auto", axis.y.position = "auto",
   axis.label.drop = TRUE, legend.title = "corr",
   legend.position = "auto", legend.breaks = NULL,
-  legend.labels = NULL, coord.fixed = TRUE, xlim = NULL,
-  ylim = NULL, ...)
+  legend.labels = NULL, ...)
 }
 \arguments{
 \item{x, y}{matrix or data frame.}

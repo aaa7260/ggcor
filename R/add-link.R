@@ -50,6 +50,13 @@ add_link <- function(df,
                                               upper = 1,
                                               lower = 0)
     }
+    min.x <- min(link.data$link.x, na.rm = TRUE)
+    max.x <- max(link.data$link.x, na.rm = TRUE)
+    xlim <- switch (type,
+      full = if(on.left) min.x - 2 else max.x + 2,
+      upper = min.x - 2,
+      lower = max.x + 2
+    )
     gg <- list(link.line = geom_curve(mapping, link.data, curvature = curvature,
                                       inherit.aes = FALSE, ...),
                if(!is.null(extra.params$spec.point)) {
@@ -89,17 +96,18 @@ add_link <- function(df,
                    vjust = extra.params$spec.label$vjust,
                    angle = extra.params$spec.label$angle,
                    inherit.aes = FALSE)
-               })
+               },
+               expand_axis(x = xlim))
     gg
   }
-  class(link_fun) <- c("link_fun", class(link_fun))
+  class(link_fun) <- c("add_link", class(link_fun))
   link_fun
 }
 
 
 
 #' @export
-ggplot_add.link_fun <- function(object, plot, object_name) {
+ggplot_add.add_link <- function(object, plot, object_name) {
   data <- plot$data
   new_layer <- object(corr = data)
   plot + new_layer

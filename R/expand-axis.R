@@ -2,18 +2,16 @@
 expand_axis <- function(x = NULL, y = NULL)
 {
   reset_axis_lim <- function(p) {
+    if(!is.null(x) && !is.numeric(x)) x <- NULL
+    if(!is.null(y) && !is.numeric(y)) y <- NULL
     if(is.null(x) && is.null(y)) return(p)
+    xlim <- p$coordinates$limits$x
+    ylim <- p$coordinates$limits$y
     if(!is.null(x)) {
-      if(!is.numeric(x))
-        stop("'x' must be a numeric vector.", call. = FALSE)
-      xlim <- p$coordinates$limits$x
       p$coordinates$limits$x <- c(min(xlim, x, na.rm = TRUE),
                                   max(xlim, x, na.rm = TRUE))
     }
     if(!is.null(y)) {
-      if(!is.numeric(y))
-        stop("'y' must be a numeric vector.", call. = FALSE)
-      ylim <- p$coordinates$limits$y
       p$coordinates$limits$y <- c(min(ylim, y, na.rm = TRUE),
                                   max(ylim, y, na.rm = TRUE))
     }

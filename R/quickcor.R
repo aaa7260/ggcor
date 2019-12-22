@@ -20,9 +20,6 @@ quickcor <- function(x,
                      legend.position = "auto",
                      legend.breaks = NULL,
                      legend.labels = NULL,
-                     coord.fixed = TRUE,
-                     xlim = NULL,
-                     ylim = NULL,
                      ...)
 {
   data <- fortify_cor(x, y, ...)
@@ -117,14 +114,11 @@ quickcor <- function(x,
                                     nbin  = 40))
   }
   # add theme and coord
-  xlim <- xlim %||% c(0.5, length(xname) + 0.5)
-  ylim <- ylim %||% c(0.5, length(yname) + 0.5)
-  if(coord.fixed) {
-    p <- p + coord_fixed(expand = FALSE, xlim = xlim, ylim = ylim)
-  } else {
-    p <- p + coord_cartesian(expand = FALSE, xlim = xlim, ylim = ylim)
-  }
-  p <- p + theme_cor(legend.position = legend.position)
+  xlim <- c(0.5, length(xname) + 0.5)
+  ylim <- c(0.5, length(yname) + 0.5)
+  p <- p +
+    coord_fixed(expand = FALSE, xlim = xlim, ylim = ylim) +
+    theme_cor(legend.position = legend.position)
   class(p) <- c("quickcor", class(p))
   p
 }
