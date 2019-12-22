@@ -52,11 +52,20 @@ add_link <- function(df,
     }
     min.x <- min(link.data$link.x, na.rm = TRUE)
     max.x <- max(link.data$link.x, na.rm = TRUE)
-    xlim <- switch (type,
-      full = if(on.left) min.x - 2 else max.x + 2,
-      upper = min.x - 2,
-      lower = max.x + 2
-    )
+    xlim <- if(!is.null(extra.params$spec.label)) {
+      switch (type,
+              full = if(on.left) min.x - 2 else max.x + 2,
+              upper = min.x - 2,
+              lower = max.x + 2
+      )
+    } else {
+      switch (type,
+              full = if(on.left) min.x - 0.2 else max.x + 0.2,
+              upper = min.x - 0.2,
+              lower = max.x + 0.2
+      )
+    }
+
     gg <- list(link.line = geom_curve(mapping, link.data, curvature = curvature,
                                       inherit.aes = FALSE, ...),
                if(!is.null(extra.params$spec.point)) {
