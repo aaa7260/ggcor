@@ -115,7 +115,7 @@ as_cor_tbl.data.frame <- function(corr,
 
 #' @rdname  as-cor-tbl
 #' @export
-#' @method as_cor_tbl data.frame
+#' @method as_cor_tbl correlation
 as_cor_tbl.correlation <- function(corr, check = FALSE, ...) {
   as_cor_tbl(corr$r, p.value = corr$p.value, lower.ci = corr$lower.ci,
              upper.ci = corr$upper.ci, check = FALSE, ...)

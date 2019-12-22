@@ -22,7 +22,7 @@ as_cor_tbl(corr, ...)
 \method{as_cor_tbl}{data.frame}(corr, p.value = NULL, lower.ci = NULL,
   upper.ci = NULL, cluster = FALSE, ...)
 
-\method{as_cor_tbl}{data.frame}(corr, check = FALSE, ...)
+\method{as_cor_tbl}{correlation}(corr, check = FALSE, ...)
 
 \method{as_cor_tbl}{rcorr}(corr, check = FALSE, ...)
 
