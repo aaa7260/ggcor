@@ -9,6 +9,10 @@
 #' @param rownames,colnames row/column names of correlation matrix.
 #' @param cluster a logical value indicating whether reorder the correlation matrix
 #'     by clustering.
+#' @param byrow a logical value indicating whether arrange the spec on y axis.
+#' @param keys a named character vector, should contain "r" and "p.value".
+#' @param check a logical value indicating whether check the correlation coefficient and
+#'     p value.
 #' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
 #' @details \code{cluster = TRUE} just supports for symmetric correlation matrix.
 #' @return a cor_tbl object.

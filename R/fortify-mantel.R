@@ -52,15 +52,13 @@ fortify_mantel <- function(spec,
   attr(df, "grouped") <- grouped
   df
 }
-#' @noRd
+#' @export
 mantel_test <- function(spec,
                         env,
                         env.ctrl = NULL, # named list if grouped
                         mantel.fun = "mantel",
                         spec.select = NULL, # a list of index vector
                         env.select = NULL,
-                        spec.dist.fun = "vegdist",
-                        env.dist.fun = "vegdist",
                         spec.dist.method = "bray",
                         env.dist.method = "euclidean",
                         ...)
@@ -98,10 +96,10 @@ mantel_test <- function(spec,
     subset(env, select = .x, drop = FALSE)})
 
   rp <- purrr::map2(spec.name, env.name, function(.x, .y) {
-    spec.dist <- do.call(spec.dist.fun, list(spec[[.x]], method = spec.dist.method))
-    env.dist <- do.call(env.dist.fun, list(env[[.y]], method = env.dist.method))
+    spec.dist <- vegan::vegdist(spec[[.x]], method = spec.dist.method)
+    env.dist <- vegan::vegdist(env[[.y]], method = env.dist.method)
     if(mantel.fun == "mantel.partial") {
-      env.ctrl.dist <- do.call(env.dist.fun, list(env.ctrl, method = env.dist.method))
+      env.ctrl.dist <- vegan::vegdist(env.ctrl, method = env.dist.method)
     }
     switch (mantel.fun,
             mantel.partial  = vegan::mantel.partial(spec.dist, env.dist, env.ctrl.dist, ...),
