@@ -51,6 +51,13 @@ matrix, lower triangular or upper triangular matrix.}
 \item{cluster}{a logical value indicating whether reorder the correlation matrix
 by clustering.}
 
+\item{check}{a logical value indicating whether check the correlation coefficient and
+p value.}
+
+\item{byrow}{a logical value indicating whether arrange the spec on y axis.}
+
+\item{keys}{a named character vector, should contain "r" and "p.value".}
+
 \item{rownames, colnames}{row/column names of correlation matrix.}
 }
 \value{
