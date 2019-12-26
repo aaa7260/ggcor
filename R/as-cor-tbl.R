@@ -1,34 +1,33 @@
 #' Coerce to a cor_tbl object.
 #' @description Functions to coerce a object to cor_tbl if possible.
 #' @param corr any \code{R} object.
-#' @param type a string, "full" (default), "upper" or "lower", display full
-#'     matrix, lower triangular or upper triangular matrix.
+#' @param type a string, "full" (default), "upper" or "lower", display full,
+#'     lower triangular or upper triangular matrix.
 #' @param show.diag a logical value indicating whether keep the diagonal.
-#' @param p.value matrix of p value.
+#' @param p.value a matrix of p value.
 #' @param lower.ci,upper.ci matrix of confidence interval.
 #' @param rownames,colnames row/column names of correlation matrix.
 #' @param cluster a logical value indicating whether reorder the correlation matrix
-#'     by clustering.
-#' @param byrow a logical value indicating whether arrange the spec on y axis.
+#'     by clustering, default is FALSE.
+#' @param byrow a logical value indicating whether arrange the 'spec' columns on y axis.
 #' @param keys a named character vector, should contain "r" and "p.value".
 #' @param check a logical value indicating whether check the correlation coefficient and
 #'     p value.
 #' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
 #' @details \code{cluster = TRUE} just supports for symmetric correlation matrix.
 #' @return a cor_tbl object.
-#' @rdname as-cor-tbl
+#' @rdname as_cor_tbl
 #' @export
 #' @examples
 #' corr <- cor(mtcars)
 #' as_cor_tbl(corr)
-#' @author Houyun Huang
-#' @author Lei Zhou
-#' @author Jian Chen
-#' @author Taiyun Wei
+#' ll <- correlate(mtcars)
+#' as_cor_tbl(ll, type = "upper")
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 as_cor_tbl <- function(corr, ...) {
   UseMethod("as_cor_tbl")
 }
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl matrix
 as_cor_tbl.matrix <- function(corr,
@@ -103,7 +102,7 @@ as_cor_tbl.matrix <- function(corr,
           lower = get_lower_data(cor_tbl, show.diag = show.diag)
   )
 }
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl data.frame
 as_cor_tbl.data.frame <- function(corr,
@@ -117,7 +116,7 @@ as_cor_tbl.data.frame <- function(corr,
                     upper.ci = upper.ci, cluster = cluster, ...)
 }
 
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl correlation
 as_cor_tbl.correlation <- function(corr, check = FALSE, ...) {
@@ -125,7 +124,7 @@ as_cor_tbl.correlation <- function(corr, check = FALSE, ...) {
              upper.ci = corr$upper.ci, check = FALSE, ...)
 }
 
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl rcorr
 as_cor_tbl.rcorr <- function(corr, check = FALSE, ...)
@@ -135,7 +134,7 @@ as_cor_tbl.rcorr <- function(corr, check = FALSE, ...)
   as_cor_tbl(corr$r, p.value = p.value, check = FALSE, ...)
 }
 
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl corr.test
 as_cor_tbl.corr.test <- function(corr, check = FALSE, ...)
@@ -143,7 +142,7 @@ as_cor_tbl.corr.test <- function(corr, check = FALSE, ...)
   as_cor_tbl(corr$r, p.value = corr$p, check = FALSE, ...)
 }
 
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl mantel_tbl
 as_cor_tbl.mantel_tbl <- function(corr, byrow = TRUE, ...) {
@@ -179,7 +178,7 @@ as_cor_tbl.mantel_tbl <- function(corr, byrow = TRUE, ...) {
   )
 }
 
-#' @rdname as-cor-tbl
+#' @rdname as_cor_tbl
 #' @export
 #' @method as_cor_tbl list
 as_cor_tbl.list <- function(corr, keys = NULL, check = TRUE, ...)
@@ -201,7 +200,7 @@ as_cor_tbl.list <- function(corr, keys = NULL, check = TRUE, ...)
   }
   as_cor_tbl(r, p.value = p, check = check, ...)
 }
-#' @rdname as-cor-tbl
+#' @rdname as_cor_tbl
 #' @export
 #' @method as_cor_tbl default
 as_cor_tbl.default <- function(corr, ...) {

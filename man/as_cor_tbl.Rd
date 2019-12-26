@@ -39,22 +39,22 @@ as_cor_tbl(corr, ...)
 
 \item{...}{extra params passing to \code{\link[ggcor]{matrix_order}}.}
 
-\item{type}{a string, "full" (default), "upper" or "lower", display full
-matrix, lower triangular or upper triangular matrix.}
+\item{type}{a string, "full" (default), "upper" or "lower", display full,
+lower triangular or upper triangular matrix.}
 
 \item{show.diag}{a logical value indicating whether keep the diagonal.}
 
-\item{p.value}{matrix of p value.}
+\item{p.value}{a matrix of p value.}
 
 \item{lower.ci, upper.ci}{matrix of confidence interval.}
 
 \item{cluster}{a logical value indicating whether reorder the correlation matrix
-by clustering.}
+by clustering, default is FALSE.}
 
 \item{check}{a logical value indicating whether check the correlation coefficient and
 p value.}
 
-\item{byrow}{a logical value indicating whether arrange the spec on y axis.}
+\item{byrow}{a logical value indicating whether arrange the 'spec' columns on y axis.}
 
 \item{keys}{a named character vector, should contain "r" and "p.value".}
 
@@ -72,13 +72,9 @@ Functions to coerce a object to cor_tbl if possible.
 \examples{
 corr <- cor(mtcars)
 as_cor_tbl(corr)
+ll <- correlate(mtcars)
+as_cor_tbl(ll, type = "upper")
 }
 \author{
-Houyun Huang
-
-Lei Zhou
-
-Jian Chen
-
-Taiyun Wei
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }

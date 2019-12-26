@@ -161,7 +161,7 @@ link_env_data <- function(yname,
                  env.key = yname)
 }
 
-#' @noRd
+#' @export
 link_colour_pal <- function(n)
 {
   stopifnot(n <= 6)
