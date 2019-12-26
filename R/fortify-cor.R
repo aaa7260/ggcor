@@ -1,7 +1,41 @@
-
+#' Convert to cor_tbl based on input type.convert
+#' @description The fortify_cor function is a deep encapsulation of
+#'     the \code{as_cor_tbl} function and also supports converting
+#'     raw data into cor_tbl objects by calculation.
+#' @param x any \code{R} object.
+#' @param y NULL (default) or a matrix or data
+#'     frame with compatible dimensions to x.
+#' @param is.cor logical value (default is FALSE) indicating wheater
+#'     \code{x} is a correlation matrix.
+#' @param group NULL (default) or a vector that has the same number
+#'     of rows as x.
+#' @param type a string, "full" (default), "upper" or "lower", display full,
+#'     lower triangular or upper triangular matrix.
+#' @param show.diag a logical value indicating whether keep the diagonal.
+#' @param cor.test logical value (default is FALSE) indicating whether test
+#'     for the correlation.
+#' @param cluster logical value (default is FALSE) indicating whether reorder
+#'    the correlation matrix by cluster.
+#' @param cluster.method the agglomeration method to be used. This should be
+#'     (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
+#'     "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
+#'     or "centroid" (= UPGMC).
+#' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
+#' @return cor_tbl object.
+#' @rdname fortify_cor
+#' @examples
+#' fortify_cor(mtcars)
+#' fortify_cor(iris[-5], group = iris[[5]])
+#' fortify_cor(mtcars, type = "lower", cluster = TRUE)
+#' m <- cor(mtcars)
+#' fortify_cor(m, is.cor = TRUE)
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @seealso \code{\link[ggcor]{matrix_order}}, \code{\link[stats]{hclust}},
+#'     \code{\link[ggcor]{as_cor_tbl}}.
 #' @export
 fortify_cor <- function(x,
                         y = NULL,
+                        is.cor = FALSE,
                         group = NULL,
                         type = "full",
                         show.diag = FALSE,
@@ -20,7 +54,7 @@ fortify_cor <- function(x,
     ))
   }
   clss <- c("correlation", "rcorr", "corr.test", "mantel_tbl")
-  if(any(clss %in% class(x)) || (is.list(x) && !is.data.frame(x))) {
+  if(any(clss %in% class(x)) || is.cor) {
     return(as_cor_tbl(x, type = type, show.diag = show.diag, cluster = cluster,
                       cluster.method = cluster.method, ...))
   }

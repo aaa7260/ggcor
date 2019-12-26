@@ -17,13 +17,13 @@
 #' @details \code{cluster = TRUE} just supports for symmetric correlation matrix.
 #' @return a cor_tbl object.
 #' @rdname as_cor_tbl
-#' @export
 #' @examples
 #' corr <- cor(mtcars)
 #' as_cor_tbl(corr)
 #' ll <- correlate(mtcars)
 #' as_cor_tbl(ll, type = "upper")
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 as_cor_tbl <- function(corr, ...) {
   UseMethod("as_cor_tbl")
 }
