@@ -5,8 +5,7 @@
 \alias{cor_tbl_yname}
 \alias{cor_tbl_type}
 \alias{cor_tbl_showdiag}
-\alias{is_cor_tbl}
-\title{Get attributes of cor_tbl}
+\title{Helper function of cor_tbl}
 \usage{
 cor_tbl_xname(x)
 
@@ -15,17 +14,15 @@ cor_tbl_yname(x)
 cor_tbl_type(x)
 
 cor_tbl_showdiag(x)
-
-is_cor_tbl(x)
 }
 \arguments{
 \item{x}{a cor_tbl.}
 }
 \value{
-return attribute vector.
+return attribute value.
 }
 \description{
-Helper function to get extra attributs of cor_tbl.
+Helper function of cor_tbl
 }
 \examples{
 df <- fortify_cor(mtcars)
@@ -39,11 +36,5 @@ cor_tbl_showdiag(df)
 cor_tbl_type(df)
 }
 \author{
-Houyun Huang
-
-Lei Zhou
-
-Jian Chen
-
-Taiyun Wei
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }
