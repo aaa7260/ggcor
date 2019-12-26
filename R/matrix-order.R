@@ -1,6 +1,6 @@
 #' Reorder Matrices
 #' @description  Tries to find an order for matrix by different cluster methods.
-#' @param x a matrix object.
+#' @param x a matrix-like object.
 #' @param cluster.method a character string with the name of agglomeration method.
 #' @param ... extra params passing to \code{\link[stats]{hclust}}.
 #' @details Now it just supports for square matrix.

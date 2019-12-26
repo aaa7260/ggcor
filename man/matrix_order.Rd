@@ -7,7 +7,7 @@
 matrix_order(x, cluster.method = "complete", ...)
 }
 \arguments{
-\item{x}{a matrix object.}
+\item{x}{a matrix-like object.}
 
 \item{cluster.method}{a character string with the name of agglomeration method.}
 
