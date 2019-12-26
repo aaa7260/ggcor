@@ -31,7 +31,7 @@ The columns of 'x' will be tested for each pair when y is NULL(the default),
     otherwise each column in 'x' and each column in 'y' is tested for each pair.
 }
 \examples{
-cor_test(mtcars)
+correlate(mtcars)
 m1 <- matrix(rnorm(100), nrow = 10)
 m2 <- matrix(rnorm(60), nrow = 10)
 correlate(m1, m2)

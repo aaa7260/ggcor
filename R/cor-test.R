@@ -13,7 +13,7 @@
 #' @importFrom stats cor cor.test
 #' @importFrom purrr walk2
 #' @examples
-#' cor_test(mtcars)
+#' correlate(mtcars)
 #' m1 <- matrix(rnorm(100), nrow = 10)
 #' m2 <- matrix(rnorm(60), nrow = 10)
 #' correlate(m1, m2)
@@ -67,7 +67,15 @@ correlate <- function(x,
   )
 }
 
-#' @noRd
+#' Print for correlate object.
+#' @param x an object used to select a method.
+#' @param all if FALSE (default) just print correlation matrix, else will
+#'     print all values.
+#' @examples
+#' m <- correlate(mtcars)
+#' print(m)
+#' print(m, TRUE)
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 print.correlation <- function(x, all = FALSE, ...) {
   if(all) print(x, ...) else print(x$r, ...)
