@@ -1,14 +1,15 @@
-#' Remove Axis Elements.
-#' @description A simple wrapper of the `theme()` function to quickly
-#'     remove axis elements.
-#' @param index the index ("all", "x", "y") of axis will be removed.
+#' Remove axis elements.
+#' @description A simple wrapper of the \code{\link[ggplot2]{theme}} function
+#'     to quickly remove axis elements.
+#' @param index 'all' (default), 'x' or 'y' axis will be removed.
 #' @return The theme.
-#' @importFrom ggplot2 theme
-#' @importFrom ggplot2 element_blank
-#' @author Houyun Huang
-#' @author Lei Zhou
-#' @author Jian Chen
-#' @author Taiyun Wei
+#' @importFrom ggplot2 theme element_blank
+#' @rdname remove_axis
+#' @examples
+#' quickcor(mtcars) + geom_circle2() + remove_axis()
+#' quickcor(mtcars) + geom_circle2() + remove_axis("x")
+#' quickcor(mtcars) + geom_circle2() + remove_axis("y")
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 remove_axis <- function(index = c("all", "x", "y")) {
   index <- match.arg(index)
