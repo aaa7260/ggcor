@@ -1,33 +1,28 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # ggcor
 
-<!-- badges: start -->
-
-<!-- badges: end -->
-
-The goal of ggcor is to …
+The `ggcor` package can be used to visualize simply and directly a
+correlation matrix based on ‘ggplot2’. It provides a solution for
+reordering the correlation matrix, displaying the different significance
+level on the plot and other details. The most important parts, It also
+provides a graphical display of any correlation analysis and their
+combination (such as Mantel test, Partial correlation analysis, and so
+on).
 
 ## Installation
 
-You can install the released version of ggcor from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("ggcor")
-```
-
-And the development version from [GitHub](https://github.com/) with:
+Now `ggcor` is not on cran, You can install the development version of
+ggcor from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("houyunhuang/ggcor")
 ```
 
-## Example
+## Draw correlation plot quickly
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to draw correlation plot
+quickly:
 
 ``` r
 library(ggcor)
@@ -35,29 +30,90 @@ library(ggcor)
 #> Registered S3 method overwritten by 'ggcor':
 #>   method            from
 #>   print.correlation nlme
-## basic example code
+quickcor(mtcars) + geom_colour()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+<img src="man/figures/README-example01-1.png" width="100%" />
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+quickcor(mtcars, type = "upper") + geom_circle2()
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
+<img src="man/figures/README-example01-2.png" width="100%" />
 
-You can also embed plots, for example:
+``` r
+quickcor(mtcars, cor.test = TRUE) +
+  geom_square(data = get_data(type = "lower", show.diag = FALSE)) +
+  geom_mark(data = get_data(type = "upper", show.diag = FALSE), size = 2.5) +
+  geom_abline(slope = -1, intercept = 12)
+```
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+<img src="man/figures/README-example01-3.png" width="100%" />
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+## Grouped by rows
+
+``` r
+grp <- mtcars$gear
+quickcor(mtcars[-10], type = "lower", group = grp) + 
+  geom_colour() +
+  add_diaglab(hjust = 0) +
+  expand_axis(x = 12) +
+  remove_axis("x") +
+  facet_wrap(~group)
+#> Warning in cor(x, y, use = use, method = method): 标准差为零
+
+#> Warning in cor(x, y, use = use, method = method): 标准差为零
+```
+
+<img src="man/figures/README-example02-1.png" width="100%" />
+
+## Mantel test plot
+
+``` r
+library(vegan)
+#> Loading required package: permute
+#> Loading required package: lattice
+#> This is vegan 2.5-6
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+data("varechem")
+data("varespec")
+set.seed(20191224)
+sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
+mantel01 <- fortify_mantel(varespec, varechem, group = sam_grp,
+                           spec.select = list(spec01 = 1:5, 
+                                              spec02 = 6:12,
+                                              spec03 = 7:18,
+                                              spec04 = 20:29,
+                                              spec05 = 30:44),
+                           mantel.fun = "mantel.randtest")
+quickcor(mantel01, legend.title = "Mantel's r") + 
+  geom_colour() + geom_cross() + facet_grid(rows = vars(group))
+```
+
+<img src="man/figures/README-example03-1.png" width="100%" />
+
+``` r
+mantel02 <- fortify_mantel(varespec, varechem, 
+                         spec.select = list(1:10, 5:14, 7:22, 9:32)) %>% 
+  mutate(r = cut(r, breaks = c(-Inf, 0.25, 0.5, Inf), 
+                 labels = c("<0.25", "0.25-0.5", ">=0.5"),
+                 right = FALSE),
+         p.value = cut(p.value, breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
+                       labels = c("<0.001", "0.001-0.01", "0.01-0.05", ">=0.05"),
+                       right = FALSE))
+quickcor(varechem, type = "upper") + geom_square() + 
+  add_link(mantel02, mapping = aes(colour = p.value, size = r),
+           diag.label = TRUE) +
+  scale_size_manual(values = c(0.5, 1.5, 3)) +
+  add_diaglab() + remove_axis("x")
+```
+
+<img src="man/figures/README-example03-2.png" width="100%" />

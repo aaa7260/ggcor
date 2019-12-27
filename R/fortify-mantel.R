@@ -52,6 +52,7 @@ fortify_mantel <- function(spec,
   attr(df, "grouped") <- grouped
   df
 }
+
 #' @export
 mantel_test <- function(spec,
                         env,
