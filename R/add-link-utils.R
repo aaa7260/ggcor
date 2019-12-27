@@ -160,16 +160,3 @@ link_env_data <- function(yname,
                  link.yend = y,
                  env.key = yname)
 }
-
-#' @export
-link_colour_pal <- function(n)
-{
-  stopifnot(n <= 6)
-  colors <- c("#D95F02", "#1B9E77", "#7570B3",
-              "#E7298A", "#A6761D", "#CCCCCC")
-  if(n == 1)
-    return(colors[1])
-  col <- c(colors[1:(n - 1)], colors[6])
-  col
-
-}

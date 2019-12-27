@@ -3,8 +3,7 @@
 #'     in ggplot2. It takes care of setting up the position of axis and legend for
 #'     the plot based on the plot type.
 #' @param data cor_tbl object.
-#' @param mapping NULL (default) or a list of aesthetic mappings to use for plot,
-#'     see Details.
+#' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
 #' @param axis.x.position,axis.y.position the position of the axis. 'auto' (default)
 #'     is set according to the plot type, 'bottom' or 'top' for x axes, 'left' or 'right'
 #'     for y axes.

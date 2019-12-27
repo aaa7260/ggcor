@@ -79,7 +79,6 @@ Cross Geom
   \item \code{linetype}
   \item \code{size}
 }
-Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
 }
 
 \keyword{datasets}

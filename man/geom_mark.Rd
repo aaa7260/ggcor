@@ -102,7 +102,6 @@ Significant marks Geom
   \item \code{size}
   \item \code{vjust}
 }
-Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
 }
 
 \keyword{datasets}

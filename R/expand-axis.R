@@ -1,3 +1,11 @@
+#' Expand axis limits
+#' @description Force to extend the coordinate range of the ggplot object.
+#' @param x,y NULL (default) or numeric vector.
+#' @rdname expand_axis
+#' @examples
+#' quickcor(mtcars) + geom_square() + expand_axis(x = -3)
+#' quickcor(mtcars) + geom_square() + expand_axis(y = 16)
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 expand_axis <- function(x = NULL, y = NULL)
 {

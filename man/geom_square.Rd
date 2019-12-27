@@ -73,7 +73,6 @@ Square Geom
   \item \code{r0}
   \item \code{size}
 }
-Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
 }
 
 \keyword{datasets}

@@ -2,12 +2,9 @@
 % Please edit documentation in R/theme-cor.R
 \name{theme_cor}
 \alias{theme_cor}
-\alias{theme_cor2}
 \title{Create the default ggcor theme}
 \usage{
 theme_cor(legend.position = "right", ...)
-
-theme_cor2(legend.position = "right", ...)
 }
 \arguments{
 \item{legend.position}{the position of legends ("none", "left", "right",
@@ -25,12 +22,10 @@ Create the default ggcor theme
 The theme_cor, with no axis title, no background, no grid,
     made some adjustments to the x-axis label.
 }
+\examples{
+df <- fortify_cor(mtcars)
+ggcor(df) + geom_raster(aes(fill = r)) + theme_cor()
+}
 \author{
-Houyun Huang
-
-Lei Zhou
-
-Jian Chen
-
-Taiyun Wei
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }
