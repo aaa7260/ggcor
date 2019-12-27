@@ -4,11 +4,13 @@
 \name{geom_mark}
 \alias{geom_mark}
 \alias{GeomMark}
-\title{Significant marks based on center.}
+\title{Significant marks Geom}
 \usage{
 geom_mark(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., nudge_x = 0, nudge_y = 0,
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., nudge_x = 0, nudge_y = 0, digits = 2,
+  nsmall = 2, sig.level = c(0.05, 0.01, 0.001), mark = c("*", "**",
+  "***"), sig.thres = NULL, sep = "", parse = FALSE, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -48,6 +50,22 @@ Useful for offsetting text from points, particularly on discrete scales.}
 \item{nudge_y}{Horizontal and vertical adjustment to nudge labels by.
 Useful for offsetting text from points, particularly on discrete scales.}
 
+\item{digits}{integer indicating the number of decimal places (round) or
+significant digits (signif) to be used, the default value is 2.}
+
+\item{nsmall}{the minimum number of digits to the right of the decimal
+point in formatting real/complex numbers in non-scientific formats,
+the default value is 2.}
+
+\item{sig.level}{significance level，the defaults values is `c(0.05, 0.01, 0.001)`.}
+
+\item{mark}{significance mark，the defaults values is `c("*", "**", "***")`.}
+
+\item{sig.thres}{if not NULL, just when `p` is not larger than `sig.thres` will be ploted.}
+
+\item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
+displayed as described in \code{?plotmath}.}
+
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -61,22 +79,9 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{digits}{integer indicating the number of decimal places (round) or
-significant digits (signif) to be used, the default value is 2.}
-
-\item{nsmall}{the minimum number of digits to the right of the decimal
-point in formatting real/complex numbers in non-scientific formats,
-the default value is 2.}
-
-\item{sig.level}{significance level，the defaults values is `c(0.05, 0.01, 0.001)`.}
-
-\item{mark}{significance mark，the defaults values is `c("*", "**", "***")`.}
-
-\item{sig.thres}{if not NULL, just when `p` is not larger than `sig.thres` will be ploted.}
 }
 \description{
-Significant marks based on center.
+Significant marks Geom
 }
 \section{Aesthetics}{
 
@@ -84,7 +89,7 @@ Significant marks based on center.
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
-  \item \strong{\code{p}}
+  \item \strong{\code{p.value}}
   \item \code{alpha}
   \item \code{angle}
   \item \code{colour}
@@ -97,7 +102,6 @@ Significant marks based on center.
   \item \code{size}
   \item \code{vjust}
 }
-Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
 }
 
 \keyword{datasets}

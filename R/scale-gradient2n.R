@@ -37,10 +37,10 @@ scale_colour_gradient2n <- function(...,
                                     values = NULL,
                                     na.value = "grey50",
                                     guide = "colourbar",
-                                    aesthetics = "colour") {
+                                    aesthetics = "colour",
+                                    colors = NULL) {
   colours <- if (missing(colours)) colors else colours
-  if(!is.atomic(colours))
-    stop("`colours` must be a atomic vector.", call. = FALSE)
+  colours <- colours %||% red_blue()
   continuous_scale(aesthetics,
                    "gradient2n",
                    scales::gradient_n_pal(colours, values, space),
@@ -66,10 +66,9 @@ scale_fill_gradient2n <- function(...,
                                   na.value = "grey50",
                                   guide = "colourbar",
                                   aesthetics = "fill",
-                                  colors) {
+                                  colors = NULL) {
   colours <- if (missing(colours)) colors else colours
-  if(!is.atomic(colours))
-    stop("`colours` must be a atomic vector.", call. = FALSE)
+  colours <- colours %||% red_blue()
   continuous_scale(aesthetics,
                    "gradient2n",
                    scales::gradient_n_pal(colours, values, space),
@@ -91,11 +90,10 @@ scale_fill_steps2n <- function(...,
                                na.value = "grey50",
                                guide = "coloursteps",
                                aesthetics = "fill",
-                               colors)
+                               colors = NULL)
 {
   colours <- if (missing(colours)) colors else colours
-  if(!is.atomic(colours))
-    stop("`colours` must be a atomic vector.", call. = FALSE)
+  colours <- colours %||% red_blue()
   ggplot2:::binned_scale(aesthetics, "steps2n", scales::gradient_n_pal(colours, values, space),
                          limits = limits, na.value = na.value, guide = guide,
                          rescaler = mid_rescaler(mid = midpoint), ...)
@@ -112,11 +110,10 @@ scale_colour_steps2n <- function(...,
                                  na.value = "grey50",
                                  guide = "coloursteps",
                                  aesthetics = "colour",
-                                 colors)
+                                 colors = NULL)
 {
   colours <- if (missing(colours)) colors else colours
-  if(!is.atomic(colours))
-    stop("`colours` must be a atomic vector.", call. = FALSE)
+  colours <- colours %||% red_blue()
   ggplot2:::binned_scale(aesthetics, "steps2", scales::gradient_n_pal(colours, values, space),
                          limits = limits, na.value = na.value, guide = guide,
                          rescaler = mid_rescaler(mid = midpoint), ...)

@@ -1,47 +1,123 @@
-
+#' Convert to cor_tbl based on input type.convert
+#' @description The fortify_cor function is a deep encapsulation of
+#'     the \code{as_cor_tbl} function and also supports converting
+#'     raw data into cor_tbl objects by calculation.
+#' @param x any \code{R} object.
+#' @param y NULL (default) or a matrix or data
+#'     frame with compatible dimensions to x.
+#' @param is.cor logical value (default is FALSE) indicating wheater
+#'     \code{x} is a correlation matrix.
+#' @param group NULL (default) or a vector that has the same number
+#'     of rows as x.
+#' @param type a string, "full" (default), "upper" or "lower", display full,
+#'     lower triangular or upper triangular matrix.
+#' @param show.diag a logical value indicating whether keep the diagonal.
+#' @param cor.test logical value (default is FALSE) indicating whether test
+#'     for the correlation.
+#' @param cluster logical value (default is FALSE) indicating whether reorder
+#'    the correlation matrix by cluster.
+#' @param cluster.method the agglomeration method to be used. This should be
+#'     (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
+#'     "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
+#'     or "centroid" (= UPGMC).
+#' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
+#' @return cor_tbl object.
+#' @rdname fortify_cor
+#' @examples
+#' fortify_cor(mtcars)
+#' fortify_cor(iris[-5], group = iris[[5]])
+#' fortify_cor(mtcars, type = "lower", cluster = TRUE)
+#' m <- cor(mtcars)
+#' fortify_cor(m, is.cor = TRUE)
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @seealso \code{\link[ggcor]{matrix_order}}, \code{\link[stats]{hclust}},
+#'     \code{\link[ggcor]{as_cor_tbl}}.
 #' @export
-
-fortify_cor <- function(
-  x,
-  y = NULL,
-  type = c("full", "upper", "lower"),
-  show.diag = FALSE,
-  cor.test = FALSE,
-  cor.test.alt = "two.sided",
-  cor.test.method = "pearson",
-  cluster.type = c("none", "all", "row", "col"),
-  cluster.method = "HC",
-  cluster.absolute = FALSE,
-  keep.name = FALSE,
-  ...   # pass to cor( )
-  )
+fortify_cor <- function(x,
+                        y = NULL,
+                        is.cor = FALSE,
+                        group = NULL,
+                        type = "full",
+                        show.diag = FALSE,
+                        cor.test = FALSE,
+                        cluster = FALSE,
+                        cluster.method = "complete",
+                        ...)
 {
-  if(!(is.matrix(x) || is.data.frame(x)))
-    stop("Need a matrix or data.frame.", call. = FALSE)
-  type <- match.arg(type)
-  if(inherits(x, "cor_tbl")) {
-    df <- x
+  type <- match.arg(type, c("full", "upper", "lower"))
+  if(is_cor_tbl(x)) {
+    return(
+      switch (type,
+      full = x,
+      upper = get_upper_data(x, show.diag),
+      lower = get_lower_data(x, show.diag)
+    ))
   }
-  x <- make_matrix_name(x)
-  m <- cor(x, y = y, ...)
-  p <- NULL
-  low <- NULL
-  upp <- NULL
-  if(cor.test) {
-    conf <- cor_test(x = x, y = y, alternative = cor.test.alt, method = cor.test.method)
-    p <- conf$p
-    low <- conf$low
-    upp <- conf$upp
-    if(cor.test.method != "pearson") {
-      low <- NULL
-      upp <- NULL
-    }
+  clss <- c("correlation", "rcorr", "corr.test", "mantel_tbl")
+  if(any(clss %in% class(x)) || is.cor) {
+    return(as_cor_tbl(x, type = type, show.diag = show.diag, cluster = cluster,
+                      cluster.method = cluster.method, ...))
   }
-  as_cor_tbl(corr = m, type = type, show.diag = show.diag, p = p, low = low,
-            upp = upp, cluster.type = cluster.type, cluster.method = cluster.method,
-            absolute = cluster.absolute, keep.name = keep.name)
+  y <- y %||% x
+  if(!is.data.frame(x))
+     x <- as.data.frame(x)
+  if(!is.data.frame(y)) {
+    y <- as.data.frame(y)
+    if(nrow(x) != nrow(y))
+      stop("'y' must have the same rows as 'x'.", call. = FALSE)
+  }
+  if(!is.null(group)) {
+    if(length(group) != nrow(x))
+      stop("'group' must have the same length as rows of 'x'.", call. = FALSE)
+    x <- split(x, group, drop = FALSE)
+    y <- split(y, group, drop = FALSE)
+    df <- suppressMessages(
+      pmap_dfr2(list(x, y, as.list(names(x))),
+                function(.x, .y, .group) {
+                  correlate(.x, .y, cor.test, ...) %>%
+                    as_cor_tbl(type = type, show.diag = show.diag, cluster = cluster,
+                               cluster.method = cluster.method) %>%
+                    mutate2(group = .group)
+                  })
+      )
+  } else {
+    corr <- correlate(x, y, cor.test, ...)
+    df <- as_cor_tbl(corr, type = type, show.diag = show.diag, cluster = cluster,
+               cluster.method = cluster.method)
+  }
+  attr(df, "grouped") <- if(is.null(group)) FALSE else TRUE
+  df
 }
 
+#' @noRd
+pmap_dfr2 <- function(.l, .f, ..., keep.attrs = c("first", "last")) {
+  keep.attrs <- match.arg(keep.attrs)
+  ll <- purrr::pmap(.l, .f, ...)
+  if(keep.attrs == "first") {
+    attrs_all <- attributes(ll[[1]])
+    attrs <- attrs_all[setdiff(names(attrs_all), c("names", "class", "row.names"))]
+  } else {
+    attrs_all <- attributes(ll[[length(ll)]])
+    attrs <- attrs_all[setdiff(names(attrs_all), c("names", "class", "row.names"))]
+  }
+  df <- dplyr::bind_rows(ll)
+  if(length(attrs) > 0) {
+    purrr::walk(names(attrs), function(nm) {
+      attr(df, nm) <<- attrs[[nm]]
+    })
+  }
+  df
+}
 
-
-
+#' @noRd
+mutate2 <- function(.data, ...) {
+  attrs_all <- attributes(.data)
+  attrs <- attrs_all[setdiff(names(attrs_all), c("names", "class", "row.names"))]
+  df <- dplyr::mutate(.data, ...)
+  if(length(attrs) > 0) {
+    purrr::walk(names(attrs), function(nm) {
+      attr(df, nm) <<- attrs[[nm]]
+    })
+  }
+  df
+}

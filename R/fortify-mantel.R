@@ -1,210 +1,133 @@
-#' @export
-#' @importFrom vegan vegdist
+#' @importFrom vegan vegdist mantel mantel.partial
+#' @importFrom ade4 mantel.randtest mantel.rtest
+#' @importFrom dplyr %>% mutate
+#' @importFrom purrr map map2 pmap_dfr map_dbl
 #' @importFrom stats dist
+#' @export
 fortify_mantel <- function(spec,
                            env,
-                           env.ctrl = NULL,
+                           group = NULL,
+                           env.ctrl = NULL, # named list if grouped
                            mantel.fun = "mantel",
-                           is.pair = FALSE,
-                           spec.select = NULL, # a list of index vector
-                           spec.group = NULL,
-                           env.group = NULL,
-                           env.ctrl.group = NULL,
-                           spec.dist.fun = "vegdist",
-                           env.dist.fun = "vegdist",
-                           spec.dist.method = "bray",
-                           env.dist.method = "euclidean",
                            ...)
 {
-  data <- handle_mantel_data(
-    spec = spec,
-    env  = env,
-    env.ctrl = env.ctrl,
-    mantel.fun = mantel.fun,
-    is.pair = is.pair,
-    spec.select = spec.select, # a list of index vector
-    spec.group = spec.group,
-    env.group = env.group,
-    env.ctrl.group = env.ctrl.group
-  )
-  res <- mantel_test(spec.list        = data$spec,
-                     env.list         = data$env,
-                     env.ctrl.list    = data$env.ctrl,
-                     spec.dist.fun    = spec.dist.fun,
-                     env.dist.fun     = env.dist.fun,
-                     mantel.fun       = mantel.fun,
-                     spec.dist.method = spec.dist.method,
-                     env.dist.method  = env.dist.method,
-                     ...)
-  res
-}
-
-#' @export
-mantel_test <- function(spec.list,
-                        env.list,
-                        env.ctrl.list = NULL,
-                        spec.dist.fun = "vegdist",
-                        env.dist.fun = "vegdist",
-                        mantel.fun = "mantel",
-                        spec.dist.method = "bray",
-                        env.dist.method = "euclidean",
-                        ...
-)
-{
-  spec.list <- make_list_names(spec.list, "spec")
-  env.list <- make_list_names(env.list, "env")
-  spec.name <- names(spec.list)
-  env.name <- names(env.list)
-  n <- length(spec.list)
-  m <- length(env.list)
-  if(n != m) {
-    stop("'spec.list' and 'env.list' must be same length.", call. = FALSE)
-  }
-  if(mantel.fun == "mantel.partial") {
-    if(is.null(env.ctrl.list))
-      stop("Did you forget to set the 'env.ctrl.list' params?", call. = FALSE)
-    if(length(env.list) != length(env.ctrl.list))
-      env.ctrl.list <- rep_len(env.ctrl.list, m)
-  }
-  spec.dist <- lapply(spec.list, function(x) {
-    do.call(spec.dist.fun, list(x = x, method = spec.dist.method))
-  })
-  env.dist <- lapply(env.list, function(x) {
-    do.call(env.dist.fun, list(x = x, method = env.dist.method))
-  })
-  if(mantel.fun == "mantel.partial" && !is.null(env.ctrl)) {
-    env.ctrl.dist <- lapply(env.ctrl.list, function(x) {
-      do.call(env.dist.fun, list(x = x, method = env.dist.method))
-    })
-  }
-  res <- switch (mantel.fun,
-                 mantel.partial  = purrr::pmap(list(spec.dist, env.dist, env.ctrl.dist), vegan::mantel.partial, ...),
-                 mantel          = purrr::map2(spec.dist, env.dist, vegan::mantel, ...),
-                 mantel.randtest = purrr::map2(spec.dist, env.dist, ade4::mantel.randtest, ...),
-                 mantel.rtest = purrr::map2(spec.dist, env.dist, ade4::mantel.rtest, ...)
-  )
-  rp <- extract_mantel(res, mantel.fun)
-  out <- tibble::tibble(spec = spec.name,
-                        env = env.name,
-                        r = rp$r,
-                        p = rp$p)
-  class(out) <- c("mantel_tbl", class(out))
-  out
-}
-
-#' @export
-is_mantel_tbl <- function(x) {
-  inherits(x, "mantel_tbl")
-}
-
-#' @noRd
-handle_mantel_data <- function(spec, # df
-                               env, # df
-                               env.ctrl = NULL, # df
-                               mantel.fun = "mantel",
-                               is.pair = FALSE,
-                               spec.select = NULL, # a list of index vector
-                               spec.group = NULL, # the same length vector with spec
-                               env.group = NULL, # the same length vector with env
-                               env.ctrl.group = NULL) # the same length vector with env
-{
-  if(!is.data.frame(spec) && !is.list(spec))
+  if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
-  if(!is.data.frame(env) && !is.list(env))
+  if(!is.data.frame(env))
     env <- as.data.frame(env)
-  env.col <- length(env)
-  env.colname <- names(env)
-  if(!is.null(spec.select)) {
-    if(!is.null(spec.group)) {
-      warning("Just supports for 'spec.select' or 'spec.group', 'spec.group' is droped", call. = FALSE)
-      spec.group <- NULL
-    }
-  }
-  if(!is.null(spec.select))
-    spec <- lapply(spec.select, function(x) {
-      subset(spec, select = x, drop = FALSE)
-    })
-  if(!is.null(spec.group)) {
-    spec <- split(spec, spec.group, drop = FALSE)
-  }
-
-  if(!is.null(env.group)) {
-    env <- split(env, env.group, drop = FALSE)
+  if(nrow(spec) != nrow(env)) {
+    stop("'spec' must have the same rows as 'env'.", call. = FALSE)
   }
   if(mantel.fun == "mantel.partial") {
     if(is.null(env.ctrl))
-      stop("Did you forget to set the 'env.ctrl.list' params?", call. = FALSE)
+      stop("Did you forget to set the 'env.ctrl' param?", call. = FALSE)
     if(!is.data.frame(env.ctrl) && !is.list(env.ctrl))
-      env.ctrl <- as.data.frame(env.ctrl)
-    if(!is.null(env.ctrl.group)) {
-      env.ctrl <- split(env.ctrl, env.ctrl.group, drop = FALSE)
-    }
-    if(is.data.frame(env.ctrl)) {
-      env.ctrl <- list(env.ctrl)
-    }
-    if(length(env.ctrl) != length(env))
-      env.ctrl <- rep_len(env.ctrl, length(env))
+      stop("'env.ctrl' needs a list or data.frame.", call. = FALSE)
   }
-  spec <- make_list_names(spec)
-  env <- make_list_names(env)
-  spec.name <- names(spec)
-  env.name <- names(env)
-  n <- length(spec)
-  m <- if(is.pair) env.col else length(env)
-  spec <- rep(spec, each = m)
-  names(spec) <- rep(spec.name, each = m)
-  if(is.pair) {
-    env <- flatten_list(env)
-    names(env) <- rep(env.colname, n)
-  } else {
-    env <- rep(env, n)
-    names(env) <- rep(env.name, n)
-  }
-  if(mantel.fun == "mantel.partial") {
-    env.ctrl <- rep(env.ctrl, n)
-  }
-  list(spec = spec, env = env, env.ctrl = env.ctrl)
-}
-
-#' @noRd
-flatten_list <- function(x) {
-  if(!is.list(x))
-    return(x)
-  nn <- purrr::map_dbl(x, function(e) {if(!is.list(e)) 1 else length(e)})
-  cnn <- cumsum(nn)
-  ll <- vector("list", sum(nn))
-  for(i in seq_len(length(x))) {
-    if(i == 1) {
-      if(is.list(x[[i]])) {
-        ll[1:cnn[1]] <- x[[1]][1:nn[1]]
+  if(!is.null(group)) {
+    if(length(group) != nrow(spec))
+      stop("Length of 'group' and rows of 'spec' must be same.", call. = FALSE)
+    spec <- split(spec, group, drop = FALSE)
+    env <- split(env, group, drop = FALSE)
+    if(mantel.fun == "mantel.partial") {
+      if(is.data.frame(env.ctrl)) {
+        env.ctrl <- rep_len(list(env.ctrl), length(names(spec)))
       } else {
-        ll[1] <- x[1]
+        env.ctrl <- env.ctrl[names(spec)]
       }
     } else {
-      idx <- (cnn[i - 1] + 1): cnn[i]
-      if(is.list(x[[i]])) {
-        ll[idx] <- x[[i]][1:nn[i]]
-      } else {
-        ll[cnn[i]] <- x[i]
-      }
+      env.ctrl <- as.list(rep(NA, length(names(spec))))
     }
-  }
-  ll
-}
-
-#' @noRd
-extract_mantel <- function(x,
-                           FUN = c("mantel", "mantel.partial",
-                                   "mantel.randtest", "mantel.rtest")) {
-  FUN <- match.arg(FUN)
-  if(FUN %in% c("mantel", "mantel.partial")) {
-    res <- purrr::map(x, function(m) c(r = m$statistic, p = m$signif))
+    df <- suppressMessages(
+      purrr::pmap_dfr(list(spec, env, env.ctrl, as.list(names(spec))),
+                      function(.spec, .env, .env.ctrl, .group) {
+                        mantel_test(.spec, .env, .env.ctrl, mantel.fun, ...) %>%
+                          dplyr::mutate(group = .group)
+                      })
+    )
   } else {
-    res <- purrr::map(x, function(m) c(r = m$obs, p = m$pvalue))
+    df <- mantel_test(spec, env, env.ctrl, mantel.fun, ...)
   }
-  df <- tibble::tibble(r = purrr::map_dbl(res, `[[`, "r"),
-                       p = purrr::map_dbl(res, `[[`, "p"))
+  grouped <- if(!is.null(group)) TRUE else FALSE
+  attr(df, "grouped") <- grouped
   df
 }
 
+#' @export
+mantel_test <- function(spec,
+                        env,
+                        env.ctrl = NULL, # named list if grouped
+                        mantel.fun = "mantel",
+                        spec.select = NULL, # a list of index vector
+                        env.select = NULL,
+                        spec.dist.method = "bray",
+                        env.dist.method = "euclidean",
+                        ...)
+{
+  if(!is.data.frame(spec))
+    spec <- as.data.frame(spec)
+  if(!is.data.frame(env))
+    env <- as.data.frame(env)
+  if(nrow(spec) != nrow(env)) {
+    stop("'spec' must have the same rows as 'env'.", call. = FALSE)
+  }
+  if(mantel.fun == "mantel.partial") {
+    if(is.null(env.ctrl))
+      stop("Did you forget to set the 'env.ctrl.list' param?", call. = FALSE)
+    if(!is.data.frame(env.ctrl))
+      env.ctrl <- as.data.frame(env.ctrl)
+  }
+  if(!is.list(spec.select) && !is.null(spec.select))
+    stop("'spec.select' needs a list or NULL.", call. = FALSE)
+  if(!is.list(env.select) && !is.null(env.select))
+    stop("'env.select' needs a list or NULL.", call. = FALSE)
+  if(is.null(spec.select)) {
+    spec.select <- list(spec = 1:ncol(spec))
+  }
+  if(is.null(env.select)) {
+    env.select <- as.list(setNames(1:ncol(env), names(env)))
+  }
+  spec.select <- make_list_names(spec.select, "spec")
+  env.select <- make_list_names(env.select, "env")
+  spec.name <- rep(names(spec.select), each = length(env.select))
+  env.name <- rep(names(env.select), length(spec.select))
+  spec <- purrr::map(spec.select, function(.x) {
+    subset(spec, select = .x, drop = FALSE)})
+  env <- purrr::map(env.select, function(.x) {
+    subset(env, select = .x, drop = FALSE)})
 
+  rp <- purrr::map2(spec.name, env.name, function(.x, .y) {
+    spec.dist <- vegan::vegdist(spec[[.x]], method = spec.dist.method)
+    env.dist <- vegan::vegdist(env[[.y]], method = env.dist.method)
+    if(mantel.fun == "mantel.partial") {
+      env.ctrl.dist <- vegan::vegdist(env.ctrl, method = env.dist.method)
+    }
+    switch (mantel.fun,
+            mantel.partial  = vegan::mantel.partial(spec.dist, env.dist, env.ctrl.dist, ...),
+            mantel          = vegan::mantel(spec.dist, env.dist, ...),
+            mantel.randtest = ade4::mantel.randtest(spec.dist, env.dist, ...),
+            mantel.rtest    = ade4::mantel.rtest(spec.dist, env.dist, ...),
+    )
+  }) %>% extract_mantel(mantel.fun)
+  df <-
+    structure(.Data = tibble::tibble(spec = spec.name,
+                                     env = env.name,
+                                     r = rp$r,
+                                     p.value = rp$p.value),
+              grouped = FALSE,
+              class = c("mantel_tbl", "tbl_df", "tbl", "data.frame"))
+}
+
+#' @noRd
+extract_mantel <- function(x, .f = "mantel") {
+  .f <- match.arg(.f, c("mantel", "mantel.partial",
+                        "mantel.randtest", "mantel.rtest"))
+  if(.f %in% c("mantel", "mantel.partial")) {
+    r <- purrr::map_dbl(x, `[[`, "statistic")
+    p.value <- purrr::map_dbl(x, `[[`, "signif")
+  } else {
+    r <- purrr::map_dbl(x, `[[`, "obs")
+    p.value <- purrr::map_dbl(x, `[[`, "pvalue")
+  }
+  list(r = r, p.value = p.value)
+}

@@ -1,55 +1,56 @@
+#' @importFrom dplyr %>% left_join
+#' @importFrom stats setNames
 #' @noRd
-#' @importFrom dplyr %>%
-handle_link_data <- function(
-  x,
-  y,
-  corrmat.point.hjust = NULL,
-  corrmat.point.vjust = NULL,
-  group.point.hjust = NULL,
-  group.point.vjust = NULL,
-  on.left = FALSE,
-  diag.label = FALSE)
+tidy_link_data <- function(df,
+                           cor_tbl,
+                           spec.key = "spec",
+                           env.key = "env",
+                           env.point.hjust = NULL,
+                           env.point.vjust = NULL,
+                           spec.point.hjust = NULL,
+                           spec.point.vjust = NULL,
+                           on.left = FALSE,
+                           diag.label = FALSE)
 {
-  if(!is_cor_tbl(y))
-    stop("'y' need a cor_tbl.", call. = FALSE)
-  xname <- cor_tbl_xname(y)
-  yname <- cor_tbl_yname(y)
-  type <- cor_tbl_type(y)
-  show.diag <- cor_tbl_showdiag(y)
-  x$x <- as.character(x$x)
-  x$y <- as.character(x$y)
-  y$x <- xname[corr$x]
-  y$y <- yname[corr$y]
-  group.name <- unique(x$x)
-  corrmat_data <- link_corrmat_data(yname = yname,
-                                    n.row = length(yname),
-                                    n.col = length(xname),
-                                    type = type,
-                                    show.diag = show.diag,
-                                    hjust = corrmat.point.hjust,
-                                    vjust = corrmat.point.vjust,
-                                    on.left = on.left,
-                                    diag.label = diag.label)
-  group_data <- link_group_data(group.name = group.name,
-                                n.row = length(yname),
-                                n.col = length(xname),
-                                type = type,
-                                hjust = group.point.hjust,
-                                vjust = group.point.vjust,
-                                on.left = on.left)
-  link_data <- x %>%
-    dplyr::left_join(corrmat_data, by = c("y" = "corr_yname")) %>%
-    dplyr::left_join(group_data, by = c("x" = "group_name"))
-  structure(list(link_data = link_data,
-                 corrmat_data = corrmat_data,
-                 group_data = group_data),
-            class = "mantel_link_data")
+  if(!is_cor_tbl(cor_tbl))
+    stop("Need a cor_tbl.", call. = FALSE)
+  xname <- cor_tbl_xname(cor_tbl)
+  yname <- cor_tbl_yname(cor_tbl)
+  type <- cor_tbl_type(cor_tbl)
+  show.diag <- cor_tbl_showdiag(cor_tbl)
+  spec.name <- unique(df[[spec.key]])
+  env_data <- link_env_data(yname = yname,
+                            n.row = length(yname),
+                            n.col = length(xname),
+                            type = type,
+                            show.diag = show.diag,
+                            hjust = env.point.hjust,
+                            vjust = env.point.vjust,
+                            on.left = on.left,
+                            diag.label = diag.label)
+  spec_data <- link_spec_data(spec.name = spec.name,
+                               n.row = length(yname),
+                               n.col = length(xname),
+                               type = type,
+                               hjust = spec.point.hjust,
+                               vjust = spec.point.vjust,
+                               on.left = on.left)
+  link_data <- df %>%
+    dplyr::left_join(env_data, by = setNames("env.key", env.key)) %>%
+    dplyr::left_join(spec_data, by = setNames("spec.key", spec.key))
+  structure(.Data = link_data, class = c("link_tbl", class(link_data)))
 }
 
 #' @noRd
-link_group_data <- function(group.name, n.row, n.col, type, hjust = NULL, vjust = NULL, on.left = FALSE)
+link_spec_data <- function(spec.name,
+                           n.row,
+                           n.col,
+                           type,
+                           hjust = NULL,
+                           vjust = NULL,
+                           on.left = FALSE)
 {
-  len <- length(group.name)
+  len <- length(spec.name)
   if(!is.null(hjust) && length(hjust) != len)
     hjust <- rep_len(hjust, len)
   if(!is.null(vjust) && length(hjust) != len)
@@ -96,15 +97,21 @@ link_group_data <- function(group.name, n.row, n.col, type, hjust = NULL, vjust 
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  data.frame(group_x = x,
-             group_y = y,
-             group_name = group.name,
-             stringsAsFactors = FALSE)
+  tibble::tibble(link.x = x,
+                 link.y = y,
+                 spec.key = spec.name)
 }
 
 #' @noRd
-link_corrmat_data <- function(yname, n.row, n.col, type = "upper", show.diag = FALSE,
-                              hjust = NULL, vjust = NULL, on.left = FALSE, diag.label = FALSE)
+link_env_data <- function(yname,
+                          n.row,
+                          n.col,
+                          type = "upper",
+                          show.diag = FALSE,
+                          hjust = NULL,
+                          vjust = NULL,
+                          on.left = FALSE,
+                          diag.label = FALSE)
 {
   if(!is.null(hjust) && length(hjust) != n.row)
     hjust <- rep_len(hjust, n.row)
@@ -149,32 +156,7 @@ link_corrmat_data <- function(yname, n.row, n.col, type = "upper", show.diag = F
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  data.frame(corr_x = x,
-             corr_y = y,
-             corr_yname = yname,
-             stringsAsFactors = FALSE)
-}
-
-
-#' @noRd
-rename_mantel <- function(mantel) {
-  name <- names(mantel)
-  name <- ifelse(name == "spec", "x", name)
-  name <- ifelse(name == "env", "y", name)
-  names(mantel) <- name
-  mantel
-}
-
-
-#' @noRd
-link_colour_pal <- function(n)
-{
-  stopifnot(n <= 6)
-  colors <- c("#D95F02", "#1B9E77", "#7570B3",
-              "#E7298A", "#A6761D", "#CCCCCC")
-  if(n == 1)
-    return(colors[1])
-  col <- c(colors[1:(n - 1)], colors[6])
-  col
-
+  tibble::tibble(link.xend = x,
+                 link.yend = y,
+                 env.key = yname)
 }

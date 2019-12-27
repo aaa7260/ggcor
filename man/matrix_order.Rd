@@ -4,44 +4,31 @@
 \alias{matrix_order}
 \title{Reorder Matrices}
 \usage{
-matrix_order(x, cluster.type = c("none", "all", "row", "col"),
-  cluster.method = "HC", absolute = FALSE, ...)
+matrix_order(x, cluster.method = "complete", ...)
 }
 \arguments{
-\item{x}{a matrix object.}
+\item{x}{a matrix-like object.}
 
-\item{cluster.type}{a character string with the name of reorder type.}
+\item{cluster.method}{a character string with the name of agglomeration method.}
 
-\item{cluster.method}{a character string with the name of the seriation method.}
-
-\item{absolute}{logical, if TRUE will transform x using abs().}
-
-\item{...}{extra params passing to \code{\link[seriation]{seriate}}.}
+\item{...}{extra params passing to \code{\link[stats]{hclust}}.}
 }
 \value{
-a list of two numeric vector. The 'row_ord' is the order of rows, and
-    the 'col_ord' is the order of columns.
+a numeric vector of new order.
 }
 \description{
-Tries to find an linear order for matrix by different cluster methods.
+Tries to find an order for matrix by different cluster methods.
 }
 \details{
-All cluster methods in \code{\link[seriation]{seriate}} are supported，and the
-    default cluster method is "HC". other methods please see `?seriation::seriate`.
+Now it just supports for square matrix.
 }
 \examples{
-m <- matrix(rnorm(20), nrow = 4)
-matrix_order(m, cluster.type = "all")
+m <- matrix(rnorm(25), nrow = 5)
+matrix_order(m)
 }
 \seealso{
-\code{\link[seriation]{seriate}}.
+\code{\link[stats]{hclust}}.
 }
 \author{
-Houyun Huang
-
-Lei Zhou
-
-Jian Chen
-
-Taiyun Wei
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }

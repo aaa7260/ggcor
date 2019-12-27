@@ -11,27 +11,27 @@
 \usage{
 scale_colour_gradient2n(..., colours, midpoint = 0, limits = NULL,
   space = "Lab", values = NULL, na.value = "grey50",
-  guide = "colourbar", aesthetics = "colour")
+  guide = "colourbar", aesthetics = "colour", colors = NULL)
 
 scale_color_gradient2n(..., colours, midpoint = 0, limits = NULL,
   space = "Lab", values = NULL, na.value = "grey50",
-  guide = "colourbar", aesthetics = "colour")
+  guide = "colourbar", aesthetics = "colour", colors = NULL)
 
 scale_fill_gradient2n(..., colours, midpoint = 0, limits = NULL,
   space = "Lab", values = NULL, na.value = "grey50",
-  guide = "colourbar", aesthetics = "fill", colors)
+  guide = "colourbar", aesthetics = "fill", colors = NULL)
 
 scale_fill_steps2n(..., colours, midpoint = 0, values = NULL,
   space = "Lab", limits = c(-1, 1), na.value = "grey50",
-  guide = "coloursteps", aesthetics = "fill", colors)
+  guide = "coloursteps", aesthetics = "fill", colors = NULL)
 
 scale_colour_steps2n(..., colours, midpoint = 0, values = NULL,
   space = "Lab", limits = c(-1, 1), na.value = "grey50",
-  guide = "coloursteps", aesthetics = "colour", colors)
+  guide = "coloursteps", aesthetics = "colour", colors = NULL)
 
 scale_color_steps2n(..., colours, midpoint = 0, values = NULL,
   space = "Lab", limits = c(-1, 1), na.value = "grey50",
-  guide = "coloursteps", aesthetics = "colour", colors)
+  guide = "coloursteps", aesthetics = "colour", colors = NULL)
 }
 \arguments{
 \item{...}{Arguments passed on to \code{discrete_scale}

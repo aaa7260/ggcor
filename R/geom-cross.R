@@ -1,9 +1,9 @@
-#' Circles based on center and radius
+#' Cross Geom
 #'
 #'
 #' @eval rd_aesthetics("geom", "cross")
 #' @param r0 the radius of an outer circle, defualt value is sqrt(2)/2.
-#' @param sig_thres significance threshold.
+#' @param sig.level significance threshold.
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_segment
@@ -21,6 +21,7 @@
 geom_cross <- function(mapping = NULL, data = NULL,
                        stat = "identity", position = "identity",
                        ...,
+                       sig.level = 0.05,
                        linejoin = "mitre",
                        na.rm = FALSE,
                        show.legend = NA,
@@ -34,6 +35,7 @@ geom_cross <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      sig.level = sig.level,
       linejoin = linejoin,
       na.rm = na.rm,
       ...
@@ -49,20 +51,20 @@ GeomCross <- ggproto(
   "GeomCross", Geom,
   default_aes = aes(colour = "red", fill = NA,
                     size = 0.5, linetype = 1, alpha = NA),
-  required_aes = c("x", "y", "p"),
+  required_aes = c("x", "y", "p.value"),
 
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
-                        sig.thres = 0.05, r0 = 0.6) {
+                        sig.level = 0.05, r0 = 0.6) {
     if (!coord$is_linear()) {
       warning("geom_cross is not implemented for non-linear coordinates",
               call. = FALSE)
     }
     aesthetics <- setdiff(names(data), c("x", "y", "p"))
-    data <- dplyr::filter(data, p > sig.thres)
+    data <- dplyr::filter(data, p.value > sig.level)
     dd <- point_to_cross(data$x, data$y, r0)
     GeomSegment$draw_panel(cbind(dd, data[, aesthetics]), panel_params, coord)
   },
-  draw_key = draw_key_cross
+  draw_key = draw_key_point
 )
 
 #' @noRd
@@ -79,4 +81,3 @@ point_to_cross <- function(x, y, r = 0.6) {
     yend = yend
   ))
 }
-

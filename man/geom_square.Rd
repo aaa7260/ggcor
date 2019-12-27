@@ -4,7 +4,7 @@
 \name{geom_square}
 \alias{geom_square}
 \alias{GeomSquare}
-\title{Square based on center and radius}
+\title{Square Geom}
 \usage{
 geom_square(mapping = NULL, data = NULL, stat = "identity",
   position = "identity", ..., linejoin = "mitre", na.rm = FALSE,
@@ -55,11 +55,9 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{r0}{the radius of circle, defualt value is 0.48.}
 }
 \description{
-Square based on center and radius
+Square Geom
 }
 \section{Aesthetics}{
 
@@ -67,15 +65,14 @@ Square based on center and radius
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
-  \item \strong{\code{r}}
   \item \code{alpha}
   \item \code{colour}
   \item \code{fill}
   \item \code{group}
   \item \code{linetype}
+  \item \code{r0}
   \item \code{size}
 }
-Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
 }
 
 \keyword{datasets}

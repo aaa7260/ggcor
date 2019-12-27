@@ -2,26 +2,25 @@
 % Please edit documentation in R/remove-axis.R
 \name{remove_axis}
 \alias{remove_axis}
-\title{Remove Axis Elements.}
+\title{Remove axis elements.}
 \usage{
 remove_axis(index = c("all", "x", "y"))
 }
 \arguments{
-\item{index}{the index ("all", "x", "y") of axis will be removed.}
+\item{index}{'all' (default), 'x' or 'y' axis will be removed.}
 }
 \value{
 The theme.
 }
 \description{
-A simple wrapper of the `theme()` function to quickly
-    remove axis elements.
+A simple wrapper of the \code{\link[ggplot2]{theme}} function
+    to quickly remove axis elements.
+}
+\examples{
+quickcor(mtcars) + geom_circle2() + remove_axis()
+quickcor(mtcars) + geom_circle2() + remove_axis("x")
+quickcor(mtcars) + geom_circle2() + remove_axis("y")
 }
 \author{
-Houyun Huang
-
-Lei Zhou
-
-Jian Chen
-
-Taiyun Wei
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }

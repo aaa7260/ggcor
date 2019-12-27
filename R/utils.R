@@ -34,7 +34,7 @@ make_matrix_name <- function(mat)
   mat
 }
 #' @noRd
-make_list_names <- function(x, pre = "X", sep = "_")
+make_list_names <- function(x, pre = "X", sep = "")
 {
   stopifnot(is.list(x))
   n <- length(x)
@@ -52,26 +52,6 @@ make_list_names <- function(x, pre = "X", sep = "_")
     names(x) <- make.unique(name)
   }
   return(x)
-}
-
-
-#' @noRd
-matrix_to_df <- function(x, val.name = "v")
-{
-  if(!is.matrix(x))
-    x <- as.matrix(x)
-  # make name
-  x <- make_matrix_name(x)
-  row_name <- rownames(x)
-  col_name <- colnames(x)
-  vv <- as.vector(x)
-  xx <- rep(col_name, each = nrow(x))
-  yy <- rep(row_name, ncol(x))
-  m <- tibble::tibble(x = factor(xx, levels = col_name),
-                      y = factor(yy, levels = rev(row_name)),
-                      v = vv)
-  names(m) <- c("x", "y", val.name)
-  m
 }
 
 #' @noRd
@@ -145,8 +125,7 @@ rd_aesthetics <- function(type, name) {
     ),
     "\\itemize{",
     paste0("  \\item ", aes),
-    "}",
-    "Learn more about setting these aesthetics in \\code{vignette(\"ggplot2-specs\")}."
+    "}"
   )
 }
 

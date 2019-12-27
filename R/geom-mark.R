@@ -1,4 +1,4 @@
-#' Significant marks based on center.
+#' Significant marks Geom
 #'
 #'
 #' @eval rd_aesthetics("geom", "mark")
@@ -25,6 +25,13 @@ geom_mark <- function(mapping = NULL, data = NULL,
                      ...,
                      nudge_x = 0,
                      nudge_y = 0,
+                     digits = 2,
+                     nsmall = 2,
+                     sig.level = c(0.05, 0.01, 0.001),
+                     mark = c("*", "**", "***"),
+                     sig.thres = NULL,
+                     sep = "",
+                     parse = FALSE,
                      na.rm = FALSE,
                      show.legend = NA,
                      inherit.aes = TRUE)
@@ -45,6 +52,13 @@ geom_mark <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      digits = digits,
+      nsmall = nsmall,
+      sig.level = sig.level,
+      mark = mark,
+      sig.thres = sig.thres,
+      sep = sep,
+      parse = parse,
       na.rm = na.rm,
       ...
     )
@@ -56,7 +70,7 @@ geom_mark <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomMark <- ggproto("GeomMark", GeomText,
-                   required_aes = c("x", "y", "p"),
+                   required_aes = c("x", "y", "p.value"),
 
                    default_aes = aes(
                      r = NA, colour = "black", size = 3.88, angle = 0, hjust = 0.5,
@@ -69,13 +83,14 @@ GeomMark <- ggproto("GeomMark", GeomText,
                                          sep = "", parse = FALSE, na.rm = FALSE) {
                      stopifnot(length(sig.level) == length(mark))
                      if(!is.null(sig.thres))
-                       data <- dplyr::filter(data, p <= sig.thres)
-                     star <- sig_mark(data$p, sig.level, mark)
+                       data <- dplyr::filter(data, p.value <= sig.thres)
+                     star <- sig_mark(data$p.value, sig.level, mark)
                      na_idx <- is.na(data$r)
-                     if(!all(na_idx)) {
-                       num <- format_number(data$r, digits, nsmall)
-                     } else {
-                       num <- ""
+                     num <- ifelse(na_idx, "", format_number(data$r, digits, nsmall))
+                     if(parse) {
+                       if(!requireNamespace("latex2exp", quietly = TRUE))
+                         warning("Need latex2exp package.", call. = FALSE)
+                       parse <- FALSE
                      }
                      if(parse) {
                        label <- paste(num, paste0("{", star, "}"), sep = sep)
@@ -85,22 +100,21 @@ GeomMark <- ggproto("GeomMark", GeomText,
                      }
                      GeomText$draw_panel(data, panel_params, coord)
                    },
-
                    draw_key = draw_key_text
 )
 
 #' @noRd
-sig_mark <- function(p,
+sig_mark <- function(p.value,
                      sig.level = c(0.05, 0.01, 0.001),
                      mark = c("*", "**", "***")) {
-  if(!is.numeric(p))
-    p <- as.numeric(p)
+  if(!is.numeric(p.value))
+    p.value <- as.numeric(p.value)
   ord <- order(sig.level)
   sig.level <- sig.level[ord]
   mark <- mark[ord]
   brks <- c(0, sig.level, 1)
   lbs <- c(mark, "")
-  pp <- cut(p, breaks = brks, labels = lbs, include.lowest = FALSE, right = TRUE)
-  ifelse(p == 0, mark[1], as.character(pp))
+  pp <- cut(p.value, breaks = brks, labels = lbs, include.lowest = FALSE, right = TRUE)
+  ifelse(p.value == 0, mark[1], as.character(pp))
 }
 

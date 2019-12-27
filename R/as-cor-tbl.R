@@ -1,284 +1,259 @@
 #' Coerce to a cor_tbl object.
 #' @description Functions to coerce a object to cor_tbl if possible.
-#' @param corr Any \code{R} object.
-#' @param type A string, "full" (default), "upper" or "lower", display full
-#'     matrix, lower triangular or upper triangular matrix.
-#' @param show.diag A logical value indicating whether keep the diagonal.
-#' @param p Matrix of p value.
-#' @param low Matrix of the lower bound of confidence interval.
-#' @param upp Matrix of the upper bound of confidence interval.
-#' @param cluster.type A string, the ordering type of the correlation matrix.
-#'     \itemize{
-#'   \item{\code{"none"} for original order (default).}
-#'   \item{\code{"all"} for reordering rows and columns at the same time.}
-#'   \item{\code{"row"} for reordering rows, just supports the symmetry correlation matrix.}
-#'   \item{\code{"col"} for reordering columns, just supports the symmetry correlation matrix.}
-#' }
-#' @param keep.name A logical value indicating whether keep the x/y column name.
-#' @param ... Extra params, see Details.
-#' @details The method of coerce a \code{matrix} object to a cor_tbl object is the
-#'     fundamental function. In the earth, other methods is call the \code{as_cor_tbl.matrix}
-#'     coerce to cor_tbl except \code{as_cor_tbl.mantel_tbl}.
-#'     For \code{as_cor_tbl.matrix}, \code{...} params pass to \code{\link[ggcor]{matrix_order}},
-#'     and for \code{as_cor_tbl.data.frame}, \code{...} params pass to \code{as_cor_tbl.matrix}.
-#' @return A cor_tbl object.
-#' @rdname as-cor-tbl
-#' @export
+#' @param corr any \code{R} object.
+#' @param type a string, "full" (default), "upper" or "lower", display full,
+#'     lower triangular or upper triangular matrix.
+#' @param show.diag a logical value indicating whether keep the diagonal.
+#' @param p.value a matrix of p value.
+#' @param lower.ci,upper.ci matrix of confidence interval.
+#' @param rownames,colnames row/column names of correlation matrix.
+#' @param cluster a logical value indicating whether reorder the correlation matrix
+#'     by clustering, default is FALSE.
+#' @param byrow a logical value indicating whether arrange the 'spec' columns on y axis.
+#' @param keys a named character vector, should contain "r" and "p.value".
+#' @param check a logical value indicating whether check the correlation coefficient and
+#'     p value.
+#' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
+#' @details \code{cluster = TRUE} just supports for symmetric correlation matrix.
+#' @return a cor_tbl object.
+#' @rdname as_cor_tbl
 #' @examples
 #' corr <- cor(mtcars)
 #' as_cor_tbl(corr)
-#' @author Houyun Huang
-#' @author Lei Zhou
-#' @author Jian Chen
-#' @author Taiyun Wei
+#' ll <- correlate(mtcars)
+#' as_cor_tbl(ll, type = "upper")
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 as_cor_tbl <- function(corr, ...) {
   UseMethod("as_cor_tbl")
 }
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl matrix
 as_cor_tbl.matrix <- function(corr,
-                              type = c("full", "upper", "lower"),
+                              type = "full",
                               show.diag = TRUE,
-                              p = NULL,
-                              low = NULL,
-                              upp = NULL,
+                              p.value = NULL,
+                              lower.ci = NULL,
+                              upper.ci = NULL,
                               row.names = NULL,
                               col.names = NULL,
-                              cluster.type = c("none", "all", "row", "col"),
-                              keep.name = FALSE,
+                              cluster = FALSE,
+                              check = TRUE,
                               ...) {
-  type <- match.arg(type)
-  cluster.type <- match.arg(cluster.type)
+  type <- match.arg(type, c("full", "upper", "lower"))
   if(!is.null(row.names))
     rownames(corr) <- row.names
   if(!is.null(col.names))
     rownames(corr) <- col.names
   corr <- make_matrix_name(corr)
-  if(!is.null(p)) {
-    if(!is.matrix(p))
-      p <- as.matrix(p)
-    if(any(dim(corr) != dim(p)))
-      stop("`p` must have the same dimension as `corr`.", call. = FALSE)
+  xname <- colnames(corr)
+  yname <- rev(rownames(corr))
+  if(!is.null(p.value)) {
+    if(!is.matrix(p.value))
+      p.value <- as.matrix(p.value)
   }
-  if(!is.null(low)) {
-    if(!is.matrix(low))
-      low <- as.matrix(low)
-    if(any(dim(corr) != dim(low)))
-      stop("`low` must have the same dimension as `corr`.", call. = FALSE)
+  if(check) {
+    check_cor_matrix(corr, p.value)
+  } else {
+    check_dimension(corr, p.value)
   }
-  if(!is.null(upp)) {
-    if(!is.matrix(upp))
-      upp <- as.matrix(upp)
-    if(any(dim(corr) != dim(upp)))
-      stop("`upp` must have the same dimension as `corr`.", call. = FALSE)
+  if(!is.null(lower.ci)) {
+    if(!is.matrix(lower.ci))
+      lower.ci <- as.matrix(lower.ci)
+    check_dimension(corr, lower.ci)
   }
-  if((length(rownames(corr)) != length(colnames(corr))) ||
-     any(sort(rownames(corr)) != sort(colnames(corr)))) {
-    show.diag <- "none"
+  if(!is.null(upper.ci)) {
+    if(!is.matrix(upper.ci))
+      upper.ci <- as.matrix(upper.ci)
+    check_dimension(corr, upper.ci)
+  }
+  if(!isSymmetric(corr) || any(xname != rev(yname))) {
     if(type != "full") {
       warning("'type=", type, "' just supports for symmetric correlation matrix.", call. = FALSE)
       type <- "full"
+      if(type == "full") show.diag <- TRUE
+    }
+    if(isTRUE(cluster)) {
+      warning("'cluster' just spports for symmetric correlation matrix.", call. = FALSE)
+      cluster <- FALSE
     }
   }
-  if((type != "full") && (!cluster.type %in% c("none", "all"))) {
-    warning("'cluster.type=", cluster.type, "' just spports for symmetric correlation matrix.", call. = FALSE)
-    cluster.type <- "none"
+  if(isTRUE(cluster)) {
+    ord <- matrix_order(corr, ...)
+    corr <- corr[ord, ord]
+    p.value <- if(is.null(p.value)) p.value else p.value[ord, ord]
+    lower.ci <- if(is.null(lower.ci)) lower.ci else lower.ci[ord, ord]
+    upper.ci <- if(is.null(upper.ci)) upper.ci else upper.ci[ord, ord]
   }
-  ord <- matrix_order(corr, cluster.type = cluster.type, ...)
-  row_ord <- ord$row_ord
-  col_ord <- ord$col_ord
-  corr <- corr[row_ord, col_ord]
-  xname <- colnames(corr)
-  yname <- rev(rownames(corr))
-  df <- matrix_to_df(corr, "r")
-  if(!is.null(p)) {
-    p <- p[row_ord, col_ord]
-    df$p <- as.vector(p)
-  }
-  if(!is.null(low)) {
-    low <- low[row_ord, col_ord]
-    df$low <- as.vector(low)
-  }
-  if(!is.null(upp)) {
-    upp <- upp[row_ord, col_ord]
-    df$upp <- as.vector(upp)
-  }
-  if(!keep.name) {
-    df <- purrr::map_df(df, function(x) {
-      if(is.factor(x)) {
-        as.integer(x)
-      } else x
-    })
-  }
-  if(type == "full")
-    show.diag <- TRUE
-  if(keep.name) {
-    class <- c("cor_tbl_fct", class(df))
-  } else {
-    class <- c("cor_tbl", class(df))
-  }
-  out <- structure(
+  df <- make_cor_tbl(corr, p.value, lower.ci, upper.ci)
+  cor_tbl <- structure(
     .Data = df,
     xname = xname,
     yname = yname,
     type = type,
     show.diag = show.diag,
-    class = class
+    grouped = FALSE,
+    class = c("cor_tbl", class(df))
   )
   switch (type,
-          full = out,
-          upper = get_upper_data(out, show.diag = show.diag),
-          lower = get_lower_data(out, show.diag = show.diag)
+          full = cor_tbl,
+          upper = get_upper_data(cor_tbl, show.diag = show.diag),
+          lower = get_lower_data(cor_tbl, show.diag = show.diag)
   )
 }
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl data.frame
 as_cor_tbl.data.frame <- function(corr,
-                                  p = NULL,
-                                  low = NULL,
-                                  upp = NULL,
-                                  cluster.type = c("none", "all", "row", "col"),
-                                  keep.name = FALSE,
+                                  p.value = NULL,
+                                  lower.ci = NULL,
+                                  upper.ci = NULL,
+                                  cluster = FALSE,
                                   ...) {
   corr <- as.matrix(corr)
-  as_cor_tbl.matrix(corr, p = p, low = low, upp = upp,
-                    cluster.type = cluster.type, keep.name = keep.name, ...)
+  as_cor_tbl(corr, p.value = p.value, lower.ci = lower.ci,
+                    upper.ci = upper.ci, cluster = cluster, ...)
 }
 
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
+#' @export
+#' @method as_cor_tbl correlation
+as_cor_tbl.correlation <- function(corr, check = FALSE, ...) {
+  as_cor_tbl(corr$r, p.value = corr$p.value, lower.ci = corr$lower.ci,
+             upper.ci = corr$upper.ci, check = FALSE, ...)
+}
+
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl rcorr
-as_cor_tbl.rcorr <- function(corr, fill.diag.p = 0, ...)
+as_cor_tbl.rcorr <- function(corr, check = FALSE, ...)
 {
-  if(!is.null(fill.diag.p)) {
-    p <- corr$P
-    diag(p) <- 0
-  } else {
-    p <- corr$P
-  }
-  df <- as_cor_tbl.matrix(corr$r, p = p, keep.name = FALSE, ...)
-  df
+  p.value <- corr$P
+  diag(p.value) <- 0
+  as_cor_tbl(corr$r, p.value = p.value, check = FALSE, ...)
 }
 
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl corr.test
-as_cor_tbl.corr.test <- function(corr, ...)
+as_cor_tbl.corr.test <- function(corr, check = FALSE, ...)
 {
-  df <- as_cor_tbl.matrix(corr$r, p = corr$p, keep.name = FALSE, ...)
+  as_cor_tbl(corr$r, p.value = corr$p, check = FALSE, ...)
 }
 
-#' @rdname  as-cor-tbl
-#' @export
-#' @method as_cor_tbl cor_tbl_fct
-as_cor_tbl.cor_tbl_fct <- function(corr, ...) {
-  corr$x <- as.integer(corr$x)
-  corr$y <- as.integer(corr$y)
-  class(corr) <- c("cor_tbl", setdiff(class(corr), "cor_tbl_fct"))
-}
-
-#' @rdname  as-cor-tbl
+#' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl mantel_tbl
 as_cor_tbl.mantel_tbl <- function(corr, byrow = TRUE, ...) {
-  env.name <- unique(corr$env)
-  spec.name <- unique(corr$spec)
-  r <- corr$r
-  p <- corr$p
+  env_nm <- unique(corr$env)
+  spec_nm <- unique(corr$spec)
   if(byrow) {
-    xname <- env.name
-    yname <- spec.name
-    xx <- factor(corr$env, levels = xname)
-    yy <- factor(corr$spec, levels = rev(yname))
+    xname <- env_nm
+    yname <- spec_nm
+    idx <- corr$env
+    idy <- corr$spec
+    x <- as.integer(factor(corr$env, levels = xname))
+    y <- as.integer(factor(corr$spec, levels = rev(yname)))
   } else {
-    xname <- spec.name
-    yname <- env.name
-    xx <- factor(corr$spec, levels = xname)
-    yy <- factor(corr$env, levels = rev(yname))
+    xname <- spec_nm
+    yname <- env_nm
+    idx <- corr$spec
+    idy <- corr$env
+    x <- as.integer(factor(corr$spec, levels = xname))
+    y <- as.integer(factor(corr$env, levels = rev(yname)))
   }
-  df <- tibble::tibble(x = as.integer(xx), y = as.integer(yy), r = r, p = p)
-  out <- structure(
+  df <- tibble::tibble(idx = idx, idy = idy, r = corr$r,
+                       p.value = corr$p.value, x = x, y = y)
+  if(attr(corr, "grouped"))
+    df$group <- corr$group
+  structure(
     .Data = df,
     xname = xname,
     yname = yname,
     type = "full",
-    show.diag = "none",
+    show.diag = TRUE,
+    grouped = attr(corr, "grouped"),
     class = c("cor_tbl", setdiff(class(df), "mantel_tbl"))
   )
-  out
 }
 
-#' @rdname as-cor-tbl
+#' @rdname as_cor_tbl
+#' @export
+#' @method as_cor_tbl list
+as_cor_tbl.list <- function(corr, keys = NULL, check = TRUE, ...)
+{
+  if(is.null(keys)) {
+    r <- corr$r %||% corr$cor %||% corr$corr
+    p <- corr$p %||% corr$pvalue %||% corr$p.value
+  } else {
+    nm <- names(keys)
+    if(is.null(nm))
+      stop("'keys' must be a named character vector.", call. = FALSE)
+    if(!"r" %in% nm )
+      stop("'keys' must contained 'r' column.", call. = FALSE)
+    r <- corr[[keys["r"]]]
+    p <- if(is.null(keys["p.value"])) NULL else corr[[keys["p.value"]]]
+  }
+  if(is.null(r)) {
+    stop("Not find correlation matrix.", call. = FALSE)
+  }
+  as_cor_tbl(r, p.value = p, check = check, ...)
+}
+#' @rdname as_cor_tbl
 #' @export
 #' @method as_cor_tbl default
 as_cor_tbl.default <- function(corr, ...) {
   stop(class(corr), " hasn't been realized yet.", call. = FALSE)
 }
 
-#' @export
-as_cor_tbl_fct <- function(corr, ...) {
-  UseMethod("as_cor_tbl_fct")
-}
-
-#' @export
-as_cor_tbl_fct.cor_tbl <- function(corr, ...) {
-  xname <- cor_tbl_xname(corr)
-  yname <- cor_tbl_yname(corr)
-  corr$x <- factor(xname[corr$x], levels = xname)
-  corr$y <- factor(yname[corr$y], levels = yname)
-  structure(corr,
-            class = c("cor_tbl_fct", setdiff(class(corr), "cor_tbl")))
-}
-#' @export
-as_cor_tbl_fct.rcorr <- function(corr, fill.diag.p = 0, ...)
-{
-  if(!is.null(fill.diag.p)) {
-    p <- corr$P
-    diag(p) <- 0
-  } else {
-    p <- corr$P
+#' @noRd
+check_dimension <- function(x, y) {
+  x_nm <- as.character(match.call()[["x"]])
+  y_nm <- as.character(match.call()[["y"]])
+  if(any(dim(x) != dim(y))) {
+    msg <- paste0(" Dimension error: ", y_nm, " must have same dimension as ", x_nm)
+    stop(msg, call. = FALSE)
   }
-  df <- as_cor_tbl.matrix(corr$r, p = p, keep.name = TRUE, ...)
-  df
 }
 
-#' @export
-as_cor_tbl_fct.corr.test <- function(corr, ...)
+#' @noRd
+check_cor_matrix <- function(corr,
+                             p.value = NULL)
 {
-  df <- as_cor_tbl.matrix(corr$r, p = corr$p, keep.name = TRUE, ...)
+  if(!is.numeric(corr))
+    stop("'corr' needs a numeric matrix.", call. = FALSE)
+  if(!is.null(p.value))
+    check_dimension(corr, p.value)
+  corr <- corr[is.finite(corr)]
+  if(!all(corr >= -1 & corr <= 1))
+    stop("'corr' not in range -1 to 1.", call. = FALSE)
+  if(!is.null(p.value)) {
+    if(!is.numeric(p.value))
+      stop("'p.value' needs a numeric matrix.", call. = FALSE)
+    p.value <- p.value[is.finite(p.value)]
+    if(!all(p.value >= 0 & p.value <= 1))
+      stop("'p.value' not in range 0 to 1.", call. = FALSE)
+  }
 }
 
-#' @export
-as_cor_tbl_fct.mantel_tbl <- function(corr, byrow = TRUE, ...) {
-  env.name <- unique(corr$env)
-  spec.name <- unique(corr$spec)
-  r <- corr$r
-  p <- corr$p
-  if(byrow) {
-    xname <- env.name
-    yname <- spec.name
-    xx <- factor(corr$env, levels = xname)
-    yy <- factor(corr$spec, levels = rev(yname))
-  } else {
-    xname <- spec.name
-    yname <- env.name
-    xx <- factor(corr$spec, levels = xname)
-    yy <- factor(corr$env, levels = rev(yname))
-  }
-  df <- tibble::tibble(x = xx, y = yy, r = r, p = p)
-  out <- structure(
-    .Data = df,
-    xname = xname,
-    yname = yname,
-    type = "full",
-    show.diag = "none",
-    class = c("cor_tbl_fct", setdiff(class(df), "mantel_tbl"))
-  )
-  out
-}
-#' @export
-as_cor_tbl_fct.default <- function(corr, ...) {
-  stop(class(corr), " hasn't been realized yet.", call. = FALSE)
+#' @noRd
+make_cor_tbl <- function(corr,
+                         p.value = NULL,
+                         lower.ci = NULL,
+                         upper.ci = NULL)
+{
+  row_nm <- rownames(corr)
+  col_nm <- colnames(corr)
+  n <- nrow(corr)
+  m <- ncol(corr)
+  tibble::tibble(idx = rep(col_nm, each = n),
+                 idy = rep(row_nm, m)) %>%
+    dplyr::mutate(
+      r = as.vector(corr),
+      p.value = as.vector(p.value),
+      lower.ci = as.vector(lower.ci),
+      upper.ci = as.vector(upper.ci),
+      x = rep(1:m, each= n),
+      y = rep(n:1, m))
 }
