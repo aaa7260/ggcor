@@ -33,5 +33,7 @@ Imports:
 Suggests:
     knitr,
     WGCNA,
-    latex2expr
+    latex2expr,
+    rmarkdown
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr
