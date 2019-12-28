@@ -95,7 +95,7 @@ add_link <- function(df,
                    x = spec.point.data$link.x + spec.label.hspace,
                    y = spec.point.data$link.y + spec.label.vspace,
                    label = spec.point.data[[spec.key]])
-                 spec.label <- geom_text(
+                 spec.label = geom_text(
                    aes_(x = ~x, y = ~y, label = ~label), spec.label.data,
                    family = extra.params$spec.label$family,
                    fontface = extra.params$spec.label$fontface,
