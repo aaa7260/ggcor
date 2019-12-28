@@ -41,6 +41,7 @@ tidy_link_data <- function(df,
   structure(.Data = link_data, class = c("link_tbl", class(link_data)))
 }
 
+#' @importFrom tibble tibble
 #' @noRd
 link_spec_data <- function(spec.name,
                            n.row,
@@ -101,7 +102,7 @@ link_spec_data <- function(spec.name,
                  link.y = y,
                  spec.key = spec.name)
 }
-
+#' @importFrom tibble tibble
 #' @noRd
 link_env_data <- function(yname,
                           n.row,
