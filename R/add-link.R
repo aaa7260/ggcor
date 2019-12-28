@@ -66,10 +66,10 @@ add_link <- function(df,
       )
     }
 
-    gg <- list(link.line = geom_curve(mapping, link.data, curvature = curvature,
+    gg <- list(geom_curve(mapping, link.data, curvature = curvature,
                                       inherit.aes = FALSE, ...),
                if(!is.null(extra.params$spec.point)) {
-                 spec.point <- geom_point(
+                 geom_point(
                    aes_(x = ~link.x, y = ~link.y), spec.point.data,
                    alpha = extra.params$spec.point$alpha,
                    colour = extra.params$spec.point$colour,
@@ -80,7 +80,7 @@ add_link <- function(df,
                    inherit.aes = FALSE)
                },
                if(!is.null(extra.params$env.point)) {
-                 env.point = geom_point(
+                 geom_point(
                    aes_(x = ~link.xend, y = ~link.yend), env.point.data,
                    alpha = extra.params$env.point$alpha,
                    colour = extra.params$env.point$colour,
@@ -95,7 +95,7 @@ add_link <- function(df,
                    x = spec.point.data$link.x + spec.label.hspace,
                    y = spec.point.data$link.y + spec.label.vspace,
                    label = spec.point.data[[spec.key]])
-                 spec.label = geom_text(
+                 geom_text(
                    aes_(x = ~x, y = ~y, label = ~label), spec.label.data,
                    family = extra.params$spec.label$family,
                    fontface = extra.params$spec.label$fontface,
@@ -112,9 +112,6 @@ add_link <- function(df,
   class(link_fun) <- c("add_link", class(link_fun))
   link_fun
 }
-
-
-
 #' @export
 ggplot_add.add_link <- function(object, plot, object_name) {
   data <- plot$data
