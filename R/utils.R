@@ -90,16 +90,6 @@ modify_list <- function (..., params, keep.null = TRUE)
 }
 
 #' @noRd
-cat_line <- function(x, name = "", collapse = " ", sep = " ", width = 60) {
-  msg <- paste(name, paste(x, collapse = collapse), sep = sep)
-  n <- nchar(msg)
-  if(n > width) {
-    msg <- paste(strtrim(msg, width), "...", sep = " ")
-  }
-  cat(msg, sep = "\n")
-}
-
-#' @noRd
 `%||%` <- function(x, y)
 {
   if(is.null(x)) y else x
