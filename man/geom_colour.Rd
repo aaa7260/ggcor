@@ -20,5 +20,5 @@ This is the encapsulation of \code{geom_tile()}
 function, and some fine-tuning has been done.
 }
 \examples{
-ggcorr(mtcars) + geom_colour()
+quickcor(mtcars) + geom_colour()
 }

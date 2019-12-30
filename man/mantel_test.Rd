@@ -47,7 +47,7 @@ mantel_test(varespec, varechem, mantel.fun = "mantel.randtest",
   spec.select = list(spec01 = 1:6, spec02 = 7:12),
   env.select = list(env01 = 1:4, env02 = 5:14))
 nm <- names(varechem[1:9])
-mantel_test(varespec, varechem, env.ctrl = env[10:14],
+mantel_test(varespec, varechem, env.ctrl = varechem[10:14],
   mantel.fun = "mantel.partial",
   env.select = as.list(setNames(nm, nm)))
 }

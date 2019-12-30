@@ -12,7 +12,7 @@
 #' quickcor(df) + geom_colour()
 #' df01 <- get_lower_data(df)
 #' quickcor(df01) + geom_colour()
-#' get_upper_data(df, show.diag = FALSE)
+#' df02 <- get_upper_data(df, show.diag = FALSE)
 #' quickcor(df02) + geom_colour()
 #' df03 <- get_diag_data(df)
 #' quickcor(df03) + geom_colour()
@@ -81,7 +81,7 @@ get_diag_data <- function(x)
     return(x)
   }
   n <- length(cor_tbl_xname(x))
-  dplyr::filter(x, xx + yy == n + 1)
+  dplyr::filter(x, x + y == n + 1)
 }
 
 #' Create cor_tbl extractor function

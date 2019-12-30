@@ -15,13 +15,13 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 cor_tbl_xname <- function(x) {
-  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
+  stopifnot(is_cor_tbl(x))
   attr(x, "xname")
 }
 #' @rdname cor_tbl_attr
 #' @export
 cor_tbl_yname <- function(x) {
-  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
+  stopifnot(is_cor_tbl(x))
   attr(x, "yname")
 }
 #' @rdname cor_tbl_attr
@@ -33,10 +33,11 @@ cor_tbl_type <- function(x) {
 #' @rdname cor_tbl_attr
 #' @export
 cor_tbl_showdiag <- function(x) {
-  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
+  stopifnot(is_cor_tbl(x))
   attr(x, "show.diag")
 }
-#' @noRd
+#' @rdname cor_tbl_attr
+#' @export
 is_cor_tbl <- function(x) {
   inherits(x, "cor_tbl")
 }

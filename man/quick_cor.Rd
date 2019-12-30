@@ -19,8 +19,8 @@ quickcor(x, y = NULL, mapping = NULL, fill.colours = NULL,
 \item{fill.colours}{NULL (default) or a vector of colours to use for n-colour gradient.}
 
 \item{fill.bin}{logical value (default is FALSE). if TRUE, If TRUE, use the function
-\code{\link[ggcor]{scale_fill_steps2n}}, otherwise use the function
-\code{\link[ggcor]{scale_fill_gradient2n}} for fill colour scale.}
+\code{ggcor::scale_fill_steps2n}, otherwise use the function
+\code{ggcor::scale_fill_gradient2n} for fill colour scale.}
 
 \item{grid.colour}{colour of grid lines.}
 

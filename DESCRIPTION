@@ -1,6 +1,6 @@
 Package: ggcor
 Type: Package
-Title: Extended tools for correlation analysis and visualization.
+Title: Extended tools for correlation analysis and visualization
 Version: 0.9.0
 Authors@R: c(
     person("Houyun", "Huang", email = "houyunhuang@163.com", role = c("aut", "cre")),
@@ -26,6 +26,7 @@ Imports:
     stats,
     RColorBrewer,
     scales,
+    tibble,
     purrr,
     dplyr,
     vegan,
@@ -33,7 +34,9 @@ Imports:
 Suggests:
     knitr,
     WGCNA,
-    latex2expr,
+    psych,
+    Hmisc,
+    latex2exp,
     rmarkdown
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

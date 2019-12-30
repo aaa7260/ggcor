@@ -24,7 +24,7 @@
 #' library(ggplot2)
 #' ggplot(df, aes(x, y, fill = z)) +
 #'        geom_tile( ) +
-#'        scale_gradient2n( )
+#'        scale_fill_gradient2n( )
 #'
 #' ggplot(df, aes(x, y, colour = z)) +
 #'        geom_point(size = 4) +
