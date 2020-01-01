@@ -4,9 +4,6 @@
 #' @param x,y matrix or data frame.
 #' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
 #' @param fill.colours NULL (default) or a vector of colours to use for n-colour gradient.
-#' @param fill.bin logical value (default is FALSE). if TRUE, If TRUE, use the function
-#'     \code{ggcor::scale_fill_steps2n}, otherwise use the function
-#'     \code{ggcor::scale_fill_gradient2n} for fill colour scale.
 #' @param grid.colour colour of grid lines.
 #' @param grid.size size of grid lines.
 #' @param axis.x.position,axis.y.position the position of the axis. 'auto' (default)
@@ -21,7 +18,7 @@
 #' @param legend.labels labels of colour bar.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
 #' @importFrom ggplot2 aes_string ggplot ggplot_add scale_x_continuous scale_y_continuous guides
-#'     guide_colorsteps guide_colourbar coord_fixed
+#'     guide_colourbar coord_fixed
 #' @rdname quick_cor
 #' @examples
 #' quickcor(mtcars)
@@ -45,7 +42,6 @@ quickcor <- function(x,
                      y = NULL,
                      mapping = NULL,
                      fill.colours = NULL,
-                     fill.bin = FALSE, # if TRUE, using scale_fill_steps2n(), else scale_fill_gradient2n()
                      grid.colour = "grey50",
                      grid.size = 0.25,
                      axis.x.position = "auto",
@@ -128,24 +124,13 @@ quickcor <- function(x,
                        position = axis.y.position)
   # add colour scale
   ## handle colours setting
-  if(fill.bin) {
-    p <- p + scale_fill_steps2n(breaks = legend.breaks,
-                                labels = legend.labels,
-                                expand = TRUE,
-                                colours = fill.colours %||% red_blue(),
-                                limits = c(-1, 1)) +
-      guides(fill = guide_colorsteps(even.steps = FALSE,
-                                     show.limits = FALSE,
-                                     title = legend.title))
-  } else {
-    p <- p + scale_fill_gradient2n(breaks = legend.breaks,
-                                   labels = legend.labels,
-                                   expand = TRUE,
-                                   colours = fill.colours %||% red_blue(),
-                                   limits = c(-1, 1)) +
-      guides(fill = guide_colourbar(title = legend.title,
-                                    nbin  = 40))
-  }
+  p <- p + scale_fill_gradient2n(breaks = legend.breaks,
+                                 labels = legend.labels,
+                                 expand = TRUE,
+                                 colours = fill.colours %||% red_blue(),
+                                 limits = c(-1, 1)) +
+    guides(fill = guide_colourbar(title = legend.title,
+                                  nbin  = 40))
   # add theme and coord
   xlim <- c(0.5, length(xname) + 0.5)
   ylim <- c(0.5, length(yname) + 0.5)

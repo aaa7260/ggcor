@@ -4,9 +4,6 @@
 \alias{scale_colour_gradient2n}
 \alias{scale_color_gradient2n}
 \alias{scale_fill_gradient2n}
-\alias{scale_fill_steps2n}
-\alias{scale_colour_steps2n}
-\alias{scale_color_steps2n}
 \title{Gradient n colour scales}
 \usage{
 scale_colour_gradient2n(..., colours, midpoint = 0, limits = NULL,
@@ -20,29 +17,18 @@ scale_color_gradient2n(..., colours, midpoint = 0, limits = NULL,
 scale_fill_gradient2n(..., colours, midpoint = 0, limits = NULL,
   space = "Lab", values = NULL, na.value = "grey50",
   guide = "colourbar", aesthetics = "fill", colors = NULL)
-
-scale_fill_steps2n(..., colours, midpoint = 0, values = NULL,
-  space = "Lab", limits = c(-1, 1), na.value = "grey50",
-  guide = "coloursteps", aesthetics = "fill", colors = NULL)
-
-scale_colour_steps2n(..., colours, midpoint = 0, values = NULL,
-  space = "Lab", limits = c(-1, 1), na.value = "grey50",
-  guide = "coloursteps", aesthetics = "colour", colors = NULL)
-
-scale_color_steps2n(..., colours, midpoint = 0, values = NULL,
-  space = "Lab", limits = c(-1, 1), na.value = "grey50",
-  guide = "coloursteps", aesthetics = "colour", colors = NULL)
 }
 \arguments{
 \item{...}{Arguments passed on to \code{discrete_scale}
 \describe{
   \item{palette}{A palette function that when called with a single integer
 argument (the number of levels in the scale) returns the values that
-they should take (e.g., \code{\link[scales:hue_pal]{scales::hue_pal()}}).}
+they should take.}
   \item{breaks}{One of:
 \itemize{
 \item \code{NULL} for no breaks
-\item \code{waiver()} for the default breaks (the scale limits)
+\item \code{waiver()} for the default breaks computed by the
+transformation object
 \item A character vector of breaks
 \item A function that takes the limits as input and returns breaks
 as output
@@ -58,8 +44,7 @@ from a discrete scale, specify \code{na.translate = FALSE}.}
   \item{na.value}{If \code{na.translate = TRUE}, what value aesthetic
 value should missing be displayed as? Does not apply to position scales
 where \code{NA} is always placed at the far right.}
-  \item{scale_name}{The name of the scale that should be used for error messages
-associated with this scale.}
+  \item{scale_name}{The name of the scale}
   \item{name}{The name of the scale. Used as the axis or legend title. If
 \code{waiver()}, the default, the name of the scale is taken from the first
 mapping used for that aesthetic. If \code{NULL}, the legend title will be
@@ -73,16 +58,16 @@ transformation object
 \item A function that takes the breaks as input and returns labels
 as output
 }}
-  \item{expand}{For position scales, a vector of range expansion constants used to add some
-padding around the data to ensure that they are placed some distance
-away from the axes. Use the convenience function \code{\link[=expansion]{expansion()}}
+  \item{expand}{Vector of range expansion constants used to add some
+padding around the data, to ensure that they are placed some distance
+away from the axes. Use the convenience function \code{\link[=expand_scale]{expand_scale()}}
 to generate the values for the \code{expand} argument. The defaults are to
 expand the scale by 5\% on each side for continuous variables, and by
 0.6 units on each side for discrete variables.}
   \item{guide}{A function used to create a guide or its name. See
-\code{\link[=guides]{guides()}} for more information.}
-  \item{position}{For position scales, The position of the axis.
-\code{left} or \code{right} for y axes, \code{top} or \code{bottom} for x axes.}
+\code{\link[=guides]{guides()}} for more info.}
+  \item{position}{The position of the axis. "left" or "right" for vertical
+scales, "top" or "bottom" for horizontal scales}
   \item{super}{The super class to use for the constructed scale}
 }}
 
@@ -101,11 +86,10 @@ same time, via \code{aesthetics = c("colour", "fill")}.}
 
 \item{...}{Arguments passed on to \code{ggplot2::continuous_scale}
 \describe{
-  \item{scale_name}{The name of the scale that should be used for error messages
-associated with this scale.}
+  \item{scale_name}{The name of the scale}
   \item{palette}{A palette function that when called with a numeric vector with
-values between 0 and 1 returns the corresponding output values
-(e.g., \code{\link[scales:area_pal]{scales::area_pal()}}).}
+values between 0 and 1 returns the corresponding values in the range the
+scale maps to.}
   \item{name}{The name of the scale. Used as the axis or legend title. If
 \code{waiver()}, the default, the name of the scale is taken from the first
 mapping used for that aesthetic. If \code{NULL}, the legend title will be
@@ -114,10 +98,10 @@ omitted.}
 \itemize{
 \item \code{NULL} for no breaks
 \item \code{waiver()} for the default breaks computed by the
-\link[scales:trans_new]{transformation object}
+transformation object
 \item A numeric vector of positions
 \item A function that takes the limits as input and returns breaks
-as output (e.g., a function returned by \code{\link[scales:extended_breaks]{scales::extended_breaks()}})
+as output
 }}
   \item{minor_breaks}{One of:
 \itemize{
@@ -143,43 +127,31 @@ as output
 Use \code{NA} to refer to the existing minimum or maximum
 \item A function that accepts the existing (automatic) limits and returns
 new limits
-Note that setting limits on positional scales will \strong{remove} data outside of the limits.
-If the purpose is to zoom, use the limit argument in the coordinate system
-(see \code{\link[=coord_cartesian]{coord_cartesian()}}).
 }}
-  \item{rescaler}{A function used to scale the input values to the
-range [0, 1]. This is always \code{\link[scales:rescale]{scales::rescale()}}, except for
-diverging and n colour gradients (i.e., \code{\link[=scale_colour_gradient2]{scale_colour_gradient2()}},
-\code{\link[=scale_colour_gradientn]{scale_colour_gradientn()}}). The \code{rescaler} is ignored by position
-scales, which ways use \code{\link[scales:rescale]{scales::rescale()}}.}
-  \item{oob}{One of:
-\itemize{
-\item Function that handles limits outside of the scale limits
-(out of bounds).
-\item The default (\code{\link[scales:censor]{scales::censor()}}) replaces out of
-bounds values with \code{NA}.
-\item \code{\link[scales:squish]{scales::squish()}} for squishing out of bounds values into range.
-\item \code{\link[scales:squish_infinite]{scales::squish_infinite()}} for squishing infitite values into range.
-}}
-  \item{expand}{For position scales, a vector of range expansion constants used to add some
-padding around the data to ensure that they are placed some distance
-away from the axes. Use the convenience function \code{\link[=expansion]{expansion()}}
+  \item{rescaler}{Used by diverging and n colour gradients
+(i.e. \code{\link[=scale_colour_gradient2]{scale_colour_gradient2()}}, \code{\link[=scale_colour_gradientn]{scale_colour_gradientn()}}).
+A function used to scale the input values to the range [0, 1].}
+  \item{oob}{Function that handles limits outside of the scale limits
+(out of bounds). The default replaces out of bounds values with \code{NA}.}
+  \item{expand}{Vector of range expansion constants used to add some
+padding around the data, to ensure that they are placed some distance
+away from the axes. Use the convenience function \code{\link[=expand_scale]{expand_scale()}}
 to generate the values for the \code{expand} argument. The defaults are to
 expand the scale by 5\% on each side for continuous variables, and by
 0.6 units on each side for discrete variables.}
-  \item{trans}{For continuous scales, the name of a transformation object
-or the object itself. Built-in transformations include "asn", "atanh",
+  \item{trans}{Either the name of a transformation object, or the
+object itself. Built-in transformations include "asn", "atanh",
 "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2",
 "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal",
 "reverse", "sqrt" and "time".
 
 A transformation object bundles together a transform, its inverse,
 and methods for generating breaks and labels. Transformation objects
-are defined in the scales package, and are called \code{<name>_trans} (e.g.,
-\code{\link[scales:boxcox_trans]{scales::boxcox_trans()}}). You can create your own
+are defined in the scales package, and are called \code{name_trans}, e.g.
+\code{\link[scales:boxcox_trans]{scales::boxcox_trans()}}. You can create your own
 transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
-  \item{position}{For position scales, The position of the axis.
-\code{left} or \code{right} for y axes, \code{top} or \code{bottom} for x axes.}
+  \item{position}{The position of the axis. "left" or "right" for vertical
+scales, "top" or "bottom" for horizontal scales}
   \item{super}{The super class to use for the constructed scale}
 }}
 }
