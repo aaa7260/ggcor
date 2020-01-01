@@ -19,72 +19,7 @@ scale_fill_gradient2n(..., colours, midpoint = 0, limits = NULL,
   guide = "colourbar", aesthetics = "fill", colors = NULL)
 }
 \arguments{
-\item{...}{Arguments passed on to \code{discrete_scale}
-\describe{
-  \item{palette}{A palette function that when called with a single integer
-argument (the number of levels in the scale) returns the values that
-they should take.}
-  \item{breaks}{One of:
-\itemize{
-\item \code{NULL} for no breaks
-\item \code{waiver()} for the default breaks computed by the
-transformation object
-\item A character vector of breaks
-\item A function that takes the limits as input and returns breaks
-as output
-}}
-  \item{limits}{A character vector that defines possible values of the scale
-and their order.}
-  \item{drop}{Should unused factor levels be omitted from the scale?
-The default, \code{TRUE}, uses the levels that appear in the data;
-\code{FALSE} uses all the levels in the factor.}
-  \item{na.translate}{Unlike continuous scales, discrete scales can easily show
-missing values, and do so by default. If you want to remove missing values
-from a discrete scale, specify \code{na.translate = FALSE}.}
-  \item{na.value}{If \code{na.translate = TRUE}, what value aesthetic
-value should missing be displayed as? Does not apply to position scales
-where \code{NA} is always placed at the far right.}
-  \item{scale_name}{The name of the scale}
-  \item{name}{The name of the scale. Used as the axis or legend title. If
-\code{waiver()}, the default, the name of the scale is taken from the first
-mapping used for that aesthetic. If \code{NULL}, the legend title will be
-omitted.}
-  \item{labels}{One of:
-\itemize{
-\item \code{NULL} for no labels
-\item \code{waiver()} for the default labels computed by the
-transformation object
-\item A character vector giving labels (must be same length as \code{breaks})
-\item A function that takes the breaks as input and returns labels
-as output
-}}
-  \item{expand}{Vector of range expansion constants used to add some
-padding around the data, to ensure that they are placed some distance
-away from the axes. Use the convenience function \code{\link[=expand_scale]{expand_scale()}}
-to generate the values for the \code{expand} argument. The defaults are to
-expand the scale by 5\% on each side for continuous variables, and by
-0.6 units on each side for discrete variables.}
-  \item{guide}{A function used to create a guide or its name. See
-\code{\link[=guides]{guides()}} for more info.}
-  \item{position}{The position of the axis. "left" or "right" for vertical
-scales, "top" or "bottom" for horizontal scales}
-  \item{super}{The super class to use for the constructed scale}
-}}
-
-\item{space}{colour space in which to calculate gradient. Must be "Lab" -
-other values are deprecated.}
-
-\item{na.value}{Colour to use for missing values}
-
-\item{guide}{Type of legend. Use `"colourbar"` for continuous
-colour bar, or `"legend"` for discrete colour legend.}
-
-\item{aesthetics}{Character string or vector of character strings listing the
-name(s) of the aesthetic(s) that this scale works with. This can be useful, for
-example, to apply colour settings to the \code{colour} and \code{fill} aesthetics at the
-same time, via \code{aesthetics = c("colour", "fill")}.}
-
-\item{...}{Arguments passed on to \code{ggplot2::continuous_scale}
+\item{...}{Arguments passed on to \code{continuous_scale}
 \describe{
   \item{scale_name}{The name of the scale}
   \item{palette}{A palette function that when called with a numeric vector with
@@ -133,12 +68,6 @@ new limits
 A function used to scale the input values to the range [0, 1].}
   \item{oob}{Function that handles limits outside of the scale limits
 (out of bounds). The default replaces out of bounds values with \code{NA}.}
-  \item{expand}{Vector of range expansion constants used to add some
-padding around the data, to ensure that they are placed some distance
-away from the axes. Use the convenience function \code{\link[=expand_scale]{expand_scale()}}
-to generate the values for the \code{expand} argument. The defaults are to
-expand the scale by 5\% on each side for continuous variables, and by
-0.6 units on each side for discrete variables.}
   \item{trans}{Either the name of a transformation object, or the
 object itself. Built-in transformations include "asn", "atanh",
 "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2",
@@ -153,16 +82,42 @@ transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
   \item{position}{The position of the axis. "left" or "right" for vertical
 scales, "top" or "bottom" for horizontal scales}
   \item{super}{The super class to use for the constructed scale}
+  \item{expand}{Vector of range expansion constants used to add some
+padding around the data, to ensure that they are placed some distance
+away from the axes. Use the convenience function \code{\link[=expand_scale]{expand_scale()}}
+to generate the values for the \code{expand} argument. The defaults are to
+expand the scale by 5\% on each side for continuous variables, and by
+0.6 units on each side for discrete variables.}
 }}
+
+\item{colours}{Vector of colours to use for n-colour gradient.}
+
+\item{midpoint}{The midpoint (in data value) of the diverging scale.
+Defaults to 0.}
+
+\item{space}{colour space in which to calculate gradient. Must be "Lab" -
+other values are deprecated.}
+
+\item{values}{if colours should not be evenly positioned along the gradient
+this vector gives the position (between 0 and 1) for each colour in the
+\code{colours} vector. See \code{\link[=rescale]{rescale()}} for a convenience function
+to map an arbitrary range to between 0 and 1.}
+
+\item{na.value}{Colour to use for missing values}
+
+\item{guide}{Type of legend. Use \code{"colourbar"} for continuous
+colour bar, or \code{"legend"} for discrete colour legend.}
+
+\item{aesthetics}{Character string or vector of character strings listing the
+name(s) of the aesthetic(s) that this scale works with. This can be useful, for
+example, to apply colour settings to the \code{colour} and \code{fill} aesthetics at the
+same time, via \code{aesthetics = c("colour", "fill")}.}
+
+\item{colors}{Vector of colours to use for n-colour gradient.}
 }
 \description{
 `scale_*_gradient2n` creates a n colour gradient (low-high), mixed some
 features of `scale_*_gradient2` and `scale_*_gradientn`.
-}
-\details{
-Default colours are `c("#67001F", "#B2182B", "#D6604D", "#F4A582","#FDDBC7",
-"#FFFFFF", "#D1E5F0", "#92C5DE","#4393C3", "#2166AC", "#053061")` , borrowed
-from \pkg{corrplot}.
 }
 \examples{
 df <- data.frame(x = rep(1:10, 10),
