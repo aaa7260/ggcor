@@ -39,7 +39,7 @@ GeomStar <- ggproto(
     })
     ggplot2:::ggname("star", do.call("grobTree", star))
   },
-  draw_key = draw_key_polygon
+  draw_key = draw_key_star
 )
 
 #' @noRd

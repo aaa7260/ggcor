@@ -70,7 +70,7 @@ GeomPie2 <- ggproto(
     })
     ggplot2:::ggname("geom_pie2", do.call("grobTree", polys))
   },
-  draw_key = draw_key_polygon
+  draw_key = draw_key_pie
 )
 #' @noRd
 point_to_sector <- function(x, y, r0, n = 58) {

@@ -58,7 +58,7 @@ GeomCircle2 <- ggproto(
     })
     ggplot2:::ggname("geom_circle", do.call("grobTree", polys))
   },
-  draw_key = draw_key_polygon
+  draw_key = draw_key_circle
 )
 
 #' @noRd

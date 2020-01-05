@@ -58,7 +58,7 @@ GeomEllipse2 <- ggproto(
     })
     ggplot2:::ggname("geom_ellipse", do.call("grobTree", polys))
   },
-  draw_key = draw_key_polygon
+  draw_key = draw_key_ellipse
 )
 
 #' @noRd
