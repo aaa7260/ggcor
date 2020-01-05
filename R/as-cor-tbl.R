@@ -47,8 +47,6 @@ as_cor_tbl.matrix <- function(corr,
   if(!is.null(col.names))
     rownames(corr) <- col.names
   corr <- make_matrix_name(corr)
-  xname <- colnames(corr)
-  yname <- rev(rownames(corr))
   if(!is.null(p.value)) {
     if(!is.matrix(p.value))
       p.value <- as.matrix(p.value)
@@ -86,6 +84,8 @@ as_cor_tbl.matrix <- function(corr,
     lower.ci <- if(is.null(lower.ci)) lower.ci else lower.ci[ord, ord]
     upper.ci <- if(is.null(upper.ci)) upper.ci else upper.ci[ord, ord]
   }
+  xname <- colnames(corr)
+  yname <- rev(rownames(corr))
   df <- make_cor_tbl(corr, p.value, lower.ci, upper.ci)
   cor_tbl <- structure(
     .Data = df,
