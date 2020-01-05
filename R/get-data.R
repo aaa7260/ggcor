@@ -12,7 +12,7 @@
 #' quickcor(df) + geom_colour()
 #' df01 <- get_lower_data(df)
 #' quickcor(df01) + geom_colour()
-#' get_upper_data(df, show.diag = FALSE)
+#' df02 <- get_upper_data(df, show.diag = FALSE)
 #' quickcor(df02) + geom_colour()
 #' df03 <- get_diag_data(df)
 #' quickcor(df03) + geom_colour()
@@ -27,11 +27,11 @@ get_lower_data <- function(x, show.diag = TRUE)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
+  n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- dplyr::filter(x, x + y <= n + 1)
+    x <- subset(x, .row.id + .col.id <= n + 1)
   } else {
-    x <- dplyr::filter(x, x + y < n + 1)
+    x <- subset(x, .row.id + .col.id < n + 1)
   }
   attr(x, "type") <- "lower"
   attr(x, "show.diag") <- show.diag
@@ -46,11 +46,11 @@ get_upper_data <- function(x, show.diag = TRUE)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
+  n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- dplyr::filter(x, x + y >= n + 1)
+    x <- subset(x, .row.id + .col.id >= n + 1)
   } else {
-    x <- dplyr::filter(x, x + y > n + 1)
+    x <- subset(x, .row.id + .col.id > n + 1)
   }
   attr(x, "type") <- "upper"
   attr(x, "show.diag") <- show.diag
@@ -65,9 +65,9 @@ get_diag_tri <- function(x)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
-  x <- dplyr::filter(x, x + y != n + 1)
-  if(cor_tbl_type(x) %in% c("upper", "lower"))
+  n <- length(get_col_name(x))
+  x <- subset(x, .row.id + .col.id != n + 1)
+  if(get_type(x) %in% c("upper", "lower"))
     attr(x, "show.diag") <- FALSE
   x
 }
@@ -80,8 +80,8 @@ get_diag_data <- function(x)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
-  dplyr::filter(x, xx + yy == n + 1)
+  n <- length(get_col_name(x))
+  subset(x, .row.id + .col.id == n + 1)
 }
 
 #' Create cor_tbl extractor function
@@ -121,8 +121,8 @@ get_data <- function(..., type = "full", show.diag = TRUE)
 #' @noRd
 is_symmet <- function(x) {
   stopifnot(is_cor_tbl(x))
-  xname <- cor_tbl_xname(x)
-  yname <- cor_tbl_yname(x)
+  xname <- get_col_name(x)
+  yname <- get_row_name(x)
   if((length(xname) != length(yname)) || !all(xname == rev(yname))) {
     return(FALSE)
   }

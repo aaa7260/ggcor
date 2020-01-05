@@ -1,4 +1,5 @@
-#' @importFrom ggplot2 aes_
+#' @importFrom ggplot2 aes_ geom_curve geom_text geom_point
+#' @importFrom utils modifyList
 #' @export
 add_link <- function(df,
                      mapping = NULL,
@@ -15,12 +16,12 @@ add_link <- function(df,
   link_fun <- function(corr) {
     if(!is_cor_tbl(corr)) {
       warning("'corr' need a cor_tbl.", call. = FALSE)
-      return()
+      return(geom_blank())
     }
-    type <- cor_tbl_type(corr)
-    show.diag <- cor_tbl_showdiag(corr)
-    n <- length(cor_tbl_xname(corr))
-    m <- length(cor_tbl_yname(corr))
+    type <- get_type(corr)
+    show.diag <- get_show_diag(corr)
+    n <- length(get_col_name(corr))
+    m <- length(get_row_name(corr))
     if(type != "full") on.left <- FALSE
     link.data <- tidy_link_data(df = df,
                                 cor_tbl = corr,
@@ -34,8 +35,8 @@ add_link <- function(df,
                                 diag.label = diag.label)
     spec.point.data <- link.data[!duplicated(link.data[[spec.key]]), , drop = FALSE]
     env.point.data <- link.data[!duplicated(link.data[[env.key]]), , drop = FALSE]
-    map_base <- aes_(x = ~link.x, y = ~link.y, xend = ~link.xend, yend = ~link.yend)
-    mapping <- if(!is.null(mapping)) modifyList(map_base, mapping) else map_base
+    base.aes <- aes_(x = ~link.x, y = ~link.y, xend = ~link.xend, yend = ~link.yend)
+    mapping <- if(!is.null(mapping)) modifyList(base.aes, mapping) else base.aes
     curvature <- curvature %||% switch (type,
                                         full = 0,
                                         upper = -0.1,

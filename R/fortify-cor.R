@@ -22,6 +22,7 @@
 #'     or "centroid" (= UPGMC).
 #' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
 #' @return cor_tbl object.
+#' @importFrom dplyr %>%
 #' @rdname fortify_cor
 #' @examples
 #' fortify_cor(mtcars)
@@ -89,6 +90,8 @@ fortify_cor <- function(x,
   df
 }
 
+#' @importFrom purrr pmap walk
+#' @importFrom dplyr bind_rows
 #' @noRd
 pmap_dfr2 <- function(.l, .f, ..., keep.attrs = c("first", "last")) {
   keep.attrs <- match.arg(keep.attrs)
@@ -109,6 +112,8 @@ pmap_dfr2 <- function(.l, .f, ..., keep.attrs = c("first", "last")) {
   df
 }
 
+#' @importFrom dplyr mutate
+#' @importFrom purrr walk
 #' @noRd
 mutate2 <- function(.data, ...) {
   attrs_all <- attributes(.data)

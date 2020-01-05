@@ -11,6 +11,8 @@
 #'     or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
 #'     label.
 #' @return an object of class gg onto which layers, scales, etc. can be added.
+#' @importFrom ggplot2 ggplot ggplot_add aes_string scale_x_continuous scale_y_continuous
+#' @importFrom utils modifyList
 #' @rdname ggcor
 #' @examples
 #' df <- fortify_cor(mtcars)
@@ -27,12 +29,12 @@ ggcor <- function(data,
 {
   if(!is_cor_tbl(data))
     stop("'data' needs a cor_tbl.", call. = FALSE)
-  type <- cor_tbl_type(data)
-  show.diag <- cor_tbl_showdiag(data)
-  xname <- cor_tbl_xname(data)
-  yname <- cor_tbl_yname(data)
-  base_map <- aes_string("x", "y")
-  mapping <- if(is.null(mapping)) base_map else modifyList(base_map, mapping)
+  type <- get_type(data)
+  show.diag <- get_show_diag(data)
+  xname <- get_col_name(data)
+  yname <- get_row_name(data)
+  base.aes <- aes_string(".col.id", ".row.id")
+  mapping <- if(is.null(mapping)) base.aes else modifyList(base.aes, mapping)
   # handle axis setting
   axis.x.position <- match.arg(axis.x.position, c("auto", "bottom", "top"))
   axis.y.position <- match.arg(axis.y.position, c("auto", "left", "right"))
@@ -68,11 +70,16 @@ ggcor <- function(data,
       }
     }
   }
+
+  expand.x <- length(xname) * 0.0025
+  expand.y <- length(yname) * 0.0025
+  xlim <- c(0.5 - expand.x, length(xname) + 0.5 + expand.x)
+  ylim <- c(0.5 - expand.y, length(yname) + 0.5 + expand.y)
   p <- ggplot(data = data, mapping = mapping, environment = parent.frame()) +
-    scale_x_continuous(breaks = axis.x.breaks, labels = axis.x.labels,
-                       position = axis.x.position)+
-    scale_y_continuous(breaks = axis.y.breaks, labels = axis.y.labels,
-                       position = axis.y.position)
+    scale_x_continuous(expand = c(0, 0), breaks = axis.x.breaks, labels = axis.x.labels,
+                       position = axis.x.position, limits = xlim)+
+    scale_y_continuous(expand = c(0, 0), breaks = axis.y.breaks, labels = axis.y.labels,
+                       position = axis.y.position, limits = ylim)
   class(p) <- c("ggcor", class(p))
   p
 }

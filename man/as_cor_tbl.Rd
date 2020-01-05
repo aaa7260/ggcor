@@ -2,35 +2,32 @@
 % Please edit documentation in R/as-cor-tbl.R
 \name{as_cor_tbl}
 \alias{as_cor_tbl}
+\alias{as_cor_tbl.list}
 \alias{as_cor_tbl.matrix}
 \alias{as_cor_tbl.data.frame}
 \alias{as_cor_tbl.correlation}
 \alias{as_cor_tbl.rcorr}
 \alias{as_cor_tbl.corr.test}
 \alias{as_cor_tbl.mantel_tbl}
-\alias{as_cor_tbl.list}
 \alias{as_cor_tbl.default}
 \title{Coerce to a cor_tbl object.}
 \usage{
 as_cor_tbl(corr, ...)
 
-\method{as_cor_tbl}{matrix}(corr, type = "full", show.diag = TRUE,
-  p.value = NULL, lower.ci = NULL, upper.ci = NULL,
-  row.names = NULL, col.names = NULL, cluster = FALSE,
-  check = TRUE, ...)
+\method{as_cor_tbl}{list}(x, type = "full", show.diag = TRUE,
+  row.names = NULL, col.names = NULL, cluster = FALSE, ...)
 
-\method{as_cor_tbl}{data.frame}(corr, p.value = NULL, lower.ci = NULL,
-  upper.ci = NULL, cluster = FALSE, ...)
+\method{as_cor_tbl}{matrix}(corr, ...)
 
-\method{as_cor_tbl}{correlation}(corr, check = FALSE, ...)
+\method{as_cor_tbl}{data.frame}(corr, ...)
+
+\method{as_cor_tbl}{correlation}(corr, ...)
 
 \method{as_cor_tbl}{rcorr}(corr, check = FALSE, ...)
 
 \method{as_cor_tbl}{corr.test}(corr, check = FALSE, ...)
 
 \method{as_cor_tbl}{mantel_tbl}(corr, byrow = TRUE, ...)
-
-\method{as_cor_tbl}{list}(corr, keys = NULL, check = TRUE, ...)
 
 \method{as_cor_tbl}{default}(corr, ...)
 }
@@ -44,19 +41,10 @@ lower triangular or upper triangular matrix.}
 
 \item{show.diag}{a logical value indicating whether keep the diagonal.}
 
-\item{p.value}{a matrix of p value.}
-
-\item{lower.ci, upper.ci}{matrix of confidence interval.}
-
 \item{cluster}{a logical value indicating whether reorder the correlation matrix
 by clustering, default is FALSE.}
 
-\item{check}{a logical value indicating whether check the correlation coefficient and
-p value.}
-
 \item{byrow}{a logical value indicating whether arrange the 'spec' columns on y axis.}
-
-\item{keys}{a named character vector, should contain "r" and "p.value".}
 
 \item{rownames, colnames}{row/column names of correlation matrix.}
 }

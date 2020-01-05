@@ -8,7 +8,7 @@
 #' @export
 #' @importFrom ggplot2 geom_tile
 #' @examples
-#' ggcorr(mtcars) + geom_colour()
+#' quickcor(mtcars) + geom_colour()
 geom_colour <- function(mapping = NULL,
                         data = NULL,
                         colour = "grey60",

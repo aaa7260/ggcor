@@ -1,39 +1,39 @@
 #' Helper function of cor_tbl
 #' @param x a cor_tbl.
 #' @return return attribute value.
-#' @rdname cor_tbl_attr
+#' @rdname get_attr
 #' @examples
 #' df <- fortify_cor(mtcars)
-#' ## get xname
-#' cor_tbl_xname(df)
-#' ## get yname
-#' cor_tbl_yname(df)
+#' ## get rows names
+#' get_row_name(df)
+#' ## get columns names
+#' get_col_name(df)
 #' ## get show.diag
-#' cor_tbl_showdiag(df)
+#' get_show_diag(df)
 #' ## get type
-#' cor_tbl_type(df)
+#' get_type(df)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-cor_tbl_xname <- function(x) {
-  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
-  attr(x, "xname")
+get_row_name <- function(x) {
+  stopifnot(is_cor_tbl(x))
+  attr(x, ".row.names")
 }
-#' @rdname cor_tbl_attr
+#' @rdname get_attr
 #' @export
-cor_tbl_yname <- function(x) {
-  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
-  attr(x, "yname")
+get_col_name <- function(x) {
+  stopifnot(is_cor_tbl(x))
+  attr(x, ".col.names")
 }
-#' @rdname cor_tbl_attr
+#' @rdname get_attr
 #' @export
-cor_tbl_type <- function(x) {
+get_type <- function(x) {
   stopifnot(is_cor_tbl(x))
   attr(x, "type")
 }
-#' @rdname cor_tbl_attr
+#' @rdname get_attr
 #' @export
-cor_tbl_showdiag <- function(x) {
-  stopifnot(is_cor_tbl(x) || is_cor_tbl_fct(x))
+get_show_diag <- function(x) {
+  stopifnot(is_cor_tbl(x))
   attr(x, "show.diag")
 }
 #' @noRd

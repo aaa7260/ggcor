@@ -14,10 +14,10 @@ tidy_link_data <- function(df,
 {
   if(!is_cor_tbl(cor_tbl))
     stop("Need a cor_tbl.", call. = FALSE)
-  xname <- cor_tbl_xname(cor_tbl)
-  yname <- cor_tbl_yname(cor_tbl)
-  type <- cor_tbl_type(cor_tbl)
-  show.diag <- cor_tbl_showdiag(cor_tbl)
+  xname <- get_col_name(cor_tbl)
+  yname <- get_row_name(cor_tbl)
+  type <- get_type(cor_tbl)
+  show.diag <- get_show_diag(cor_tbl)
   spec.name <- unique(df[[spec.key]])
   env_data <- link_env_data(yname = yname,
                             n.row = length(yname),
@@ -97,9 +97,9 @@ link_spec_data <- function(spec.name,
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  tibble::tibble(link.x = x,
-                 link.y = y,
-                 spec.key = spec.name)
+  new_data_frame(list(link.x = x,
+                      link.y = y,
+                      spec.key = spec.name))
 }
 
 #' @noRd
@@ -156,7 +156,7 @@ link_env_data <- function(yname,
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  tibble::tibble(link.xend = x,
-                 link.yend = y,
-                 env.key = yname)
+  new_data_frame(list(link.xend = x,
+                      link.yend = y,
+                      env.key = yname))
 }

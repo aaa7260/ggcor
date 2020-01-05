@@ -5,11 +5,10 @@
 \title{Plot Correlation Matrix Quickly}
 \usage{
 quickcor(x, y = NULL, mapping = NULL, fill.colours = NULL,
-  fill.bin = FALSE, grid.colour = "grey50", grid.size = 0.25,
-  axis.x.position = "auto", axis.y.position = "auto",
-  axis.label.drop = TRUE, legend.title = "corr",
-  legend.position = "auto", legend.breaks = NULL,
-  legend.labels = NULL, ...)
+  grid.colour = "grey50", grid.size = 0.25, axis.x.position = "auto",
+  axis.y.position = "auto", axis.label.drop = TRUE,
+  legend.title = "corr", legend.position = "auto",
+  legend.breaks = NULL, legend.labels = NULL, ...)
 }
 \arguments{
 \item{x, y}{matrix or data frame.}
@@ -17,10 +16,6 @@ quickcor(x, y = NULL, mapping = NULL, fill.colours = NULL,
 \item{mapping}{NULL (default) or a list of aesthetic mappings to use for plot.}
 
 \item{fill.colours}{NULL (default) or a vector of colours to use for n-colour gradient.}
-
-\item{fill.bin}{logical value (default is FALSE). if TRUE, If TRUE, use the function
-\code{\link[ggcor]{scale_fill_steps2n}}, otherwise use the function
-\code{\link[ggcor]{scale_fill_gradient2n}} for fill colour scale.}
 
 \item{grid.colour}{colour of grid lines.}
 
