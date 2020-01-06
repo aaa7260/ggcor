@@ -6,8 +6,8 @@ draw_key_square <- function(data, params, size) {
   grid::rectGrob(
     x = 0.5,
     y = 0.5,
-    width = unit(data$r0, "npc") - unit(data$size, "mm"),
-    height = unit(data$r0, "npc") - unit(data$size, "mm"),
+    width = grid::unit(data$r0, "npc") - grid::unit(data$size, "mm"),
+    height = grid::unit(data$r0, "npc") - grid::unit(data$size, "mm"),
     gp = grid::gpar(col = data$colour %||% NA,
                     fill = scales::alpha(data$fill %||% "grey40", data$alpha),
                     lty = data$linetype %||% 1,
@@ -24,7 +24,7 @@ draw_key_circle <- function(data, params, size) {
   grid::circleGrob(
     x = 0.5,
     y = 0.5,
-    r = unit(0.5 * data$r0, "npc") - unit(data$size, "mm"),
+    r = grid::unit(0.5 * data$r0, "npc") - grid::unit(data$size, "mm"),
     gp = grid::gpar(col = data$colour %||% NA,
                     fill = scales::alpha(data$fill %||% "grey40", data$alpha),
                     lty = data$linetype %||% 1,
