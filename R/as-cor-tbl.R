@@ -66,7 +66,7 @@ as_cor_tbl.matrix <- function(corr,
       upper.ci <- as.matrix(upper.ci)
     check_dimension(corr, upper.ci)
   }
-  if(!isSymmetric(corr) || any(xname != rev(yname))) {
+  if(!isSymmetric(corr) || any(rownames(corr) != colnames(corr))) {
     if(type != "full") {
       warning("'type=", type, "' just supports for symmetric correlation matrix.", call. = FALSE)
       type <- "full"
