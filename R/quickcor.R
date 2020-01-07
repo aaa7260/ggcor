@@ -14,8 +14,8 @@
 #'     label.
 #' @param legend.title title of colour bar.
 #' @param legend.position position of legend.
-#' @param legend.breaks breaks of colour bar.
-#' @param legend.labels labels of colour bar.
+#' @param legend.breaks breaks of colourbar.
+#' @param legend.labels labels of colourbar.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
 #' @rdname quick_cor
 #' @examples
@@ -34,6 +34,7 @@
 #'   geom_square(data = get_data(type = "lower", show.diag = FALSE)) +
 #'   geom_mark(data = get_data(type = "upper", show.diag = FALSE)) +
 #'   geom_abline(slope = -1, intercept = 12)
+#' @seealso \code{\link[ggcor]{fortify_cor}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 quickcor <- function(x,
@@ -54,8 +55,6 @@ quickcor <- function(x,
   data <- fortify_cor(x, y, ...)
   type <- get_type(data)
   show.diag <- get_show_diag(data)
-  xname <- get_col_name(data)
-  yname <- get_row_name(data)
   name <- names(data)
   # handle mapping setting
   base.aes <- aes_string(".col.id", ".row.id", r0 = "r", r = "r", fill = "r")

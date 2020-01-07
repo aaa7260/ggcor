@@ -12,27 +12,27 @@
 \alias{as_cor_tbl.default}
 \title{Coerce to a cor_tbl object.}
 \usage{
-as_cor_tbl(corr, ...)
+as_cor_tbl(x, ...)
 
 \method{as_cor_tbl}{list}(x, type = "full", show.diag = TRUE,
   row.names = NULL, col.names = NULL, cluster = FALSE, ...)
 
-\method{as_cor_tbl}{matrix}(corr, ...)
+\method{as_cor_tbl}{matrix}(x, ...)
 
-\method{as_cor_tbl}{data.frame}(corr, ...)
+\method{as_cor_tbl}{data.frame}(x, ...)
 
-\method{as_cor_tbl}{correlation}(corr, ...)
+\method{as_cor_tbl}{correlation}(x, ...)
 
-\method{as_cor_tbl}{rcorr}(corr, check = FALSE, ...)
+\method{as_cor_tbl}{rcorr}(x, ...)
 
-\method{as_cor_tbl}{corr.test}(corr, check = FALSE, ...)
+\method{as_cor_tbl}{corr.test}(x, ...)
 
-\method{as_cor_tbl}{mantel_tbl}(corr, byrow = TRUE, ...)
+\method{as_cor_tbl}{mantel_tbl}(x, byrow = TRUE, ...)
 
-\method{as_cor_tbl}{default}(corr, ...)
+\method{as_cor_tbl}{default}(x, ...)
 }
 \arguments{
-\item{corr}{any \code{R} object.}
+\item{x}{any \code{R} object.}
 
 \item{...}{extra params passing to \code{\link[ggcor]{matrix_order}}.}
 

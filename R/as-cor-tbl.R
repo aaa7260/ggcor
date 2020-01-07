@@ -1,6 +1,6 @@
 #' Coerce to a cor_tbl object.
 #' @description Functions to coerce a object to cor_tbl if possible.
-#' @param corr any \code{R} object.
+#' @param x any \code{R} object.
 #' @param type a string, "full" (default), "upper" or "lower", display full,
 #'     lower triangular or upper triangular matrix.
 #' @param show.diag a logical value indicating whether keep the diagonal.
@@ -20,7 +20,7 @@
 #' as_cor_tbl(ll, type = "upper")
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-as_cor_tbl <- function(corr, ...) {
+as_cor_tbl <- function(x, ...) {
   UseMethod("as_cor_tbl")
 }
 #' @rdname  as_cor_tbl
@@ -89,7 +89,7 @@ as_cor_tbl.list <- function(x,
   new.order <- intersect(c(".row.names", ".col.names", name, ".row.id", ".col.id"),
                          names(data))
   data <- structure(.Data = new_data_frame(data[new.order]),
-                    .row.names = rev(row.names),
+                    .row.names = row.names,
                     .col.names = col.names,
                     type = type,
                     show.diag = show.diag,
@@ -104,63 +104,63 @@ as_cor_tbl.list <- function(x,
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl matrix
-as_cor_tbl.matrix <- function(corr, ...) {
-  as_cor_tbl(list(r = corr), ...)
+as_cor_tbl.matrix <- function(x, ...) {
+  as_cor_tbl(list(r = x), ...)
 }
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl data.frame
-as_cor_tbl.data.frame <- function(corr, ...) {
-  as_cor_tbl(list(r = data.matrix(corr)), ...)
+as_cor_tbl.data.frame <- function(x, ...) {
+  as_cor_tbl(list(r = data.matrix(x)), ...)
 }
 
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl correlation
-as_cor_tbl.correlation <- function(corr, ...) {
-  as_cor_tbl.list(corr, ...)
+as_cor_tbl.correlation <- function(x, ...) {
+  as_cor_tbl.list(x, ...)
 }
 
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl rcorr
-as_cor_tbl.rcorr <- function(corr, check = FALSE, ...)
+as_cor_tbl.rcorr <- function(x, ...)
 {
-  p.value <- corr$P
+  p.value <- x$P
   diag(p.value) <- 0
-  as_cor_tbl(list(r = corr$r, p.value = p.value), ...)
+  as_cor_tbl(list(r = x$r, p.value = p.value), ...)
 }
 
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl corr.test
-as_cor_tbl.corr.test <- function(corr, check = FALSE, ...)
+as_cor_tbl.corr.test <- function(x, ...)
 {
-  as_cor_tbl(list(corr$r, p.value = corr$p), ...)
+  as_cor_tbl(list(x$r, p.value = x$p), ...)
 }
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl mantel_tbl
-as_cor_tbl.mantel_tbl <- function(corr, byrow = TRUE, ...) {
-  env_nm <- unique(corr$env)
-  spec_nm <- unique(corr$spec)
+as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, ...) {
+  env_nm <- unique(x$env)
+  spec_nm <- unique(x$spec)
   if(byrow) {
     col.names <- env_nm
     row.names <- spec_nm
-    .col.names <- corr$env
-    .row.names <- corr$spec
-    .col.id <- as.integer(factor(corr$env, levels = col.names))
-    .row.id <- as.integer(factor(corr$spec, levels = rev(row.names)))
+    .col.names <- x$env
+    .row.names <- x$spec
+    .col.id <- as.integer(factor(x$env, levels = col.names))
+    .row.id <- as.integer(factor(x$spec, levels = rev(row.names)))
   } else {
     col.names <- spec_nm
     row.names <- env_nm
-    .col.names <- corr$spec
-    .row.names <- corr$env
-    .col.id <- as.integer(factor(corr$spec, levels = col.names))
-    .row.id <- as.integer(factor(corr$env, levels = rev(row.names)))
+    .col.names <- x$spec
+    .row.names <- x$env
+    .col.id <- as.integer(factor(x$spec, levels = col.names))
+    .row.id <- as.integer(factor(x$env, levels = rev(row.names)))
   }
   df <- tibble::tibble(.col.names = .col.names, .row.names = .row.names,
-                       r = corr$r, p.value = corr$p.value, .row.id = .row.id,
+                       r = x$r, p.value = x$p.value, .row.id = .row.id,
                        .col.id = .col.id)
   structure(
     .Data = df,
@@ -175,8 +175,8 @@ as_cor_tbl.mantel_tbl <- function(corr, byrow = TRUE, ...) {
 #' @rdname as_cor_tbl
 #' @export
 #' @method as_cor_tbl default
-as_cor_tbl.default <- function(corr, ...) {
-  stop(class(corr), " hasn't been realized yet.", call. = FALSE)
+as_cor_tbl.default <- function(x, ...) {
+  stop(class(x)[1], " hasn't been realized yet.", call. = FALSE)
 }
 
 #' @noRd

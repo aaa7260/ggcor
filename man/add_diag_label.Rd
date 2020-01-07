@@ -20,6 +20,9 @@ or 'lower' and 'show.diag' is FALSE, whether need to remove the blank label.}
 quickcor(mtcars, type = "upper") + geom_colour() + add_diag_label()
 quickcor(mtcars, type = "lower") + geom_colour() + add_diag_label()
 }
+\seealso{
+\code{\link[ggplot2]{geom_text}}.
+}
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }

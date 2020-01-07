@@ -33,9 +33,9 @@ label.}
 
 \item{legend.position}{position of legend.}
 
-\item{legend.breaks}{breaks of colour bar.}
+\item{legend.breaks}{breaks of colourbar.}
 
-\item{legend.labels}{labels of colour bar.}
+\item{legend.labels}{labels of colourbar.}
 
 \item{...}{extra params for \code{\link[ggcor]{fortify_cor}}.}
 }
@@ -59,6 +59,9 @@ quickcor(mtcars, cor.test = TRUE) +
   geom_square(data = get_data(type = "lower", show.diag = FALSE)) +
   geom_mark(data = get_data(type = "upper", show.diag = FALSE)) +
   geom_abline(slope = -1, intercept = 12)
+}
+\seealso{
+\code{\link[ggcor]{fortify_cor}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

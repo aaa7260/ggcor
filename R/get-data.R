@@ -29,9 +29,9 @@ get_lower_data <- function(x, show.diag = TRUE)
   }
   n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- subset(x, .row.id + .col.id <= n + 1)
+    x <- with(x, subset(x, .row.id + .col.id <= n + 1))
   } else {
-    x <- subset(x, .row.id + .col.id < n + 1)
+    x <- with(x, subset(x, .row.id + .col.id < n + 1))
   }
   attr(x, "type") <- "lower"
   attr(x, "show.diag") <- show.diag
@@ -48,9 +48,9 @@ get_upper_data <- function(x, show.diag = TRUE)
   }
   n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- subset(x, .row.id + .col.id >= n + 1)
+    x <- with(x, subset(x, .row.id + .col.id >= n + 1))
   } else {
-    x <- subset(x, .row.id + .col.id > n + 1)
+    x <- with(x, subset(x, .row.id + .col.id > n + 1))
   }
   attr(x, "type") <- "upper"
   attr(x, "show.diag") <- show.diag
@@ -66,7 +66,7 @@ get_diag_tri <- function(x)
     return(x)
   }
   n <- length(get_col_name(x))
-  x <- subset(x, .row.id + .col.id != n + 1)
+  x <- with(x, subset(x, .row.id + .col.id != n + 1))
   if(get_type(x) %in% c("upper", "lower"))
     attr(x, "show.diag") <- FALSE
   x
@@ -81,7 +81,7 @@ get_diag_data <- function(x)
     return(x)
   }
   n <- length(get_col_name(x))
-  subset(x, .row.id + .col.id == n + 1)
+  with(x, subset(x, .row.id + .col.id == n + 1))
 }
 
 #' Create cor_tbl extractor function
@@ -121,9 +121,9 @@ get_data <- function(..., type = "full", show.diag = TRUE)
 #' @noRd
 is_symmet <- function(x) {
   stopifnot(is_cor_tbl(x))
-  xname <- get_col_name(x)
-  yname <- get_row_name(x)
-  if((length(xname) != length(yname)) || !all(xname == rev(yname))) {
+  col.name <- get_col_name(x)
+  row.name <- get_row_name(x)
+  if((length(col.name) != length(row.name)) || !all(col.name == row.name)) {
     return(FALSE)
   }
   TRUE

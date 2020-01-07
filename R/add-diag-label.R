@@ -9,6 +9,7 @@
 #' @examples
 #' quickcor(mtcars, type = "upper") + geom_colour() + add_diag_label()
 #' quickcor(mtcars, type = "lower") + geom_colour() + add_diag_label()
+#' @seealso \code{\link[ggplot2]{geom_text}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 add_diag_label <- function(drop = FALSE, ...)
@@ -20,20 +21,23 @@ add_diag_label <- function(drop = FALSE, ...)
 #' @noRd
 get_diag_label_data <- function(drop = FALSE) {
   function(data) {
+    empty <- new_data_frame(list(x = numeric(0),
+                                 y = numeric(0),
+                                 label = character(0)))
     if(!is_cor_tbl(data)) {
       warning("Need a cor_tbl.", call. = FALSE)
-      return(new_data_frame())
+      return(empty)
     }
     if(!is_symmet(data)) {
       warning("'add_diag_label' just supports for symmetrical correlation matrxi.", call. = FALSE)
-      return(new_data_frame())
+      return(empty)
     }
     type <- get_type(data)
     show.diag <- get_show_diag(data)
-    yname <- get_col_name(data)
-    n <- length(yname)
+    row.names <- rev(get_row_name(data))
+    n <- length(row.names)
     y <- 1:n
-    lab <- yname
+    lab <- row.names
     if(type == "upper") {
       if(show.diag) {
         x <- n - y

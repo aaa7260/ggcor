@@ -31,8 +31,8 @@ ggcor <- function(data,
     stop("'data' needs a cor_tbl.", call. = FALSE)
   type <- get_type(data)
   show.diag <- get_show_diag(data)
-  xname <- get_col_name(data)
-  yname <- get_row_name(data)
+  col.names <- get_col_name(data)
+  row.names <- rev(get_row_name(data))
   base.aes <- aes_string(".col.id", ".row.id")
   mapping <- if(is.null(mapping)) base.aes else modifyList(base.aes, mapping)
   # handle axis setting
@@ -50,10 +50,10 @@ ggcor <- function(data,
                                lower = "left",
                                upper = "right")
   }
-  axis.x.breaks <- 1:length(xname)
-  axis.x.labels <- xname
-  axis.y.breaks <- 1:length(yname)
-  axis.y.labels <- yname
+  axis.x.breaks <- 1:length(col.names)
+  axis.x.labels <- col.names
+  axis.y.breaks <- 1:length(row.names)
+  axis.y.labels <- row.names
   if(axis.label.drop) {
     if(isFALSE(show.diag)) {
       if(type == "upper") {
@@ -63,18 +63,18 @@ ggcor <- function(data,
         axis.y.labels <- axis.y.labels[-1]
       }
       if(type == "lower") {
-        axis.x.breaks <- axis.x.breaks[-length(xname)]
-        axis.x.labels <- axis.x.labels[-length(xname)]
-        axis.y.breaks <- axis.y.breaks[-length(yname)]
-        axis.y.labels <- axis.y.labels[-length(yname)]
+        axis.x.breaks <- axis.x.breaks[-length(col.names)]
+        axis.x.labels <- axis.x.labels[-length(col.names)]
+        axis.y.breaks <- axis.y.breaks[-length(row.names)]
+        axis.y.labels <- axis.y.labels[-length(row.names)]
       }
     }
   }
 
-  expand.x <- length(xname) * 0.0025
-  expand.y <- length(yname) * 0.0025
-  xlim <- c(0.5 - expand.x, length(xname) + 0.5 + expand.x)
-  ylim <- c(0.5 - expand.y, length(yname) + 0.5 + expand.y)
+  expand.x <- length(col.names) * 0.0025
+  expand.y <- length(row.names) * 0.0025
+  xlim <- c(0.5 - expand.x, length(col.names) + 0.5 + expand.x)
+  ylim <- c(0.5 - expand.y, length(row.names) + 0.5 + expand.y)
   p <- ggplot(data = data, mapping = mapping, environment = parent.frame()) +
     scale_x_continuous(expand = c(0, 0), breaks = axis.x.breaks, labels = axis.x.labels,
                        position = axis.x.position, limits = xlim)+
