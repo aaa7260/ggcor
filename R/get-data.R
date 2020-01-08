@@ -104,7 +104,7 @@ get_diag_data <- function(x)
 #' @seealso \code{\link[dplyr]{filter}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-get_data <- function(..., type = "full", show.diag = TRUE)
+get_data <- function(..., type = "full", show.diag = FALSE)
 {
   type <- match.arg(type, c("full", "upper", "lower", "diag"))
   function(data) {

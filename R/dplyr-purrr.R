@@ -19,7 +19,7 @@ mutate.cor_tbl <- function(.data, ...)
 {
   attrs <- attributes(.data)
   .data <- dplyr::mutate(as_tibble(.data), ...)
-  set_attrs(.data, attrs)
+  set_attrs(.data, attrs, .excludes = c("names", "row.names"))
 }
 
 #' @export
@@ -27,6 +27,15 @@ dplyr::`%>%`
 
 #' @export
 dplyr::mutate
+
+#' @export
+dplyr::mutate_if
+
+#' @export
+dplyr::mutate_all
+
+#' @export
+dplyr::mutate_each
 
 #' @export
 tibble::as_tibble
