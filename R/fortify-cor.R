@@ -22,8 +22,7 @@
 #'     or "centroid" (= UPGMC).
 #' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
 #' @return cor_tbl object.
-#' @importFrom dplyr %>%
-#' @importFrom purrr pmap
+#' @importFrom dplyr %>% mutate
 #' @rdname fortify_cor
 #' @examples
 #' fortify_cor(mtcars)
@@ -73,20 +72,44 @@ fortify_cor <- function(x,
       stop("'group' must have the same length as rows of 'x'.", call. = FALSE)
     x <- split(x, group, drop = FALSE)
     y <- split(y, group, drop = FALSE)
+    dfs <- purrr::pmap(list(x, y, as.list(names(x))),
+                      function(.x, .y, .group) {
+                        correlate(.x, .y, cor.test, ...) %>%
+                          as_cor_tbl(type = type, show.diag = show.diag, cluster = cluster,
+                                     cluster.method = cluster.method) %>%
+                          mutate(group = .group)
+                      })
+    attrs <- attributes(dfs[[1]])
     df <- suppressMessages(
-      purrr::pmap(list(x, y, as.list(names(x))),
-                function(.x, .y, .group) {
-                  correlate(.x, .y, cor.test, ...) %>%
-                    as_cor_tbl(type = type, show.diag = show.diag, cluster = cluster,
-                               cluster.method = cluster.method) %>%
-                    mutate(group = .group)
-                  }) %>% bind_cor_tbl_rows()
-      )
+      set_attrs(dplyr::bind_rows(dfs), attrs)
+    )
   } else {
     corr <- correlate(x, y, cor.test, ...)
     df <- as_cor_tbl(corr, type = type, show.diag = show.diag, cluster = cluster,
                cluster.method = cluster.method)
   }
   attr(df, "grouped") <- if(is.null(group)) FALSE else TRUE
+  df
+}
+
+#' @importFrom dplyr bind_rows %>%
+#' @importFrom purrr pmap walk
+#' @noRd
+pmap_dfr2 <- function(.l, .f, ..., keep.attrs = c("first", "last")) {
+  keep.attrs <- match.arg(keep.attrs)
+  ll <- purrr::pmap(.l, .f, ...)
+  if(keep.attrs == "first") {
+    attrs_all <- attributes(ll[[1]])
+    attrs <- attrs_all[setdiff(names(attrs_all), c("names", "class", "row.names"))]
+  } else {
+    attrs_all <- attributes(ll[[length(ll)]])
+    attrs <- attrs_all[setdiff(names(attrs_all), c("names", "class", "row.names"))]
+  }
+  df <- dplyr::bind_rows(ll)
+  if(length(attrs) > 0) {
+    purrr::walk(names(attrs), function(nm) {
+      attr(df, nm) <<- attrs[[nm]]
+    })
+  }
   df
 }
