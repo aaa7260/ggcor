@@ -77,7 +77,7 @@ fortify_cor <- function(x,
                         correlate(.x, .y, cor.test, ...) %>%
                           as_cor_tbl(type = type, show.diag = show.diag, cluster = cluster,
                                      cluster.method = cluster.method) %>%
-                          mutate(group = .group)
+                          mutate(.group = .group)
                       })
     attrs <- attributes(dfs[[1]])
     df <- suppressMessages(
