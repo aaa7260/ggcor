@@ -2,23 +2,19 @@
 #'
 #'
 #' @eval rd_aesthetics("geom", "ellipse2")
-#'
+#' @param r0 cosine value in range ([-1, 1]).
+#' @param n the number of ellipse path.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
-#' @rdname geom_ellipse2
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomPolygon
-#' @importFrom ggplot2 draw_key_polygon
+#' @importFrom ggplot2 layer ggproto GeomPolygon
 #' @importFrom grid grobTree
+#' @rdname geom_ellipse2
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_ellipse2 <- function(mapping = NULL, data = NULL,
                          stat = "identity", position = "identity",
                          ...,
                          n = 60,
-                         linejoin = "mitre",
                          na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE) {
@@ -32,7 +28,6 @@ geom_ellipse2 <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(
       n = n,
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )
@@ -44,7 +39,7 @@ geom_ellipse2 <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomEllipse2 <- ggproto(
-  "GeomEllipse2", Geom,
+  "GeomEllipse2", GeomPolygon,
   default_aes = aes(r0 = 1, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y"),

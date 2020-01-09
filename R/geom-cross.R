@@ -1,23 +1,16 @@
 #' Cross Geom
 #'
-#'
 #' @eval rd_aesthetics("geom", "cross")
-#' @param r0 the radius of an outer circle, defualt value is sqrt(2)/2.
+#' @param r0 The diameter of an outer circle, defualt value is 0.6.
 #' @param sig.level significance threshold.
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_segment
-#' @rdname geom_cross
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomSegment
-#' @importFrom ggplot2 draw_key_blank
+#' @importFrom ggplot2 layer ggproto GeomSegment draw_key_blank
 #' @importFrom grid grobTree
-
-
+#' @rdname geom_cross
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_cross <- function(mapping = NULL, data = NULL,
                        stat = "identity", position = "identity",
                        ...,
@@ -48,7 +41,7 @@ geom_cross <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomCross <- ggproto(
-  "GeomCross", Geom,
+  "GeomCross", GeomSegment,
   default_aes = aes(colour = "red", fill = NA,
                     size = 0.5, linetype = 1, alpha = NA),
   required_aes = c("x", "y", "p.value"),

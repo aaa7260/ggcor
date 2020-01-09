@@ -1,22 +1,16 @@
 #' Square Geom
 #'
-#'
 #' @eval rd_aesthetics("geom", "square")
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
-#' @rdname geom_square
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomPolygon
-#' @importFrom ggplot2 draw_key_polygon
+#' @importFrom ggplot2 layer ggproto GeomPolygon
 #' @importFrom grid grobTree
+#' @rdname geom_square
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_square <- function(mapping = NULL, data = NULL,
                          stat = "identity", position = "identity",
                          ...,
-                         linejoin = "mitre",
                          na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE) {
@@ -29,7 +23,6 @@ geom_square <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )
@@ -41,7 +34,7 @@ geom_square <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomSquare <- ggproto(
-  "GeomSquare", Geom,
+  "GeomSquare", GeomPolygon,
   default_aes = aes(r0 = 0.5, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y"),

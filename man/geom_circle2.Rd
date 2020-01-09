@@ -42,6 +42,8 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
+\item{n}{the number of circle path.}
+
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -55,6 +57,8 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
+
+\item{r0}{the diameter of circle.}
 }
 \description{
 Circle Geom
@@ -75,4 +79,7 @@ Circle Geom
 }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

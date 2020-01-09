@@ -1,24 +1,18 @@
 #' Confident-Box Geom
 #'
 #' @eval rd_aesthetics("geom", "confbox")
-#'
+#' @param width the width of confident box.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
-#' @rdname geom_confbox
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomPolygon
-#' @importFrom ggplot2 GeomSegment
-#' @importFrom ggplot2 draw_key_polygon
+#' @importFrom ggplot2 layer ggproto Geom GeomPolygon GeomSegment draw_key_polygon
 #' @importFrom grid grobTree
+#' @rdname geom_confbox
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_confbox <- function(mapping = NULL, data = NULL,
                         stat = "identity", position = "identity",
                         ...,
                         width = 0.5,
-                        linejoin = "mitre",
                         na.rm = FALSE,
                         show.legend = NA,
                         inherit.aes = TRUE) {
@@ -32,7 +26,6 @@ geom_confbox <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(
       width = width,
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )
@@ -50,7 +43,7 @@ GeomConfbox <- ggproto(
                     midline.type = "dotted", linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y", "r", "lower.ci", "upper.ci"),
-  draw_panel = function(self, data, panel_params, coord, width = 0.5, linejoin = "mitre") {
+  draw_panel = function(self, data, panel_params, coord, width = 0.5) {
     aesthetics <- setdiff(
       names(data), c("x", "y", "r", "lower.ci", "upper.ci")
     )

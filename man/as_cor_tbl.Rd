@@ -10,7 +10,7 @@
 \alias{as_cor_tbl.corr.test}
 \alias{as_cor_tbl.mantel_tbl}
 \alias{as_cor_tbl.default}
-\title{Coerce to a cor_tbl object.}
+\title{Coerce to a cor_tbl object}
 \usage{
 as_cor_tbl(x, ...)
 

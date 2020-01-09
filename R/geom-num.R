@@ -9,14 +9,10 @@
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_text
+#' @importFrom ggplot2 layer ggproto position_nudge GeomText draw_key_text
 #' @rdname geom_number
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 position_nudge
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 GeomText
-#' @importFrom ggplot2 draw_key_text
 geom_number <- function(mapping = NULL, data = NULL,
                       stat = "identity", position = "identity",
                       ...,

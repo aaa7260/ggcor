@@ -7,8 +7,8 @@
 \title{Confident-Box Geom}
 \usage{
 geom_confbox(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., width = 0.5, linejoin = "mitre",
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., width = 0.5, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -41,6 +41,8 @@ a call to a position adjustment function.}
 often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
+
+\item{width}{the width of confident box.}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
@@ -80,4 +82,7 @@ Confident-Box Geom
 }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

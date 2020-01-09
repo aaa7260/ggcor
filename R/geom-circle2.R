@@ -1,18 +1,15 @@
 #' Circle Geom
 #'
-#'
 #' @eval rd_aesthetics("geom", "circle2")
+#' @param r0 the diameter of circle.
+#' @param n the number of circle path.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
-#' @rdname geom_circle2
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomPolygon
-#' @importFrom ggplot2 draw_key_polygon
+#' @importFrom ggplot2 layer ggproto GeomPolygon
 #' @importFrom grid grobTree
+#' @rdname geom_circle2
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_circle2 <- function(mapping = NULL,
                          data = NULL,
                          stat = "identity",
@@ -45,7 +42,7 @@ geom_circle2 <- function(mapping = NULL,
 #' @usage NULL
 #' @export
 GeomCircle2 <- ggproto(
-  "GeomCircle2", Geom,
+  "GeomCircle2", GeomPolygon,
   default_aes = aes(r0 = 1, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y"),

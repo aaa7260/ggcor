@@ -91,25 +91,3 @@ fortify_cor <- function(x,
   attr(df, "grouped") <- if(is.null(group)) FALSE else TRUE
   df
 }
-
-#' @importFrom dplyr bind_rows %>%
-#' @importFrom purrr pmap walk
-#' @noRd
-pmap_dfr2 <- function(.l, .f, ..., keep.attrs = c("first", "last")) {
-  keep.attrs <- match.arg(keep.attrs)
-  ll <- purrr::pmap(.l, .f, ...)
-  if(keep.attrs == "first") {
-    attrs_all <- attributes(ll[[1]])
-    attrs <- attrs_all[setdiff(names(attrs_all), c("names", "class", "row.names"))]
-  } else {
-    attrs_all <- attributes(ll[[length(ll)]])
-    attrs <- attrs_all[setdiff(names(attrs_all), c("names", "class", "row.names"))]
-  }
-  df <- dplyr::bind_rows(ll)
-  if(length(attrs) > 0) {
-    purrr::walk(names(attrs), function(nm) {
-      attr(df, nm) <<- attrs[[nm]]
-    })
-  }
-  df
-}

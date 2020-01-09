@@ -7,8 +7,8 @@
 \title{Square Geom}
 \usage{
 geom_square(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., linejoin = "mitre", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -75,4 +75,7 @@ Square Geom
 }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

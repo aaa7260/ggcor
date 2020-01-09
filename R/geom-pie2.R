@@ -2,23 +2,18 @@
 #'
 #'
 #' @eval rd_aesthetics("geom", "pie2")
+#' @param n the number of ellipse path.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
-#' @rdname geom_pie2
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomPolygon
-#' @importFrom ggplot2 GeomLine
-#' @importFrom ggplot2 draw_key_polygon
+#' @importFrom ggplot2 layer ggproto Geom GeomPolygon GeomLine
 #' @importFrom grid grobTree
+#' @rdname geom_pie2
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_pie2 <- function(mapping = NULL, data = NULL,
                       stat = "identity", position = "identity",
                       ...,
                       n = 60,
-                      linejoin = "mitre",
                       na.rm = FALSE,
                       show.legend = NA,
                       inherit.aes = TRUE) {
@@ -32,7 +27,6 @@ geom_pie2 <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(
       n = n,
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )

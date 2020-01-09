@@ -1,6 +1,5 @@
 #' Significant marks Geom
 #'
-#'
 #' @eval rd_aesthetics("geom", "mark")
 #' @param digits integer indicating the number of decimal places (round) or
 #'     significant digits (signif) to be used, the default value is 2.
@@ -10,16 +9,13 @@
 #' @param sig.level significance level，the defaults values is `c(0.05, 0.01, 0.001)`.
 #' @param mark significance mark，the defaults values is `c("*", "**", "***")`.
 #' @param sig.thres if not NULL, just when `p` is not larger than `sig.thres` will be ploted.
-#'
+#' @param sep a character string to separate the number ("r") and mark symbols.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_text
+#' @importFrom ggplot2 layer ggproto GeomText draw_key_text
 #' @rdname geom_mark
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 GeomText
-#' @importFrom ggplot2 draw_key_text
 geom_mark <- function(mapping = NULL, data = NULL,
                      stat = "identity", position = "identity",
                      ...,

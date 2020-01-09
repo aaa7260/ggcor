@@ -63,6 +63,8 @@ the default value is 2.}
 
 \item{sig.thres}{if not NULL, just when `p` is not larger than `sig.thres` will be ploted.}
 
+\item{sep}{a character string to separate the number ("r") and mark symbols.}
+
 \item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
 displayed as described in \code{?plotmath}.}
 
@@ -104,4 +106,7 @@ Significant marks Geom
 }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

@@ -1,6 +1,6 @@
 #' @importFrom tibble as_tibble
 #' @export
-as_tibble.cor_tbl <- function(.data, ...) 
+as_tibble.cor_tbl <- function(.data, ...)
 {
   class(.data) <- setdiff(class(.data), "cor_tbl")
   attrs <- attributes(.data)
@@ -29,19 +29,10 @@ dplyr::`%>%`
 dplyr::mutate
 
 #' @export
-dplyr::mutate_if
-
-#' @export
-dplyr::mutate_all
-
-#' @export
-dplyr::mutate_each
-
-#' @export
 tibble::as_tibble
 
 #' @noRd
-set_attrs <- function(.data, .attrs = list(), .excludes = NULL) 
+set_attrs <- function(.data, .attrs = list(), .excludes = NULL)
 {
   .excludes <- .excludes %||% c("names", "class", "row.names")
   new.attrs <- .attrs[setdiff(names(.attrs), .excludes)]
@@ -53,7 +44,7 @@ set_attrs <- function(.data, .attrs = list(), .excludes = NULL)
   .data
 }
 #' @noRd
-remove_attrs <- function(.data, .excludes = NULL) 
+remove_attrs <- function(.data, .excludes = NULL)
 {
   attrs <- attributes(.data)
   .excludes <- .excludes %||% c("names", "class", "row.names")

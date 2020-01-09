@@ -5,9 +5,6 @@
 \alias{reexports}
 \alias{\%>\%}
 \alias{mutate}
-\alias{mutate_if}
-\alias{mutate_all}
-\alias{mutate_each}
 \alias{as_tibble}
 \title{Objects exported from other packages}
 \keyword{internal}
@@ -16,7 +13,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{mutate_if}}, \code{\link[dplyr]{mutate_all}}, \code{\link[dplyr]{mutate_each}}}
+  \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{mutate}}}
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
 }}

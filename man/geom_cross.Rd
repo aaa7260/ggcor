@@ -60,7 +60,7 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{r0}{the radius of an outer circle, defualt value is sqrt(2)/2.}
+\item{r0}{The diameter of an outer circle, defualt value is 0.6.}
 }
 \description{
 Cross Geom
@@ -81,4 +81,7 @@ Cross Geom
 }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

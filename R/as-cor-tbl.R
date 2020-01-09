@@ -1,4 +1,4 @@
-#' Coerce to a cor_tbl object.
+#' Coerce to a cor_tbl object
 #' @description Functions to coerce a object to cor_tbl if possible.
 #' @param x any \code{R} object.
 #' @param type a string, "full" (default), "upper" or "lower", display full,
