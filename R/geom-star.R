@@ -1,8 +1,16 @@
+#' Star Geom
+#'
+#' @eval rd_aesthetics("geom", "star")
+#' @inheritParams ggplot2::layer
+#' @inheritParams ggplot2::geom_polygon
+#' @importFrom ggplot2 layer ggproto GeomPolygon
+#' @importFrom grid grobTree
+#' @rdname geom_star
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 geom_star <- function(mapping = NULL, data = NULL,
                           stat = "identity", position = "identity",
                           ...,
-                          linejoin = "mitre",
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE) {
@@ -15,16 +23,18 @@ geom_star <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )
   )
 }
 
+#' @rdname geom_star
+#' @format NULL
+#' @usage NULL
 #' @export
 GeomStar <- ggproto(
-  "GeomStar", Geom,
+  "GeomStar", GeomPolygon,
   default_aes = aes(n = 5, r0 = 0.5, ratio = 0.618, colour = "grey35", fill = NA,
                     size = 0.25, linetype = 1, alpha = NA),
   required_aes = c("x", "y"),
