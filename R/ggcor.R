@@ -71,15 +71,11 @@ ggcor <- function(data,
     }
   }
 
-  expand.x <- length(col.names) * 0.0025
-  expand.y <- length(row.names) * 0.0025
-  xlim <- c(0.5 - expand.x, length(col.names) + 0.5 + expand.x)
-  ylim <- c(0.5 - expand.y, length(row.names) + 0.5 + expand.y)
   p <- ggplot(data = data, mapping = mapping, environment = parent.frame()) +
     scale_x_continuous(expand = c(0, 0), breaks = axis.x.breaks, labels = axis.x.labels,
-                       position = axis.x.position, limits = xlim)+
+                       position = axis.x.position)+
     scale_y_continuous(expand = c(0, 0), breaks = axis.y.breaks, labels = axis.y.labels,
-                       position = axis.y.position, limits = ylim)
+                       position = axis.y.position)
   class(p) <- c("ggcor", class(p))
   p
 }

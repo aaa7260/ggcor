@@ -5,6 +5,7 @@
 #' @param ... extra params passing to \code{\link[stats]{hclust}}.
 #' @details Now it just supports for square matrix.
 #' @return a numeric vector of new order.
+#' @importFrom stats as.dist hclust
 #' @examples
 #' m <- matrix(rnorm(25), nrow = 5)
 #' matrix_order(m)

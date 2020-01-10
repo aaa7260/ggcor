@@ -60,7 +60,7 @@ mantel01 <- mantel \%>\%
 quickcor(varechem, type = "upper") + geom_square() +
   add_link(mantel01, mapping = aes(colour = p.value, size = r),
            diag.label = TRUE) +
-  add_diaglab() +
+  add_diag_label() +
   scale_size_manual(values = c(0.5, 1.5, 3)) +
   remove_axis("x")
 }

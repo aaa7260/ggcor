@@ -17,6 +17,7 @@
 #' @param legend.breaks breaks of colourbar.
 #' @param legend.labels labels of colourbar.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
+#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed
 #' @rdname quick_cor
 #' @examples
 #' quickcor(mtcars)
@@ -54,6 +55,8 @@ quickcor <- function(x,
 {
   data <- fortify_cor(x, y, ...)
   type <- get_type(data)
+  n <- length(get_row_name(data))
+  m <- length(get_col_name(data))
   show.diag <- get_show_diag(data)
   name <- names(data)
   # handle mapping setting
@@ -91,7 +94,9 @@ quickcor <- function(x,
     guides(fill = guide_colourbar(title = legend.title,
                                   nbin  = 40))
   # add theme and coord
-  p <- p + coord_fixed() + theme_cor(legend.position = legend.position)
+  xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
+  ylim <- c(0.5 - 0.002 * n, n + 0.5 + 0.002 * n)
+  p <- p + coord_fixed(xlim = xlim, ylim = ylim) + theme_cor(legend.position = legend.position)
   class(p) <- c("quickcor", class(p))
   p
 }

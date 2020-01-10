@@ -2,9 +2,12 @@
 % Please edit documentation in R/geom-colour.R
 \name{geom_colour}
 \alias{geom_colour}
+\alias{geom_color}
 \title{Unit square based on center}
 \usage{
 geom_colour(mapping = NULL, data = NULL, colour = "grey60", ...)
+
+geom_color(mapping = NULL, data = NULL, colour = "grey60", ...)
 }
 \arguments{
 \item{mapping}{set of aesthetic mappings created by aes() or aes_().}
@@ -13,12 +16,18 @@ geom_colour(mapping = NULL, data = NULL, colour = "grey60", ...)
 
 \item{colour}{the border colour.}
 
-\item{...}{other params pass to `geom_tile()`.}
+\item{...}{other params pass to \code{\link[ggplot2]{geom_tile}}.}
 }
 \description{
 This is the encapsulation of \code{geom_tile()}
-function, and some fine-tuning has been done.
+    function, and some fine-tuning has been done.
 }
 \examples{
 quickcor(mtcars) + geom_colour()
+}
+\seealso{
+\code{\link[ggplot2]{geom_tile}}.
+}
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }

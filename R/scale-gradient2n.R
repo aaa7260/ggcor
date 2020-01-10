@@ -1,22 +1,15 @@
-#' Gradient n colour scales
+#' Colour scales for correlation plot
 #'
-#' `scale_*_gradient2n` creates a n colour gradient (low-high), mixed some
-#' features of `scale_*_gradient2` and `scale_*_gradientn`.
+#' @description This set of scales defines new fill scales for correlation matrix plot
+#' equivalent to the ones already defined by ggplot2.
 #'
-#' Default colours are `c("#67001F", "#B2182B", "#D6604D", "#F4A582","#FDDBC7",
-#' "#FFFFFF", "#D1E5F0", "#92C5DE","#4393C3", "#2166AC", "#053061")` , borrowed
-#' from \pkg{corrplot}.
-#'
-#' @inheritParams scales::seq_gradient_pal
-#' @inheritParams ggplot2::scale_colour_hue
-#' @param guide Type of legend. Use `"colourbar"` for continuous
-#'   colour bar, or `"legend"` for discrete colour legend.
-#' @inheritDotParams ggplot2::continuous_scale -na.value -guide -aesthetics
-#' @seealso [scales::seq_gradient_pal()] for details on underlying
-#'   palette
+#' @return A ggproto object inheriting from `Scale`
+#' @inheritParams ggplot2::scale_fill_gradient2
+#' @param colours,colors vector of colours to use for n-colour gradient.
+#' @param limits a numeric vector of length two providing limits of the scale.
+#' @importFrom scales gradient_n_pal
 #' @importFrom ggplot2 continuous_scale
-#' @rdname scale_colour_gradient2n
-#' @export
+#' @rdname scale_colour
 #' @examples
 #' df <- data.frame(x = rep(1:10, 10),
 #'                  y = rep(1:10, each = 10),
@@ -29,6 +22,8 @@
 #' ggplot(df, aes(x, y, colour = z)) +
 #'        geom_point(size = 4) +
 #'        scale_colour_gradient2n()
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 scale_colour_gradient2n <- function(...,
                                     colours,
                                     midpoint = 0,
@@ -51,11 +46,11 @@ scale_colour_gradient2n <- function(...,
                    rescaler = mid_rescaler(mid = midpoint))
 }
 
-#' @rdname scale_colour_gradient2n
+#' @rdname scale_colour
 #' @export
 scale_color_gradient2n <- scale_colour_gradient2n
 
-#' @rdname scale_colour_gradient2n
+#' @rdname scale_colour
 #' @export
 scale_fill_gradient2n <- function(...,
                                   colours,

@@ -41,12 +41,12 @@ lower triangular or upper triangular matrix.}
 
 \item{show.diag}{a logical value indicating whether keep the diagonal.}
 
+\item{row.names, col.names}{row/column names of correlation matrix.}
+
 \item{cluster}{a logical value indicating whether reorder the correlation matrix
 by clustering, default is FALSE.}
 
 \item{byrow}{a logical value indicating whether arrange the 'spec' columns on y axis.}
-
-\item{rownames, colnames}{row/column names of correlation matrix.}
 }
 \value{
 a cor_tbl object.

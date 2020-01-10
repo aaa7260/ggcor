@@ -1,7 +1,6 @@
 #' Cross Geom
 #'
 #' @eval rd_aesthetics("geom", "cross")
-#' @param r0 The diameter of an outer circle, defualt value is 0.6.
 #' @param sig.level significance threshold.
 #'
 #' @inheritParams ggplot2::layer

@@ -1,7 +1,6 @@
 #' Circle Geom
 #'
 #' @eval rd_aesthetics("geom", "circle2")
-#' @param r0 the diameter of circle.
 #' @param n the number of circle path.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
@@ -16,7 +15,6 @@ geom_circle2 <- function(mapping = NULL,
                          position = "identity",
                          ...,
                          n = 60,
-                         linejoin = "mitre",
                          na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE) {
@@ -30,7 +28,6 @@ geom_circle2 <- function(mapping = NULL,
     inherit.aes = inherit.aes,
     params = list(
       n = n,
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )

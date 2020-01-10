@@ -57,8 +57,6 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{r0}{cosine value in range ([-1, 1]).}
 }
 \description{
 Ellipse Geom

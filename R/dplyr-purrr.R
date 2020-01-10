@@ -1,16 +1,16 @@
 #' @importFrom tibble as_tibble
 #' @export
-as_tibble.cor_tbl <- function(.data, ...)
+as_tibble.cor_tbl <- function(x, ...)
 {
-  class(.data) <- setdiff(class(.data), "cor_tbl")
-  attrs <- attributes(.data)
+  class(x) <- setdiff(class(x), "cor_tbl")
+  attrs <- attributes(x)
   excludes <- attrs[setdiff(names(attrs), c("names", "class", "row.names"))]
   if(length(excludes) > 0) {
     for (nm in names(excludes)) {
-      attr(.data, nm) <- NULL
+      attr(x, nm) <- NULL
     }
   }
-  .data
+  x
 }
 
 #' @importFrom dplyr mutate

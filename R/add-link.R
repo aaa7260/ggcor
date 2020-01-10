@@ -40,7 +40,7 @@
 #' quickcor(varechem, type = "upper") + geom_square() +
 #'   add_link(mantel01, mapping = aes(colour = p.value, size = r),
 #'            diag.label = TRUE) +
-#'   add_diaglab() +
+#'   add_diag_label() +
 #'   scale_size_manual(values = c(0.5, 1.5, 3)) +
 #'   remove_axis("x")
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
@@ -60,7 +60,7 @@ add_link <- function(df,
   link_fun <- function(corr) {
     if(!is_cor_tbl(corr)) {
       warning("'corr' need a cor_tbl.", call. = FALSE)
-      return(geom_blank())
+      return(NULL)
     }
     type <- get_type(corr)
     show.diag <- get_show_diag(corr)

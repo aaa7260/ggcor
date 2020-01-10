@@ -1,8 +1,6 @@
 #' Ellipse Geom
 #'
-#'
 #' @eval rd_aesthetics("geom", "ellipse2")
-#' @param r0 cosine value in range ([-1, 1]).
 #' @param n the number of ellipse path.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon

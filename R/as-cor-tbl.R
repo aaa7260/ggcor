@@ -4,7 +4,7 @@
 #' @param type a string, "full" (default), "upper" or "lower", display full,
 #'     lower triangular or upper triangular matrix.
 #' @param show.diag a logical value indicating whether keep the diagonal.
-#' @param rownames,colnames row/column names of correlation matrix.
+#' @param row.names,col.names row/column names of correlation matrix.
 #' @param cluster a logical value indicating whether reorder the correlation matrix
 #'     by clustering, default is FALSE.
 #' @param byrow a logical value indicating whether arrange the 'spec' columns on y axis.
@@ -168,7 +168,7 @@ as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, ...) {
     .col.names = .col.names,
     type = "full",
     show.diag = TRUE,
-    grouped = attr(corr, "grouped"),
+    grouped = attr(x, "grouped"),
     class = c("cor_tbl", setdiff(class(df), "mantel_tbl"))
   )
 }
