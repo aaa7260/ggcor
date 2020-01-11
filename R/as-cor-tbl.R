@@ -164,8 +164,8 @@ as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, ...) {
                        .col.id = .col.id)
   structure(
     .Data = df,
-    .row.names = .row.names,
-    .col.names = .col.names,
+    .row.names = row.names,
+    .col.names = col.names,
     type = "full",
     show.diag = TRUE,
     grouped = attr(x, "grouped"),
