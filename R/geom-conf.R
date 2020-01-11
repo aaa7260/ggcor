@@ -1,9 +1,25 @@
 #' Confident-Box Geom
 #'
-#' @eval rd_aesthetics("geom", "confbox")
 #' @param width the width of confident box.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
+#' @section Aesthetics:
+#'     \code{geom_confbox()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \strong{\code{r}}
+#'       \item \strong{\code{lower.ci}}
+#'       \item \strong{\code{upper.ci}}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{confline.col}
+#'       \item \code{midline.col}
+#'       \item \code{fill}
+#'       \item \code{linetype}
+#'       \item \code{size}
+#'    }
 #' @importFrom ggplot2 layer ggproto Geom GeomPolygon GeomSegment draw_key_polygon
 #' @importFrom grid grobTree
 #' @rdname geom_confbox

@@ -1,9 +1,21 @@
 #' Circle Geom
 #'
-#' @eval rd_aesthetics("geom", "circle2")
-#' @param n the number of circle path.
+#' @param n the number of circle path points.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
+#' @section Aesthetics:
+#'     \code{geom_circle2()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \code{r0}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{fill}
+#'       \item \code{linetype}
+#'       \item \code{size}
+#'    }
 #' @importFrom ggplot2 layer ggproto GeomPolygon
 #' @importFrom grid grobTree
 #' @rdname geom_circle2

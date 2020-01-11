@@ -1,6 +1,5 @@
 #' Significant marks Geom
 #'
-#' @eval rd_aesthetics("geom", "mark")
 #' @param digits integer indicating the number of decimal places (round) or
 #'     significant digits (signif) to be used, the default value is 2.
 #' @param nsmall the minimum number of digits to the right of the decimal
@@ -12,6 +11,24 @@
 #' @param sep a character string to separate the number ("r") and mark symbols.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_text
+#' @section Aesthetics:
+#'     \code{geom_mark()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \strong{\code{p.value}}
+#'       \item \code{r}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{size}
+#'       \item \code{angle}
+#'       \item \code{hjust}
+#'       \item \code{vjust}
+#'       \item \code{family}
+#'       \item \code{fontface}
+#'       \item \code{lineheight}
+#'    }
 #' @importFrom ggplot2 layer ggproto GeomText draw_key_text
 #' @rdname geom_mark
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

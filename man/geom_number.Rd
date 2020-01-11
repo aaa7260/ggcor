@@ -74,22 +74,22 @@ Format number Geom
 }
 \section{Aesthetics}{
 
-\code{geom_number()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{num}}
-  \item \code{alpha}
-  \item \code{angle}
-  \item \code{colour}
-  \item \code{family}
-  \item \code{fontface}
-  \item \code{group}
-  \item \code{hjust}
-  \item \code{lineheight}
-  \item \code{size}
-  \item \code{vjust}
-}
+    \code{geom_number()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \strong{\code{num}}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{size}
+      \item \code{angle}
+      \item \code{hjust}
+      \item \code{vjust}
+      \item \code{family}
+      \item \code{fontface}
+      \item \code{lineheight}
+   }
 }
 
 \author{

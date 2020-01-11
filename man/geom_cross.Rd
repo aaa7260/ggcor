@@ -65,18 +65,17 @@ Cross Geom
 }
 \section{Aesthetics}{
 
-\code{geom_cross()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{p.value}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{group}
-  \item \code{linetype}
-  \item \code{size}
-}
+    \code{geom_cross()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \strong{\code{p.value}}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{linetype}
+      \item \code{size}
+   }
 }
 
 \author{

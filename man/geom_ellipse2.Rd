@@ -63,18 +63,18 @@ Ellipse Geom
 }
 \section{Aesthetics}{
 
-\code{geom_ellipse2()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{group}
-  \item \code{linetype}
-  \item \code{r0}
-  \item \code{size}
-}
+    \code{geom_ellipse2()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \code{r0}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{fill}
+      \item \code{linetype}
+      \item \code{size}
+   }
 }
 
 \author{

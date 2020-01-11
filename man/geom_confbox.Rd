@@ -63,23 +63,22 @@ Confident-Box Geom
 }
 \section{Aesthetics}{
 
-\code{geom_confbox()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{r}}
-  \item \strong{\code{lower.ci}}
-  \item \strong{\code{upper.ci}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{confline.col}
-  \item \code{fill}
-  \item \code{group}
-  \item \code{linetype}
-  \item \code{midline.col}
-  \item \code{midline.type}
-  \item \code{size}
-}
+    \code{geom_confbox()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \strong{\code{r}}
+      \item \strong{\code{lower.ci}}
+      \item \strong{\code{upper.ci}}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{confline.col}
+      \item \code{midline.col}
+      \item \code{fill}
+      \item \code{linetype}
+      \item \code{size}
+   }
 }
 
 \author{

@@ -1,14 +1,29 @@
 #' Format number Geom
 #'
-#' @eval rd_aesthetics("geom", "number")
 #' @param digits integer indicating the number of decimal places (round) or
 #'     significant digits (signif) to be used, the default value is 2.
 #' @param nsmall the minimum number of digits to the right of the decimal
 #'     point in formatting real/complex numbers in non-scientific formats,
 #'     the default value is 2.
-#'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_text
+#' @section Aesthetics:
+#'     \code{geom_number()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \strong{\code{num}}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{size}
+#'       \item \code{angle}
+#'       \item \code{hjust}
+#'       \item \code{vjust}
+#'       \item \code{family}
+#'       \item \code{fontface}
+#'       \item \code{lineheight}
+#'    }
 #' @importFrom ggplot2 layer ggproto position_nudge GeomText draw_key_text
 #' @rdname geom_number
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

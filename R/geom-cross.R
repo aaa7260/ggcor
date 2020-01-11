@@ -1,10 +1,20 @@
 #' Cross Geom
 #'
-#' @eval rd_aesthetics("geom", "cross")
 #' @param sig.level significance threshold.
-#'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_segment
+#' @section Aesthetics:
+#'     \code{geom_cross()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \strong{\code{p.value}}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{linetype}
+#'       \item \code{size}
+#'    }
 #' @importFrom ggplot2 layer ggproto GeomSegment draw_key_blank
 #' @importFrom grid grobTree
 #' @rdname geom_cross
@@ -41,8 +51,7 @@ geom_cross <- function(mapping = NULL, data = NULL,
 #' @export
 GeomCross <- ggproto(
   "GeomCross", GeomSegment,
-  default_aes = aes(colour = "red", fill = NA,
-                    size = 0.5, linetype = 1, alpha = NA),
+  default_aes = aes(colour = "red", size = 0.5, linetype = 1, alpha = NA),
   required_aes = c("x", "y", "p.value"),
 
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
@@ -51,8 +60,8 @@ GeomCross <- ggproto(
       warning("geom_cross is not implemented for non-linear coordinates",
               call. = FALSE)
     }
-    aesthetics <- setdiff(names(data), c("x", "y", "p"))
-    data <- dplyr::filter(data, p.value > sig.level)
+    aesthetics <- setdiff(names(data), c("x", "y", "p.value"))
+    data <- with(data, subset(data, p.value > sig.level))
     dd <- point_to_cross(data$x, data$y, r0)
     GeomSegment$draw_panel(cbind(dd, data[, aesthetics]), panel_params, coord)
   },

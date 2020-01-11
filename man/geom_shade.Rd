@@ -7,8 +7,8 @@
 \title{Shade Geom}
 \usage{
 geom_shade(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., sign = 1, linejoin = "mitre",
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., sign = 1, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -47,8 +47,6 @@ negtive \code{r} values. If larger than 0, add shade on cells with positive
 \code{r} values. If equals 0, add shade on cells except where \code{r}  values
 equals 0.}
 
-\item{linejoin}{Line join style (round, mitre, bevel).}
-
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -68,18 +66,20 @@ Shade Geom
 }
 \section{Aesthetics}{
 
-\code{geom_shade()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{r0}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{group}
-  \item \code{linetype}
-  \item \code{size}
-}
+    \code{geom_shade()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \strong{\code{r0}}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{linetype}
+      \item \code{size}
+   }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

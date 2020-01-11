@@ -1,28 +1,32 @@
 #' Shade Geom
 #'
-#'
-#' @eval rd_aesthetics("geom", "shade")
 #' @param sign scalar numeric value. If less than 0, add shade on cells with
 #'     negtive \code{r} values. If larger than 0, add shade on cells with positive
 #'     \code{r} values. If equals 0, add shade on cells except where \code{r}  values
 #'     equals 0.
-#'
 #' @inheritParams ggplot2::layer
-#' @inheritParams ggplot2::geom_line
+#' @inheritParams ggplot2::geom_segment
+#' @section Aesthetics:
+#'     \code{geom_shade()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \strong{\code{r0}}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{linetype}
+#'       \item \code{size}
+#'    }
 #' @rdname geom_shade
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomLine
-#' @importFrom ggplot2 draw_key_blank
+#' @importFrom ggplot2 layer ggproto GeomSegment draw_key_blank
 #' @importFrom grid grobTree
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_shade <- function(mapping = NULL, data = NULL,
                         stat = "identity", position = "identity",
                         ...,
                         sign = 1,
-                        linejoin = "mitre",
                         na.rm = FALSE,
                         show.legend = NA,
                         inherit.aes = TRUE) {
@@ -36,7 +40,6 @@ geom_shade <- function(mapping = NULL, data = NULL,
     inherit.aes = inherit.aes,
     params = list(
       sign = sign,
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )
@@ -48,9 +51,8 @@ geom_shade <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomShade <- ggproto(
-  "GeomShade", Geom,
-  default_aes = aes(colour = "white", fill = NA, size = 0.25, linetype = 1,
-                    alpha = NA),
+  "GeomShade", GeomSegment,
+  default_aes = aes(colour = "white", size = 0.25, linetype = 1, alpha = NA),
   required_aes = c("x", "y", "r0"),
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
                         sign = 1) {
