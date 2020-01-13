@@ -5,7 +5,6 @@
 #' @param x a cor_tbl object.
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @return a modified cor_tbl object.
-#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @examples
 #' df <- fortify_cor(mtcars)

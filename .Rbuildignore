@@ -1,4 +1,7 @@
 
+\.git
+\.Rhistory
+\.Rcheck
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
