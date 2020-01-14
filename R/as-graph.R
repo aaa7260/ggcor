@@ -40,8 +40,27 @@ as_tbl_graph.co_network <- function(x, simplify = TRUE, ...)
   as_tbl_graph(g, ...)
 }
 
+#' @importFrom igraph plot.igraph
+#' @export
+plot.cor_tbl <- function(x, simplify = TRUE, ...)
+{
+  x <- as.igraph(x, simplify = simplify)
+  plot.igraph(x, ...)
+}
+
+#' @importFrom igraph plot.igraph
+#' @export
+plot.co_network <- function(x, simplify = TRUE, ...)
+{
+  x <- as.igraph(x, simplify = simplify)
+  plot.igraph(x, ...)
+}
+
 #' @export
 igraph::as.igraph
+
+#' @export
+igraph::plot.igraph
 
 #' @export
 tidygraph::as_tbl_graph

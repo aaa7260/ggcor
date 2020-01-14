@@ -7,6 +7,7 @@
 #' @param p.thres a numeric value.
 #' @param ... passing to \code{\link[ggcor]{as_cor_tbl}}
 #' @return cor_tbl.
+#' @importFrom dplyr filter
 #' @rdname create_network
 #' @export
 create_network <- function(x,
@@ -17,14 +18,15 @@ create_network <- function(x,
 {
   df <- fortify_cor(x, type = "upper", show.diag = FALSE, cor.test = TRUE, ...)
   if(r.absolute) {
-    df <- with(df, subset(df, abs(r) > r.thres, p.value < p.thres))
+    df <- with(df, dplyr::filter(df, abs(r) > r.thres, p.value < p.thres))
   } else {
-    df <- with(df, subset(df, r > r.thres, p.value < p.thres))
+    df <- with(df, dplyr::filter(df, r > r.thres, p.value < p.thres))
   }
   df
 }
 
 #' @importFrom tibble tibble
+#' @importFrom dplyr filter
 #' @rdname create_network
 #' @export
 fast_create_network <- function(x,
@@ -49,8 +51,8 @@ fast_create_network <- function(x,
                   .row.names = name,
                   class = "co_network")
   if(r.absolute) {
-    with(df, subset(df, abs(r) > r.thres, p.value < p.thres))
+    with(df, dplyr::filter(df, abs(r) > r.thres, p.value < p.thres))
   } else {
-    with(df, subset(df, r > r.thres, p.value < p.thres))
+    with(df, dplyr::filter(df, r > r.thres, p.value < p.thres))
   }
 }

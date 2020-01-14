@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{as.igraph}
+\alias{plot.igraph}
 \alias{as_tbl_graph}
 \alias{\%>\%}
 \alias{mutate}
@@ -17,7 +18,7 @@ below to see their documentation.
 \describe{
   \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{mutate}}}
 
-  \item{igraph}{\code{\link[igraph]{as.igraph}}}
+  \item{igraph}{\code{\link[igraph]{as.igraph}}, \code{\link[igraph]{plot.igraph}}}
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
 
