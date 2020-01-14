@@ -29,6 +29,8 @@ Imports:
     tibble,
     purrr,
     dplyr,
+    igraph,
+    tidygraph,
     vegan,
     ade4
 Suggests:
@@ -45,13 +47,13 @@ Collate:
     'add-link-utils.R'
     'add-link.R'
     'as-cor-tbl.R'
+    'as-graph.R'
     'colour-pal-utils.R'
     'cor-tbl-utils.R'
     'cor-test.R'
     'dplyr-purrr.R'
     'draw-key.R'
     'expand-axis.R'
-    'filter-otu.R'
     'fortify-cor.R'
     'fortify-mantel.R'
     'geom-circle2.R'

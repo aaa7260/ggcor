@@ -34,17 +34,20 @@ fast_create_network <- function(x,
                                 ...)
 {
   if(!requireNamespace("WGCNA", quietly = TRUE)) {
-    stop("'fast_correlate' needs 'WGCNA' package.", call. = FALSE)
+    stop("'fast_create_network' needs 'WGCNA' package.", call. = FALSE)
   }
   if(!is.data.frame(x))
     x <- as.data.frame(x)
   name <- names(x)
   corr <- WGCNA::corAndPvalue(x, ...)
   idx <- upper.tri(corr$cor)
-  df <- tibble::tibble(.row.names = rep(name, length(name)),
-                       .col.names = rep(name, each = length(name)),
-                       r = as.vector(corr$cor),
-                       p.value = as.vector(corr$p)) %>% subset(idx)
+  df <- structure(.Data = tibble::tibble(.row.names = rep(name, length(name)),
+                                         .col.names = rep(name, each = length(name)),
+                                         r = as.vector(corr$cor),
+                                         p.value = as.vector(corr$p)) %>% subset(idx),
+                  .col.names = name,
+                  .row.names = name,
+                  class = "co_network")
   if(r.absolute) {
     with(df, subset(df, abs(r) > r.thres, p.value < p.thres))
   } else {
