@@ -49,7 +49,7 @@ fast_create_network <- function(x,
                                          p.value = as.vector(corr$p)) %>% subset(idx),
                   .col.names = name,
                   .row.names = name,
-                  class = "co_network")
+                  class = c("co_network", "tbl_df", "tbl", "data.frame"))
   if(r.absolute) {
     with(df, dplyr::filter(df, abs(r) > r.thres, p.value < p.thres))
   } else {
