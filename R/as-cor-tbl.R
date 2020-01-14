@@ -136,7 +136,7 @@ as_cor_tbl.rcorr <- function(x, ...)
 #' @method as_cor_tbl corr.test
 as_cor_tbl.corr.test <- function(x, ...)
 {
-  as_cor_tbl(list(x$r, p.value = x$p), ...)
+  as_cor_tbl(list(r = x$r, p.value = x$p), ...)
 }
 #' @rdname  as_cor_tbl
 #' @export
