@@ -22,15 +22,6 @@ mutate.cor_tbl <- function(.data, ...)
   set_attrs(.data, attrs, .excludes = c("names", "row.names"))
 }
 
-#' @export
-dplyr::`%>%`
-
-#' @export
-dplyr::mutate
-
-#' @export
-tibble::as_tibble
-
 #' @noRd
 set_attrs <- function(.data, .attrs = list(), .excludes = NULL)
 {
