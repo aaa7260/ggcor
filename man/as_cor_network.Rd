@@ -8,6 +8,8 @@
 \alias{as_cor_network.corr.test}
 \alias{as_cor_network.correlation}
 \alias{cor_network}
+\alias{is_cor_network}
+\alias{cn_active}
 \title{Tidy co-occurrence network data}
 \usage{
 as_cor_network(x, ...)
@@ -25,9 +27,13 @@ as_cor_network(x, ...)
 
 cor_network(corr, p.value = NULL, simplify = TRUE, r.thres = 0.6,
   r.absolute = TRUE, p.thres = 0.05)
+
+is_cor_network(x)
+
+cn_active(x, active = "nodes")
 }
 \arguments{
-\item{x}{any \code{R} object can be converted to cor_tbl.}
+\item{x}{\code{R} object.}
 
 \item{...}{passing to \code{\link[ggcor]{fortify_cor}}}
 
@@ -44,8 +50,8 @@ delete nodes without edge connections.}
 
 \item{p.value}{significant matrix of correlation.}
 
-\item{type}{a string, "full" (default), "upper" or "lower", display full,
-lower triangular or upper triangular matrix.}
+\item{active}{"nodes" (defaults) or "edges", indicating whether to
+handle edges or nodes.}
 }
 \value{
 a list of nodes and edges.
