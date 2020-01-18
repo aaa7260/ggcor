@@ -26,10 +26,15 @@ mutate.cor_tbl <- function(.data, ...)
 #' @export
 mutate.cor_network <- function(.data, active = NULL, ...)
 {
+  ll <- list(...)
   active <- active %||% attr(.data, "active") %||% "nodes"
   if(active == "nodes") {
+    if(name %in% names(ll))
+      stop("'name' variable are preserved.", call. = FALSE)
     .data$nodes <- dplyr::mutate(.data$nodes, ...)
   } else {
+    if(any(c("from", "to") %in% names(ll)))
+      stop("'from', 'to' variables are preserved.", call. = FALSE)
     .data$edges <- dplyr::mutate(.data$edges, ...)
   }
   attr(.data, "active") <- active
