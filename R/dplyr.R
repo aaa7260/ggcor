@@ -29,7 +29,7 @@ mutate.cor_network <- function(.data, active = NULL, ...)
   ll <- list(...)
   active <- active %||% attr(.data, "active") %||% "nodes"
   if(active == "nodes") {
-    if(name %in% names(ll))
+    if("name" %in% names(ll))
       stop("'name' variable are preserved.", call. = FALSE)
     .data$nodes <- dplyr::mutate(.data$nodes, ...)
   } else {
