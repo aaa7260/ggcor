@@ -53,26 +53,26 @@ GeomEllipse2 <- ggproto(
   default_aes = aes(r0 = 0.5, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y"),
-  draw_panel = function(self, data, panel_params, coord,
-                        n = 60, linejoin = "mitre") {
-    aesthetics <- setdiff(names(data), c("x", "y"))
-    polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      ell <- point_to_ellipse(row$x, row$y, row$r0, n)
-      aes <- new_data_frame(row[aesthetics])[rep(1,n), ]
-      GeomPolygon$draw_panel(cbind(ell, aes), panel_params, coord)
-    })
-    ggplot2:::ggname("geom_ellipse", do.call("grobTree", polys))
+  draw_panel = function(self, data, panel_params, coord, n = 60, linejoin = "mitre") {
+    aesthetics <- setdiff(names(data), c("x", "y", "group", "subgroup"))
+    dd <- point_to_ellipse(data$x, data$y, data$r0, n)
+    aes <- data[rep(1:nrow(data), each = n), aesthetics, drop = FALSE]
+    GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
   },
+
   draw_key = draw_key_ellipse
 )
 
 #' @noRd
 point_to_ellipse <- function(x, y, r0, n = 60) {
-  t <- seq(0, 2 * pi, length = n)
-  xx <- 0.5 * cos(t + acos(r0) / 2)  + x
-  yy <- 0.5 * cos(t - acos(r0) / 2)  + y
+  nn <- length(x)
+  x <- rep(x, each = n)
+  y <- rep(y, each = n)
+  r0 <- rep(r0, each = n)
+  t <- rep(seq(0, 2 * pi, length = n), nn)
   new_data_frame(list(
-    x = xx,
-    y = yy
+    x = 0.5 * cos(t + acos(r0) / 2)  + x,
+    y = 0.5 * cos(t - acos(r0) / 2)  + y,
+    group = rep(1:nn, each = n)
   ))
 }
