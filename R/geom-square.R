@@ -53,7 +53,7 @@ GeomSquare <- ggproto(
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre") {
     aesthetics <- setdiff(names(data), c("x", "y", "group", "subgroup"))
     dd <- point_to_square(data$x, data$y, data$r0)
-    aes <- aes <- data[rep(1:nrow(data), 5) , aesthetics, drop = FALSE]
+    aes <- data[rep(1:nrow(data), 5) , aesthetics, drop = FALSE]
     GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
   },
 

@@ -56,27 +56,27 @@ GeomCircle2 <- ggproto(
                     alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord, n = 60, linejoin = "mitre") {
-    aesthetics <- setdiff(names(data), c("x", "y"))
-    polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      circle <- point_to_circle(row$x, row$y, row$r0, n)
-      aes <- new_data_frame(row[aesthetics])[rep(1, n), ]
-      GeomPolygon$draw_panel(cbind(circle, aes), panel_params, coord)
-    })
-    ggplot2:::ggname("geom_circle", do.call("grobTree", polys))
-  },
+    aesthetics <- setdiff(names(data), c("x", "y", "group", "subgroup"))
+    dd <- point_to_circle(data$x, data$y, data$r0, n)
+    aes <- data[rep(1:nrow(data), each = n), aesthetics, drop = FALSE]
+    GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
+    },
+
   draw_key = draw_key_circle
 )
 
 #' @noRd
 
 point_to_circle <- function(x, y, r0, n = 60) {
-  t <- seq(0, 2*pi, length.out = n)
-  r0 <- 0.5 * sign(r0) * sqrt(abs(r0))
-  xx <- r0 * cos(t) + x
-  yy <- r0 * sin(t) + y
+  nn <- length(x)
+  x <- rep(x, each = n)
+  y <- rep(y, each = n)
+  r0 <- 0.5 * sign(rep(r0, each = n)) * sqrt(abs(rep(r0, each = n)))
+  t <- rep(seq(0, 2*pi, length.out = n), nn)
   new_data_frame(list(
-    x = xx,
-    y = yy
+    x = r0 * cos(t) + x,
+    y = r0 * sin(t) + y,
+    group = rep(1:nn, each = n)
   ))
 }
 
