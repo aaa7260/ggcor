@@ -51,14 +51,10 @@ GeomSquare <- ggproto(
                     alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre") {
-    aesthetics <- setdiff(names(data), c("x", "y"))
-    polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      square <- point_to_square(row$x, row$y, row$r0)
-      aes <- new_data_frame(row[aesthetics])[rep(1, 5), ]
-      GeomPolygon$draw_panel(cbind(square, aes), panel_params, coord)
-    })
-
-    ggplot2:::ggname("geom_square", do.call("grobTree", polys))
+    aesthetics <- setdiff(names(data), c("x", "y", "group", "subgroup"))
+    dd <- point_to_square(data$x, data$y, data$r0)
+    aes <- aes <- data[rep(1:nrow(data), 5) , aesthetics, drop = FALSE]
+    GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
   },
 
   draw_key = draw_key_square
@@ -67,13 +63,15 @@ GeomSquare <- ggproto(
 #' @noRd
 point_to_square <- function(x, y, r0) {
   r0 <- 0.5 * sign(r0) * sqrt(abs(r0))
+  n <- length(x)
   xmin <- - r0 + x
   xmax <- r0 + x
   ymin <- - r0 + y
   ymax <- r0 + y
   new_data_frame(list(
+    x = c(xmin, xmax, xmax, xmin, xmin),
     y = c(ymax, ymax, ymin, ymin, ymax),
-    x = c(xmin, xmax, xmax, xmin, xmin)
+    group = rep(1:n, 5)
   ))
 }
 
