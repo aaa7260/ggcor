@@ -61,7 +61,7 @@ fortify_mantel <- function(spec,
       purrr::pmap_dfr(list(spec, env, env.ctrl, as.list(names(spec))),
                       function(.spec, .env, .env.ctrl, .group) {
                         mantel_test(.spec, .env, .env.ctrl, mantel.fun, ...) %>%
-                          dplyr::mutate(group = .group)
+                          dplyr::mutate(.group = .group)
                       })
     )
   } else {

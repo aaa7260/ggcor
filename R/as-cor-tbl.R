@@ -161,7 +161,8 @@ as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, ...) {
   }
   df <- tibble::tibble(.col.names = .col.names, .row.names = .row.names,
                        r = x$r, p.value = x$p.value, .row.id = .row.id,
-                       .col.id = .col.id)
+                       .col.id = .col.id) %>%
+    dplyr::bind_cols(x[setdiff(names(x), c("spec", "env", "r", "p.value"))])
   structure(
     .Data = df,
     .row.names = row.names,

@@ -58,7 +58,8 @@ group_by.cor_network <- function(.data, ..., add = FALSE) {
     .data$nodes$name[.x$name]
   })
   gedges <- lapply(gnode.name, function(nm) {
-    with(.data$edges, subset(.data$edges, all(c(.col.names, .row.names) %in% nm)))
+    with(.data$edges[setdiff(names(.data$edges), c("r", "p.value"))],
+         subset(.data$edges, all(c(.col.names, .row.names) %in% nm)))
   })
   gnet <- lapply(1:length(gnodes), function(.idx) {
     structure(.Data = list(nodes = gnodes[[.idx]], edges = gedges[[.idx]]),

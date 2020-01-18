@@ -63,9 +63,10 @@ GeomCross <- ggproto(
     aesthetics <- setdiff(names(data), c("x", "y", "p.value"))
     data <- with(data, subset(data, p.value > sig.level))
     dd <- point_to_cross(data$x, data$y, r0)
-    GeomSegment$draw_panel(cbind(dd, data[, aesthetics]), panel_params, coord)
+    GeomSegment$draw_panel(cbind(dd, data[rep(1:nrow(data), each = 2) , aesthetics, drop = FALSE]),
+                           panel_params, coord)
   },
-  draw_key = draw_key_point
+  draw_key = draw_key_blank
 )
 
 #' @noRd
