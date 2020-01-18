@@ -1,7 +1,9 @@
 #' Tidy co-occurrence network data
 #' @description The function calculates correlation coefficient, statistical
 #'     significance level and filters according to conditions.
-#' @param x any \code{R} object can be converted to cor_tbl.
+#' @param x \code{R} object.
+#' @param active "nodes" (defaults) or "edges", indicating whether to
+#'     handle edges or nodes.
 #' @param corr correlation matrix.
 #' @param p.value significant matrix of correlation.
 #' @param simplify logical value (defaults to TRUE) indicating whether to
@@ -9,8 +11,6 @@
 #' @param r.thres a numeric value.
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
-#' @param type a string, "full" (default), "upper" or "lower", display full,
-#'     lower triangular or upper triangular matrix.
 #' @param ... passing to \code{\link[ggcor]{fortify_cor}}
 #' @return a list of nodes and edges.
 #' @importFrom dplyr filter
@@ -139,4 +139,20 @@ cor_network <- function(corr,
                          edges = edges),
             active = "nodes",
             class = "cor_network")
+}
+
+#' @rdname as_cor_network
+#' @export
+is_cor_network <- function(x)
+{
+  inherits(x, "cor_network")
+}
+
+#' @rdname as_cor_network
+#' @export
+cn_active <- function(x, active = "nodes")
+{
+  stopifnot(is_cor_network(x))
+  attr(x, "active") <- active
+  x
 }

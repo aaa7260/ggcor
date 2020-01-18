@@ -9,22 +9,6 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @rdname network_stats
 #' @export
-is_cor_network <- function(cn)
-{
-  inherits(cn, "cor_network")
-}
-
-#' @rdname network_stats
-#' @export
-cn_active <- function(cn, active = "nodes")
-{
-  stopifnot(is_cor_network(cn))
-  attr(cn, "active") <- active
-  cn
-}
-
-#' @rdname network_stats
-#' @export
 cn_degree <- function(cn, ...)
 {
   stopifnot(is_cor_network(cn))
