@@ -22,6 +22,20 @@ mutate.cor_tbl <- function(.data, ...)
   set_attrs(.data, attrs, .excludes = c("names", "row.names"))
 }
 
+#' @importFrom dplyr mutate
+#' @export
+mutate.cor_network <- function(.data, active = NULL, ...)
+{
+  active <- active %||% attr(.data, "active") %||% "nodes"
+  if(active == "nodes") {
+    .data$nodes <- dplyr::mutate(.data$nodes, ...)
+  } else {
+    .data$edges <- dplyr::mutate(.data$edges, ...)
+  }
+  attr(.data, "active") <- active
+  .data
+}
+
 #' @noRd
 set_attrs <- function(.data, .attrs = list(), .excludes = NULL)
 {

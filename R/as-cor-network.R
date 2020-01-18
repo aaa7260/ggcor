@@ -58,9 +58,9 @@ as_cor_network.cor_tbl <- function(x,
 }
 
 #' @rdname  as_cor_network
-#' @method as_cor_network mantel
+#' @method as_cor_network mantel_tbl
 #' @export
-as_cor_network.mantel <- function(x, ...)
+as_cor_network.mantel_tbl <- function(x, ...)
 {
   cor_network(as_cor_tbl(x), ...)
 }
@@ -101,9 +101,10 @@ cor_network <- function(corr,
                         r.absolute = TRUE,
                         p.thres = 0.05)
 {
-  corr <- if(!is.matrix(corr)) as.matrix(corr)
-  p.value <- if(!is.null(p.value)) as.matrix(p.value)
-
+  if(!is.matrix(corr))
+    corr <- as.matrix(corr)
+  if(!is.null(p.value) && !is.matrix(p.value))
+    p.value <- as.matrix(p.value)
   .row.names <- rownames(corr) %||% paste0("row", 1:nrow(corr))
   .col.names <- colnames(corr) %||% paste0("col", 1:ncol(corr))
   is.symmet <- length(.row.names) == length(.col.names) && all(.row.names == .col.names)

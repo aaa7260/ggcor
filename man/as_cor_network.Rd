@@ -3,7 +3,7 @@
 \name{as_cor_network}
 \alias{as_cor_network}
 \alias{as_cor_network.cor_tbl}
-\alias{as_cor_network.mantel}
+\alias{as_cor_network.mantel_tbl}
 \alias{as_cor_network.rcorr}
 \alias{as_cor_network.corr.test}
 \alias{as_cor_network.correlation}
@@ -15,7 +15,7 @@ as_cor_network(x, ...)
 \method{as_cor_network}{cor_tbl}(x, simplify = TRUE, r.thres = 0.6,
   r.absolute = TRUE, p.thres = 0.05, ...)
 
-\method{as_cor_network}{mantel}(x, ...)
+\method{as_cor_network}{mantel_tbl}(x, ...)
 
 \method{as_cor_network}{rcorr}(x, ...)
 
