@@ -8,7 +8,6 @@
 \alias{mutate}
 \alias{as_tibble}
 \alias{as.igraph}
-\alias{plot.igraph}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -20,7 +19,7 @@ below to see their documentation.
 
   \item{ggplot2}{\code{\link[ggplot2]{ggplot_add}}}
 
-  \item{igraph}{\code{\link[igraph]{as.igraph}}, \code{\link[igraph]{plot.igraph}}}
+  \item{igraph}{\code{\link[igraph]{as.igraph}}}
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
 }}

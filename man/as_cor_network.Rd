@@ -12,12 +12,12 @@ as_cor_network(x, ...)
   r.absolute = TRUE, p.thres = 0.05, ...)
 
 \method{as_cor_network}{default}(x, simplify = TRUE, r.thres = 0.6,
-  r.absolute = TRUE, p.thres = 0.05, ...)
+  r.absolute = TRUE, p.thres = 0.05, type = "upper", ...)
 }
 \arguments{
 \item{x}{any \code{R} object can be converted to cor_tbl.}
 
-\item{...}{passing to \code{\link[ggcor]{as_cor_tbl}}}
+\item{...}{passing to \code{\link[ggcor]{fortify_cor}}}
 
 \item{simplify}{logical value (defaults to TRUE) indicating whether to
 delete nodes without edge connections.}
@@ -27,6 +27,9 @@ delete nodes without edge connections.}
 \item{r.absolute}{logical value (defaults to TRUE).}
 
 \item{p.thres}{a numeric value.}
+
+\item{type}{a string, "full" (default), "upper" or "lower", display full,
+lower triangular or upper triangular matrix.}
 }
 \value{
 a list of nodes and edges.

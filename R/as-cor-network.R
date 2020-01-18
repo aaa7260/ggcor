@@ -7,7 +7,9 @@
 #' @param r.thres a numeric value.
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
-#' @param ... passing to \code{\link[ggcor]{as_cor_tbl}}
+#' @param type a string, "full" (default), "upper" or "lower", display full,
+#'     lower triangular or upper triangular matrix.
+#' @param ... passing to \code{\link[ggcor]{fortify_cor}}
 #' @return a list of nodes and edges.
 #' @importFrom dplyr filter
 #' @rdname as_cor_network

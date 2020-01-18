@@ -36,7 +36,7 @@ Suggests:
     knitr,
     latex2exp,
     rmarkdown,
-    tidyggraph,
+    tidygraph,
     WGCNA
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

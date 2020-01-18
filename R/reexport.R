@@ -12,6 +12,3 @@ tibble::as_tibble
 
 #' @export
 igraph::as.igraph
-
-#' @export
-igraph::plot.igraph

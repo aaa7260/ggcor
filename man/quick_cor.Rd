@@ -4,18 +4,15 @@
 \alias{quickcor}
 \title{Plot Correlation Matrix Quickly}
 \usage{
-quickcor(x, y = NULL, mapping = NULL, fill.colours = NULL,
-  grid.colour = "grey50", grid.size = 0.25, axis.x.position = "auto",
+quickcor(x, y = NULL, mapping = NULL, grid.colour = "grey50",
+  grid.size = 0.25, axis.x.position = "auto",
   axis.y.position = "auto", axis.label.drop = TRUE,
-  legend.title = "corr", legend.position = "auto",
-  legend.breaks = NULL, legend.labels = NULL, ...)
+  legend.position = "auto", ...)
 }
 \arguments{
 \item{x, y}{matrix or data frame.}
 
 \item{mapping}{NULL (default) or a list of aesthetic mappings to use for plot.}
-
-\item{fill.colours}{NULL (default) or a vector of colours to use for n-colour gradient.}
 
 \item{grid.colour}{colour of grid lines.}
 
@@ -29,13 +26,7 @@ for y axes.}
 or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
 label.}
 
-\item{legend.title}{title of colour bar.}
-
 \item{legend.position}{position of legend.}
-
-\item{legend.breaks}{breaks of colourbar.}
-
-\item{legend.labels}{labels of colourbar.}
 
 \item{...}{extra params for \code{\link[ggcor]{fortify_cor}}.}
 }

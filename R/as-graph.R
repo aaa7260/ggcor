@@ -7,9 +7,10 @@ as.igraph.cor_network <- function(x, ...)
 }
 
 #' @importFrom igraph plot.igraph
+#' @importFrom graphics plot
+#' @method plot cor_network
 #' @export
 plot.cor_network <- function(x, ...)
 {
-  x <- as.igraph(x)
-  plot.igraph(x, ...)
+  plot(as.igraph(x), ...)
 }
