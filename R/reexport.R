@@ -8,6 +8,12 @@ dplyr::`%>%`
 dplyr::mutate
 
 #' @export
+dplyr::group_by
+
+#' @export
+dplyr::ungroup
+
+#' @export
 tibble::as_tibble
 
 #' @export

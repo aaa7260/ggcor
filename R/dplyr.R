@@ -33,12 +33,58 @@ mutate.cor_network <- function(.data, active = NULL, ...)
       stop("'name' variable are preserved.", call. = FALSE)
     .data$nodes <- dplyr::mutate(.data$nodes, ...)
   } else {
-    if(any(c("from", "to") %in% names(ll)))
-      stop("'from', 'to' variables are preserved.", call. = FALSE)
+    if(any(c(".row.names", ".col.names") %in% names(ll)))
+      stop("'.row.names', '.col.names' variables are preserved.", call. = FALSE)
     .data$edges <- dplyr::mutate(.data$edges, ...)
   }
   attr(.data, "active") <- active
   .data
+}
+
+#' @importFrom dplyr mutate
+#' @export
+mutate.grouped_cor_network <- function(.data, ...)
+{
+  lapply(attr(.data, "grouped_cn"), mutate, ...)
+}
+
+#' @importFrom dplyr group_by
+#' @export
+group_by.cor_network <- function(.data, ..., add = FALSE) {
+  if(attr(.data, "active") != "nodes")
+    stop("`group_by()` for cor_network only works on nodes.", call. = FALSE)
+  gnodes <- with(.data$nodes, split(.data$nodes, ...))
+  gnode.name <- lapply(gnodes, function(.x) {
+    .data$nodes$name[.x$name]
+  })
+  gedges <- lapply(gnode.name, function(nm) {
+    with(.data$edges, subset(.data$edges, all(c(.col.names, .row.names) %in% nm)))
+  })
+  gnet <- lapply(1:length(gnodes), function(.idx) {
+    structure(.Data = list(nodes = gnodes[[.idx]], edges = gedges[[.idx]]),
+              active = "nodes",
+              class = class(.data))
+  })
+  structure(.Data = .data,
+            grouped_cn = gnet,
+            class = c("grouped_cor_network", class(.data)))
+}
+
+#' @importFrom dplyr ungroup
+#' @export
+ungroup.grouped_cor_network <- function(.data, ...)
+{
+  gnet <- attr(.data, "grouped_cn")
+  nodes <- .data$nodes %>%
+    left_join(dplyr::bind_rows(purrr::map(gnet, `[[`, 1)),
+              by = c(name = "name"))
+  edges <- .data$edges %>%
+    left_join(dplyr::bind_rows(purrr::map(gnet, `[[`, 2)),
+              by = c(.col.names = ".col.names", .row.names = ".row.names"))
+  structure(.Data = list(nodes = nodes,
+                         edges = edges),
+            active = "nodes",
+            class = "cor_network")
 }
 
 #' @noRd

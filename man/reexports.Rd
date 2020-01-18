@@ -6,6 +6,8 @@
 \alias{ggplot_add}
 \alias{\%>\%}
 \alias{mutate}
+\alias{group_by}
+\alias{ungroup}
 \alias{as_tibble}
 \alias{as.igraph}
 \title{Objects exported from other packages}
@@ -15,7 +17,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{mutate}}}
+  \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{ungroup}}}
 
   \item{ggplot2}{\code{\link[ggplot2]{ggplot_add}}}
 
