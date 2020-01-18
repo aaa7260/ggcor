@@ -3,7 +3,11 @@
 \name{as_cor_network}
 \alias{as_cor_network}
 \alias{as_cor_network.cor_tbl}
-\alias{as_cor_network.default}
+\alias{as_cor_network.mantel}
+\alias{as_cor_network.rcorr}
+\alias{as_cor_network.corr.test}
+\alias{as_cor_network.correlation}
+\alias{cor_network}
 \title{Tidy co-occurrence network data}
 \usage{
 as_cor_network(x, ...)
@@ -11,8 +15,16 @@ as_cor_network(x, ...)
 \method{as_cor_network}{cor_tbl}(x, simplify = TRUE, r.thres = 0.6,
   r.absolute = TRUE, p.thres = 0.05, ...)
 
-\method{as_cor_network}{default}(x, simplify = TRUE, r.thres = 0.6,
-  r.absolute = TRUE, p.thres = 0.05, type = "upper", ...)
+\method{as_cor_network}{mantel}(x, ...)
+
+\method{as_cor_network}{rcorr}(x, ...)
+
+\method{as_cor_network}{corr.test}(x, ...)
+
+\method{as_cor_network}{correlation}(x, ...)
+
+cor_network(corr, p.value = NULL, simplify = TRUE, r.thres = 0.6,
+  r.absolute = TRUE, p.thres = 0.05)
 }
 \arguments{
 \item{x}{any \code{R} object can be converted to cor_tbl.}
@@ -27,6 +39,10 @@ delete nodes without edge connections.}
 \item{r.absolute}{logical value (defaults to TRUE).}
 
 \item{p.thres}{a numeric value.}
+
+\item{corr}{correlation matrix.}
+
+\item{p.value}{significant matrix of correlation.}
 
 \item{type}{a string, "full" (default), "upper" or "lower", display full,
 lower triangular or upper triangular matrix.}

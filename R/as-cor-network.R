@@ -2,6 +2,8 @@
 #' @description The function calculates correlation coefficient, statistical
 #'     significance level and filters according to conditions.
 #' @param x any \code{R} object can be converted to cor_tbl.
+#' @param corr correlation matrix.
+#' @param p.value significant matrix of correlation.
 #' @param simplify logical value (defaults to TRUE) indicating whether to
 #'     delete nodes without edge connections.
 #' @param r.thres a numeric value.
@@ -19,7 +21,7 @@ as_cor_network <- function(x, ...) {
   UseMethod("as_cor_network")
 }
 
-#' @importFrom dplyr filter
+#' @importFrom dplyr filter %>%
 #' @importFrom tibble tibble
 #' @rdname  as_cor_network
 #' @method as_cor_network cor_tbl
@@ -56,16 +58,84 @@ as_cor_network.cor_tbl <- function(x,
 }
 
 #' @rdname  as_cor_network
-#' @method as_cor_network default
+#' @method as_cor_network mantel
 #' @export
-as_cor_network.default <- function(x,
-                                   simplify = TRUE,
-                                   r.thres = 0.6,
-                                   r.absolute = TRUE,
-                                   p.thres = 0.05,
-                                   type = "upper",
-                                   ...)
+as_cor_network.mantel <- function(x, ...)
 {
-  as_cor_network(fortify_cor(x, type = type, ...), simplify = simplify, r.thres = r.thres,
-                 r.absolute = r.absolute, p.thres = p.thres)
+  cor_network(as_cor_tbl(x), ...)
+}
+#' @rdname  as_cor_network
+#' @method as_cor_network rcorr
+#' @export
+as_cor_network.rcorr <- function(x, ...)
+{
+  p.value <- x$P
+  diag(p.value) <- 0
+  cor_network(x$r, p.value, ...)
+}
+
+#' @rdname  as_cor_network
+#' @method as_cor_network corr.test
+#' @export
+as_cor_network.corr.test <- function(x, ...)
+{
+  cor_network(x$r, x$p, ...)
+}
+
+#' @rdname  as_cor_network
+#' @method as_cor_network correlation
+#' @export
+as_cor_network.correlation <- function(x, ...)
+{
+  cor_network(x$r, x$p.value, ...)
+}
+
+#' @importFrom dplyr filter
+#' @importFrom tibble tibble
+#' @rdname as_cor_network
+#' @export
+cor_network <- function(corr,
+                        p.value = NULL,
+                        simplify = TRUE,
+                        r.thres = 0.6,
+                        r.absolute = TRUE,
+                        p.thres = 0.05)
+{
+  corr <- if(!is.matrix(corr)) as.matrix(corr)
+  p.value <- if(!is.null(p.value)) as.matrix(p.value)
+
+  .row.names <- rownames(corr) %||% paste0("row", 1:nrow(corr))
+  .col.names <- colnames(corr) %||% paste0("col", 1:ncol(corr))
+  is.symmet <- length(.row.names) == length(.col.names) && all(.row.names == .col.names)
+
+  edges <- tibble::tibble(.row.names = rep(.row.names, ncol(corr)),
+                          .col.names = rep(.col.names, each = nrow(corr)),
+                          r = as.vector(corr))
+  if(!is.null(p.value))
+    edges$p.value <- as.vector(p.value)
+  if(is.symmet) {
+    edges <- subset(edges, upper.tri(corr))
+  }
+  edges <- if(r.absolute) {
+    if(is.null(p.value)) {
+      with(edges, dplyr::filter(edges, abs(r) > r.thres))
+    } else {
+      with(edges, dplyr::filter(edges, abs(r) > r.thres, p.value < p.thres))
+    }
+  } else {
+    if(is.null(p.value)) {
+      with(edges, dplyr::filter(edges, r > r.thres))
+    } else {
+      with(edges, dplyr::filter(edges, r > r.thres, p.value < p.thres))
+    }
+  }
+  node.name <- if(simplify) {
+    unique(c(edges$.col.names, edges$.row.names))
+  } else {
+    unique(c(.row.names, .col.names))
+  }
+  structure(.Data = list(nodes = tibble::tibble(name = node.name),
+                         edges = edges),
+            active = "nodes",
+            class = "cor_network")
 }
