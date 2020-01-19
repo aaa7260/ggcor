@@ -81,7 +81,7 @@ draw_key_ring <- function(data, params, size) {
 #' @noRd
 ringGrob <- function(x = 0.5, y = 0.5, r0 = 0.5, start.radius = 0.25,
                      end.radius = 0.5, zoom = 0.98, gp = grid::gpar()) {
-  xy <- get_ring_coord(0, 0, r0, start.radius, end.radius, steps = 0.1)
+  xy <- point_to_ring(0, 0, r0, start.radius, end.radius, steps = 0.1)
   x <- xy$x * zoom + x
   y <- xy$y * zoom + y
   grid::polygonGrob(x, y, xy$group, gp = gp)

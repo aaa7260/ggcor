@@ -67,7 +67,7 @@ GeomRing <- ggproto(
                         linejoin = "mitre") {
     aesthetics <- setdiff(names(data), c("x", "y", "fill", "group", "subgroup"))
     polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      dd <- get_ring_coord(row$x, row$y, row$r0, start.radius, end.radius, steps)
+      dd <- point_to_ring(row$x, row$y, row$r0, start.radius, end.radius, steps)
       dd$fill <- c(row$fill, remain.fill)[dd$group]
       aes <- new_data_frame(row[aesthetics])[rep(1, nrow(dd)), ]
       GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
@@ -102,7 +102,7 @@ geom_pie2 <- function(mapping = NULL, data = NULL,
 }
 
 #' @noRd
-get_ring_coord <- function(cx,
+point_to_ring <- function(cx,
                            cy,
                            r0,
                            start.radius = 0.25,
@@ -115,8 +115,10 @@ get_ring_coord <- function(cx,
   df <- purrr::pmap_dfr(list(start.angle, end.angle, 1:2), function(.start, .end, .n) {
     get_sector_coord(.start, .end, start.radius, end.radius, steps) %>%
       dplyr::mutate(group = .n)
-  }) %>%
-    mutate(x = x + cx, y = y + cy)
+  })
+
+  df$x <- df$x + cx
+  df$y <- df$y + cy
   df
 }
 

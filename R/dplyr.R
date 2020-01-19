@@ -73,13 +73,13 @@ group_by.cor_network <- function(.data, ..., add = FALSE) {
 
 #' @importFrom dplyr ungroup
 #' @export
-ungroup.grouped_cor_network <- function(.data, ...)
+ungroup.grouped_cor_network <- function(x, ...)
 {
-  gnet <- attr(.data, "grouped_cn")
-  nodes <- .data$nodes %>%
+  gnet <- attr(x, "grouped_cn")
+  nodes <- x$nodes %>%
     left_join(dplyr::bind_rows(purrr::map(gnet, `[[`, 1)),
               by = c(name = "name"))
-  edges <- .data$edges %>%
+  edges <- x$edges %>%
     left_join(dplyr::bind_rows(purrr::map(gnet, `[[`, 2)),
               by = c(.col.names = ".col.names", .row.names = ".row.names"))
   structure(.Data = list(nodes = nodes,
