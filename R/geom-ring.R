@@ -109,8 +109,8 @@ get_ring_coord <- function(cx,
                            end.radius = 0.5,
                            steps = 0.1)
 {
-  start.angle <- c(0.5 * pi,  0.5 * pi - r0 * 2 * pi)
-  end.angle <- c(0.5 * pi - r0 * 2 * pi, 0.5 * pi  - 2 * pi)
+  start.angle <- c(0.5 * pi,  0.5 * pi + r0 * 2 * pi)
+  end.angle <- c(0.5 * pi + r0 * 2 * pi, 0.5 * pi  + sign(r0) * 2 * pi)
 
   df <- purrr::pmap_dfr(list(start.angle, end.angle, 1:2), function(.start, .end, .n) {
     get_sector_coord(.start, .end, start.radius, end.radius, steps) %>%
