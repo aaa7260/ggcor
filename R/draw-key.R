@@ -58,35 +58,33 @@ ellipseGrob <- function(x = 0.5, y = 0.5, r0 = 0.5, zoom = 0.98, gp = grid::gpar
 }
 
 #' @noRd
-draw_key_pie <- function(data, params, size) {
+draw_key_ring <- function(data, params, size) {
   if (is.null(data$size)) {
     data$size <- 0.5
   }
   data$zoom <- 1 - data$size / 5
-  pieGrob(
+  fill <- c(scales::alpha(data$fill %||% "grey40", data$alpha),
+            params$remain.fill %||% NA)
+  ringGrob(
     x = 0.5,
     y = 0.5,
     r0 = data$r0,
+    start.radius = params$start.radius %||% 0.25,
+    end.radius = params$end.radius %||% 0.5,
     zoom = data$zoom,
     gp = grid::gpar(col = data$colour %||% NA,
-                    fill = scales::alpha(data$fill %||% "grey40", data$alpha),
+                    fill = fill,
                     lty = data$linetype %||% 1,
                     lwd = data$size * ggplot2::.pt,
                     linejoin = params$linejoin %||% "mitre"))
 }
 #' @noRd
-pieGrob <- function(x = 0.5, y = 0.5, r0 = 0.5, zoom = 0.98, gp = grid::gpar()) {
-  xy1 <- point_to_sector(0, 0, r0)
-  xy2 <- point_to_line(0, 0, r0)
-  px1 <- zoom * xy1$x + x
-  py1 <- zoom * xy1$y + y
-  px2 <- zoom * xy2$x + x
-  py2 <- zoom * xy2$y + y
-  grid::grobTree(
-    grid::polygonGrob(px1, py1),
-    grid::linesGrob(px2, py2),
-    gp = gp
-  )
+ringGrob <- function(x = 0.5, y = 0.5, r0 = 0.5, start.radius = 0.25,
+                     end.radius = 0.5, zoom = 0.98, gp = grid::gpar()) {
+  xy <- get_ring_coord(0, 0, r0, start.radius, end.radius, steps = 0.1)
+  x <- xy$x * zoom + x
+  y <- xy$y * zoom + y
+  grid::polygonGrob(x, y, xy$group, gp = gp)
 }
 
 #' @noRd

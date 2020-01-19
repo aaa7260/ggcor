@@ -66,6 +66,7 @@ Collate:
     'geom-mark.R'
     'geom-num.R'
     'geom-pie2.R'
+    'geom-ring.R'
     'geom-shade.R'
     'geom-square.R'
     'geom-star.R'
