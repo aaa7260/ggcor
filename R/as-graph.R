@@ -10,7 +10,8 @@ as.igraph.cor_network <- function(x, ...)
 #' @export
 as_tbl_graph.cor_network <- function(x, ...)
 {
-  tidygraph::as_tbl_graph(x, directed = FALSE)
+  tidygraph::as_tbl_graph(list(nodes = x$nodes, edges = x$edges),
+                          directed = FALSE)
 }
 
 #' @importFrom igraph plot.igraph
