@@ -51,8 +51,7 @@ mutate.grouped_cor_network <- function(.data, ...)
 #' @importFrom dplyr group_by
 #' @export
 group_by.cor_network <- function(.data, ..., add = FALSE) {
-  if(attr(.data, "active") != "nodes")
-    stop("`group_by()` for cor_network only works on nodes.", call. = FALSE)
+  active <- attr(.data, "active")
   gnodes <- with(.data$nodes, split(.data$nodes, ...))
   gnode.name <- lapply(gnodes, function(.x) {
     .data$nodes$name[.x$name]
@@ -63,7 +62,7 @@ group_by.cor_network <- function(.data, ..., add = FALSE) {
   })
   gnet <- lapply(1:length(gnodes), function(.idx) {
     structure(.Data = list(nodes = gnodes[[.idx]], edges = gedges[[.idx]]),
-              active = "nodes",
+              active = active,
               class = class(.data))
   })
   structure(.Data = .data,
