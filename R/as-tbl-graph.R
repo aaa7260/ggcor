@@ -12,26 +12,19 @@
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
 #' @param ... passing to \code{\link[ggcor]{fortify_cor}}
-#' @return a list of nodes and edges.
-#' @importFrom dplyr filter
-#' @rdname as_cor_network
-#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
-#' @export
-as_cor_network <- function(x, ...) {
-  UseMethod("as_cor_network")
-}
-
+#' @return tbl_graph object.
 #' @importFrom dplyr filter %>%
 #' @importFrom tibble tibble
-#' @rdname  as_cor_network
-#' @method as_cor_network cor_tbl
+#' @importFrom tidygraph tbl_graph
+#' @rdname as_tbl_graph
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-as_cor_network.cor_tbl <- function(x,
-                                   simplify = TRUE,
-                                   r.thres = 0.6,
-                                   r.absolute = TRUE,
-                                   p.thres = 0.05,
-                                   ...)
+as_tbl_graph.cor_tbl <- function(x,
+                                 simplify = TRUE,
+                                 r.thres = 0.6,
+                                 r.absolute = TRUE,
+                                 p.thres = 0.05,
+                                 ...)
 {
   if("p.value" %in% names(x)) {
     edges <- if(r.absolute) {
@@ -51,48 +44,47 @@ as_cor_network.cor_tbl <- function(x,
   } else {
     unique(c(get_col_name(x), get_row_name(x)))
   }
-  structure(.Data = list(nodes = tibble::tibble(name = node.name),
-                         edges = edges),
-            active = "nodes",
-            class = "cor_network")
+  tidygraph::tbl_graph(nodes = tibble::tibble(name = node.name),
+                       edges = edges, directed = FALSE)
 }
 
-#' @rdname  as_cor_network
-#' @method as_cor_network mantel_tbl
+#' @rdname  as_tbl_graph
+#' @importFrom tidygraph tbl_graph
 #' @export
-as_cor_network.mantel_tbl <- function(x, ...)
+as_tbl_graph.mantel_tbl <- function(x, ...)
 {
   cor_network(as_cor_tbl(x), ...)
 }
-#' @rdname  as_cor_network
-#' @method as_cor_network rcorr
+#' @rdname  as_tbl_graph
+#' @importFrom tidygraph tbl_graph
 #' @export
-as_cor_network.rcorr <- function(x, ...)
+as_tbl_graph.rcorr <- function(x, ...)
 {
   p.value <- x$P
   diag(p.value) <- 0
   cor_network(x$r, p.value, ...)
 }
 
-#' @rdname  as_cor_network
-#' @method as_cor_network corr.test
+#' @rdname  as_tbl_graph
+#' @importFrom tidygraph tbl_graph
 #' @export
-as_cor_network.corr.test <- function(x, ...)
+as_tbl_graph.corr.test <- function(x, ...)
 {
   cor_network(x$r, x$p, ...)
 }
 
-#' @rdname  as_cor_network
-#' @method as_cor_network correlation
+#' @rdname  as_tbl_graph
+#' @importFrom tidygraph as_tbl_graph
 #' @export
-as_cor_network.correlation <- function(x, ...)
+as_tbl_graph.correlation <- function(x, ...)
 {
   cor_network(x$r, x$p.value, ...)
 }
 
 #' @importFrom dplyr filter
 #' @importFrom tibble tibble
-#' @rdname as_cor_network
+#' @importFrom tidygraph tbl_graph
+#' @rdname as_tbl_graph
 #' @export
 cor_network <- function(corr,
                         p.value = NULL,
@@ -135,24 +127,6 @@ cor_network <- function(corr,
   } else {
     unique(c(.row.names, .col.names))
   }
-  structure(.Data = list(nodes = tibble::tibble(name = node.name),
-                         edges = edges),
-            active = "nodes",
-            class = "cor_network")
-}
-
-#' @rdname as_cor_network
-#' @export
-is_cor_network <- function(x)
-{
-  inherits(x, "cor_network")
-}
-
-#' @rdname as_cor_network
-#' @export
-cn_active <- function(x, active = "nodes")
-{
-  stopifnot(is_cor_network(x))
-  attr(x, "active") <- active
-  x
+  tidygraph::tbl_graph(nodes = tibble::tibble(name = node.name),
+                       edges = edges, directed = FALSE)
 }
