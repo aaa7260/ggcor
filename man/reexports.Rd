@@ -9,7 +9,6 @@
 \alias{group_by}
 \alias{ungroup}
 \alias{as_tibble}
-\alias{as.igraph}
 \alias{as_tbl_graph}
 \title{Objects exported from other packages}
 \keyword{internal}
@@ -21,8 +20,6 @@ below to see their documentation.
   \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{ungroup}}}
 
   \item{ggplot2}{\code{\link[ggplot2]{ggplot_add}}}
-
-  \item{igraph}{\code{\link[igraph]{as.igraph}}}
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
 

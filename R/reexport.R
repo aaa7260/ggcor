@@ -17,7 +17,4 @@ dplyr::ungroup
 tibble::as_tibble
 
 #' @export
-igraph::as.igraph
-
-#' @export
 tidygraph::as_tbl_graph

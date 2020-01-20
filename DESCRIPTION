@@ -34,6 +34,7 @@ Imports:
     tidygraph,
     vegan
 Suggests:
+    ggraph,
     igraph,
     knitr,
     latex2exp,

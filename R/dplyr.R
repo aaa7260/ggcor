@@ -22,6 +22,27 @@ mutate.cor_tbl <- function(.data, ...)
   set_attrs(.data, attrs, .excludes = c("names", "row.names"))
 }
 
+#' @importFrom dplyr group_by
+#' @export
+group_by.cor_tbl <- function(.data, add = FALSE, ...)
+{
+  attrs <- attributes(.data)
+  .data <- group_by(as.tibble(.data), add = FALSE)
+  structure(.Data = .data,
+            class = c("grouped_cor_tbl", class(.data)),
+            attrs = attrs)
+}
+
+#' @importFrom dplyr ungroup
+#' @export
+ungroup.grouped_cor_tbl <- function(x, ...)
+{
+  attrs <- attr(x, "attrs")
+  class(x) <- setdiff(class(x), "grouped_cor_tbl")
+  x <- ungroup(x, ...)
+  class(.data) <- c("grouped_cor_tbl", class(.data))
+  set_attrs(.data, attrs, .excludes = c("names", "row.names"))
+}
 #' @noRd
 set_attrs <- function(.data, .attrs = list(), .excludes = NULL)
 {
