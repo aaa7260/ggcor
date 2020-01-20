@@ -16,7 +16,7 @@
 #'       \item \code{linetype}
 #'       \item \code{size}
 #'    }
-#' @importFrom ggplot2 layer ggproto GeomPolygon
+#' @importFrom ggplot2 layer ggproto GeomPolygon aes
 #' @importFrom grid grobTree
 #' @rdname geom_circle2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

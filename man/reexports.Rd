@@ -10,6 +10,7 @@
 \alias{ungroup}
 \alias{as_tibble}
 \alias{as.igraph}
+\alias{as_tbl_graph}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -24,5 +25,7 @@ below to see their documentation.
   \item{igraph}{\code{\link[igraph]{as.igraph}}}
 
   \item{tibble}{\code{\link[tibble]{as_tibble}}}
+
+  \item{tidygraph}{\code{\link[tidygraph]{as_tbl_graph}}}
 }}
 

@@ -20,6 +20,7 @@ add_grid(colour = "grey50", size = 0.25, ..., color = NULL)
 \examples{
 df <- fortify_cor(mtcars)
 ggcor(df) + add_grid()
+require(ggplot2, quietly = TRUE)
 ggplot(df, aes(x, y)) + add_grid()
 }
 \author{

@@ -19,7 +19,7 @@
 #'       \item \code{size}
 #'    }
 #' @rdname geom_shade
-#' @importFrom ggplot2 layer ggproto GeomSegment draw_key_blank
+#' @importFrom ggplot2 layer ggproto GeomSegment aes draw_key_blank
 #' @importFrom grid grobTree
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export

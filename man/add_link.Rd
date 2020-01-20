@@ -40,7 +40,9 @@ This function can add other associated information link plot more
     other variables and variables in the correlation coefficient matrix plot.
 }
 \examples{
-library(vegan)
+require(vegan, quietly = TRUE)
+require(dplyr, quietly = TRUE)
+require(ggplot2, quietly = TRUE)
 data("varechem")
 data("varespec")
 mantel <- fortify_mantel(varespec, varechem,
@@ -49,7 +51,7 @@ quickcor(varechem, type = "upper") +
   geom_square() +
   add_link(mantel, diag.label = TRUE) +
   add_diag_label() + remove_axis("x")
-library(dplyr)
+
 mantel01 <- mantel \%>\%
   mutate(r = cut(r, breaks = c(-Inf, 0.25, 0.5, Inf),
                  labels = c("<0.25", "0.25-0.5", ">=0.5"),

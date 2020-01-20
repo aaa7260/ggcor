@@ -35,6 +35,7 @@ quickcor is convenient wrapper for creating a number of different types
 of correlation matrix plots because of adding some extra settings by default.
 }
 \examples{
+require(ggplot2, quietly = TRUE)
 quickcor(mtcars)
 quickcor(mtcars, type = "upper")
 quickcor(mtcars, type = "lower", show.diag = FALSE)

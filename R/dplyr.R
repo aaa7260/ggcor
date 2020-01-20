@@ -70,7 +70,7 @@ group_by.cor_network <- function(.data, ..., add = FALSE) {
             class = c("grouped_cor_network", class(.data)))
 }
 
-#' @importFrom dplyr ungroup
+#' @importFrom dplyr ungroup %>%
 #' @export
 ungroup.grouped_cor_network <- function(x, ...)
 {

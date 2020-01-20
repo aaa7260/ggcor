@@ -6,6 +6,13 @@ as.igraph.cor_network <- function(x, ...)
                                 vertices = x$nodes)
 }
 
+#' @importFrom tidygraph as_tbl_graph
+#' @export
+as_tbl_graph.cor_network <- function(x, ...)
+{
+  tidygraph::as_tbl_graph(x, directed = FALSE)
+}
+
 #' @importFrom igraph plot.igraph
 #' @importFrom graphics plot
 #' @method plot cor_network

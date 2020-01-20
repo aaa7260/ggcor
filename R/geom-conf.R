@@ -20,7 +20,7 @@
 #'       \item \code{linetype}
 #'       \item \code{size}
 #'    }
-#' @importFrom ggplot2 layer ggproto Geom GeomPolygon GeomSegment draw_key_polygon
+#' @importFrom ggplot2 layer ggproto Geom GeomPolygon GeomSegment aes draw_key_polygon
 #' @importFrom grid grobTree
 #' @rdname geom_confbox
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

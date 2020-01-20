@@ -16,6 +16,7 @@
 #' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed
 #' @rdname quick_cor
 #' @examples
+#' require(ggplot2, quietly = TRUE)
 #' quickcor(mtcars)
 #' quickcor(mtcars, type = "upper")
 #' quickcor(mtcars, type = "lower", show.diag = FALSE)

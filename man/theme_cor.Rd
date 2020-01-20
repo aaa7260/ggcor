@@ -23,6 +23,7 @@ The theme_cor, with no axis title, no background, no grid,
     made some adjustments to the x-axis label.
 }
 \examples{
+require(ggplot2, quietly = TRUE)
 df <- fortify_cor(mtcars)
 ggcor(df) + geom_raster(aes(fill = r)) + theme_cor()
 }

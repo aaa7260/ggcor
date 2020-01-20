@@ -29,7 +29,7 @@
 #'       \item \code{fontface}
 #'       \item \code{lineheight}
 #'    }
-#' @importFrom ggplot2 layer ggproto GeomText draw_key_text
+#' @importFrom ggplot2 layer ggproto GeomText aes draw_key_text
 #' @rdname geom_mark
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export

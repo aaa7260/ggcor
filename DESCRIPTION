@@ -20,23 +20,24 @@ BugReports: https://github.com/houyunhuang/ggcor/issues
 LazyData: TRUE
 Encoding: UTF-8
 Depends:
-    R (>= 3.5.0),
-    ggplot2 (>= 3.0.0)
+    R (>= 3.5.0)
 Imports:
     stats,
+    grid,
     ade4,
     dplyr,
+    ggplot2 (>= 3.0.0),
     igraph,
     purrr,
     RColorBrewer,
     scales,
     tibble,
+    tidygraph,
     vegan
 Suggests:
     knitr,
     latex2exp,
     rmarkdown,
-    tidygraph,
     WGCNA
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

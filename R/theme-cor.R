@@ -8,6 +8,7 @@
 #' @importFrom ggplot2 theme element_text element_blank element_rect element_line
 #' @rdname theme_cor
 #' @examples
+#' require(ggplot2, quietly = TRUE)
 #' df <- fortify_cor(mtcars)
 #' ggcor(df) + geom_raster(aes(fill = r)) + theme_cor()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

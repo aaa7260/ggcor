@@ -9,6 +9,7 @@
 #' @examples
 #' df <- fortify_cor(mtcars)
 #' ggcor(df) + add_grid()
+#' require(ggplot2, quietly = TRUE)
 #' ggplot(df, aes(x, y)) + add_grid()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
