@@ -111,8 +111,7 @@ fortify_mantel <- function(spec,
 #'   mantel.fun = "mantel.partial",
 #'   env.select = as.list(setNames(nm, nm)))
 #' @seealso \code{\link[vegan]{vegdist}}, \code{\link[vegan]{mantel}},
-#'     \code{\link[vegan]{mantel.partial}}, \code{\link[ade4]{mantel.rtest}},
-#'     \code{\link[ade4]{mantel.randtest}}.
+#'     \code{\link[ade4]{mantel.rtest}}, \code{\link[ade4]{mantel.randtest}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 mantel_test <- function(spec,
