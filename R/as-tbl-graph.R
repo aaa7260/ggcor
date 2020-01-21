@@ -28,15 +28,15 @@ as_tbl_graph.cor_tbl <- function(x,
 {
   if("p.value" %in% names(x)) {
     edges <- if(r.absolute) {
-      with(x, dplyr::filter(x, abs(r) > r.thres, p.value < p.thres))
+      dplyr::filter(x, abs(r) > r.thres, p.value < p.thres)
     } else {
-      with(x, dplyr::filter(x, r > r.thres, p.value < p.thres))
+      dplyr::filter(x, r > r.thres, p.value < p.thres)
     }
   } else {
     edges <- if(r.absolute) {
-      with(x, dplyr::filter(x, abs(r) > r.thres))
+      dplyr::filter(x, abs(r) > r.thres)
     } else {
-      with(x, dplyr::filter(x, r > r.thres, p.value < p.thres))
+      dplyr::filter(x, r > r.thres, p.value < p.thres)
     }
   }
   node.name <- if(simplify) {
@@ -88,6 +88,8 @@ as_tbl_graph.correlation <- function(x, ...)
 #' @export
 cor_network <- function(corr,
                         p.value = NULL,
+                        row.names = NULL,
+                        col.names = NULL,
                         simplify = TRUE,
                         r.thres = 0.6,
                         r.absolute = TRUE,
@@ -97,8 +99,8 @@ cor_network <- function(corr,
     corr <- as.matrix(corr)
   if(!is.null(p.value) && !is.matrix(p.value))
     p.value <- as.matrix(p.value)
-  .row.names <- rownames(corr) %||% paste0("row", 1:nrow(corr))
-  .col.names <- colnames(corr) %||% paste0("col", 1:ncol(corr))
+  .row.names <- row.names %||% rownames(corr) %||% paste0("row", 1:nrow(corr))
+  .col.names <- col.names %||% colnames(corr) %||% paste0("col", 1:ncol(corr))
   is.symmet <- length(.row.names) == length(.col.names) && all(.row.names == .col.names)
 
   edges <- tibble::tibble(.row.names = rep(.row.names, ncol(corr)),
@@ -107,19 +109,19 @@ cor_network <- function(corr,
   if(!is.null(p.value))
     edges$p.value <- as.vector(p.value)
   if(is.symmet) {
-    edges <- subset(edges, upper.tri(corr))
+    edges <- dplyr::filter(edges, upper.tri(corr))
   }
   edges <- if(r.absolute) {
     if(is.null(p.value)) {
-      with(edges, dplyr::filter(edges, abs(r) > r.thres))
+      dplyr::filter(edges, abs(r) > r.thres)
     } else {
-      with(edges, dplyr::filter(edges, abs(r) > r.thres, p.value < p.thres))
+      dplyr::filter(edges, abs(r) > r.thres, p.value < p.thres)
     }
   } else {
     if(is.null(p.value)) {
-      with(edges, dplyr::filter(edges, r > r.thres))
+      dplyr::filter(edges, r > r.thres)
     } else {
-      with(edges, dplyr::filter(edges, r > r.thres, p.value < p.thres))
+      dplyr::filter(edges, r > r.thres, p.value < p.thres)
     }
   }
   node.name <- if(simplify) {

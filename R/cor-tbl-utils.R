@@ -18,25 +18,30 @@ get_row_name <- function(x) {
   stopifnot(is_cor_tbl(x))
   attr(x, ".row.names")
 }
+
 #' @rdname get_attr
 #' @export
 get_col_name <- function(x) {
   stopifnot(is_cor_tbl(x))
   attr(x, ".col.names")
 }
+
 #' @rdname get_attr
 #' @export
 get_type <- function(x) {
   stopifnot(is_cor_tbl(x))
   attr(x, "type")
 }
+
 #' @rdname get_attr
 #' @export
 get_show_diag <- function(x) {
   stopifnot(is_cor_tbl(x))
   attr(x, "show.diag")
 }
-#' @noRd
+
+#' @rdname get_attr
+#' @export
 is_cor_tbl <- function(x) {
   inherits(x, "cor_tbl")
 }

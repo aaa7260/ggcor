@@ -5,6 +5,7 @@
 #' @param x a cor_tbl object.
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @return a modified cor_tbl object.
+#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @examples
 #' df <- fortify_cor(mtcars)
@@ -28,14 +29,16 @@ get_lower_data <- function(x, show.diag = TRUE)
   }
   n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- with(x, subset(x, .row.id + .col.id <= n + 1))
+    x <- dplyr::filter(x, .row.id + .col.id <= n + 1)
   } else {
-    x <- with(x, subset(x, .row.id + .col.id < n + 1))
+    x <- dplyr::filter(x, .row.id + .col.id < n + 1)
   }
   attr(x, "type") <- "lower"
   attr(x, "show.diag") <- show.diag
   x
 }
+
+#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @export
 get_upper_data <- function(x, show.diag = TRUE)
@@ -47,14 +50,16 @@ get_upper_data <- function(x, show.diag = TRUE)
   }
   n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- with(x, subset(x, .row.id + .col.id >= n + 1))
+    x <- dplyr::filter(x, .row.id + .col.id >= n + 1)
   } else {
-    x <- with(x, subset(x, .row.id + .col.id > n + 1))
+    x <- dplyr::filter(x, .row.id + .col.id > n + 1)
   }
   attr(x, "type") <- "upper"
   attr(x, "show.diag") <- show.diag
   x
 }
+
+#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @export
 get_diag_tri <- function(x)
@@ -65,11 +70,13 @@ get_diag_tri <- function(x)
     return(x)
   }
   n <- length(get_col_name(x))
-  x <- with(x, subset(x, .row.id + .col.id != n + 1))
+  x <- dplyr::filter(x, .row.id + .col.id != n + 1)
   if(get_type(x) %in% c("upper", "lower"))
     attr(x, "show.diag") <- FALSE
   x
 }
+
+#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @export
 get_diag_data <- function(x)
@@ -80,7 +87,19 @@ get_diag_data <- function(x)
     return(x)
   }
   n <- length(get_col_name(x))
-  with(x, subset(x, .row.id + .col.id == n + 1))
+  dplyr::filter(x, .row.id + .col.id == n + 1)
+}
+
+#' @rdname extract_cor_tbl
+#' @export
+is_symmet <- function(x) {
+  stopifnot(is_cor_tbl(x))
+  col.name <- get_col_name(x)
+  row.name <- get_row_name(x)
+  if((length(col.name) != length(row.name)) || !all(col.name == row.name)) {
+    return(FALSE)
+  }
+  TRUE
 }
 
 #' Create cor_tbl extractor function
@@ -117,13 +136,3 @@ get_data <- function(..., type = "full", show.diag = FALSE)
   }
 }
 
-#' @noRd
-is_symmet <- function(x) {
-  stopifnot(is_cor_tbl(x))
-  col.name <- get_col_name(x)
-  row.name <- get_row_name(x)
-  if((length(col.name) != length(row.name)) || !all(col.name == row.name)) {
-    return(FALSE)
-  }
-  TRUE
-}

@@ -51,3 +51,13 @@ format_number <- function(x, digits = 2, nsmall = 2) {
 {
   if(is.null(x)) y else x
 }
+
+#' @noRd
+utils::globalVariables(
+  c(
+    "r",
+    "p.value",
+    ".row.id",
+    ".col.id"
+  )
+)
