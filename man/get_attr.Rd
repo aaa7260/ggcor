@@ -5,6 +5,7 @@
 \alias{get_col_name}
 \alias{get_type}
 \alias{get_show_diag}
+\alias{is_cor_tbl}
 \title{Helper function of cor_tbl}
 \usage{
 get_row_name(x)
@@ -14,6 +15,8 @@ get_col_name(x)
 get_type(x)
 
 get_show_diag(x)
+
+is_cor_tbl(x)
 }
 \arguments{
 \item{x}{a cor_tbl.}

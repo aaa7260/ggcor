@@ -20,8 +20,9 @@
 
 \method{as_tbl_graph}{correlation}(x, ...)
 
-cor_network(corr, p.value = NULL, simplify = TRUE, r.thres = 0.6,
-  r.absolute = TRUE, p.thres = 0.05)
+cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
+  simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
+  p.thres = 0.05)
 }
 \arguments{
 \item{x}{\code{R} object.}
