@@ -42,8 +42,7 @@ delete nodes without edge connections.}
 
 \item{p.value}{significant matrix of correlation.}
 
-\item{active}{"nodes" (defaults) or "edges", indicating whether to
-handle edges or nodes.}
+\item{row.names, col.names}{row and column names of correlation matrix.}
 }
 \value{
 tbl_graph object.

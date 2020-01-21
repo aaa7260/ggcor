@@ -27,7 +27,7 @@ mutate.cor_tbl <- function(.data, ...)
 group_by.cor_tbl <- function(.data, add = FALSE, ...)
 {
   attrs <- attributes(.data)
-  .data <- group_by(as.tibble(.data), add = FALSE)
+  .data <- group_by(as_tibble(.data), add = FALSE)
   structure(.Data = .data,
             class = c("grouped_cor_tbl", class(.data)),
             attrs = attrs)

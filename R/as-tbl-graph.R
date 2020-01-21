@@ -2,10 +2,9 @@
 #' @description The function calculates correlation coefficient, statistical
 #'     significance level and filters according to conditions.
 #' @param x \code{R} object.
-#' @param active "nodes" (defaults) or "edges", indicating whether to
-#'     handle edges or nodes.
 #' @param corr correlation matrix.
 #' @param p.value significant matrix of correlation.
+#' @param row.names,col.names row and column names of correlation matrix.
 #' @param simplify logical value (defaults to TRUE) indicating whether to
 #'     delete nodes without edge connections.
 #' @param r.thres a numeric value.
