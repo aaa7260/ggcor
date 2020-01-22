@@ -36,7 +36,6 @@ Imports:
     vegan
 Suggests:
     ggraph,
-    igraph,
     knitr,
     latex2exp,
     rmarkdown,
@@ -52,6 +51,7 @@ Collate:
     'as-tbl-graph.R'
     'as-cor-tbl.R'
     'colour-pal-utils.R'
+    'cor-tbl.R'
     'cor-tbl-utils.R'
     'cor-test.R'
     'dplyr.R'

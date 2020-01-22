@@ -53,8 +53,7 @@ mantel_test(varespec, varechem, env.ctrl = varechem[10:14],
 }
 \seealso{
 \code{\link[vegan]{vegdist}}, \code{\link[vegan]{mantel}},
-    \code{\link[vegan]{mantel.partial}}, \code{\link[ade4]{mantel.rtest}},
-    \code{\link[ade4]{mantel.randtest}}.
+    \code{\link[ade4]{mantel.rtest}}, \code{\link[ade4]{mantel.randtest}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

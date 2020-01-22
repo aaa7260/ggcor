@@ -1,15 +1,8 @@
 #' Coerce to a cor_tbl object
 #' @description Functions to coerce a object to cor_tbl if possible.
 #' @param x any \code{R} object.
-#' @param type a string, "full" (default), "upper" or "lower", display full,
-#'     lower triangular or upper triangular matrix.
-#' @param show.diag a logical value indicating whether keep the diagonal.
-#' @param row.names,col.names row/column names of correlation matrix.
-#' @param cluster a logical value indicating whether reorder the correlation matrix
-#'     by clustering, default is FALSE.
 #' @param byrow a logical value indicating whether arrange the 'spec' columns on y axis.
-#' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
-#' @details \code{cluster = TRUE} just supports for symmetric correlation matrix.
+#' @param ... extra params passing to \code{\link[ggcor]{cor_tbl}}.
 #' @return a cor_tbl object.
 #' @importFrom utils modifyList
 #' @rdname as_cor_tbl
@@ -23,102 +16,29 @@
 as_cor_tbl <- function(x, ...) {
   UseMethod("as_cor_tbl")
 }
-#' @rdname  as_cor_tbl
-#' @export
-#' @method as_cor_tbl list
-as_cor_tbl.list <- function(x,
-                            type = "full",
-                            show.diag = TRUE,
-                            row.names = NULL,
-                            col.names = NULL,
-                            cluster = FALSE,
-                            ...)
-{
-  type <- match.arg(type, c("full", "upper", "lower"))
-  ## exclude NULL
-  x <- modifyList(list(), x, keep.null = FALSE)
-  x <- set_list_name(x)
-  if(length(x) == 0) {
-    return(new_data_frame())
-  }
-  name <- names(x)
-  if(is.null(name) || length(unique(name)) != length(x))
-    stop("'x' must be a all named list.", call. = FALSE)
-  first <- x[[1]]
-  x <- lapply(x, function(.x) {
-    if(!is.matrix(.x)) as.matrix(.x) else .x
-  })
-  if(length(x) > 1) {
-    lapply(names(x), function(name) {
-      check_dimension(first, x[[name]])
-    })
-  }
-  row.names <- row.names %||% rownames(first) %||% paste0("row", 1:nrow(first))
-  col.names <- col.names %||% colnames(first) %||% paste0("col", 1:ncol(first))
-  if(length(row.names) != nrow(first))
-    stop("'row.names' must have same length as rows of matrix.", call. = FALSE)
-  if(length(col.names) != ncol(first))
-    stop("'col.names' must have same length as columns of matrix.", call. = FALSE)
 
-  ## handle cluster
-  if(!isSymmetric(first) || any(colnames(first) != rownames(first))) {
-    if(type != "full") {
-      warning("'type=", type, "' just supports for symmetric correlation matrix.", call. = FALSE)
-      type <- "full"
-      if(type == "full") show.diag <- TRUE
-    }
-    if(isTRUE(cluster)) {
-      warning("'cluster' just spports for symmetric correlation matrix.", call. = FALSE)
-      cluster <- FALSE
-    }
-  }
-  if(isTRUE(cluster)) {
-    ord <- matrix_order(first, ...)
-    x <- lapply(x, function(.x) {
-      .x[ord, ord]
-    })
-    row.names <- row.names[ord]
-    col.names <- col.names[ord]
-  }
-  id <- list(.row.names = rep(row.names, ncol(first)),
-             .col.names = rep(col.names, each = nrow(first)),
-             .row.id = rep(nrow(first):1, ncol(first)),
-             .col.id = rep(1:ncol(first), each = nrow(first))
-  )
-  data <- modifyList(id, setNames(lapply(x, as.vector), name))
-  new.order <- intersect(c(".row.names", ".col.names", name, ".row.id", ".col.id"),
-                         names(data))
-  data <- structure(.Data = new_data_frame(data[new.order]),
-                    .row.names = row.names,
-                    .col.names = col.names,
-                    type = type,
-                    show.diag = show.diag,
-                    grouped = FALSE,
-                    class = c("cor_tbl", "tbl_df", "tbl", "data.frame"))
-  switch (type,
-          full = data,
-          upper = get_upper_data(data, show.diag = show.diag),
-          lower = get_lower_data(data, show.diag = show.diag)
-  )
-}
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl matrix
 as_cor_tbl.matrix <- function(x, ...) {
-  as_cor_tbl(list(r = x), ...)
+  cor_tbl(x = x, ...)
 }
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl data.frame
 as_cor_tbl.data.frame <- function(x, ...) {
-  as_cor_tbl(list(r = data.matrix(x)), ...)
+ cor_tbl(x = x, ...)
 }
 
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl correlation
 as_cor_tbl.correlation <- function(x, ...) {
-  as_cor_tbl.list(x, ...)
+  anynull <- is.null(x$lower.ci) || is.null(x$upper.ci)
+  extra.mat <- if(!anynull) {
+    list(upper.ci = x$upper.ci, lower.ci = x$lower.ci)
+  } else list()
+  cor_tbl(x = x$r, p.value = x$p.value, extra.mat = extra.mat, ...)
 }
 
 #' @rdname  as_cor_tbl
@@ -128,7 +48,7 @@ as_cor_tbl.rcorr <- function(x, ...)
 {
   p.value <- x$P
   diag(p.value) <- 0
-  as_cor_tbl(list(r = x$r, p.value = p.value), ...)
+  cor_tbl(x = x$r, p.value = p.value, ...)
 }
 
 #' @rdname  as_cor_tbl
@@ -136,7 +56,7 @@ as_cor_tbl.rcorr <- function(x, ...)
 #' @method as_cor_tbl corr.test
 as_cor_tbl.corr.test <- function(x, ...)
 {
-  as_cor_tbl(list(r = x$r, p.value = x$p), ...)
+  cor_tbl(x = x$r, p.value = x$p, ...)
 }
 #' @rdname  as_cor_tbl
 #' @export
@@ -188,20 +108,4 @@ check_dimension <- function(x, y) {
     msg <- paste0(" Dimension error: ", y_nm, " must have same dimension as ", x_nm)
     stop(msg, call. = FALSE)
   }
-}
-
-#' @noRd
-set_list_name <- function(x) {
-  if(is.matrix(x) || is.data.frame(x))
-    x <- list(x)
-  if(!is.list(x)) {
-    stop("'x' needs a list object.", call. = FALSE)
-  }
-  name <- names(x)
-  if(is.null(name)) {
-    name <- paste0("m", 1:length(x))
-  }
-  name <- make.unique(name, "")
-  names(x) <- name
-  x
 }

@@ -2,7 +2,6 @@
 % Please edit documentation in R/as-cor-tbl.R
 \name{as_cor_tbl}
 \alias{as_cor_tbl}
-\alias{as_cor_tbl.list}
 \alias{as_cor_tbl.matrix}
 \alias{as_cor_tbl.data.frame}
 \alias{as_cor_tbl.correlation}
@@ -13,9 +12,6 @@
 \title{Coerce to a cor_tbl object}
 \usage{
 as_cor_tbl(x, ...)
-
-\method{as_cor_tbl}{list}(x, type = "full", show.diag = TRUE,
-  row.names = NULL, col.names = NULL, cluster = FALSE, ...)
 
 \method{as_cor_tbl}{matrix}(x, ...)
 
@@ -34,17 +30,7 @@ as_cor_tbl(x, ...)
 \arguments{
 \item{x}{any \code{R} object.}
 
-\item{...}{extra params passing to \code{\link[ggcor]{matrix_order}}.}
-
-\item{type}{a string, "full" (default), "upper" or "lower", display full,
-lower triangular or upper triangular matrix.}
-
-\item{show.diag}{a logical value indicating whether keep the diagonal.}
-
-\item{row.names, col.names}{row/column names of correlation matrix.}
-
-\item{cluster}{a logical value indicating whether reorder the correlation matrix
-by clustering, default is FALSE.}
+\item{...}{extra params passing to \code{\link[ggcor]{cor_tbl}}.}
 
 \item{byrow}{a logical value indicating whether arrange the 'spec' columns on y axis.}
 }
@@ -53,9 +39,6 @@ a cor_tbl object.
 }
 \description{
 Functions to coerce a object to cor_tbl if possible.
-}
-\details{
-\code{cluster = TRUE} just supports for symmetric correlation matrix.
 }
 \examples{
 corr <- cor(mtcars)
