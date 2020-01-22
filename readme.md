@@ -144,7 +144,7 @@ ggraph(net, "circle") +
                  show.legend = FALSE)  +
   scale_edge_color_gradientn(colours = c("blue", "red")) +
   scale_edge_width_continuous(range = c(0.1, 1)) +
-  coord_fixed(xlim = c(-1.4, 1.4), ylim = c(-1.4, 1.4)) +
+  coord_fixed(xlim = c(-1.5, 1.5), ylim = c(-1.5, 1.5)) +
   theme_graph()
 ```
 
