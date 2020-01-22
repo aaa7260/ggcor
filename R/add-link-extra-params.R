@@ -1,15 +1,4 @@
 #' Extra params for add_link
-<<<<<<< HEAD
-#' @description This function is similar to the \code{theme} function in ggplot2,
-#'     used to set the shape, size, colour, fill of spec and env marker points,
-#'     size, colour, family, and so on of spec labels.
-#' @param spec.label text_params object (\code{\link[ggcor]{text_params}}).
-#' @param spec.point,env.point point_params object (\code{\link[ggcor]{point_params}}).
-#' @param link.params link_params object (\code{\link[ggcor]{link_params}}).
-#' @rdname extra_params
-#' @seealso \code{\link[ggcor]{text_params}}, \code{\link[ggcor]{point_params}},
-#'     \code{\link[ggcor]{link_params}}.
-=======
 #' @description This function is used to control the details
 #'     of the link, including the location, shape, size, color
 #'     of points, and font size, font color, and so on of the
@@ -22,7 +11,6 @@
 #'     \code{\link[ggcor]{point_params}}.
 #' @param link.params "point_params" object producing by \code{\link[ggcor]{point_params}}.
 #' @rdname extra_params
->>>>>>> dev1.0.0
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 extra_params <- function(spec.label = text_params(),
@@ -45,25 +33,6 @@ extra_params <- function(spec.label = text_params(),
   ),
   class = "extra_params")
 }
-<<<<<<< HEAD
-#' Extra params elements
-#' @description In conjunction with the \code{\link[ggcor]{extra_params}}.
-#' @param fill Fill colour.
-#' @param colour,color Line/border colour. Color is an alias for colour.
-#' @param size Line/border size in mm; text size in pts.
-#' @param alpha alpha level in [0,1].
-#' @param angle angle (in [0, 360]).
-#' @param hjust horizontal justification (in [0, 1]).
-#' @param vjust vertical justification (in [0, 1]).
-#' @param family font family.
-#' @param fontface font face.
-#' @param shape point shape.
-#' @param stroke point stroke.
-#' @param spec.point.hjust,env.point.hjust numeric vector, adjust horizontal position of points.
-#' @param spec.point.vjust,env.point.vjust numeric vector, adjust vertical position of points.
-#' @rdname extra_params_elements
-#' @seealso \code{\link[ggcor]{extra_params}}.
-=======
 
 #' Extra text label params
 #' @description This is mainly used in the add_link function to set the group label.
@@ -75,7 +44,6 @@ extra_params <- function(spec.label = text_params(),
 #' @param family the font family.
 #' @param fontface the font face.
 #' @rdname text_params
->>>>>>> dev1.0.0
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 text_params <- function(colour = "black", size = 3.88, angle = 0, hjust = NULL,
@@ -86,9 +54,6 @@ text_params <- function(colour = "black", size = 3.88, angle = 0, hjust = NULL,
                  vjust = vjust, alpha = alpha, family = family, fontface = fontface),
             class = "text_params")
 }
-<<<<<<< HEAD
-#' @rdname extra_params_elements
-=======
 
 #' Extra points params
 #' @description This is mainly used in the add_link function to control points style.
@@ -100,7 +65,6 @@ text_params <- function(colour = "black", size = 3.88, angle = 0, hjust = NULL,
 #' @param stroke stroke of points.
 #' @rdname point_params
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
->>>>>>> dev1.0.0
 #' @export
 point_params <- function(alpha = NA, colour = "black", fill = NA, shape = 21,
                          size = 1, stroke = 0.5, color = NULL)
@@ -110,9 +74,6 @@ point_params <- function(alpha = NA, colour = "black", fill = NA, shape = 21,
                  shape = shape, size = size, stroke = stroke),
             class = "point_params")
 }
-<<<<<<< HEAD
-#' @rdname extra_params_elements
-=======
 
 #' Control the points position of link
 #' @description This is mainly used in the add_link function to control points position.
@@ -122,7 +83,6 @@ point_params <- function(alpha = NA, colour = "black", fill = NA, shape = 21,
 #'     points (away from the correlation matrix) moves horizontally or vertically.
 #' @rdname link_params
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
->>>>>>> dev1.0.0
 #' @export
 link_params <- function(env.point.hjust = NULL, env.point.vjust = NULL,
                         spec.point.hjust = NULL, spec.point.vjust = NULL)
