@@ -2,13 +2,16 @@
 % Please edit documentation in R/cor-test.R
 \name{correlate}
 \alias{correlate}
+\alias{fast_correlate}
 \title{Matrix of Correlations, P-values and confidence intervals}
 \usage{
 correlate(x, y = NULL, cor.test = FALSE, method = "pearson",
   use = "everything", ...)
+
+fast_correlate(x, y = NULL, use = "everything", ...)
 }
 \arguments{
-\item{x, }{y a matrix object or NULL.}
+\item{x, y}{a matrix object or NULL.}
 
 \item{cor.test}{logical, if \code{TRUE} (default) will test for correlation.}
 
@@ -17,7 +20,8 @@ for the test. One of "pearson", "kendall", or "spearman".}
 
 \item{use}{an optional character string giving a method for computing covariances in the presence of missing values.}
 
-\item{...}{extra params passing to \code{cor.test}.}
+\item{...}{extra params passing to \code{cor.test} for \code{correlate},
+passing to \code{WGCNA::corAndPvalue}.}
 }
 \value{
 a list with correlation matrix, P values matrix, confidence intervals matrix.
@@ -35,6 +39,9 @@ correlate(mtcars)
 m1 <- matrix(rnorm(100), nrow = 10)
 m2 <- matrix(rnorm(60), nrow = 10)
 correlate(m1, m2)
+if(require(WGCNA)) {
+  fast_correlate(m1, m2)
+}
 }
 \seealso{
 \code{\link[stats]{cor}}, \code{\link[stats]{cor.test}}.

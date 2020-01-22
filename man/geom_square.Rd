@@ -7,8 +7,8 @@
 \title{Square Geom}
 \usage{
 geom_square(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., linejoin = "mitre", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -61,18 +61,21 @@ Square Geom
 }
 \section{Aesthetics}{
 
-\code{geom_square()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{group}
-  \item \code{linetype}
-  \item \code{r0}
-  \item \code{size}
-}
+    \code{geom_square()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \code{r0}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{fill}
+      \item \code{linetype}
+      \item \code{size}
+   }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

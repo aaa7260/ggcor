@@ -1,22 +1,28 @@
 #' Square Geom
 #'
-#'
-#' @eval rd_aesthetics("geom", "square")
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
-#' @rdname geom_square
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomPolygon
-#' @importFrom ggplot2 draw_key_polygon
+#' @section Aesthetics:
+#'     \code{geom_square()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \code{r0}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{fill}
+#'       \item \code{linetype}
+#'       \item \code{size}
+#'    }
+#' @importFrom ggplot2 layer ggproto GeomPolygon aes
 #' @importFrom grid grobTree
+#' @rdname geom_square
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_square <- function(mapping = NULL, data = NULL,
                          stat = "identity", position = "identity",
                          ...,
-                         linejoin = "mitre",
                          na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE) {
@@ -29,7 +35,6 @@ geom_square <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )
@@ -41,34 +46,32 @@ geom_square <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomSquare <- ggproto(
-  "GeomSquare", Geom,
+  "GeomSquare", GeomPolygon,
   default_aes = aes(r0 = 0.5, colour = "grey35", fill = NA, size = 0.25, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre") {
-    aesthetics <- setdiff(names(data), c("x", "y"))
-    polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
-      square <- point_to_square(row$x, row$y, row$r0)
-      aes <- new_data_frame(row[aesthetics])[rep(1, 5), ]
-      GeomPolygon$draw_panel(cbind(square, aes), panel_params, coord)
-    })
-
-    ggplot2:::ggname("geom_square", do.call("grobTree", polys))
+    aesthetics <- setdiff(names(data), c("x", "y", "group", "subgroup"))
+    dd <- point_to_square(data$x, data$y, data$r0)
+    aes <- data[rep(1:nrow(data), 5) , aesthetics, drop = FALSE]
+    GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
   },
 
-  draw_key = draw_key_polygon
+  draw_key = draw_key_square
 )
 
 #' @noRd
 point_to_square <- function(x, y, r0) {
   r0 <- 0.5 * sign(r0) * sqrt(abs(r0))
+  n <- length(x)
   xmin <- - r0 + x
   xmax <- r0 + x
   ymin <- - r0 + y
   ymax <- r0 + y
   new_data_frame(list(
+    x = c(xmin, xmax, xmax, xmin, xmin),
     y = c(ymax, ymax, ymin, ymin, ymax),
-    x = c(xmin, xmax, xmax, xmin, xmin)
+    group = rep(1:n, 5)
   ))
 }
 

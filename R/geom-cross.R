@@ -1,23 +1,25 @@
 #' Cross Geom
 #'
-#'
-#' @eval rd_aesthetics("geom", "cross")
-#' @param r0 the radius of an outer circle, defualt value is sqrt(2)/2.
 #' @param sig.level significance threshold.
-#'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_segment
-#' @rdname geom_cross
-#' @export
-#' @importFrom ggplot2 layer
-#' @importFrom ggplot2 ggproto
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 Geom
-#' @importFrom ggplot2 GeomSegment
-#' @importFrom ggplot2 draw_key_blank
+#' @section Aesthetics:
+#'     \code{geom_cross()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \strong{\code{p.value}}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{linetype}
+#'       \item \code{size}
+#'    }
+#' @importFrom ggplot2 layer ggproto GeomSegment aes draw_key_blank
 #' @importFrom grid grobTree
-
-
+#' @rdname geom_cross
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 geom_cross <- function(mapping = NULL, data = NULL,
                        stat = "identity", position = "identity",
                        ...,
@@ -48,9 +50,8 @@ geom_cross <- function(mapping = NULL, data = NULL,
 #' @usage NULL
 #' @export
 GeomCross <- ggproto(
-  "GeomCross", Geom,
-  default_aes = aes(colour = "red", fill = NA,
-                    size = 0.5, linetype = 1, alpha = NA),
+  "GeomCross", GeomSegment,
+  default_aes = aes(colour = "red", size = 0.5, linetype = 1, alpha = NA),
   required_aes = c("x", "y", "p.value"),
 
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
@@ -59,12 +60,13 @@ GeomCross <- ggproto(
       warning("geom_cross is not implemented for non-linear coordinates",
               call. = FALSE)
     }
-    aesthetics <- setdiff(names(data), c("x", "y", "p"))
-    data <- dplyr::filter(data, p.value > sig.level)
+    aesthetics <- setdiff(names(data), c("x", "y", "p.value"))
+    data <- with(data, subset(data, p.value > sig.level))
     dd <- point_to_cross(data$x, data$y, r0)
-    GeomSegment$draw_panel(cbind(dd, data[, aesthetics]), panel_params, coord)
+    aes <- data[rep(1:nrow(data), each = 2) , aesthetics, drop = FALSE]
+    GeomSegment$draw_panel(cbind(dd, aes), panel_params, coord)
   },
-  draw_key = draw_key_point
+  draw_key = draw_key_blank
 )
 
 #' @noRd

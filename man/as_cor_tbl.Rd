@@ -8,66 +8,37 @@
 \alias{as_cor_tbl.rcorr}
 \alias{as_cor_tbl.corr.test}
 \alias{as_cor_tbl.mantel_tbl}
-\alias{as_cor_tbl.list}
 \alias{as_cor_tbl.default}
-\title{Coerce to a cor_tbl object.}
+\title{Coerce to a cor_tbl object}
 \usage{
-as_cor_tbl(corr, ...)
+as_cor_tbl(x, ...)
 
-\method{as_cor_tbl}{matrix}(corr, type = "full", show.diag = TRUE,
-  p.value = NULL, lower.ci = NULL, upper.ci = NULL,
-  row.names = NULL, col.names = NULL, cluster = FALSE,
-  check = TRUE, ...)
+\method{as_cor_tbl}{matrix}(x, ...)
 
-\method{as_cor_tbl}{data.frame}(corr, p.value = NULL, lower.ci = NULL,
-  upper.ci = NULL, cluster = FALSE, ...)
+\method{as_cor_tbl}{data.frame}(x, ...)
 
-\method{as_cor_tbl}{correlation}(corr, check = FALSE, ...)
+\method{as_cor_tbl}{correlation}(x, ...)
 
-\method{as_cor_tbl}{rcorr}(corr, check = FALSE, ...)
+\method{as_cor_tbl}{rcorr}(x, ...)
 
-\method{as_cor_tbl}{corr.test}(corr, check = FALSE, ...)
+\method{as_cor_tbl}{corr.test}(x, ...)
 
-\method{as_cor_tbl}{mantel_tbl}(corr, byrow = TRUE, ...)
+\method{as_cor_tbl}{mantel_tbl}(x, byrow = TRUE, ...)
 
-\method{as_cor_tbl}{list}(corr, keys = NULL, check = TRUE, ...)
-
-\method{as_cor_tbl}{default}(corr, ...)
+\method{as_cor_tbl}{default}(x, ...)
 }
 \arguments{
-\item{corr}{any \code{R} object.}
+\item{x}{any \code{R} object.}
 
-\item{...}{extra params passing to \code{\link[ggcor]{matrix_order}}.}
-
-\item{type}{a string, "full" (default), "upper" or "lower", display full,
-lower triangular or upper triangular matrix.}
-
-\item{show.diag}{a logical value indicating whether keep the diagonal.}
-
-\item{p.value}{a matrix of p value.}
-
-\item{lower.ci, upper.ci}{matrix of confidence interval.}
-
-\item{cluster}{a logical value indicating whether reorder the correlation matrix
-by clustering, default is FALSE.}
-
-\item{check}{a logical value indicating whether check the correlation coefficient and
-p value.}
+\item{...}{extra params passing to \code{\link[ggcor]{cor_tbl}}.}
 
 \item{byrow}{a logical value indicating whether arrange the 'spec' columns on y axis.}
-
-\item{keys}{a named character vector, should contain "r" and "p.value".}
-
-\item{rownames, colnames}{row/column names of correlation matrix.}
 }
 \value{
 a cor_tbl object.
 }
 \description{
 Functions to coerce a object to cor_tbl if possible.
-}
-\details{
-\code{cluster = TRUE} just supports for symmetric correlation matrix.
 }
 \examples{
 corr <- cor(mtcars)

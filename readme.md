@@ -25,8 +25,8 @@ This is a basic example which shows you how to draw correlation plot
 quickly:
 
 ``` r
+library(ggplot2)
 library(ggcor)
-#> Loading required package: ggplot2
 #> Registered S3 method overwritten by 'ggcor':
 #>   method            from
 #>   print.correlation nlme
@@ -56,10 +56,10 @@ quickcor(mtcars, cor.test = TRUE) +
 grp <- mtcars$gear
 quickcor(mtcars[-10], type = "lower", group = grp) + 
   geom_colour() +
-  add_diaglab(hjust = 0) +
+  add_diag_label(hjust = 0) +
   expand_axis(x = 12) +
   remove_axis("x") +
-  facet_wrap(~group)
+  facet_wrap(~.group)
 #> Warning in cor(x, y, use = use, method = method): 标准差为零
 
 #> Warning in cor(x, y, use = use, method = method): 标准差为零
@@ -95,7 +95,7 @@ mantel01 <- fortify_mantel(varespec, varechem, group = sam_grp,
                                               spec05 = 30:44),
                            mantel.fun = "mantel.randtest")
 quickcor(mantel01, legend.title = "Mantel's r") + 
-  geom_colour() + geom_cross() + facet_grid(rows = vars(group))
+  geom_colour() + geom_cross() + facet_grid(rows = vars(.group))
 ```
 
 <img src="man/figures/README-example03-1.png" width="100%" />
@@ -113,7 +113,39 @@ quickcor(varechem, type = "upper") + geom_square() +
   add_link(mantel02, mapping = aes(colour = p.value, size = r),
            diag.label = TRUE) +
   scale_size_manual(values = c(0.5, 1.5, 3)) +
-  add_diaglab() + remove_axis("x")
+  add_diag_label() + remove_axis("x")
 ```
 
 <img src="man/figures/README-example03-2.png" width="100%" />
+
+# network
+
+``` r
+library(tidygraph)
+#> 
+#> Attaching package: 'tidygraph'
+#> The following object is masked from 'package:stats':
+#> 
+#>     filter
+library(ggraph)
+net <- fast_correlate(varespec) %>% 
+  as_tbl_graph(r.thres = 0.5, p.thres = 0.05) %>% 
+  mutate(degree = tidygraph::centrality_degree(mode = "all"))
+#> 
+
+ggraph(net, "circle") + 
+  geom_edge_fan(aes(edge_width = r, edge_linetype = r < 0), 
+                edge_colour = "grey80", show.legend = FALSE) +
+  geom_node_point(aes(size = degree, colour = name), 
+                  show.legend = FALSE) +
+  geom_node_text(aes(x = x * 1.08, y = y * 1.08, 
+                     angle = -((-node_angle(x, y) + 90) %% 180) + 90, 
+                     label = name), size = 4, hjust= "outward",
+                 show.legend = FALSE)  +
+  scale_edge_color_gradientn(colours = c("blue", "red")) +
+  scale_edge_width_continuous(range = c(0.1, 1)) +
+  coord_fixed(xlim = c(-1.5, 1.5), ylim = c(-1.5, 1.5)) +
+  theme_graph()
+```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />

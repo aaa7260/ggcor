@@ -11,6 +11,8 @@
 
 \item{all}{if FALSE (default) just print correlation matrix, else will
 print all values.}
+
+\item{...}{extra params passing to \code{print}.}
 }
 \description{
 Print for correlate object.

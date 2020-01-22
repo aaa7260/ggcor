@@ -9,6 +9,7 @@
 #' @examples
 #' df <- fortify_cor(mtcars)
 #' ggcor(df) + add_grid()
+#' require(ggplot2, quietly = TRUE)
 #' ggplot(df, aes(x, y)) + add_grid()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
@@ -23,10 +24,10 @@ get_grid_data <- function() {
   function(data) {
     if(!is_cor_tbl(data))
       stop("Need a cor_tbl.", call. = FALSE)
-    n <- length(cor_tbl_xname(data))
-    m <- length(cor_tbl_yname(data))
-    type <- cor_tbl_type(data)
-    show.diag <- cor_tbl_showdiag(data)
+    n <- length(get_col_name(data))
+    m <- length(get_row_name(data))
+    type <- get_type(data)
+    show.diag <- get_show_diag(data)
     if(type == "full") {
       xx <- c(0:n + 0.5, rep_len(0.5, m + 1))
       yy <- c(rep_len(0.5, n + 1), 0:m + 0.5)

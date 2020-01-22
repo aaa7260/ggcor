@@ -1,22 +1,27 @@
 #' Matrix of Correlations, P-values and confidence intervals
 #' @description \code{correlate} uses \code{cor} to find the correlations and use \code{cor.test} to find
 #'     the p values, confidence intervals for all possible pairs of columns ofmatrix.
-#' @param x, y a matrix object or NULL.
+#' @param x,y a matrix object or NULL.
 #' @param cor.test logical, if \code{TRUE} (default) will test for correlation.
 #' @param method a character string indicating which correlation coefficient is to be used
 #'     for the test. One of "pearson", "kendall", or "spearman".
 #' @param use an optional character string giving a method for computing covariances in the presence of missing values.
-#' @param ... extra params passing to \code{cor.test}.
+#' @param ... extra params passing to \code{cor.test} for \code{correlate},
+#'     passing to \code{WGCNA::corAndPvalue}.
 #' @details The columns of 'x' will be tested for each pair when y is NULL(the default),
 #'     otherwise each column in 'x' and each column in 'y' is tested for each pair.
 #' @return a list with correlation matrix, P values matrix, confidence intervals matrix.
 #' @importFrom stats cor cor.test
 #' @importFrom purrr walk2
+#' @rdname corrlate
 #' @examples
 #' correlate(mtcars)
 #' m1 <- matrix(rnorm(100), nrow = 10)
 #' m2 <- matrix(rnorm(60), nrow = 10)
 #' correlate(m1, m2)
+#' if(require(WGCNA)) {
+#'   fast_correlate(m1, m2)
+#' }
 #' @seealso \code{\link[stats]{cor}}, \code{\link[stats]{cor.test}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
@@ -67,10 +72,26 @@ correlate <- function(x,
   )
 }
 
+#' @rdname corrlate
+#' @export
+fast_correlate <- function(x,
+                           y = NULL,
+                           use = "everything",
+                           ...)
+{
+  if(!requireNamespace("WGCNA", quietly = TRUE)) {
+    stop("'fast_correlate' needs 'WGCNA' package.", call. = FALSE)
+  }
+  corr <- WGCNA::corAndPvalue(x, y, use, ...)
+  structure(.Data = list(r = corr$cor, p.value = corr$p),
+            class = "correlation")
+}
+
 #' Print for correlate object.
 #' @param x an object used to select a method.
 #' @param all if FALSE (default) just print correlation matrix, else will
 #'     print all values.
+#' @param ... extra params passing to \code{print}.
 #' @examples
 #' m <- correlate(mtcars)
 #' print(m)

@@ -3,7 +3,6 @@
 #' of correlation matrix plots because of adding some extra settings by default.
 #' @param x,y matrix or data frame.
 #' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
-#' @param fill.colours NULL (default) or a vector of colours to use for n-colour gradient.
 #' @param grid.colour colour of grid lines.
 #' @param grid.size size of grid lines.
 #' @param axis.x.position,axis.y.position the position of the axis. 'auto' (default)
@@ -12,15 +11,12 @@
 #' @param axis.label.drop logical value (default is TRUE). When type of plot is 'upper'
 #'     or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
 #'     label.
-#' @param legend.title title of colour bar.
 #' @param legend.position position of legend.
-#' @param legend.breaks breaks of colour bar.
-#' @param legend.labels labels of colour bar.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
-#' @importFrom ggplot2 aes_string ggplot ggplot_add scale_x_continuous scale_y_continuous guides
-#'     guide_colourbar coord_fixed
+#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed
 #' @rdname quick_cor
 #' @examples
+#' require(ggplot2, quietly = TRUE)
 #' quickcor(mtcars)
 #' quickcor(mtcars, type = "upper")
 #' quickcor(mtcars, type = "lower", show.diag = FALSE)
@@ -36,74 +32,36 @@
 #'   geom_square(data = get_data(type = "lower", show.diag = FALSE)) +
 #'   geom_mark(data = get_data(type = "upper", show.diag = FALSE)) +
 #'   geom_abline(slope = -1, intercept = 12)
+#' @seealso \code{\link[ggcor]{fortify_cor}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 quickcor <- function(x,
                      y = NULL,
                      mapping = NULL,
-                     fill.colours = NULL,
                      grid.colour = "grey50",
                      grid.size = 0.25,
                      axis.x.position = "auto",
                      axis.y.position = "auto",
                      axis.label.drop = TRUE,
-                     legend.title = "corr",
                      legend.position = "auto",
-                     legend.breaks = NULL,
-                     legend.labels = NULL,
                      ...)
 {
   data <- fortify_cor(x, y, ...)
-  type <- cor_tbl_type(data)
-  show.diag <- cor_tbl_showdiag(data)
-  xname <- cor_tbl_xname(data)
-  yname <- cor_tbl_yname(data)
+  type <- get_type(data)
+  n <- length(get_row_name(data))
+  m <- length(get_col_name(data))
+  show.diag <- get_show_diag(data)
   name <- names(data)
   # handle mapping setting
-  map_base <- aes_string(x = "x", y = "y", r = "r", r0 = "r", fill = "r")
+  base.aes <- aes_string(".col.id", ".row.id", r0 = "r", r = "r", fill = "r")
   if("p.value" %in% name)
-    map_base <- modifyList(map_base, aes_string(p.value = "p.value"))
+    base.aes <- modifyList(base.aes, aes_string(p.value = "p.value"))
   if(all (c("lower.ci", "upper.ci") %in% name))
-    map_base <- modifyList(map_base, aes_string(lower.ci = "lower.ci", upper.ci = "upper.ci"))
+    base.aes <- modifyList(base.aes, aes_string(lower.ci = "lower.ci", upper.ci = "upper.ci"))
   if(is.null(mapping)) {
-    mapping <- map_base
+    mapping <- base.aes
   } else {
-    mapping <- modifyList(map_base, mapping)
-  }
-  # handle axis setting
-  axis.x.breaks <- 1:length(xname)
-  axis.x.labels <- xname
-  axis.y.breaks <- 1:length(yname)
-  axis.y.labels <- yname
-  if(axis.label.drop) {
-    if(isFALSE(show.diag)) {
-      if(type == "upper") {
-        axis.x.breaks <- axis.x.breaks[-1]
-        axis.x.labels <- axis.x.labels[-1]
-        axis.y.breaks <- axis.y.breaks[-1]
-        axis.y.labels <- axis.y.labels[-1]
-      }
-      if(type == "lower") {
-        axis.x.breaks <- axis.x.breaks[-length(xname)]
-        axis.x.labels <- axis.x.labels[-length(xname)]
-        axis.y.breaks <- axis.y.breaks[-length(yname)]
-        axis.y.labels <- axis.y.labels[-length(yname)]
-      }
-    }
-  }
-  axis.x.position <- match.arg(axis.x.position, c("auto", "bottom", "top"))
-  axis.y.position <- match.arg(axis.y.position, c("auto", "left", "right"))
-  if(axis.x.position == "auto") {
-    axis.x.position <- switch (type,
-                               full = "bottom",
-                               lower = "bottom",
-                               upper = "top")
-  }
-  if(axis.y.position == "auto") {
-    axis.y.position <- switch (type,
-                               full = "left",
-                               lower = "left",
-                               upper = "right")
+    mapping <- modifyList(base.aes, mapping)
   }
   # handle legend setting
   if(legend.position == "auto")
@@ -111,32 +69,38 @@ quickcor <- function(x,
                                full = "right",
                                lower = "left",
                                upper = "right")
-  if(is.null(legend.breaks))
-    legend.breaks <- seq(-1, 1, length.out = 5)
-  if(is.null(legend.labels))
-    legend.labels <- legend.breaks
-  envir <- parent.frame()
-  p <- ggplot(data = data, mapping = mapping, environment = envir) +
-    add_grid(grid.colour, grid.size) +
-    scale_x_continuous(breaks = axis.x.breaks, labels = axis.x.labels,
-                       position = axis.x.position)+
-    scale_y_continuous(breaks = axis.y.breaks, labels = axis.y.labels,
-                       position = axis.y.position)
-  # add colour scale
-  ## handle colours setting
-  p <- p + scale_fill_gradient2n(breaks = legend.breaks,
-                                 labels = legend.labels,
-                                 expand = TRUE,
-                                 colours = fill.colours %||% red_blue(),
-                                 limits = c(-1, 1)) +
-    guides(fill = guide_colourbar(title = legend.title,
-                                  nbin  = 40))
+  p <- ggcor(data, mapping = mapping, axis.x.position = axis.x.position,
+             axis.y.position = axis.y.position, axis.label.drop = axis.label.drop) +
+    add_grid(grid.colour, grid.size)
+
   # add theme and coord
-  xlim <- c(0.5, length(xname) + 0.5)
-  ylim <- c(0.5, length(yname) + 0.5)
-  p <- p +
-    coord_fixed(expand = FALSE, xlim = xlim, ylim = ylim) +
+  xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
+  ylim <- c(0.5 - 0.002 * n, n + 0.5 + 0.002 * n)
+  p <- p + coord_fixed(xlim = xlim, ylim = ylim) +
     theme_cor(legend.position = legend.position)
   class(p) <- c("quickcor", class(p))
   p
 }
+
+#' @importFrom ggplot2 ggplot_add
+#' @importFrom grid grid.draw
+#' @method print quickcor
+#' @export
+print.quickcor <- function(x, ...)
+{
+  fill.scale <- x$scales$get_scales("fill")
+  if(is.null(fill.scale)) {
+    x <- x + scale_fill_gradient2n(breaks = c(-1, -0.5, 0, 0.5, 1),
+                                   labels = c(-1, -0.5, 0, 0.5, 1),
+                                   limits = c(-1, 1)) +
+      guides(fill = guide_colourbar(title = "corr",
+                                    nbin  = 40))
+  }
+  class(x) <- setdiff(class(x), "quickcor")
+  grid::grid.draw(x, ...)
+}
+
+#' @importFrom graphics plot
+#' @method print quickcor
+#' @export
+plot.quickcor <- print.quickcor

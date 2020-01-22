@@ -5,6 +5,7 @@
 \alias{get_upper_data}
 \alias{get_diag_tri}
 \alias{get_diag_data}
+\alias{is_symmet}
 \title{Helper function to extract cor_tbl.}
 \usage{
 get_lower_data(x, show.diag = TRUE)
@@ -14,6 +15,8 @@ get_upper_data(x, show.diag = TRUE)
 get_diag_tri(x)
 
 get_diag_data(x)
+
+is_symmet(x)
 }
 \arguments{
 \item{x}{a cor_tbl object.}

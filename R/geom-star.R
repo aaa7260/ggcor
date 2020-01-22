@@ -1,8 +1,30 @@
+#' Star Geom
+#'
+#' @inheritParams ggplot2::layer
+#' @inheritParams ggplot2::geom_polygon
+#' @section Aesthetics:
+#'     \code{geom_star()} understands the following aesthetics (required
+#'     aesthetics are in bold):
+#'     \itemize{
+#'       \item \strong{\code{x}}
+#'       \item \strong{\code{y}}
+#'       \item \code{n}
+#'       \item \code{r0}
+#'       \item \code{ratio}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{fill}
+#'       \item \code{linetype}
+#'       \item \code{size}
+#'    }
+#' @importFrom ggplot2 layer ggproto GeomPolygon aes
+#' @importFrom grid grobTree
+#' @rdname geom_star
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 geom_star <- function(mapping = NULL, data = NULL,
                           stat = "identity", position = "identity",
                           ...,
-                          linejoin = "mitre",
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE) {
@@ -15,16 +37,18 @@ geom_star <- function(mapping = NULL, data = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      linejoin = linejoin,
       na.rm = na.rm,
       ...
     )
   )
 }
 
+#' @rdname geom_star
+#' @format NULL
+#' @usage NULL
 #' @export
 GeomStar <- ggproto(
-  "GeomStar", Geom,
+  "GeomStar", GeomPolygon,
   default_aes = aes(n = 5, r0 = 0.5, ratio = 0.618, colour = "grey35", fill = NA,
                     size = 0.25, linetype = 1, alpha = NA),
   required_aes = c("x", "y"),
@@ -39,7 +63,7 @@ GeomStar <- ggproto(
     })
     ggplot2:::ggname("star", do.call("grobTree", star))
   },
-  draw_key = draw_key_polygon
+  draw_key = draw_key_star
 )
 
 #' @noRd

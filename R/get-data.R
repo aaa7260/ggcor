@@ -27,16 +27,18 @@ get_lower_data <- function(x, show.diag = TRUE)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
+  n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- dplyr::filter(x, x + y <= n + 1)
+    x <- dplyr::filter(x, .row.id + .col.id <= n + 1)
   } else {
-    x <- dplyr::filter(x, x + y < n + 1)
+    x <- dplyr::filter(x, .row.id + .col.id < n + 1)
   }
   attr(x, "type") <- "lower"
   attr(x, "show.diag") <- show.diag
   x
 }
+
+#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @export
 get_upper_data <- function(x, show.diag = TRUE)
@@ -46,16 +48,18 @@ get_upper_data <- function(x, show.diag = TRUE)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
+  n <- length(get_col_name(x))
   if(isTRUE(show.diag)) {
-    x <- dplyr::filter(x, x + y >= n + 1)
+    x <- dplyr::filter(x, .row.id + .col.id >= n + 1)
   } else {
-    x <- dplyr::filter(x, x + y > n + 1)
+    x <- dplyr::filter(x, .row.id + .col.id > n + 1)
   }
   attr(x, "type") <- "upper"
   attr(x, "show.diag") <- show.diag
   x
 }
+
+#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @export
 get_diag_tri <- function(x)
@@ -65,12 +69,14 @@ get_diag_tri <- function(x)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
-  x <- dplyr::filter(x, x + y != n + 1)
-  if(cor_tbl_type(x) %in% c("upper", "lower"))
+  n <- length(get_col_name(x))
+  x <- dplyr::filter(x, .row.id + .col.id != n + 1)
+  if(get_type(x) %in% c("upper", "lower"))
     attr(x, "show.diag") <- FALSE
   x
 }
+
+#' @importFrom dplyr filter
 #' @rdname extract_cor_tbl
 #' @export
 get_diag_data <- function(x)
@@ -80,8 +86,20 @@ get_diag_data <- function(x)
     warning("Just supports symmetric correlation matrix.", call. = FALSE)
     return(x)
   }
-  n <- length(cor_tbl_xname(x))
-  dplyr::filter(x, x + y == n + 1)
+  n <- length(get_col_name(x))
+  dplyr::filter(x, .row.id + .col.id == n + 1)
+}
+
+#' @rdname extract_cor_tbl
+#' @export
+is_symmet <- function(x) {
+  stopifnot(is_cor_tbl(x))
+  col.name <- get_col_name(x)
+  row.name <- get_row_name(x)
+  if((length(col.name) != length(row.name)) || !all(col.name == row.name)) {
+    return(FALSE)
+  }
+  TRUE
 }
 
 #' Create cor_tbl extractor function
@@ -104,7 +122,7 @@ get_diag_data <- function(x)
 #' @seealso \code{\link[dplyr]{filter}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-get_data <- function(..., type = "full", show.diag = TRUE)
+get_data <- function(..., type = "full", show.diag = FALSE)
 {
   type <- match.arg(type, c("full", "upper", "lower", "diag"))
   function(data) {
@@ -118,13 +136,3 @@ get_data <- function(..., type = "full", show.diag = TRUE)
   }
 }
 
-#' @noRd
-is_symmet <- function(x) {
-  stopifnot(is_cor_tbl(x))
-  xname <- cor_tbl_xname(x)
-  yname <- cor_tbl_yname(x)
-  if((length(xname) != length(yname)) || !all(xname == rev(yname))) {
-    return(FALSE)
-  }
-  TRUE
-}

@@ -63,6 +63,8 @@ the default value is 2.}
 
 \item{sig.thres}{if not NULL, just when `p` is not larger than `sig.thres` will be ploted.}
 
+\item{sep}{a character string to separate the number ("r") and mark symbols.}
+
 \item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
 displayed as described in \code{?plotmath}.}
 
@@ -85,23 +87,26 @@ Significant marks Geom
 }
 \section{Aesthetics}{
 
-\code{geom_mark()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{p.value}}
-  \item \code{alpha}
-  \item \code{angle}
-  \item \code{colour}
-  \item \code{family}
-  \item \code{fontface}
-  \item \code{group}
-  \item \code{hjust}
-  \item \code{lineheight}
-  \item \code{r}
-  \item \code{size}
-  \item \code{vjust}
-}
+    \code{geom_mark()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \strong{\code{p.value}}
+      \item \code{r}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{size}
+      \item \code{angle}
+      \item \code{hjust}
+      \item \code{vjust}
+      \item \code{family}
+      \item \code{fontface}
+      \item \code{lineheight}
+   }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

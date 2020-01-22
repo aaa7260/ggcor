@@ -28,6 +28,7 @@ devtools::install_github("houyunhuang/ggcor")
 This is a basic example which shows you how to draw correlation plot quickly:
 
 ```{r example01}
+library(ggplot2)
 library(ggcor)
 quickcor(mtcars) + geom_colour()
 quickcor(mtcars, type = "upper") + geom_circle2()
@@ -43,10 +44,10 @@ quickcor(mtcars, cor.test = TRUE) +
 grp <- mtcars$gear
 quickcor(mtcars[-10], type = "lower", group = grp) + 
   geom_colour() +
-  add_diaglab(hjust = 0) +
+  add_diag_label(hjust = 0) +
   expand_axis(x = 12) +
   remove_axis("x") +
-  facet_wrap(~group)
+  facet_wrap(~.group)
 ```
 
 ## Mantel test plot
@@ -66,7 +67,7 @@ mantel01 <- fortify_mantel(varespec, varechem, group = sam_grp,
                                               spec05 = 30:44),
                            mantel.fun = "mantel.randtest")
 quickcor(mantel01, legend.title = "Mantel's r") + 
-  geom_colour() + geom_cross() + facet_grid(rows = vars(group))
+  geom_colour() + geom_cross() + facet_grid(rows = vars(.group))
 mantel02 <- fortify_mantel(varespec, varechem, 
                          spec.select = list(1:10, 5:14, 7:22, 9:32)) %>% 
   mutate(r = cut(r, breaks = c(-Inf, 0.25, 0.5, Inf), 
@@ -79,6 +80,31 @@ quickcor(varechem, type = "upper") + geom_square() +
   add_link(mantel02, mapping = aes(colour = p.value, size = r),
            diag.label = TRUE) +
   scale_size_manual(values = c(0.5, 1.5, 3)) +
-  add_diaglab() + remove_axis("x")
+  add_diag_label() + remove_axis("x")
+```
+
+# network
+
+```{r}
+library(tidygraph)
+library(ggraph)
+net <- fast_correlate(varespec) %>% 
+  as_tbl_graph(r.thres = 0.5, p.thres = 0.05) %>% 
+  mutate(degree = tidygraph::centrality_degree(mode = "all"))
+
+ggraph(net, "circle") + 
+  geom_edge_fan(aes(edge_width = r, edge_linetype = r < 0), 
+                edge_colour = "grey80", show.legend = FALSE) +
+  geom_node_point(aes(size = degree, colour = name), 
+                  show.legend = FALSE) +
+  geom_node_text(aes(x = x * 1.08, y = y * 1.08, 
+                     angle = -((-node_angle(x, y) + 90) %% 180) + 90, 
+                     label = name), size = 4, hjust= "outward",
+                 show.legend = FALSE)  +
+  scale_edge_color_gradientn(colours = c("blue", "red")) +
+  scale_edge_width_continuous(range = c(0.1, 1)) +
+  coord_fixed(xlim = c(-1.5, 1.5), ylim = c(-1.5, 1.5)) +
+  theme_graph()
+
 ```
 

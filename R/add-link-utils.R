@@ -14,14 +14,14 @@ tidy_link_data <- function(df,
 {
   if(!is_cor_tbl(cor_tbl))
     stop("Need a cor_tbl.", call. = FALSE)
-  xname <- cor_tbl_xname(cor_tbl)
-  yname <- cor_tbl_yname(cor_tbl)
-  type <- cor_tbl_type(cor_tbl)
-  show.diag <- cor_tbl_showdiag(cor_tbl)
+  col.names <- get_col_name(cor_tbl)
+  row.names <- rev(get_row_name(cor_tbl))
+  type <- get_type(cor_tbl)
+  show.diag <- get_show_diag(cor_tbl)
   spec.name <- unique(df[[spec.key]])
-  env_data <- link_env_data(yname = yname,
-                            n.row = length(yname),
-                            n.col = length(xname),
+  env_data <- link_env_data(row.names = row.names,
+                            n.row = length(row.names),
+                            n.col = length(col.names),
                             type = type,
                             show.diag = show.diag,
                             hjust = env.point.hjust,
@@ -29,8 +29,8 @@ tidy_link_data <- function(df,
                             on.left = on.left,
                             diag.label = diag.label)
   spec_data <- link_spec_data(spec.name = spec.name,
-                               n.row = length(yname),
-                               n.col = length(xname),
+                               n.row = length(row.names),
+                               n.col = length(col.names),
                                type = type,
                                hjust = spec.point.hjust,
                                vjust = spec.point.vjust,
@@ -98,13 +98,13 @@ link_spec_data <- function(spec.name,
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  tibble::tibble(link.x = x,
-                 link.y = y,
-                 spec.key = spec.name)
+  new_data_frame(list(link.x = x,
+                      link.y = y,
+                      spec.key = spec.name))
 }
 #' @importFrom tibble tibble
 #' @noRd
-link_env_data <- function(yname,
+link_env_data <- function(row.names,
                           n.row,
                           n.col,
                           type = "upper",
@@ -157,7 +157,7 @@ link_env_data <- function(yname,
     x <- x + hjust
   if(!is.null(vjust))
     y <- y + vjust
-  tibble::tibble(link.xend = x,
-                 link.yend = y,
-                 env.key = yname)
+  new_data_frame(list(link.xend = x,
+                      link.yend = y,
+                      env.key = row.names))
 }

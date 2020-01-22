@@ -61,7 +61,7 @@ fortify_mantel <- function(spec,
       purrr::pmap_dfr(list(spec, env, env.ctrl, as.list(names(spec))),
                       function(.spec, .env, .env.ctrl, .group) {
                         mantel_test(.spec, .env, .env.ctrl, mantel.fun, ...) %>%
-                          dplyr::mutate(group = .group)
+                          dplyr::mutate(.group = .group)
                       })
     )
   } else {
@@ -71,6 +71,7 @@ fortify_mantel <- function(spec,
   attr(df, "grouped") <- grouped
   df
 }
+
 #' Mantel and partial mantel test for dissimilarity matrices
 #' @description Perform mantel test quickly and tidy up the data to
 #'     data frame.
@@ -110,8 +111,7 @@ fortify_mantel <- function(spec,
 #'   mantel.fun = "mantel.partial",
 #'   env.select = as.list(setNames(nm, nm)))
 #' @seealso \code{\link[vegan]{vegdist}}, \code{\link[vegan]{mantel}},
-#'     \code{\link[vegan]{mantel.partial}}, \code{\link[ade4]{mantel.rtest}},
-#'     \code{\link[ade4]{mantel.randtest}}.
+#'     \code{\link[ade4]{mantel.rtest}}, \code{\link[ade4]{mantel.randtest}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 mantel_test <- function(spec,

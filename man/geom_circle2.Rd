@@ -7,8 +7,8 @@
 \title{Circle Geom}
 \usage{
 geom_circle2(mapping = NULL, data = NULL, stat = "identity",
-  position = "identity", ..., n = 60, linejoin = "mitre",
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE)
+  position = "identity", ..., n = 60, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -42,6 +42,8 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
+\item{n}{the number of circle path points.}
+
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -61,18 +63,21 @@ Circle Geom
 }
 \section{Aesthetics}{
 
-\code{geom_circle2()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{group}
-  \item \code{linetype}
-  \item \code{r0}
-  \item \code{size}
-}
+    \code{geom_circle2()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \code{r0}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{fill}
+      \item \code{linetype}
+      \item \code{size}
+   }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

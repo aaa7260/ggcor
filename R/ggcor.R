@@ -11,6 +11,8 @@
 #'     or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
 #'     label.
 #' @return an object of class gg onto which layers, scales, etc. can be added.
+#' @importFrom ggplot2 ggplot ggplot_add aes_string scale_x_continuous scale_y_continuous
+#' @importFrom utils modifyList
 #' @rdname ggcor
 #' @examples
 #' df <- fortify_cor(mtcars)
@@ -27,12 +29,12 @@ ggcor <- function(data,
 {
   if(!is_cor_tbl(data))
     stop("'data' needs a cor_tbl.", call. = FALSE)
-  type <- cor_tbl_type(data)
-  show.diag <- cor_tbl_showdiag(data)
-  xname <- cor_tbl_xname(data)
-  yname <- cor_tbl_yname(data)
-  base_map <- aes_string("x", "y")
-  mapping <- if(is.null(mapping)) base_map else modifyList(base_map, mapping)
+  type <- get_type(data)
+  show.diag <- get_show_diag(data)
+  col.names <- get_col_name(data)
+  row.names <- rev(get_row_name(data))
+  base.aes <- aes_string(".col.id", ".row.id")
+  mapping <- if(is.null(mapping)) base.aes else modifyList(base.aes, mapping)
   # handle axis setting
   axis.x.position <- match.arg(axis.x.position, c("auto", "bottom", "top"))
   axis.y.position <- match.arg(axis.y.position, c("auto", "left", "right"))
@@ -48,10 +50,10 @@ ggcor <- function(data,
                                lower = "left",
                                upper = "right")
   }
-  axis.x.breaks <- 1:length(xname)
-  axis.x.labels <- xname
-  axis.y.breaks <- 1:length(yname)
-  axis.y.labels <- yname
+  axis.x.breaks <- 1:length(col.names)
+  axis.x.labels <- col.names
+  axis.y.breaks <- 1:length(row.names)
+  axis.y.labels <- row.names
   if(axis.label.drop) {
     if(isFALSE(show.diag)) {
       if(type == "upper") {
@@ -61,17 +63,18 @@ ggcor <- function(data,
         axis.y.labels <- axis.y.labels[-1]
       }
       if(type == "lower") {
-        axis.x.breaks <- axis.x.breaks[-length(xname)]
-        axis.x.labels <- axis.x.labels[-length(xname)]
-        axis.y.breaks <- axis.y.breaks[-length(yname)]
-        axis.y.labels <- axis.y.labels[-length(yname)]
+        axis.x.breaks <- axis.x.breaks[-length(col.names)]
+        axis.x.labels <- axis.x.labels[-length(col.names)]
+        axis.y.breaks <- axis.y.breaks[-length(row.names)]
+        axis.y.labels <- axis.y.labels[-length(row.names)]
       }
     }
   }
+
   p <- ggplot(data = data, mapping = mapping, environment = parent.frame()) +
-    scale_x_continuous(breaks = axis.x.breaks, labels = axis.x.labels,
+    scale_x_continuous(expand = c(0, 0), breaks = axis.x.breaks, labels = axis.x.labels,
                        position = axis.x.position)+
-    scale_y_continuous(breaks = axis.y.breaks, labels = axis.y.labels,
+    scale_y_continuous(expand = c(0, 0), breaks = axis.y.breaks, labels = axis.y.labels,
                        position = axis.y.position)
   class(p) <- c("ggcor", class(p))
   p

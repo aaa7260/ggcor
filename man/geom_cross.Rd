@@ -59,26 +59,26 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{r0}{the radius of an outer circle, defualt value is sqrt(2)/2.}
 }
 \description{
 Cross Geom
 }
 \section{Aesthetics}{
 
-\code{geom_cross()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{p.value}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{group}
-  \item \code{linetype}
-  \item \code{size}
-}
+    \code{geom_cross()} understands the following aesthetics (required
+    aesthetics are in bold):
+    \itemize{
+      \item \strong{\code{x}}
+      \item \strong{\code{y}}
+      \item \strong{\code{p.value}}
+      \item \code{alpha}
+      \item \code{colour}
+      \item \code{linetype}
+      \item \code{size}
+   }
 }
 
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+}
 \keyword{datasets}

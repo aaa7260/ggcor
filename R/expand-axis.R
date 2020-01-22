@@ -12,14 +12,23 @@ expand_axis <- function(x = NULL, y = NULL)
   reset_axis_lim <- function(p) {
     if(!is.null(x) && !is.numeric(x)) x <- NULL
     if(!is.null(y) && !is.numeric(y)) y <- NULL
-    if(is.null(x) && is.null(y)) return(p)
-    xlim <- p$coordinates$limits$x
-    ylim <- p$coordinates$limits$y
-    if(!is.null(x)) {
+    if(is.null(x) && is.null(y))
+      return(p)
+    x.scale <- p$scales$get_scales("x")
+    y.scale <- p$scales$get_scales("y")
+    scale.x.limits <- if(!is.null(x.scale)) {
+      x.scale$get_limits()
+    } else NULL
+    scale.y.limits <- if(!is.null(y.scale)) {
+      y.scale$get_limits()
+    } else NULL
+    xlim <- p$coordinates$limits$x %||% scale.x.limits
+    ylim <- p$coordinates$limits$y %||% scale.y.limits
+    if(!is.null(x) && !is.null(xlim)) {
       p$coordinates$limits$x <- c(min(xlim, x, na.rm = TRUE),
                                   max(xlim, x, na.rm = TRUE))
     }
-    if(!is.null(y)) {
+    if(!is.null(y) && !is.null(ylim)) {
       p$coordinates$limits$y <- c(min(ylim, y, na.rm = TRUE),
                                   max(ylim, y, na.rm = TRUE))
     }
@@ -29,7 +38,10 @@ expand_axis <- function(x = NULL, y = NULL)
   reset_axis_lim
 }
 
+#' @importFrom ggplot2 ggplot_add
 #' @export
+#' @method ggplot_add expand_axis
 ggplot_add.expand_axis <- function(object, plot, object_name) {
-  object(plot)
+  plot <- object(plot)
+  plot
 }

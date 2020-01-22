@@ -9,20 +9,22 @@ extra_params(spec.label = text_params(), spec.point = point_params(fill
   link.params = link_params())
 }
 \arguments{
-\item{spec.label}{text_params object (\code{\link[ggcor]{text_params}}).}
+\item{spec.label}{NULL or "text_params" object producing by
+\code{\link[ggcor]{text_params}}.}
 
-\item{spec.point, env.point}{point_params object (\code{\link[ggcor]{point_params}}).}
+\item{spec.point}{NULL or "point_params" object producing by
+\code{\link[ggcor]{point_params}}.}
 
-\item{link.params}{link_params object (\code{\link[ggcor]{link_params}}).}
+\item{env.point}{NULL or "point_params" object producing by
+\code{\link[ggcor]{point_params}}.}
+
+\item{link.params}{"point_params" object producing by \code{\link[ggcor]{point_params}}.}
 }
 \description{
-This function is similar to the \code{theme} function in ggplot2,
-    used to set the shape, size, colour, fill of spec and env marker points,
-    size, colour, family, and so on of spec labels.
-}
-\seealso{
-\code{\link[ggcor]{text_params}}, \code{\link[ggcor]{point_params}},
-    \code{\link[ggcor]{link_params}}.
+This function is used to control the details
+    of the link, including the location, shape, size, color
+    of points, and font size, font color, and so on of the
+    text label.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
