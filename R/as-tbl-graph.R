@@ -110,7 +110,7 @@ cor_network <- function(corr,
                           r = as.vector(corr))
   if(!is.null(p.value))
     edges$p.value <- as.vector(p.value)
-  if(is.symmet && rm.dup) {
+  if(is.symmet && rm.dumplicate) {
     edges <- dplyr::filter(edges, lower.tri(corr))
   }
   edges <- if(r.absolute) {

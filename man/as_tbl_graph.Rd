@@ -21,7 +21,7 @@
 \method{as_tbl_graph}{correlation}(x, ...)
 
 cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
-  simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
+  rm.dup = TRUE, simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05)
 }
 \arguments{
@@ -43,6 +43,9 @@ delete nodes without edge connections.}
 \item{p.value}{significant matrix of correlation.}
 
 \item{row.names, col.names}{row and column names of correlation matrix.}
+
+\item{rm.dumplicate}{logical (defaults to TRUE) indicating whether remove duplicate
+rows. If TRUE, the correlation between A-B and B-A is retained only A-B.}
 }
 \value{
 tbl_graph object.
