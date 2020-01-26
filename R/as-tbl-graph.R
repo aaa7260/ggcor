@@ -5,7 +5,7 @@
 #' @param corr correlation matrix.
 #' @param p.value significant matrix of correlation.
 #' @param row.names,col.names row and column names of correlation matrix.
-#' @param rm.dumplicate logical (defaults to TRUE) indicating whether remove duplicate
+#' @param rm.dup logical (defaults to TRUE) indicating whether remove duplicate
 #'     rows. If TRUE, the correlation between A-B and B-A is retained only A-B.
 #' @param simplify logical value (defaults to TRUE) indicating whether to
 #'     delete nodes without edge connections.
@@ -110,7 +110,7 @@ cor_network <- function(corr,
                           r = as.vector(corr))
   if(!is.null(p.value))
     edges$p.value <- as.vector(p.value)
-  if(is.symmet && rm.dumplicate) {
+  if(is.symmet && rm.dup) {
     edges <- dplyr::filter(edges, lower.tri(corr))
   }
   edges <- if(r.absolute) {

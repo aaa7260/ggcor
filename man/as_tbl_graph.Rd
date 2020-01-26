@@ -44,7 +44,7 @@ delete nodes without edge connections.}
 
 \item{row.names, col.names}{row and column names of correlation matrix.}
 
-\item{rm.dumplicate}{logical (defaults to TRUE) indicating whether remove duplicate
+\item{rm.dup}{logical (defaults to TRUE) indicating whether remove duplicate
 rows. If TRUE, the correlation between A-B and B-A is retained only A-B.}
 }
 \value{
