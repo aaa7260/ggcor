@@ -21,3 +21,6 @@ tibble::as_tibble
 
 #' @export
 tidygraph::as_tbl_graph
+
+#' @export
+igraph::as.igraph

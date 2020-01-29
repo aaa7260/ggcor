@@ -6,11 +6,9 @@
 \alias{as_tbl_graph.rcorr}
 \alias{as_tbl_graph.corr.test}
 \alias{as_tbl_graph.correlation}
-\alias{cor_network}
-\title{Tidy co-occurrence network data}
+\title{Corece to a graph_tbl object}
 \usage{
-\method{as_tbl_graph}{cor_tbl}(x, simplify = TRUE, r.thres = 0.6,
-  r.absolute = TRUE, p.thres = 0.05, ...)
+\method{as_tbl_graph}{cor_tbl}(x, ...)
 
 \method{as_tbl_graph}{mantel_tbl}(x, ...)
 
@@ -19,40 +17,17 @@
 \method{as_tbl_graph}{corr.test}(x, ...)
 
 \method{as_tbl_graph}{correlation}(x, ...)
-
-cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
-  rm.dup = TRUE, simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05)
 }
 \arguments{
 \item{x}{\code{R} object.}
 
-\item{simplify}{logical value (defaults to TRUE) indicating whether to
-delete nodes without edge connections.}
-
-\item{r.thres}{a numeric value.}
-
-\item{r.absolute}{logical value (defaults to TRUE).}
-
-\item{p.thres}{a numeric value.}
-
-\item{...}{passing to \code{\link[ggcor]{fortify_cor}}}
-
-\item{corr}{correlation matrix.}
-
-\item{p.value}{significant matrix of correlation.}
-
-\item{row.names, col.names}{row and column names of correlation matrix.}
-
-\item{rm.dup}{logical (defaults to TRUE) indicating whether remove duplicate
-rows. If TRUE, the correlation between A-B and B-A is retained only A-B.}
+\item{...}{extra params.}
 }
 \value{
 tbl_graph object.
 }
 \description{
-The function calculates correlation coefficient, statistical
-    significance level and filters according to conditions.
+Functions to coerce a object to graph_tbl if possible.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

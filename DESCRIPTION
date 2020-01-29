@@ -28,6 +28,7 @@ Imports:
     ade4,
     dplyr,
     ggplot2 (>= 3.0.0),
+    igraph,
     purrr,
     RColorBrewer,
     scales,
@@ -48,9 +49,12 @@ Collate:
     'add-link-extra-params.R'
     'add-link-utils.R'
     'add-link.R'
-    'as-tbl-graph.R'
+    'as-cor-network.R'
     'as-cor-tbl.R'
+    'as-igraph.R'
+    'as-tbl-graph.R'
     'colour-pal-utils.R'
+    'cor-network.R'
     'cor-tbl.R'
     'cor-tbl-utils.R'
     'cor-test.R'
