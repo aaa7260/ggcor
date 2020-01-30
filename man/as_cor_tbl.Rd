@@ -17,7 +17,7 @@ as_cor_tbl(x, ...)
 
 \method{as_cor_tbl}{data.frame}(x, ...)
 
-\method{as_cor_tbl}{correlation}(x, ...)
+\method{as_cor_tbl}{correlation}(x, extra.mat = list(), ...)
 
 \method{as_cor_tbl}{rcorr}(x, ...)
 
@@ -31,6 +31,8 @@ as_cor_tbl(x, ...)
 \item{x}{any \code{R} object.}
 
 \item{...}{extra params passing to \code{\link[ggcor]{cor_tbl}}.}
+
+\item{extra.mat}{any other matrix-like data with same dimmsion as \code{x}.}
 
 \item{byrow}{a logical value indicating whether arrange the 'spec' columns on y axis.}
 }

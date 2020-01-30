@@ -1,6 +1,7 @@
 #' Coerce to a cor_tbl object
 #' @description Functions to coerce a object to cor_tbl if possible.
 #' @param x any \code{R} object.
+#' @param extra.mat any other matrix-like data with same dimmsion as \code{x}.
 #' @param byrow a logical value indicating whether arrange the 'spec' columns on y axis.
 #' @param ... extra params passing to \code{\link[ggcor]{cor_tbl}}.
 #' @return a cor_tbl object.
@@ -33,11 +34,12 @@ as_cor_tbl.data.frame <- function(x, ...) {
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl correlation
-as_cor_tbl.correlation <- function(x, ...) {
+as_cor_tbl.correlation <- function(x, extra.mat = list(), ...) {
   anynull <- is.null(x$lower.ci) || is.null(x$upper.ci)
-  extra.mat <- if(!anynull) {
+  conf.ci <- if(!anynull) {
     list(upper.ci = x$upper.ci, lower.ci = x$lower.ci)
   } else list()
+  extra.mat <- modifyList(extra.mat, conf.ci)
   cor_tbl(x = x$r, p.value = x$p.value, extra.mat = extra.mat, ...)
 }
 
