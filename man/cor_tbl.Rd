@@ -4,12 +4,12 @@
 \alias{cor_tbl}
 \title{Create a cor_tbl object}
 \usage{
-cor_tbl(x, p.value = NULL, extra.mat = list(), type = "full",
+cor_tbl(corr, p.value = NULL, extra.mat = list(), type = "full",
   show.diag = TRUE, row.names = NULL, col.names = NULL,
   cluster = FALSE, ...)
 }
 \arguments{
-\item{x}{correlation matrix.}
+\item{corr}{correlation matrix.}
 
 \item{p.value}{significance value matrix of correaltion.}
 

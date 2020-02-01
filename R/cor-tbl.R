@@ -1,6 +1,6 @@
 #' Create a cor_tbl object
 #' @description Functions to create cor_tbl object from correlation matrix.
-#' @param x correlation matrix.
+#' @param corr correlation matrix.
 #' @param p.value significance value matrix of correaltion.
 #' @param extra.mat any other matrix-like data with same dimmsion as \code{x}.
 #' @param type a string, "full" (default), "upper" or "lower", display full,
@@ -19,7 +19,7 @@
 #' cor_tbl(corr)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-cor_tbl <- function(x,
+cor_tbl <- function(corr,
                     p.value = NULL,
                     extra.mat = list(),
                     type = "full",
@@ -32,22 +32,22 @@ cor_tbl <- function(x,
   type <- match.arg(type, c("full", "upper", "lower"))
   check_extra_mat_name(extra.mat)
   ## exclude NULL
-  first <- x
-  x <- if(is.null(p.value)) {
-    list(r = x)
+  first <- corr
+  corr <- if(is.null(p.value)) {
+    list(r = corr)
     } else {
-      list(r = x, p.value = p.value)
+      list(r = corr, p.value = p.value)
     }
 
-  x <- modifyList(x, extra.mat)
+  corr <- modifyList(corr, extra.mat)
 
-  name <- names(x)
-  x <- lapply(x, function(.x) {
+  name <- names(corr)
+  corr <- lapply(corr, function(.x) {
     if(!is.matrix(.x)) as.matrix(.x) else .x
   })
-  if(length(x) > 1) {
-    lapply(names(x), function(name) {
-      check_dimension(first, x[[name]])
+  if(length(corr) > 1) {
+    lapply(names(corr), function(name) {
+      check_dimension(first, corr[[name]])
     })
   }
   row.names <- row.names %||% rownames(first) %||% paste0("row", 1:nrow(first))
@@ -71,7 +71,7 @@ cor_tbl <- function(x,
   }
   if(isTRUE(cluster)) {
     ord <- matrix_order(first, ...)
-    x <- lapply(x, function(.x) {
+    corr <- lapply(corr, function(.x) {
       .x[ord, ord]
     })
     row.names <- row.names[ord]
@@ -83,7 +83,7 @@ cor_tbl <- function(x,
     .row.id = rep(nrow(first):1, ncol(first)),
     .col.id = rep(1:ncol(first), each = nrow(first))
   )
-  data <- modifyList(id, setNames(lapply(x, as.vector), name))
+  data <- modifyList(id, setNames(lapply(corr, as.vector), name))
   new.order <- intersect(c(".row.names", ".col.names", name, ".row.id", ".col.id"),
                          names(data))
   data <- structure(.Data = new_data_frame(data[new.order]),

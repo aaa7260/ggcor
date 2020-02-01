@@ -22,13 +22,13 @@ as_cor_tbl <- function(x, ...) {
 #' @export
 #' @method as_cor_tbl matrix
 as_cor_tbl.matrix <- function(x, ...) {
-  cor_tbl(x = x, ...)
+  cor_tbl(corr = x, ...)
 }
 #' @rdname  as_cor_tbl
 #' @export
 #' @method as_cor_tbl data.frame
 as_cor_tbl.data.frame <- function(x, ...) {
- cor_tbl(x = x, ...)
+ cor_tbl(corr = x, ...)
 }
 
 #' @rdname  as_cor_tbl
@@ -40,7 +40,7 @@ as_cor_tbl.correlation <- function(x, extra.mat = list(), ...) {
     list(upper.ci = x$upper.ci, lower.ci = x$lower.ci)
   } else list()
   extra.mat <- modifyList(extra.mat, conf.ci)
-  cor_tbl(x = x$r, p.value = x$p.value, extra.mat = extra.mat, ...)
+  cor_tbl(corr = x$r, p.value = x$p.value, extra.mat = extra.mat, ...)
 }
 
 #' @rdname  as_cor_tbl
@@ -50,7 +50,7 @@ as_cor_tbl.rcorr <- function(x, ...)
 {
   p.value <- x$P
   diag(p.value) <- 0
-  cor_tbl(x = x$r, p.value = p.value, ...)
+  cor_tbl(corr = x$r, p.value = p.value, ...)
 }
 
 #' @rdname  as_cor_tbl
@@ -58,7 +58,7 @@ as_cor_tbl.rcorr <- function(x, ...)
 #' @method as_cor_tbl corr.test
 as_cor_tbl.corr.test <- function(x, ...)
 {
-  cor_tbl(x = x$r, p.value = x$p, ...)
+  cor_tbl(corr = x$r, p.value = x$p, ...)
 }
 #' @rdname  as_cor_tbl
 #' @export
