@@ -32,7 +32,6 @@ cor_tbl <- function(corr,
   type <- match.arg(type, c("full", "upper", "lower"))
   check_extra_mat_name(extra.mat)
   ## exclude NULL
-  first <- corr
   corr <- if(is.null(p.value)) {
     list(r = corr)
     } else {
@@ -41,10 +40,13 @@ cor_tbl <- function(corr,
 
   corr <- modifyList(corr, extra.mat)
 
-  name <- names(corr)
   corr <- lapply(corr, function(.x) {
     if(!is.matrix(.x)) as.matrix(.x) else .x
   })
+
+  first <- corr[[1]]
+  name <- names(corr)
+
   if(length(corr) > 1) {
     lapply(names(corr), function(name) {
       check_dimension(first, corr[[name]])
