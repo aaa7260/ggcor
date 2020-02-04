@@ -100,6 +100,19 @@ display_cor.cor_tbl <- function(x,
     corr <- paste0(corr, 
                    sig_mark(x$p.value, sig.level, mark))
   }
+  max.len <- max(nchar(corr), na.rm = TRUE)
+  if(!is.finite(max.len)) {
+    warning("Don't have finite value.", call. = FALSE)
+    nice.format <- FALSE
+  }
+  if(nice.format) {
+    corr <- purrr::map_chr(corr, function(.corr) {
+      if(!is.na(.corr) && nchar(.corr) < max.len) {
+        paste0(.corr, paste0(rep_len(" ", max.len - nchar(.corr)), collapse = ""))
+      } else 
+        .corr
+    })
+  }
   
   mat <- matrix("", nrow = n, ncol = m, dimnames = list(row.name, col.name))
   purrr::walk(1:nrow(x), function(.id) {
@@ -146,9 +159,14 @@ format_cor <- function(corr,
                      sig_mark(p.value, sig.level, mark))
   }
   
+  max.len <- max(nchar(corr), na.rm = TRUE)
+  if(!is.finite(max.len)) {
+    warning("Don't have finite value.", call. = FALSE)
+    nice.format <- FALSE
+  }
+
   if(nice.format) {
     nn <- nchar(corr)
-    max.len <- max(nchar(corr), na.rm = TRUE)
     corr[] <- purrr::map_chr(1:length(nn), function(.idx) {
       if(nn[.idx] < max.len) {
         paste0(corr[.idx], paste0(rep_len(" ", max.len - nn[.idx]), collapse = ""))
