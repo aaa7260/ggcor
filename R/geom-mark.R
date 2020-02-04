@@ -116,18 +116,4 @@ GeomMark <- ggproto("GeomMark", GeomText,
                    draw_key = draw_key_text
 )
 
-#' @noRd
-sig_mark <- function(p.value,
-                     sig.level = c(0.05, 0.01, 0.001),
-                     mark = c("*", "**", "***")) {
-  if(!is.numeric(p.value))
-    p.value <- as.numeric(p.value)
-  ord <- order(sig.level)
-  sig.level <- sig.level[ord]
-  mark <- mark[ord]
-  brks <- c(0, sig.level, 1)
-  lbs <- c(mark, "")
-  pp <- cut(p.value, breaks = brks, labels = lbs, include.lowest = FALSE, right = TRUE)
-  ifelse(p.value == 0, mark[1], as.character(pp))
-}
 
