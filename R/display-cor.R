@@ -117,9 +117,11 @@ display_cor.cor_tbl <- function(x,
   
   if(grouped) {
     ngroup <- length(unique(x$.group))
-    mat <- matrix("", nrow = n * ngroup, ncol = m + 1, 
-                  dimnames = list(rep(row.name, ngroup), 
-                                  c(col.name, ".group")))
+    
+    mat <- matrix("", nrow = n * ngroup, ncol = m, 
+                  dimnames = list(paste(rep(unique(x$.group), each = n),
+                                         rep(row.name, ngroup), sep = "-"), 
+                                  col.name))
     x <- split(x, x$.group)
     name <- names(x)
     x <- purrr::map_dfr(1:ngroup, function(.id) {
@@ -129,7 +131,6 @@ display_cor.cor_tbl <- function(x,
     
     purrr::walk(1:nrow(x), function(.id) {
       mat[x$.row.id[.id], x$.col.id[.id]] <<- corr[.id]
-      mat[ , m + 1] <<- rep(name, each = n)
     })
   } else {
     mat <- matrix("", nrow = n, ncol = m, dimnames = list(row.name, col.name))
@@ -138,7 +139,7 @@ display_cor.cor_tbl <- function(x,
     })
   }
   
-  as.data.frame(mat, stringsAsFactors = FALSE)
+  as.data.frame(mat, stringsAsFactors = FALSE, check.names = FALSE)
 }
 
 #' @rdname  display_cor
@@ -201,6 +202,6 @@ format_cor <- function(corr,
   if(type == "lower") {
     corr[upper.tri(corr, !show.diag)] <- ""
   }
-  as.data.frame(corr, stringsAsFactors = FALSE)
+  as.data.frame(corr, stringsAsFactors = FALSE, check.names = FALSE)
 }
 
