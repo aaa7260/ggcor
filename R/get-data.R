@@ -126,12 +126,12 @@ get_data <- function(..., type = "full", show.diag = FALSE)
 {
   type <- match.arg(type, c("full", "upper", "lower", "diag"))
   function(data) {
-    x <- dplyr::filter(data, ...)
+    data <- dplyr::filter(data, ...)
     switch (type,
-            full  = if(isTRUE(show.diag)) x else get_diag_tri(x),
-            upper = get_upper_data(x, show.diag = show.diag),
-            lower = get_lower_data(x, show.diag = show.diag),
-            diag  = get_diag_data(x)
+            full  = if(isTRUE(show.diag)) data else get_diag_tri(data),
+            upper = get_upper_data(data, show.diag = show.diag),
+            lower = get_lower_data(data, show.diag = show.diag),
+            diag  = get_diag_data(data)
     )
   }
 }
