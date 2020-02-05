@@ -88,6 +88,7 @@ display_cor.cor_tbl <- function(x,
   )
   if(nrow(x) == 0)
     return()
+  grouped <- attr(x, "grouped")
   row.name <- get_row_name(x)
   col.name <- get_col_name(x)
   n <- length(row.name)
@@ -114,10 +115,29 @@ display_cor.cor_tbl <- function(x,
     })
   }
   
-  mat <- matrix("", nrow = n, ncol = m, dimnames = list(row.name, col.name))
-  purrr::walk(1:nrow(x), function(.id) {
-    mat[n - x$.row.id[.id] + 1, x$.col.id[.id]] <<- corr[.id]
-  })
+  if(grouped) {
+    ngroup <- length(unique(x$.group))
+    mat <- matrix("", nrow = n * ngroup, ncol = m + 1, 
+                  dimnames = list(rep(row.name, ngroup), 
+                                  c(col.name, ".group")))
+    x <- split(x, x$.group)
+    name <- names(x)
+    x <- purrr::map_dfr(1:ngroup, function(.id) {
+      x[[.id]]$.row.id <<- n - x[[.id]]$.row.id + 1 + (.id - 1) * n
+      x[[.id]]
+    })
+    
+    purrr::walk(1:nrow(x), function(.id) {
+      mat[x$.row.id[.id], x$.col.id[.id]] <<- corr[.id]
+      mat[ , m + 1] <<- rep(name, each = n)
+    })
+  } else {
+    mat <- matrix("", nrow = n, ncol = m, dimnames = list(row.name, col.name))
+    purrr::walk(1:nrow(x), function(.id) {
+      mat[n - x$.row.id[.id] + 1, x$.col.id[.id]] <<- corr[.id]
+    })
+  }
+  
   as.data.frame(mat, stringsAsFactors = FALSE)
 }
 
