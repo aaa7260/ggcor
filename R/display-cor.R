@@ -67,7 +67,7 @@ display_cor.corr.test <- function(x, ...) {
   format_cor(corr = x$r, p.value = x$p, ...)
 }
 
-#' @importFrom purrr walk
+#' @importFrom purrr walk map_dfr
 #' @rdname  display_cor
 #' @export
 #' @method display_cor cor_tbl
