@@ -47,4 +47,16 @@ red_yellow_green <- function(n = 11) {
 spectral <- function(n = 11) {
   RColorBrewer::brewer.pal(n, "Spectral")
 }
+#' @rdname colour-pal
+#' @export
+link_colour_pal <- function(n)
+{
+  stopifnot(n <= 6)
+  colors <- c("#D95F02", "#1B9E77", "#7570B3",
+              "#E7298A", "#A6761D", "#F2F2F2")
+  if(n == 1)
+    return(colors[1])
+  col <- c(colors[1:(n - 1)], colors[6])
+  col
 
+}

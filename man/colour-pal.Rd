@@ -10,6 +10,7 @@
 \alias{red_yellow_blue}
 \alias{red_yellow_green}
 \alias{spectral}
+\alias{link_colour_pal}
 \title{Colour pal}
 \usage{
 brown_blue(n = 11)
@@ -29,6 +30,8 @@ red_yellow_blue(n = 11)
 red_yellow_green(n = 11)
 
 spectral(n = 11)
+
+link_colour_pal(n)
 }
 \arguments{
 \item{n}{number of different colors in the palette, minimum 3, maximum 11.}
