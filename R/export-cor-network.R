@@ -122,17 +122,17 @@ export_cor_network.data.frame <- function(x,
 #' @export
 #' @method export_cor_network correlation
 export_cor_network.correlation <- function(x,
-                                         file = "",
-                                         obj = "edges",
-                                         sep = ",",
-                                         row.names = NULL,
-                                         col.names = NULL,
-                                         rm.dup = TRUE,
-                                         simplify = TRUE,
-                                         r.thres = 0.6,
-                                         r.absolute = TRUE,
-                                         p.thres = 0.05,
-                                         ...)
+                                           file = "",
+                                           obj = "edges",
+                                           sep = ",",
+                                           row.names = NULL,
+                                           col.names = NULL,
+                                           rm.dup = TRUE,
+                                           simplify = TRUE,
+                                           r.thres = 0.6,
+                                           r.absolute = TRUE,
+                                           p.thres = 0.05,
+                                           ...)
 {
   obj <- match.arg(obj, c("edges", "nodes"))
   x <- as_cor_network(x, row.names = row.names, col.names = col.names,
