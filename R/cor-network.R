@@ -45,7 +45,7 @@ cor_network <- function(corr,
   .row.names <- row.names %||% rownames(corr) %||% paste0("row", 1:nrow(corr))
   .col.names <- col.names %||% colnames(corr) %||% paste0("col", 1:ncol(corr))
   is.symmet <- length(.row.names) == length(.col.names) && all(.row.names == .col.names)
-  
+
   edges <- tibble::tibble(.row.names = rep(.row.names, ncol(corr)),
                           .col.names = rep(.col.names, each = nrow(corr)),
                           r = as.vector(corr))
@@ -54,17 +54,25 @@ cor_network <- function(corr,
   if(is.symmet && rm.dup) {
     edges <- dplyr::filter(edges, lower.tri(corr))
   }
-  edges <- if(r.absolute) {
-    if(is.null(p.value)) {
-      dplyr::filter(edges, abs(r) > r.thres)
+  edges <- if(is.finite(r.thres)) {
+    if(r.absolute) {
+      if(is.null(p.value) || !is.finite(p.thres)) {
+        dplyr::filter(edges, abs(r) > r.thres)
+      } else {
+        dplyr::filter(edges, abs(r) > r.thres, p.value < p.thres)
+      }
     } else {
-      dplyr::filter(edges, abs(r) > r.thres, p.value < p.thres)
+      if(is.null(p.value) || !is.finite(p.thres)) {
+        dplyr::filter(edges, r > r.thres)
+      } else {
+        dplyr::filter(edges, r > r.thres, p.value < p.thres)
+      }
     }
   } else {
-    if(is.null(p.value)) {
-      dplyr::filter(edges, r > r.thres)
+    if(is.null(p.value) || !is.finite(p.thres)) {
+      edges
     } else {
-      dplyr::filter(edges, r > r.thres, p.value < p.thres)
+      dplyr::filter(edges, p.value < p.thres)
     }
   }
   nodes <- if(simplify) {
@@ -72,7 +80,7 @@ cor_network <- function(corr,
   } else {
     tibble::tibble(name = unique(c(.row.names, .col.names)))
   }
-  
+
   switch (val.type,
           graph_tbl = tidygraph::tbl_graph(nodes = nodes, edges = edges, directed = FALSE),
           igraph    = igraph::graph_from_data_frame(edges, directed = FALSE, vertices = nodes),
