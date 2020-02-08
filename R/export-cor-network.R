@@ -15,6 +15,7 @@
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
 #' @param ... extra params passing to \code{\link[utils]{write.table}}.
+#' @importFrom utils write.table
 #' @rdname export_cor_network
 #' @seealso \code{\link[utils]{write.table}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
@@ -34,7 +35,7 @@ export_cor_network.cor_network <- function(x,
 {
   obj <- match.arg(obj, c("edges", "nodes"))
   x <- x[[obj]]
-  utils::write.table(x, file = file, sep = sep, ...)
+  utils::write.table(x, file, sep = sep, row.names = FALSE, ...)
 }
 
 #' @rdname  export_cor_network
