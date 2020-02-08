@@ -28,17 +28,25 @@ as_cor_network.cor_tbl <- function(x,
                                    p.thres = 0.05,
                                    ...)
 {
-  if("p.value" %in% names(x)) {
-    edges <- if(r.absolute) {
-      dplyr::filter(x, abs(r) > r.thres, p.value < p.thres)
+  edges <- if(is.finite(r.thres)) {
+    if("p.value" %in% names(x) && is.finite(p.thres)) {
+      if(r.absolute) {
+        dplyr::filter(x, abs(r) > r.thres, p.value < p.thres)
+      } else {
+        dplyr::filter(x, r > r.thres, p.value < p.thres)
+      }
     } else {
-      dplyr::filter(x, r > r.thres, p.value < p.thres)
+      if(r.absolute) {
+        dplyr::filter(x, abs(r) > r.thres)
+      } else {
+        dplyr::filter(x, r > r.thres)
+      }
     }
   } else {
-    edges <- if(r.absolute) {
-      dplyr::filter(x, abs(r) > r.thres)
+    if("p.value" %in% names(x) && is.finite(p.thres)) {
+      dplyr::filter(x, p.value < p.thres)
     } else {
-      dplyr::filter(x, r > r.thres, p.value < p.thres)
+      x
     }
   }
   nodes <- if(simplify) {
@@ -46,7 +54,7 @@ as_cor_network.cor_tbl <- function(x,
   } else {
     tibble::tibble(name = unique(c(get_col_name(x), get_row_name(x))))
   }
-  structure(.Data = list(nodes = nodes, 
+  structure(.Data = list(nodes = nodes,
                          edges  = edges), class = "cor_network")
 }
 
