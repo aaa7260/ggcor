@@ -10,7 +10,7 @@
 as.igraph.cor_tbl <- function(x, ...)
 {
   x <- as_cor_network(x, ...)
-  igraph::graph_from_data_frame(x$edges, directed = FALSE, 
+  igraph::graph_from_data_frame(x$edges, directed = FALSE,
                                 vertices = x$nodes)
 }
 
@@ -45,3 +45,10 @@ as.igraph.correlation <- function(x, ...)
   cor_network(x$r, x$p.value, ..., val.type = "igraph")
 }
 
+#' @importFrom igraph graph_from_data_frame
+#' @rdname  as_igraph
+#' @export
+as.igraph.cor_network <- function(x, ...)
+{
+  igraph::graph_from_data_frame(x$edges, FALSE, x$nodes)
+}

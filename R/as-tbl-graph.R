@@ -16,7 +16,6 @@ as_tbl_graph.cor_tbl <- function(x, ...)
 
 
 #' @rdname  as_tbl_graph
-#' @importFrom tidygraph tbl_graph
 #' @export
 as_tbl_graph.mantel_tbl <- function(x, ...)
 {
@@ -24,7 +23,6 @@ as_tbl_graph.mantel_tbl <- function(x, ...)
 }
 
 #' @rdname  as_tbl_graph
-#' @importFrom tidygraph tbl_graph
 #' @export
 as_tbl_graph.rcorr <- function(x, ...)
 {
@@ -34,7 +32,6 @@ as_tbl_graph.rcorr <- function(x, ...)
 }
 
 #' @rdname  as_tbl_graph
-#' @importFrom tidygraph tbl_graph
 #' @export
 as_tbl_graph.corr.test <- function(x, ...)
 {
@@ -42,10 +39,16 @@ as_tbl_graph.corr.test <- function(x, ...)
 }
 
 #' @rdname  as_tbl_graph
-#' @importFrom tidygraph as_tbl_graph
 #' @export
 as_tbl_graph.correlation <- function(x, ...)
 {
   cor_network(x$r, x$p.value, ..., val.type = "graph_tbl")
 }
 
+#' @importFrom tidygraph tbl_graph
+#' @rdname  as_tbl_graph
+#' @export
+as_tbl_graph.cor_network <- function(x, ...)
+{
+  tidygraph::tbl_graph(nodes = nodes, edges = edges, directed = FALSE)
+}
