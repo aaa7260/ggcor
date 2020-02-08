@@ -3,7 +3,7 @@
 #' @param x \code{R} object.
 #' @param ... extra params.
 #' @return tbl_graph object.
-#' @importFrom tidygraph tbl_graph
+#' @importFrom tidygraph tbl_graph as_tbl_graph
 #' @rdname as_tbl_graph
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
@@ -50,5 +50,5 @@ as_tbl_graph.correlation <- function(x, ...)
 #' @export
 as_tbl_graph.cor_network <- function(x, ...)
 {
-  tidygraph::tbl_graph(nodes = nodes, edges = edges, directed = FALSE)
+  tidygraph::tbl_graph(nodes = x$nodes, edges = x$edges, directed = FALSE)
 }

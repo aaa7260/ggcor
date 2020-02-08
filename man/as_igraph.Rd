@@ -6,6 +6,7 @@
 \alias{as.igraph.rcorr}
 \alias{as.igraph.corr.test}
 \alias{as.igraph.correlation}
+\alias{as.igraph.cor_network}
 \title{Corece to a igraph object}
 \usage{
 \method{as.igraph}{cor_tbl}(x, ...)
@@ -17,6 +18,8 @@
 \method{as.igraph}{corr.test}(x, ...)
 
 \method{as.igraph}{correlation}(x, ...)
+
+\method{as.igraph}{cor_network}(x, ...)
 }
 \arguments{
 \item{x}{\code{R} object.}
