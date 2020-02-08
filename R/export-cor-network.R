@@ -15,7 +15,6 @@
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
 #' @param ... extra params passing to \code{\link[utils]{write.table}}.
-#' @importFrom utils write.table
 #' @rdname export_cor_network
 #' @seealso \code{\link[utils]{write.table}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
