@@ -120,8 +120,8 @@ export_cor_network.data.frame <- function(x,
 
 #' @rdname  export_cor_network
 #' @export
-#' @method export_cor_network correlate
-export_cor_network.correlate <- function(x,
+#' @method export_cor_network correlation
+export_cor_network.correlation <- function(x,
                                          file = "",
                                          obj = "edges",
                                          sep = ",",
