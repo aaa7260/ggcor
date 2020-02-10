@@ -103,6 +103,27 @@ as_cor_network.corr.test <- function(x, ...)
   cor_network(corr = x$r, p.value = x$p, ..., val.type = "list")
 }
 
+#' @importFrom tibble as_tibble
+#' @importFrom igraph as_data_frame
+#' @rdname  as_cor_network
+#' @export
+#' @method as_cor_network igraph
+as_cor_network.igraph <- function(x, ...)
+{
+  nodes <- tibble::as_tibble(igraph::as_data_frame(x, "vertices"))
+  edges <- tibble::as_tibble(igraph::as_data_frame(x, "edges"))
+  structure(.Data = list(nodes = nodes, edges = edges),
+            class = "cor_network")
+}
+
+#' @rdname  as_cor_network
+#' @export
+#' @method as_cor_network tbl_graph
+as_cor_network.tbl_graph <- function(x, ...)
+{
+  as_cor_network(igraph::as.igraph(x), ...)
+}
+
 #' @rdname as_cor_network
 #' @export
 #' @method as_cor_network default
