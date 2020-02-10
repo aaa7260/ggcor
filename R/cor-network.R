@@ -18,6 +18,7 @@
 #'       \item \code{igraph}: return igraph object
 #'       \item \code{list}: return a list of nodes and edges
 #'    }
+#' @param n number of rows to show.
 #' @param ... extra params for printing.
 #' @return tbl_graph object.
 #' @importFrom dplyr filter %>%

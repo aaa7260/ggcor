@@ -9,7 +9,7 @@ cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
   rm.dup = TRUE, simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, val.type = "graph_tbl")
 
-\method{print}{cor_network}(x, ...)
+\method{print}{cor_network}(x, n = 3, ...)
 }
 \arguments{
 \item{corr}{correlation matrix.}
