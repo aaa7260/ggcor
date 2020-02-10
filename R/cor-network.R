@@ -1,6 +1,7 @@
 #' Tidy co-occurrence network data
 #' @description The function calculates correlation coefficient, statistical
 #'     significance level and filters according to conditions.
+#' @param x a cor_network object.
 #' @param corr correlation matrix.
 #' @param p.value significant matrix of correlation.
 #' @param row.names,col.names row and column names of correlation matrix.
@@ -17,7 +18,7 @@
 #'       \item \code{igraph}: return igraph object
 #'       \item \code{list}: return a list of nodes and edges
 #'    }
-#' @param ... passing to \code{\link[ggcor]{cor_network}}
+#' @param ... extra params for printing.
 #' @return tbl_graph object.
 #' @importFrom dplyr filter %>%
 #' @importFrom tibble tibble
@@ -88,6 +89,7 @@ cor_network <- function(corr,
   )
 }
 
+#' @rdname cor-network
 #' @export
 print.cor_network <- function(x, ...)
 {

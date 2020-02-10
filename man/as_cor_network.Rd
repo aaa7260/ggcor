@@ -9,6 +9,8 @@
 \alias{as_cor_network.correlation}
 \alias{as_cor_network.rcorr}
 \alias{as_cor_network.corr.test}
+\alias{as_cor_network.igraph}
+\alias{as_cor_network.tbl_graph}
 \alias{as_cor_network.default}
 \title{Coerce to a cor_network object}
 \usage{
@@ -28,6 +30,10 @@ as_cor_network(x, ...)
 \method{as_cor_network}{rcorr}(x, ...)
 
 \method{as_cor_network}{corr.test}(x, ...)
+
+\method{as_cor_network}{igraph}(x, ...)
+
+\method{as_cor_network}{tbl_graph}(x, ...)
 
 \method{as_cor_network}{default}(x, ...)
 }

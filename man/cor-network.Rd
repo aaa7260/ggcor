@@ -2,11 +2,14 @@
 % Please edit documentation in R/cor-network.R
 \name{cor_network}
 \alias{cor_network}
+\alias{print.cor_network}
 \title{Tidy co-occurrence network data}
 \usage{
 cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
   rm.dup = TRUE, simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, val.type = "graph_tbl")
+
+\method{print}{cor_network}(x, ...)
 }
 \arguments{
 \item{corr}{correlation matrix.}
@@ -34,7 +37,9 @@ delete nodes without edge connections.}
     \item \code{list}: return a list of nodes and edges
  }}
 
-\item{...}{passing to \code{\link[ggcor]{cor_network}}}
+\item{x}{a cor_network object.}
+
+\item{...}{extra params for printing.}
 }
 \value{
 tbl_graph object.
