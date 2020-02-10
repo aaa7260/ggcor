@@ -49,11 +49,16 @@ as_cor_network.cor_tbl <- function(x,
       x
     }
   }
+
+  # rename
+  edges <- rename_cor_network_edge(edges, ".row.names", ".col.names")
+
   nodes <- if(simplify) {
     tibble::tibble(name = unique(c(x$.col.names, x$.row.names)))
   } else {
     tibble::tibble(name = unique(c(get_col_name(x), get_row_name(x))))
   }
+
   structure(.Data = list(nodes = nodes,
                          edges  = edges), class = "cor_network")
 }
@@ -129,4 +134,15 @@ as_cor_network.tbl_graph <- function(x, ...)
 #' @method as_cor_network default
 as_cor_network.default <- function(x, ...) {
   stop(class(x)[1], " hasn't been realized yet.", call. = FALSE)
+}
+
+#' @noRd
+rename_cor_network_edge <- function(x, from, to)
+{
+  stopifnot(is.data.frame(x))
+  name <- names(x)
+  name[name %in% c(from, to)] <- c("from", "to")
+  name <- c(c("from", "to"), setdiff(name, c("from", "to")))
+  names(x) <- name
+  x
 }

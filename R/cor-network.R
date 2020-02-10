@@ -47,8 +47,8 @@ cor_network <- function(corr,
   .col.names <- col.names %||% colnames(corr) %||% paste0("col", 1:ncol(corr))
   is.symmet <- length(.row.names) == length(.col.names) && all(.row.names == .col.names)
 
-  edges <- tibble::tibble(.row.names = rep(.row.names, ncol(corr)),
-                          .col.names = rep(.col.names, each = nrow(corr)),
+  edges <- tibble::tibble(from = rep(.row.names, ncol(corr)),
+                          to = rep(.col.names, each = nrow(corr)),
                           r = as.vector(corr))
   if(!is.null(p.value))
     edges$p.value <- as.vector(p.value)
@@ -77,7 +77,7 @@ cor_network <- function(corr,
     }
   }
   nodes <- if(simplify) {
-    tibble::tibble(name = unique(c(edges$.col.names, edges$.row.names)))
+    tibble::tibble(name = unique(c(edges$from, edges$to)))
   } else {
     tibble::tibble(name = unique(c(.row.names, .col.names)))
   }
@@ -91,11 +91,11 @@ cor_network <- function(corr,
 
 #' @rdname cor-network
 #' @export
-print.cor_network <- function(x, ...)
+print.cor_network <- function(x, n = 3, ...)
 {
   cat("A cor_network object:", "\n")
   cat("Nodes table: ")
-  print(x$nodes, ...)
+  print(x$nodes, n = n, ...)
   cat("Edges table: ")
-  print(x$edges, ...)
+  print(x$edges, n = n, ...)
 }
