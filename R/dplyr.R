@@ -106,9 +106,12 @@ filter.cor_network <- function(.data,
 #' @importFrom dplyr filter
 #' @importFrom igraph as.igraph
 #' @export
-filter.igraph <- function(.data, ...)
+filter.igraph <- function(.data,
+                          ...,
+                          what = "nodes",
+                          simplify = TRUE)
 {
-  .data <- filter(as_cor_network(.data))
+  .data <- filter(as_cor_network(.data, ..., what = what, simplify = simplify))
   as.igraph(.data)
 }
 
