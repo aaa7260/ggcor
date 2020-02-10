@@ -64,7 +64,7 @@ format_number <- function(x, digits = 2, nsmall = 2) {
 #' @noRd
 ggname <- function (prefix, grob)
 {
-  grob$name <- grobName(grob, prefix)
+  grob$name <- grid::grobName(grob, prefix)
   grob
 }
 
