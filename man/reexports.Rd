@@ -6,6 +6,7 @@
 \alias{ggplot_add}
 \alias{aes}
 \alias{\%>\%}
+\alias{filter}
 \alias{mutate}
 \alias{group_by}
 \alias{ungroup}
@@ -19,7 +20,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{ungroup}}}
+  \item{dplyr}{\code{\link[dplyr]{\%>\%}}, \code{\link[dplyr]{filter}}, \code{\link[dplyr]{mutate}}, \code{\link[dplyr]{group_by}}, \code{\link[dplyr]{ungroup}}}
 
   \item{ggplot2}{\code{\link[ggplot2]{ggplot_add}}, \code{\link[ggplot2]{aes}}}
 

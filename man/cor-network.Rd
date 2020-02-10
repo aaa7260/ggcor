@@ -39,6 +39,8 @@ delete nodes without edge connections.}
 
 \item{x}{a cor_network object.}
 
+\item{n}{number of rows to show.}
+
 \item{...}{extra params for printing.}
 }
 \value{

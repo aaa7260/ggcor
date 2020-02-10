@@ -13,6 +13,14 @@ as_tibble.cor_tbl <- function(x, ...)
   x
 }
 
+#' @importFrom dplyr filter
+filter.cor_tbl <- function(.data, ...)
+{
+  attrs <- attributes(.data)
+  .data <- filter(as_tibble(.data), ...)
+  set_attrs(.data, attrs, .excludes = c("names", "row.names"))
+}
+
 #' @importFrom dplyr mutate
 #' @export
 mutate.cor_tbl <- function(.data, ...)
@@ -67,4 +75,75 @@ remove_attrs <- function(.data, .excludes = NULL)
     }
   }
   .data
+}
+
+## extended dplyr for network
+#' @importFrom dplyr filter
+#' @export
+filter.cor_network <- function(.data,
+                               ...,
+                               what = "nodes",
+                               simplify = TRUE)
+{
+  nodes <- .data$nodes
+  edges <- .data$edges
+  if(what == "nodes") {
+    nodes <- filter(nodes, ...)
+    e.id <- edges$from %in% nodes$name &
+      edges$to   %in% nodes$name
+    edges <- filter(edges, e.id)
+  } else {
+    edges <- filter(edges, ...)
+    if(simplify) {
+      n.id <- nodes$name %in% c(edges$from, edges$to)
+      nodes <- filter(nodes, n.id)
+    }
+  }
+  structure(.Data = list(nodes = nodes,
+                         edges = edges), class = "cor_network")
+}
+
+#' @importFrom dplyr filter
+#' @importFrom igraph as.igraph
+#' @export
+filter.igraph <- function(.data, ...)
+{
+  .data <- filter(as_cor_network(.data))
+  as.igraph(.data)
+}
+
+#' @importFrom dplyr mutate
+#' @export
+mutate.cor_network <- function(.data, what = "nodes", ...)
+{
+  check_mutate_var_name(what, ...)
+  if(what == "nodes") {
+    .data$nodes <- dplyr::mutate(.data$nodes, ...)
+  } else {
+    .data$edges <- dplyr::mutate(.data$edges, ...)
+  }
+  .data
+}
+
+#' @importFrom dplyr mutate
+#' @importFrom igraph as.igraph
+#' @export
+mutate.igraph <- function(.data, ..., what = "nodes")
+{
+  .data <- mutate(as_cor_network(.data), what = what, ...)
+  as.igraph(.data)
+}
+
+#' @noRd
+check_mutate_var_name <- function(what = "nodes", ...) {
+  var.name <- list(...)
+  if(what == "nodes") {
+    if("name" %in% var.name) {
+      stop("variable of 'name' is preserved.", call. = FALSE)
+    }
+  } else {
+    if(any(c("from", "to") %in% var.name)) {
+      stop("variable of 'from' and 'to' are preserved.", call. = FALSE)
+    }
+  }
 }

@@ -8,6 +8,9 @@ ggplot2::aes
 dplyr::`%>%`
 
 #' @export
+dplyr::filter
+
+#' @export
 dplyr::mutate
 
 #' @export
