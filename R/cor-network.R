@@ -87,3 +87,13 @@ cor_network <- function(corr,
           list      = structure(.Data = list(nodes = nodes, edges  = edges), class = "cor_network")
   )
 }
+
+#' @export
+print.cor_network <- function(x, ...)
+{
+  cat("A cor_network object:", "\n")
+  cat("Nodes table: ")
+  print(x$nodes, ...)
+  cat("Edges table: ")
+  print(x$edges, ...)
+}
