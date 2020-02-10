@@ -12,38 +12,38 @@
 \alias{export_cor_network.corr.test}
 \title{Output co-network object}
 \usage{
-export_cor_network(x, ...)
+export_cor_network(x, file = "", what = "edges", sep = ",", ...)
 
-\method{export_cor_network}{cor_network}(x, file = "", obj = "edges",
+\method{export_cor_network}{cor_network}(x, file = "", what = "edges",
   sep = ",", ...)
 
-\method{export_cor_network}{cor_tbl}(x, file = "", obj = "edges",
+\method{export_cor_network}{cor_tbl}(x, file = "", what = "edges",
   sep = ",", simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, ...)
 
-\method{export_cor_network}{mantel_tbl}(x, file = "", obj = "edges",
+\method{export_cor_network}{mantel_tbl}(x, file = "", what = "edges",
   sep = ",", simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, ...)
 
-\method{export_cor_network}{matrix}(x, file = "", obj = "edges",
+\method{export_cor_network}{matrix}(x, file = "", what = "edges",
   sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
   simplify = TRUE, r.thres = 0.6, r.absolute = TRUE, ...)
 
-\method{export_cor_network}{data.frame}(x, file = "", obj = "edges",
+\method{export_cor_network}{data.frame}(x, file = "", what = "edges",
   sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
   simplify = TRUE, r.thres = 0.6, r.absolute = TRUE, ...)
 
-\method{export_cor_network}{correlation}(x, file = "", obj = "edges",
+\method{export_cor_network}{correlation}(x, file = "", what = "edges",
   sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
   simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, ...)
 
-\method{export_cor_network}{rcorr}(x, file = "", obj = "edges",
+\method{export_cor_network}{rcorr}(x, file = "", what = "edges",
   sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
   simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, ...)
 
-\method{export_cor_network}{corr.test}(x, file = "", obj = "edges",
+\method{export_cor_network}{corr.test}(x, file = "", what = "edges",
   sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
   simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, ...)
@@ -51,14 +51,14 @@ export_cor_network(x, ...)
 \arguments{
 \item{x}{\code{R} object can be convert to \code{cor_network}.}
 
-\item{...}{extra params passing to \code{\link[utils]{write.table}}.}
-
 \item{file}{a character string naming a file for writing. "" indicates
 output to the console.}
 
-\item{obj}{either "edges" (default) or "nodes" will be output.}
+\item{what}{either "edges" (default) or "nodes" will be output.}
 
 \item{sep}{the field separator string (defaults to ",").}
+
+\item{...}{extra params passing to \code{\link[utils]{write.table}}.}
 
 \item{simplify}{logical value (defaults to TRUE) indicating whether to
 delete nodes without edge connections.}

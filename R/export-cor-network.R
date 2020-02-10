@@ -4,7 +4,7 @@
 #' @param x \code{R} object can be convert to \code{cor_network}.
 #' @param file a character string naming a file for writing. "" indicates
 #'     output to the console.
-#' @param obj either "edges" (default) or "nodes" will be output.
+#' @param what either "edges" (default) or "nodes" will be output.
 #' @param sep the field separator string (defaults to ",").
 #' @param row.names,col.names row and column names of correlation matrix.
 #' @param rm.dup logical (defaults to TRUE) indicating whether remove duplicate
@@ -20,7 +20,8 @@
 #' @seealso \code{\link[utils]{write.table}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-export_cor_network <- function(x, ...) {
+export_cor_network <- function(x, file = "", what = "edges", sep = ",", ...)
+{
   UseMethod("export_cor_network")
 }
 
@@ -29,12 +30,12 @@ export_cor_network <- function(x, ...) {
 #' @method export_cor_network cor_network
 export_cor_network.cor_network <- function(x,
                                            file = "",
-                                           obj = "edges",
+                                           what = "edges",
                                            sep = ",",
                                            ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
-  x <- x[[obj]]
+  what <- match.arg(what, c("edges", "nodes"))
+  x <- x[[what]]
   utils::write.table(x, file, sep = sep, row.names = FALSE, ...)
 }
 
@@ -43,7 +44,7 @@ export_cor_network.cor_network <- function(x,
 #' @method export_cor_network cor_tbl
 export_cor_network.cor_tbl <- function(x,
                                        file = "",
-                                       obj = "edges",
+                                       what = "edges",
                                        sep = ",",
                                        simplify = TRUE,
                                        r.thres = 0.6,
@@ -51,9 +52,9 @@ export_cor_network.cor_tbl <- function(x,
                                        p.thres = 0.05,
                                        ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
+  what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, simplify, r.thres, r.absolute, p.thres)
-  export_cor_network(x, file, obj, sep, ...)
+  export_cor_network(x, file, what, sep, ...)
 }
 
 #' @rdname  export_cor_network
@@ -61,7 +62,7 @@ export_cor_network.cor_tbl <- function(x,
 #' @method export_cor_network mantel_tbl
 export_cor_network.mantel_tbl <- function(x,
                                           file = "",
-                                          obj = "edges",
+                                          what = "edges",
                                           sep = ",",
                                           simplify = TRUE,
                                           r.thres = 0.6,
@@ -69,9 +70,9 @@ export_cor_network.mantel_tbl <- function(x,
                                           p.thres = 0.05,
                                           ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
+  what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, simplify, r.thres, r.absolute, p.thres)
-  export_cor_network(x, file, obj, sep, ...)
+  export_cor_network(x, file, what, sep, ...)
 }
 
 #' @rdname  export_cor_network
@@ -79,7 +80,7 @@ export_cor_network.mantel_tbl <- function(x,
 #' @method export_cor_network matrix
 export_cor_network.matrix <- function(x,
                                       file = "",
-                                      obj = "edges",
+                                      what = "edges",
                                       sep = ",",
                                       row.names = NULL,
                                       col.names = NULL,
@@ -89,11 +90,11 @@ export_cor_network.matrix <- function(x,
                                       r.absolute = TRUE,
                                       ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
+  what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, row.names = row.names, col.names = col.names,
                       rm.dup = rm.dup, simplify = simplify, r.thres = r.thres,
                       r.absolute = r.absolute)
-  export_cor_network(x, file, obj, sep, ...)
+  export_cor_network(x, file, what, sep, ...)
 }
 
 #' @rdname  export_cor_network
@@ -101,7 +102,7 @@ export_cor_network.matrix <- function(x,
 #' @method export_cor_network data.frame
 export_cor_network.data.frame <- function(x,
                                           file = "",
-                                          obj = "edges",
+                                          what = "edges",
                                           sep = ",",
                                           row.names = NULL,
                                           col.names = NULL,
@@ -111,11 +112,11 @@ export_cor_network.data.frame <- function(x,
                                           r.absolute = TRUE,
                                           ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
+  what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, row.names = row.names, col.names = col.names,
                       rm.dup = rm.dup, simplify = simplify, r.thres = r.thres,
                       r.absolute = r.absolute)
-  export_cor_network(x, file, obj, sep, ...)
+  export_cor_network(x, file, what, sep, ...)
 }
 
 #' @rdname  export_cor_network
@@ -123,7 +124,7 @@ export_cor_network.data.frame <- function(x,
 #' @method export_cor_network correlation
 export_cor_network.correlation <- function(x,
                                            file = "",
-                                           obj = "edges",
+                                           what = "edges",
                                            sep = ",",
                                            row.names = NULL,
                                            col.names = NULL,
@@ -134,11 +135,11 @@ export_cor_network.correlation <- function(x,
                                            p.thres = 0.05,
                                            ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
+  what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, row.names = row.names, col.names = col.names,
                       rm.dup = rm.dup, simplify = simplify, r.thres = r.thres,
                       r.absolute = r.absolute, p.thres = p.thres)
-  export_cor_network(x, file, obj, sep, ...)
+  export_cor_network(x, file, what, sep, ...)
 }
 
 #' @rdname  export_cor_network
@@ -146,7 +147,7 @@ export_cor_network.correlation <- function(x,
 #' @method export_cor_network rcorr
 export_cor_network.rcorr <- function(x,
                                      file = "",
-                                     obj = "edges",
+                                     what = "edges",
                                      sep = ",",
                                      row.names = NULL,
                                      col.names = NULL,
@@ -157,11 +158,11 @@ export_cor_network.rcorr <- function(x,
                                      p.thres = 0.05,
                                      ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
+  what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, row.names = row.names, col.names = col.names,
                       rm.dup = rm.dup, simplify = simplify, r.thres = r.thres,
                       r.absolute = r.absolute, p.thres = p.thres)
-  export_cor_network(x, file, obj, sep, ...)
+  export_cor_network(x, file, what, sep, ...)
 }
 
 #' @rdname  export_cor_network
@@ -169,7 +170,7 @@ export_cor_network.rcorr <- function(x,
 #' @method export_cor_network corr.test
 export_cor_network.corr.test <- function(x,
                                          file = "",
-                                         obj = "edges",
+                                         what = "edges",
                                          sep = ",",
                                          row.names = NULL,
                                          col.names = NULL,
@@ -180,9 +181,9 @@ export_cor_network.corr.test <- function(x,
                                          p.thres = 0.05,
                                          ...)
 {
-  obj <- match.arg(obj, c("edges", "nodes"))
+  what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, row.names = row.names, col.names = col.names,
                       rm.dup = rm.dup, simplify = simplify, r.thres = r.thres,
                       r.absolute = r.absolute, p.thres = p.thres)
-  export_cor_network(x, file, obj, sep, ...)
+  export_cor_network(x, file, what, sep, ...)
 }
