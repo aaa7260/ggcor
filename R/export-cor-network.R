@@ -121,19 +121,19 @@ export_cor_network.data.frame <- function(x,
 
 #' @rdname  export_cor_network
 #' @export
-#' @method export_cor_network correlation
-export_cor_network.correlation <- function(x,
-                                           file = "",
-                                           what = "edges",
-                                           sep = ",",
-                                           row.names = NULL,
-                                           col.names = NULL,
-                                           rm.dup = TRUE,
-                                           simplify = TRUE,
-                                           r.thres = 0.6,
-                                           r.absolute = TRUE,
-                                           p.thres = 0.05,
-                                           ...)
+#' @method export_cor_network correlate
+export_cor_network.correlate <- function(x,
+                                         file = "",
+                                         what = "edges",
+                                         sep = ",",
+                                         row.names = NULL,
+                                         col.names = NULL,
+                                         rm.dup = TRUE,
+                                         simplify = TRUE,
+                                         r.thres = 0.6,
+                                         r.absolute = TRUE,
+                                         p.thres = 0.05,
+                                         ...)
 {
   what <- match.arg(what, c("edges", "nodes"))
   x <- as_cor_network(x, row.names = row.names, col.names = col.names,

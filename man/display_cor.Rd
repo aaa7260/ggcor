@@ -4,7 +4,7 @@
 \alias{display_cor}
 \alias{display_cor.matrix}
 \alias{display_cor.data.frame}
-\alias{display_cor.correlation}
+\alias{display_cor.correlate}
 \alias{display_cor.rcorr}
 \alias{display_cor.corr.test}
 \alias{display_cor.cor_tbl}
@@ -18,7 +18,7 @@ display_cor(x, ...)
 
 \method{display_cor}{data.frame}(x, ...)
 
-\method{display_cor}{correlation}(x, ...)
+\method{display_cor}{correlate}(x, ...)
 
 \method{display_cor}{rcorr}(x, ...)
 
@@ -55,7 +55,7 @@ the default value is 2.}
 
 \item{mark}{significance mark，the defaults values is `c("*", "**", "***")`.}
 
-\item{nice.format}{a logical value indicating whether the output needs to be 
+\item{nice.format}{a logical value indicating whether the output needs to be
 automatically optimized.}
 
 \item{byrow}{a logical value indicating whether arrange the 'spec' columns on y axis.}

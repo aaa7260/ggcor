@@ -40,7 +40,7 @@ as.igraph.corr.test <- function(x, ...)
 
 #' @rdname  as_igraph
 #' @export
-as.igraph.correlation <- function(x, ...)
+as.igraph.correlate <- function(x, ...)
 {
   cor_network(x$r, x$p.value, ..., val.type = "igraph")
 }

@@ -6,7 +6,7 @@
 \alias{as_cor_network.mantel_tbl}
 \alias{as_cor_network.matrix}
 \alias{as_cor_network.data.frame}
-\alias{as_cor_network.correlation}
+\alias{as_cor_network.correlate}
 \alias{as_cor_network.rcorr}
 \alias{as_cor_network.corr.test}
 \alias{as_cor_network.igraph}
@@ -25,7 +25,7 @@ as_cor_network(x, ...)
 
 \method{as_cor_network}{data.frame}(x, ...)
 
-\method{as_cor_network}{correlation}(x, ...)
+\method{as_cor_network}{correlate}(x, ...)
 
 \method{as_cor_network}{rcorr}(x, ...)
 

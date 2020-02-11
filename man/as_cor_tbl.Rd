@@ -4,7 +4,7 @@
 \alias{as_cor_tbl}
 \alias{as_cor_tbl.matrix}
 \alias{as_cor_tbl.data.frame}
-\alias{as_cor_tbl.correlation}
+\alias{as_cor_tbl.correlate}
 \alias{as_cor_tbl.rcorr}
 \alias{as_cor_tbl.corr.test}
 \alias{as_cor_tbl.mantel_tbl}
@@ -17,7 +17,7 @@ as_cor_tbl(x, ...)
 
 \method{as_cor_tbl}{data.frame}(x, ...)
 
-\method{as_cor_tbl}{correlation}(x, extra.mat = list(), ...)
+\method{as_cor_tbl}{correlate}(x, extra.mat = list(), ...)
 
 \method{as_cor_tbl}{rcorr}(x, ...)
 

@@ -33,8 +33,8 @@ as_cor_tbl.data.frame <- function(x, ...) {
 
 #' @rdname  as_cor_tbl
 #' @export
-#' @method as_cor_tbl correlation
-as_cor_tbl.correlation <- function(x, extra.mat = list(), ...) {
+#' @method as_cor_tbl correlate
+as_cor_tbl.correlate <- function(x, extra.mat = list(), ...) {
   anynull <- is.null(x$lower.ci) || is.null(x$upper.ci)
   conf.ci <- if(!anynull) {
     list(upper.ci = x$upper.ci, lower.ci = x$lower.ci)

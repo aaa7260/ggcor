@@ -15,7 +15,7 @@
 #'     the default value is 2.
 #' @param sig.level significance level，the defaults values is `c(0.05, 0.01, 0.001)`.
 #' @param mark significance mark，the defaults values is `c("*", "**", "***")`.
-#' @param nice.format a logical value indicating whether the output needs to be 
+#' @param nice.format a logical value indicating whether the output needs to be
 #'     automatically optimized.
 #' @param ... extra params passing to \code{\link[ggcor]{format_cor}}.
 #' @return a data frame.
@@ -46,8 +46,8 @@ display_cor.data.frame <- function(x, ...) {
 
 #' @rdname  display_cor
 #' @export
-#' @method display_cor correlation
-display_cor.correlation <- function(x, ...) {
+#' @method display_cor correlate
+display_cor.correlate <- function(x, ...) {
   format_cor(corr = x$r, p.value = x$p.value, ...)
 }
 
@@ -71,10 +71,10 @@ display_cor.corr.test <- function(x, ...) {
 #' @rdname  display_cor
 #' @export
 #' @method display_cor cor_tbl
-display_cor.cor_tbl <- function(x, 
+display_cor.cor_tbl <- function(x,
                                 type = "full",
                                 show.diag = FALSE,
-                                digits = 2, 
+                                digits = 2,
                                 nsmall = 2,
                                 sig.level = c(0.05, 0.01, 0.001),
                                 mark = c("*", "**", "***"),
@@ -98,7 +98,7 @@ display_cor.cor_tbl <- function(x,
     corr <- ifelse(x$r >= 0, paste0("", corr), corr)
   }
   if("p.value" %in% names(x) && is.numeric(x$p.value)) {
-    corr <- paste0(corr, 
+    corr <- paste0(corr,
                    sig_mark(x$p.value, sig.level, mark))
   }
   max.len <- max(nchar(corr), na.rm = TRUE)
@@ -110,17 +110,17 @@ display_cor.cor_tbl <- function(x,
     corr <- purrr::map_chr(corr, function(.corr) {
       if(!is.na(.corr) && nchar(.corr) < max.len) {
         paste0(.corr, paste0(rep_len(" ", max.len - nchar(.corr)), collapse = ""))
-      } else 
+      } else
         .corr
     })
   }
-  
+
   if(grouped) {
     ngroup <- length(unique(x$.group))
-    
-    mat <- matrix("", nrow = n * ngroup, ncol = m, 
+
+    mat <- matrix("", nrow = n * ngroup, ncol = m,
                   dimnames = list(paste(rep(unique(x$.group), each = n),
-                                         rep(row.name, ngroup), sep = "-"), 
+                                         rep(row.name, ngroup), sep = "-"),
                                   col.name))
     x <- split(x, x$.group)
     name <- names(x)
@@ -128,7 +128,7 @@ display_cor.cor_tbl <- function(x,
       x[[.id]]$.row.id <<- n - x[[.id]]$.row.id + 1 + (.id - 1) * n
       x[[.id]]
     })
-    
+
     purrr::walk(1:nrow(x), function(.id) {
       mat[x$.row.id[.id], x$.col.id[.id]] <<- corr[.id]
     })
@@ -138,7 +138,7 @@ display_cor.cor_tbl <- function(x,
       mat[n - x$.row.id[.id] + 1, x$.col.id[.id]] <<- corr[.id]
     })
   }
-  
+
   as.data.frame(mat, stringsAsFactors = FALSE, check.names = FALSE)
 }
 
@@ -153,12 +153,11 @@ display_cor.mantel_tbl <- function(x, byrow = TRUE, ...) {
 #' @importFrom purrr map_chr
 #' @rdname display_cor
 #' @export
-
-format_cor <- function(corr, 
+format_cor <- function(corr,
                        p.value = NULL,
                        type = "full",
                        show.diag = FALSE,
-                       digits = 2, 
+                       digits = 2,
                        nsmall = 2,
                        sig.level = c(0.05, 0.01, 0.001),
                        mark = c("*", "**", "***"),
@@ -169,17 +168,17 @@ format_cor <- function(corr,
   if(!is.null(p.value) && !is.matrix(p.value))
     p.value <- as.matrix(p.value)
   type <- match.arg(type, c("full", "upper", "lower"))
-  
+
   idx <- corr >= 0
   corr[] <- format_number(corr, digits, nsmall)
   if(nice.format) {
     corr[] <- ifelse(idx, paste0("", corr), corr)
   }
   if(!is.null(p.value)) {
-    corr[] <- paste0(corr, 
+    corr[] <- paste0(corr,
                      sig_mark(p.value, sig.level, mark))
   }
-  
+
   max.len <- max(nchar(corr), na.rm = TRUE)
   if(!is.finite(max.len)) {
     warning("Don't have finite value.", call. = FALSE)
@@ -191,11 +190,11 @@ format_cor <- function(corr,
     corr[] <- purrr::map_chr(1:length(nn), function(.idx) {
       if(nn[.idx] < max.len) {
         paste0(corr[.idx], paste0(rep_len(" ", max.len - nn[.idx]), collapse = ""))
-      } else 
+      } else
         corr[.idx]
     })
   }
-  
+
   if(type == "upper") {
     corr[lower.tri(corr, !show.diag)] <- ""
   }

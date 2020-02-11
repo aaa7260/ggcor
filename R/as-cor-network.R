@@ -85,8 +85,8 @@ as_cor_network.data.frame <- function(x, ...) {
 
 #' @rdname  as_cor_network
 #' @export
-#' @method as_cor_network correlation
-as_cor_network.correlation <- function(x, ...) {
+#' @method as_cor_network correlate
+as_cor_network.correlate <- function(x, ...) {
   cor_network(corr = x$r, p.value = x$p.value, ..., val.type = "list")
 }
 

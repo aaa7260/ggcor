@@ -7,7 +7,7 @@
 \alias{export_cor_network.mantel_tbl}
 \alias{export_cor_network.matrix}
 \alias{export_cor_network.data.frame}
-\alias{export_cor_network.correlation}
+\alias{export_cor_network.correlate}
 \alias{export_cor_network.rcorr}
 \alias{export_cor_network.corr.test}
 \title{Output co-network object}
@@ -33,7 +33,7 @@ export_cor_network(x, file = "", what = "edges", sep = ",", ...)
   sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
   simplify = TRUE, r.thres = 0.6, r.absolute = TRUE, ...)
 
-\method{export_cor_network}{correlation}(x, file = "", what = "edges",
+\method{export_cor_network}{correlate}(x, file = "", what = "edges",
   sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
   simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
   p.thres = 0.05, ...)

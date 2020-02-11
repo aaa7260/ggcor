@@ -5,7 +5,7 @@
 \alias{as.igraph.mantel_tbl}
 \alias{as.igraph.rcorr}
 \alias{as.igraph.corr.test}
-\alias{as.igraph.correlation}
+\alias{as.igraph.correlate}
 \alias{as.igraph.cor_network}
 \title{Corece to a igraph object}
 \usage{
@@ -17,7 +17,7 @@
 
 \method{as.igraph}{corr.test}(x, ...)
 
-\method{as.igraph}{correlation}(x, ...)
+\method{as.igraph}{correlate}(x, ...)
 
 \method{as.igraph}{cor_network}(x, ...)
 }

@@ -40,7 +40,7 @@ as_tbl_graph.corr.test <- function(x, ...)
 
 #' @rdname  as_tbl_graph
 #' @export
-as_tbl_graph.correlation <- function(x, ...)
+as_tbl_graph.correlate <- function(x, ...)
 {
   cor_network(x$r, x$p.value, ..., val.type = "graph_tbl")
 }

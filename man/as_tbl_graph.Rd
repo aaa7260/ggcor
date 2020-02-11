@@ -5,7 +5,7 @@
 \alias{as_tbl_graph.mantel_tbl}
 \alias{as_tbl_graph.rcorr}
 \alias{as_tbl_graph.corr.test}
-\alias{as_tbl_graph.correlation}
+\alias{as_tbl_graph.correlate}
 \alias{as_tbl_graph.cor_network}
 \title{Corece to a graph_tbl object}
 \usage{
@@ -17,7 +17,7 @@
 
 \method{as_tbl_graph}{corr.test}(x, ...)
 
-\method{as_tbl_graph}{correlation}(x, ...)
+\method{as_tbl_graph}{correlate}(x, ...)
 
 \method{as_tbl_graph}{cor_network}(x, ...)
 }
