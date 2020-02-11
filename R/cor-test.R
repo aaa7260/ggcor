@@ -68,7 +68,7 @@ correlate <- function(x,
       p.value = p.value,
       lower.ci = lower.ci,
       upper.ci = upper.ci
-    ), class = "correlation"
+    ), class = "correlate"
   )
 }
 
@@ -84,7 +84,7 @@ fast_correlate <- function(x,
   }
   corr <- WGCNA::corAndPvalue(x, y, use, ...)
   structure(.Data = list(r = corr$cor, p.value = corr$p),
-            class = "correlation")
+            class = "correlate")
 }
 
 #' Print for correlate object.
@@ -98,6 +98,6 @@ fast_correlate <- function(x,
 #' print(m, TRUE)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-print.correlation <- function(x, all = FALSE, ...) {
+print.correlate <- function(x, all = FALSE, ...) {
   if(all) print(x, ...) else print(x$r, ...)
 }
