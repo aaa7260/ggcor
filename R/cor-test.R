@@ -18,7 +18,14 @@
 #' correlate(mtcars)
 #' m1 <- matrix(rnorm(100), nrow = 10)
 #' m2 <- matrix(rnorm(60), nrow = 10)
+#'
+#' ## not test for correlation matrix
 #' correlate(m1, m2)
+#'
+#' ## test for correlation matrix
+#' correlate(m1, m2, cor.test = TRUE)
+#'
+#' ## fast compute correlation
 #' if(require(WGCNA)) {
 #'   fast_correlate(m1, m2)
 #' }
@@ -93,7 +100,7 @@ fast_correlate <- function(x,
 #'     print all values.
 #' @param ... extra params passing to \code{print}.
 #' @examples
-#' m <- correlate(mtcars)
+#' m <- correlate(mtcars, cor.test = TRUE)
 #' print(m)
 #' print(m, TRUE)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

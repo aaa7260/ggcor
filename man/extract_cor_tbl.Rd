@@ -34,14 +34,22 @@ These functions are used to quickly obtain the upper
 \examples{
 df <- fortify_cor(mtcars)
 quickcor(df) + geom_colour()
-df01 <- get_lower_data(df)
-quickcor(df01) + geom_colour()
-df02 <- get_upper_data(df, show.diag = FALSE)
-quickcor(df02) + geom_colour()
-df03 <- get_diag_data(df)
-quickcor(df03) + geom_colour()
-df04 <- get_diag_tri(df)
-quickcor(df04) + geom_colour()
+
+## exclude upper
+df \%>\% get_lower_data() \%>\%
+  quickcor() + geom_colour()
+
+## exclude lower
+df \%>\% get_upper_data(show.diag = FALSE) \%>\%
+  quickcor() + geom_colour()
+
+## get the diagonal
+df \%>\% get_diag_data() \%>\%
+  quickcor() + geom_colour()
+
+## exclude the diagonal
+df \%>\% get_diag_tri() \%>\%
+  quickcor() + geom_colour()
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

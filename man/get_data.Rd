@@ -27,9 +27,18 @@ This function is mainly used in \code{ggplot2} geom_*() functions,
     are extracted based on the type and show.diag parameters.
 }
 \examples{
+## arrange different elements in upper and lower
 quickcor(mtcars) +
-  geom_square(data = get_data(type = "upper")) +
-  geom_circle2(data = get_data(type = "lower", show.diag = FALSE))
+  geom_colour(data = get_data(type = "lower")) +
+  geom_ellipse2(data = get_data(type = "upper")) +
+  add_diag_label() +
+  remove_axis()
+
+quickcor(mtcars, cor.test = TRUE) +
+  geom_ellipse2(data = get_data(type = "upper")) +
+  geom_mark(data = get_data(type = "lower")) +
+  add_diag_label() +
+  remove_axis()
 }
 \seealso{
 \code{\link[dplyr]{filter}}.

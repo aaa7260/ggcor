@@ -38,7 +38,14 @@ The columns of 'x' will be tested for each pair when y is NULL(the default),
 correlate(mtcars)
 m1 <- matrix(rnorm(100), nrow = 10)
 m2 <- matrix(rnorm(60), nrow = 10)
+
+## not test for correlation matrix
 correlate(m1, m2)
+
+## test for correlation matrix
+correlate(m1, m2, cor.test = TRUE)
+
+## fast compute correlation
 if(require(WGCNA)) {
   fast_correlate(m1, m2)
 }

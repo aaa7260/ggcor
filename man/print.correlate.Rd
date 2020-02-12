@@ -18,7 +18,7 @@ print all values.}
 Print for correlate object.
 }
 \examples{
-m <- correlate(mtcars)
+m <- correlate(mtcars, cor.test = TRUE)
 print(m)
 print(m, TRUE)
 }

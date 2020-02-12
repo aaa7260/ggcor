@@ -43,10 +43,18 @@ a cor_tbl object.
 Functions to coerce a object to cor_tbl if possible.
 }
 \examples{
-corr <- cor(mtcars)
-as_cor_tbl(corr)
-ll <- correlate(mtcars)
-as_cor_tbl(ll, type = "upper")
+cor(mtcars) \%>\% as_cor_tbl()
+correlate(mtcars, cor.test = TRUE) \%>\% as_cor_tbl()
+correlate(mtcars, type = "upper") \%>\% as_cor_tbl()
+\dontrun{
+## S3 method for rcorr object
+require(Hmisc)
+rcorr(mtcars) \%>\% as_cor_tbl()
+
+## S3 method for corr.test object
+require(psych)
+corr.test(mtcars) \%>\% as_cor_tbl()
+}
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

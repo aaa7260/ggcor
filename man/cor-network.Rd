@@ -7,7 +7,7 @@
 \usage{
 cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
   rm.dup = TRUE, simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05, val.type = "graph_tbl")
+  p.thres = 0.05, val.type = "tbl_graph")
 
 \method{print}{cor_network}(x, n = 3, ...)
 }
@@ -30,9 +30,9 @@ delete nodes without edge connections.}
 
 \item{p.thres}{a numeric value.}
 
-\item{val.type}{return value type:
+\item{val.type}{type return value:
 \itemize{
-    \item \code{graph_tbl}: return graph_tbl object
+    \item \code{tbl_graph}: return tbl_graph object
     \item \code{igraph}: return igraph object
     \item \code{list}: return a list of nodes and edges
  }}
@@ -44,11 +44,23 @@ delete nodes without edge connections.}
 \item{...}{extra params for printing.}
 }
 \value{
-tbl_graph object.
+a tbl_graph (default), igraph or list object.
 }
 \description{
 The function calculates correlation coefficient, statistical
     significance level and filters according to conditions.
+}
+\examples{
+cor_network(cor(mtcars))
+corr <- correlate(mtcars, cor.test = TRUE)
+cor_network(corr$r, corr$p.value)
+
+## return a igraph object
+cor_network(corr$r, corr$p.value, val.type = "igraph")
+
+## reurn a tbl_graph object
+cor_network(corr$r, corr$p.value, val.type = "tbl_graph")
+
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

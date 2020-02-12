@@ -40,6 +40,7 @@ This function can add other associated information link plot more
     other variables and variables in the correlation coefficient matrix plot.
 }
 \examples{
+\dontrun{
 require(vegan, quietly = TRUE)
 require(dplyr, quietly = TRUE)
 require(ggplot2, quietly = TRUE)
@@ -65,6 +66,7 @@ quickcor(varechem, type = "upper") + geom_square() +
   add_diag_label() +
   scale_size_manual(values = c(0.5, 1.5, 3)) +
   remove_axis("x")
+}
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

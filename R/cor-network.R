@@ -12,20 +12,31 @@
 #' @param r.thres a numeric value.
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
-#' @param val.type return value type:
+#' @param val.type type return value:
 #'   \itemize{
-#'       \item \code{graph_tbl}: return graph_tbl object
+#'       \item \code{tbl_graph}: return tbl_graph object
 #'       \item \code{igraph}: return igraph object
 #'       \item \code{list}: return a list of nodes and edges
 #'    }
 #' @param n number of rows to show.
 #' @param ... extra params for printing.
-#' @return tbl_graph object.
+#' @return a tbl_graph (default), igraph or list object.
 #' @importFrom dplyr filter %>%
 #' @importFrom tibble tibble
 #' @importFrom tidygraph tbl_graph
 #' @importFrom igraph graph_from_data_frame
 #' @rdname cor-network
+#' @examples
+#' cor_network(cor(mtcars))
+#' corr <- correlate(mtcars, cor.test = TRUE)
+#' cor_network(corr$r, corr$p.value)
+#'
+#' ## return a igraph object
+#' cor_network(corr$r, corr$p.value, val.type = "igraph")
+#'
+#' ## reurn a tbl_graph object
+#' cor_network(corr$r, corr$p.value, val.type = "tbl_graph")
+#'
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 cor_network <- function(corr,
@@ -37,9 +48,9 @@ cor_network <- function(corr,
                         r.thres = 0.6,
                         r.absolute = TRUE,
                         p.thres = 0.05,
-                        val.type = "graph_tbl")
+                        val.type = "tbl_graph")
 {
-  val.type <- match.arg(val.type, c("graph_tbl", "igraph", "list"))
+  val.type <- match.arg(val.type, c("tbl_graph", "igraph", "list"))
   if(!is.matrix(corr))
     corr <- as.matrix(corr)
   if(!is.null(p.value) && !is.matrix(p.value))
@@ -84,7 +95,7 @@ cor_network <- function(corr,
   }
 
   switch (val.type,
-          graph_tbl = tidygraph::tbl_graph(nodes = nodes, edges = edges, directed = FALSE),
+          tbl_graph = tidygraph::tbl_graph(nodes = nodes, edges = edges, directed = FALSE),
           igraph    = igraph::graph_from_data_frame(edges, directed = FALSE, vertices = nodes),
           list      = structure(.Data = list(nodes = nodes, edges  = edges), class = "cor_network")
   )

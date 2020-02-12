@@ -31,11 +31,14 @@ Helper function of cor_tbl
 df <- fortify_cor(mtcars)
 ## get rows names
 get_row_name(df)
+
 ## get columns names
 get_col_name(df)
-## get show.diag
+
+## get show.diag parameter
 get_show_diag(df)
-## get type
+
+## get type parameter
 get_type(df)
 }
 \author{

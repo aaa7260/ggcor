@@ -10,14 +10,22 @@
 #' @examples
 #' df <- fortify_cor(mtcars)
 #' quickcor(df) + geom_colour()
-#' df01 <- get_lower_data(df)
-#' quickcor(df01) + geom_colour()
-#' df02 <- get_upper_data(df, show.diag = FALSE)
-#' quickcor(df02) + geom_colour()
-#' df03 <- get_diag_data(df)
-#' quickcor(df03) + geom_colour()
-#' df04 <- get_diag_tri(df)
-#' quickcor(df04) + geom_colour()
+#'
+#' ## exclude upper
+#' df %>% get_lower_data() %>%
+#'   quickcor() + geom_colour()
+#'
+#' ## exclude lower
+#' df %>% get_upper_data(show.diag = FALSE) %>%
+#'   quickcor() + geom_colour()
+#'
+#' ## get the diagonal
+#' df %>% get_diag_data() %>%
+#'   quickcor() + geom_colour()
+#'
+#' ## exclude the diagonal
+#' df %>% get_diag_tri() %>%
+#'   quickcor() + geom_colour()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 get_lower_data <- function(x, show.diag = TRUE)
@@ -116,9 +124,18 @@ is_symmet <- function(x) {
 #' @importFrom dplyr filter
 #' @rdname get_data
 #' @examples
+#' ## arrange different elements in upper and lower
 #' quickcor(mtcars) +
-#'   geom_square(data = get_data(type = "upper")) +
-#'   geom_circle2(data = get_data(type = "lower", show.diag = FALSE))
+#'   geom_colour(data = get_data(type = "lower")) +
+#'   geom_ellipse2(data = get_data(type = "upper")) +
+#'   add_diag_label() +
+#'   remove_axis()
+#'
+#' quickcor(mtcars, cor.test = TRUE) +
+#'   geom_ellipse2(data = get_data(type = "upper")) +
+#'   geom_mark(data = get_data(type = "lower")) +
+#'   add_diag_label() +
+#'   remove_axis()
 #' @seealso \code{\link[dplyr]{filter}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export

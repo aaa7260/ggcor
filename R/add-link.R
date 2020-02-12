@@ -19,7 +19,7 @@
 #' @importFrom ggplot2 aes_ geom_curve geom_text geom_point
 #' @importFrom utils modifyList
 #' @rdname add_link
-#' @examples
+#' @examples \dontrun{
 #' require(vegan, quietly = TRUE)
 #' require(dplyr, quietly = TRUE)
 #' require(ggplot2, quietly = TRUE)
@@ -45,6 +45,7 @@
 #'   add_diag_label() +
 #'   scale_size_manual(values = c(0.5, 1.5, 3)) +
 #'   remove_axis("x")
+#' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 add_link <- function(df,

@@ -15,8 +15,24 @@
 #' @importFrom utils modifyList
 #' @rdname cor_tbl
 #' @examples
-#' corr <- cor(mtcars)
-#' cor_tbl(corr)
+#' cor_tbl(cor(mtcars))
+#' corr <- correlate(mtcars, cor.test = TRUE)
+#'
+#' ## with p value
+#' cor_tbl(corr$r, corr$p.value)
+#'
+#' ## reorder correlation matrix
+#' cor_tbl(corr$r, corr$p.value, cluster = TRUE)
+#'
+#' ## exclude upper or lower
+#' ### exclude lower
+#' cor_tbl(corr$r, corr$p.value, type = "upper")
+#' ### exclude upper
+#' cor_tbl(corr$r, corr$p.value, type = "lower", show.diag = FALSE)
+#'
+#' ## add extra matrix data
+#' m <- matrix(rnorm(11*11), nrow = 11)
+#' cor_tbl(corr$r, corr$p.value, extra.mat = list(m = m))
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 cor_tbl <- function(corr,
