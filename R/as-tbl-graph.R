@@ -28,21 +28,21 @@ as_tbl_graph.rcorr <- function(x, ...)
 {
   p.value <- x$P
   diag(p.value) <- 0
-  cor_network(x$r, p.value, ..., val.type = "graph_tbl")
+  cor_network(x$r, p.value, ..., val.type = "tbl_graph")
 }
 
 #' @rdname  as_tbl_graph
 #' @export
 as_tbl_graph.corr.test <- function(x, ...)
 {
-  cor_network(x$r, x$p, ..., val.type = "graph_tbl")
+  cor_network(x$r, x$p, ..., val.type = "tbl_graph")
 }
 
 #' @rdname  as_tbl_graph
 #' @export
 as_tbl_graph.correlate <- function(x, ...)
 {
-  cor_network(x$r, x$p.value, ..., val.type = "graph_tbl")
+  cor_network(x$r, x$p.value, ..., val.type = "tbl_graph")
 }
 
 #' @importFrom tidygraph tbl_graph
