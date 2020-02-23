@@ -3,11 +3,16 @@
 #' @param x any \code{R} object.
 #' @param simplify logical value (defaults to TRUE) indicating whether to
 #'     delete nodes without edge connections.
+#' @param weight NULL (default) or name of column in edges which will be renamed
+#'     to "weight".
 #' @param r.thres a numeric value.
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
 #' @param ... extra params passing to \code{\link[ggcor]{cor_network}}.
 #' @return a cor_network object.
+#' @importFrom dplyr filter rename %>%
+#' @importFrom tibble tibble
+#' @importFrom rlang sym !!
 #' @rdname as_cor_network
 #' @examples
 #' ll <- correlate(mtcars)
@@ -23,6 +28,7 @@ as_cor_network <- function(x, ...) {
 #' @method as_cor_network cor_tbl
 as_cor_network.cor_tbl <- function(x,
                                    simplify = TRUE,
+                                   weight = NULL,
                                    r.thres = 0.6,
                                    r.absolute = TRUE,
                                    p.thres = 0.05,
@@ -57,6 +63,14 @@ as_cor_network.cor_tbl <- function(x,
     tibble::tibble(name = unique(c(x$.col.names, x$.row.names)))
   } else {
     tibble::tibble(name = unique(c(get_col_name(x), get_row_name(x))))
+  }
+
+  if(!is.null(weight)) {
+    if(!weight %in% names(edges)) {
+      stop("don't find ", weight, " in egdes table.", call. = FALSE)
+    }
+    weight <- rlang::sym(weight)
+    edges <- dplyr::rename(edges, weight = !!weight)
   }
 
   structure(.Data = list(nodes = nodes,

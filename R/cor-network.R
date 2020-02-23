@@ -9,6 +9,8 @@
 #'     rows. If TRUE, the correlation between A-B and B-A is retained only A-B.
 #' @param simplify logical value (defaults to TRUE) indicating whether to
 #'     delete nodes without edge connections.
+#' @param weight NULL (default) or name of column in edges which will be renamed
+#'     to "weight".
 #' @param r.thres a numeric value.
 #' @param r.absolute logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
@@ -21,10 +23,11 @@
 #' @param n number of rows to show.
 #' @param ... extra params for printing.
 #' @return a tbl_graph (default), igraph or list object.
-#' @importFrom dplyr filter %>%
+#' @importFrom dplyr filter rename %>%
 #' @importFrom tibble tibble
 #' @importFrom tidygraph tbl_graph
 #' @importFrom igraph graph_from_data_frame
+#' @importFrom rlang sym !!
 #' @rdname cor-network
 #' @examples
 #' cor_network(cor(mtcars))
@@ -45,6 +48,7 @@ cor_network <- function(corr,
                         col.names = NULL,
                         rm.dup = TRUE,
                         simplify = TRUE,
+                        weight = NULL,
                         r.thres = 0.6,
                         r.absolute = TRUE,
                         p.thres = 0.05,
@@ -92,6 +96,14 @@ cor_network <- function(corr,
     tibble::tibble(name = unique(c(edges$from, edges$to)))
   } else {
     tibble::tibble(name = unique(c(.row.names, .col.names)))
+  }
+
+  if(!is.null(weight)) {
+    if(!weight %in% names(edges)) {
+      stop("don't find ", weight, " in egdes table.", call. = FALSE)
+    }
+    weight <- rlang::sym(weight)
+    edges <- dplyr::rename(edges, weight = !!weight)
   }
 
   switch (val.type,

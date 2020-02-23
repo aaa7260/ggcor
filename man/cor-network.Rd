@@ -6,8 +6,8 @@
 \title{Tidy co-occurrence network data}
 \usage{
 cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
-  rm.dup = TRUE, simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05, val.type = "tbl_graph")
+  rm.dup = TRUE, simplify = TRUE, weight = NULL, r.thres = 0.6,
+  r.absolute = TRUE, p.thres = 0.05, val.type = "tbl_graph")
 
 \method{print}{cor_network}(x, n = 3, ...)
 }
@@ -23,6 +23,9 @@ rows. If TRUE, the correlation between A-B and B-A is retained only A-B.}
 
 \item{simplify}{logical value (defaults to TRUE) indicating whether to
 delete nodes without edge connections.}
+
+\item{weight}{NULL (default) or name of column in edges which will be renamed
+to "weight".}
 
 \item{r.thres}{a numeric value.}
 
