@@ -90,7 +90,8 @@ print.quickcor <- function(x, title = "corr", nbin = 40, ...)
 {
   fill.scale <- x$scales$get_scales("fill")
   if(is.null(fill.scale)) {
-    x <- x + scale_fill_gradient2n(breaks = c(-1, -0.5, 0, 0.5, 1),
+    x <- x + scale_fill_gradient2n(colours = getOption("ggcor.fill.continuous"),
+                                   breaks = c(-1, -0.5, 0, 0.5, 1),
                                    labels = c(-1, -0.5, 0, 0.5, 1),
                                    limits = c(-1, 1)) +
       guides(fill = guide_colourbar(title = title,

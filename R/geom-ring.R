@@ -72,7 +72,7 @@ GeomRing <- ggproto(
       aes <- new_data_frame(row[aesthetics])[rep(1, nrow(dd)), ]
       GeomPolygon$draw_panel(cbind(dd, aes), panel_params, coord)
     })
-    ggplot2:::ggname("geom_ring", do.call("grobTree", polys))
+    ggname("geom_ring", do.call("grobTree", polys))
   },
   draw_key = draw_key_ring
 )
