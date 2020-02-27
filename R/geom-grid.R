@@ -19,6 +19,7 @@ geom_grid <- function(data = NULL, colour = "grey50", size = 0.25, ..., color = 
     if(!is_cor_tbl(data)) {
       stop("Need a cor_tbl object.", call. = FALSE)
     }
+    data <- get_grid_data()(data)
   }
   if(!is.null(color))
     colour <- color
