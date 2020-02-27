@@ -1,23 +1,37 @@
 #' Add dianoal labels on correlation plot
 #' @description \code{add_grid} is mainly used with \code{ggcor} and
 #'     \code{quickcor} functions.
+#' @param data NULL (default) or a cor_tbl object.
 #' @param drop logical value (default is TRUE). When type of plot is 'upper'
 #'     or 'lower' and 'show.diag' is FALSE, whether need to remove the blank label.
 #' @param ... extra params for \code{\link[ggplot2]{geom_text}}.
 #' @importFrom ggplot2 geom_text aes_string
-#' @rdname add_diag_label
+#' @rdname geom_diag_label
 #' @examples
-#' quickcor(mtcars, type = "upper") + geom_colour() + add_diag_label()
-#' quickcor(mtcars, type = "lower") + geom_colour() + add_diag_label()
+#' quickcor(mtcars, type = "upper") + geom_colour() + geom_diag_label()
+#' quickcor(mtcars, type = "lower") + geom_colour() + geom_diag_label()
 #' @seealso \code{\link[ggplot2]{geom_text}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-add_diag_label <- function(drop = FALSE, ...)
+geom_diag_label <- function(data = NULL, drop = FALSE, ...)
 {
+  if(!is.null(data)) {
+    if(!is_cor_tbl(data)) {
+      stop("Need a cor_tbl object.", call. = FALSE)
+    }
+  }
   geom_text(mapping = aes_string("x", "y", label = "label"),
-            data = get_diag_label_data(drop = drop), inherit.aes = FALSE, ...)
+            data = data %||% get_diag_label_data(drop = drop),
+            inherit.aes = FALSE, ...)
 }
 
+#' @rdname geom_diag_label
+#' @export
+add_diag_label <- function(...) {
+  warning("`add_diag_label()` is deprecated. ",
+  "Use `geom_diag_label()` instead.", call. = FALSE)
+  geom_diag_label(...)
+}
 #' @noRd
 get_diag_label_data <- function(drop = FALSE) {
   function(data) {

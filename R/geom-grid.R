@@ -1,24 +1,40 @@
 #' Add panel grid line on correlation plot
 #' @description \code{add_grid} is mainly used with \code{ggcor} function,
 #'     and only valid if the input data is cor_tbl in \code{\link[ggplot2]{ggplot}}.
+#' @param data NULL (default) or a cor_tbl object.
 #' @param colour,color colour of grid lines.
 #' @param size size of grid lines.
 #' @param ... extra params for \code{\link[ggplot2]{geom_segment}}.
 #' @importFrom ggplot2 geom_segment aes_string
-#' @rdname add_grid
+#' @rdname geom_grid
 #' @examples
 #' df <- fortify_cor(mtcars)
-#' ggcor(df) + add_grid()
+#' ggcor(df) + geom_grid()
 #' require(ggplot2, quietly = TRUE)
-#' ggplot(df, aes(x, y)) + add_grid()
+#' ggplot(df, aes(x, y)) + geom_grid()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-add_grid <- function(colour = "grey50", size = 0.25, ..., color = NULL) {
-  if(!is.null(color)) colour <- color
+geom_grid <- function(data = NULL, colour = "grey50", size = 0.25, ..., color = NULL) {
+  if(!is.null(data)) {
+    if(!is_cor_tbl(data)) {
+      stop("Need a cor_tbl object.", call. = FALSE)
+    }
+  }
+  if(!is.null(color))
+    colour <- color
   geom_segment(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
-               data = get_grid_data(), colour = colour, size = size,
+               data = data %||% get_grid_data(), colour = colour, size = size,
                inherit.aes = FALSE, ...)
 }
+
+#' @rdname geom_grid
+#' @export
+add_grid <- function(...) {
+  warning("`add_grid()` is deprecated. ",
+          "Use `geom_grid()` instead.", call. = FALSE)
+  geom_grid(...)
+}
+
 #' @noRd
 get_grid_data <- function() {
   function(data) {

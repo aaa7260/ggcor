@@ -51,7 +51,7 @@ mantel <- fortify_mantel(varespec, varechem,
 quickcor(varechem, type = "upper") +
   geom_square() +
   add_link(mantel, diag.label = TRUE) +
-  add_diag_label() + remove_axis("x")
+  geom_diag_label() + remove_axis("x")
 
 mantel01 <- mantel \%>\%
   mutate(r = cut(r, breaks = c(-Inf, 0.25, 0.5, Inf),
@@ -63,7 +63,7 @@ mantel01 <- mantel \%>\%
 quickcor(varechem, type = "upper") + geom_square() +
   add_link(mantel01, mapping = aes(colour = p.value, size = r),
            diag.label = TRUE) +
-  add_diag_label() +
+  geom_diag_label() +
   scale_size_manual(values = c(0.5, 1.5, 3)) +
   remove_axis("x")
 }
