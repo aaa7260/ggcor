@@ -20,6 +20,7 @@ geom_diag_label <- function(data = NULL, drop = FALSE, ...)
     if(!is_cor_tbl(data)) {
       stop("Need a cor_tbl object.", call. = FALSE)
     }
+    data <- get_diag_label_data()(data)
   }
   geom_text(mapping = aes_string("x", "y", label = "label"),
             data = data %||% get_diag_label_data(drop = drop),
