@@ -1,7 +1,7 @@
 Package: ggcor
 Type: Package
 Title: Extended tools for correlation analysis and visualization
-Version: 0.9.2.13
+Version: 0.9.2.14
 Authors@R: c(
     person("Houyun", "Huang", email = "houyunhuang@163.com", role = c("aut", "cre")),
     person("Lei", "Zhou", email = "zhoulei@scau.edu.cn", role = "aut"),
@@ -45,8 +45,6 @@ Suggests:
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Collate: 
-    'add-diag-label.R'
-    'add-grid.R'
     'add-link-extra-params.R'
     'add-link-utils.R'
     'add-link.R'
@@ -70,7 +68,9 @@ Collate:
     'geom-colour.R'
     'geom-conf.R'
     'geom-cross.R'
+    'geom-diag-label.R'
     'geom-ellipse2.R'
+    'geom-grid.R'
     'geom-mark.R'
     'geom-num.R'
     'geom-pie2.R'

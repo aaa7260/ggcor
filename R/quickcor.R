@@ -71,7 +71,7 @@ quickcor <- function(x,
                                upper = "right")
   p <- ggcor(data, mapping = mapping, axis.x.position = axis.x.position,
              axis.y.position = axis.y.position, axis.label.drop = axis.label.drop) +
-    add_grid(grid.colour, grid.size)
+    geom_grid(colour = grid.colour, size = grid.size)
 
   # add theme and coord
   xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
@@ -90,7 +90,7 @@ print.quickcor <- function(x, title = "corr", nbin = 40, ...)
 {
   fill.scale <- x$scales$get_scales("fill")
   if(is.null(fill.scale)) {
-    x <- x + scale_fill_gradient2n(colours = getOption("ggcor.fill.continuous"),
+    x <- x + scale_fill_gradient2n(colours = getOption("ggcor.fill.pal"),
                                    breaks = c(-1, -0.5, 0, 0.5, 1),
                                    labels = c(-1, -0.5, 0, 0.5, 1),
                                    limits = c(-1, 1)) +
