@@ -1,6 +1,6 @@
 #' Add panel grid line on correlation plot
-#' @description \code{add_grid} is mainly used with \code{ggcor} function,
-#'     and only valid if the input data is cor_tbl in \code{\link[ggplot2]{ggplot}}.
+#' @description \code{geom_grid} is mainly used with \code{ggcor} or \code{quickcor}
+#'     function to add a panel grid line on plot region.
 #' @param data NULL (default) or a cor_tbl object.
 #' @param colour,color colour of grid lines.
 #' @param size size of grid lines.

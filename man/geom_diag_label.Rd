@@ -3,7 +3,7 @@
 \name{geom_diag_label}
 \alias{geom_diag_label}
 \alias{add_diag_label}
-\title{Add dianoal labels on correlation plot}
+\title{Add diagnoal labels on correlation plot}
 \usage{
 geom_diag_label(data = NULL, drop = FALSE, ...)
 
@@ -18,8 +18,9 @@ or 'lower' and 'show.diag' is FALSE, whether need to remove the blank label.}
 \item{...}{extra params for \code{\link[ggplot2]{geom_text}}.}
 }
 \description{
-\code{add_grid} is mainly used with \code{ggcor} and
-    \code{quickcor} functions.
+\code{geom_diag_label} is mainly used with \code{ggcor} and
+    \code{quickcor} functions to add diagnoal labels on correct position
+    base on different type of cor_tbl object.
 }
 \examples{
 quickcor(mtcars, type = "upper") + geom_colour() + geom_diag_label()

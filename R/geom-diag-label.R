@@ -1,6 +1,7 @@
-#' Add dianoal labels on correlation plot
-#' @description \code{add_grid} is mainly used with \code{ggcor} and
-#'     \code{quickcor} functions.
+#' Add diagnoal labels on correlation plot
+#' @description \code{geom_diag_label} is mainly used with \code{ggcor} and
+#'     \code{quickcor} functions to add diagnoal labels on correct position
+#'     base on different type of cor_tbl object.
 #' @param data NULL (default) or a cor_tbl object.
 #' @param drop logical value (default is TRUE). When type of plot is 'upper'
 #'     or 'lower' and 'show.diag' is FALSE, whether need to remove the blank label.

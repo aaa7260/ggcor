@@ -20,8 +20,8 @@ add_grid(...)
 \item{...}{extra params for \code{\link[ggplot2]{geom_segment}}.}
 }
 \description{
-\code{add_grid} is mainly used with \code{ggcor} function,
-    and only valid if the input data is cor_tbl in \code{\link[ggplot2]{ggplot}}.
+\code{geom_grid} is mainly used with \code{ggcor} or \code{quickcor}
+    function to add a panel grid line on plot region.
 }
 \examples{
 df <- fortify_cor(mtcars)
