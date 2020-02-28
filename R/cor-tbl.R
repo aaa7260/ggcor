@@ -48,11 +48,19 @@ cor_tbl <- function(corr,
   type <- match.arg(type, c("full", "upper", "lower"))
   check_extra_mat_name(extra.mat)
   ## exclude NULL
-  corr <- if(is.null(p.value)) {
-    list(r = corr)
-    } else {
-      list(r = corr, p.value = p.value)
-    }
+  missing.corr <- missing(corr)
+  if(missing.corr && is.null(p.value) && length(extra.mat) == 0) {
+    stop("No matrix data input.", call. = FALSE)
+  }
+  if(missing.corr && isTRUE(cluster)) {
+    warning("Non-correlation matrix don't support clustering.", call. = FALSE)
+    cluster <- FALSE
+  }
+  if(missing(corr)) {
+    corr <- if(is.null(p.value)) list() else list(p.value = p.value)
+  } else {
+    corr <- if(is.null(p.value)) list(r = corr) else list(r = corr, p.value = p.value)
+  }
 
   corr <- modifyList(corr, extra.mat)
 
@@ -104,13 +112,18 @@ cor_tbl <- function(corr,
   data <- modifyList(id, setNames(lapply(corr, as.vector), name))
   new.order <- intersect(c(".row.names", ".col.names", name, ".row.id", ".col.id"),
                          names(data))
+  cls <- if(missing.corr) {
+    c("general_cor_tbl", "cor_tbl", "tbl_df", "tbl", "data.frame")
+  } else {
+    c("cor_tbl", "tbl_df", "tbl", "data.frame")
+  }
   data <- structure(.Data = new_data_frame(data[new.order]),
                     .row.names = row.names,
                     .col.names = col.names,
                     type = type,
                     show.diag = show.diag,
                     grouped = FALSE,
-                    class = c("cor_tbl", "tbl_df", "tbl", "data.frame"))
+                    class = cls)
   switch (type,
           full = data,
           upper = get_upper_data(data, show.diag = show.diag),

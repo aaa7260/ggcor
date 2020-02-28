@@ -15,6 +15,8 @@
 #'     the default value is 2.
 #' @param sig.level significance level，the defaults values is `c(0.05, 0.01, 0.001)`.
 #' @param mark significance mark，the defaults values is `c("*", "**", "***")`.
+#' @param coef string to specifies which column is the coefficient when "x"
+#'    is a general_cor_tbl.
 #' @param nice.format a logical value indicating whether the output needs to be
 #'     automatically optimized.
 #' @param ... extra params passing to \code{\link[ggcor]{format_cor}}.
@@ -78,8 +80,19 @@ display_cor.cor_tbl <- function(x,
                                 nsmall = 2,
                                 sig.level = c(0.05, 0.01, 0.001),
                                 mark = c("*", "**", "***"),
+                                coef = NULL,
                                 nice.format = TRUE,
                                 ...) {
+  if(is_general_cor_tbl(x)) {
+    if(is.null(coef)) {
+      stop("Must set 'coef' parameter for general_cor_tbl.", call. = FALSE)
+    }
+    if(!coef %in% names(x)) {
+      stop("Don't find ", coef, " in data table.", call. = FALSE)
+    }
+    coef <- rlang::sym(coef)
+    x <- dplyr::rename(x, r = !!coef)
+  }
   type <- match.arg(type, c("full", "upper", "lower"))
   x <- switch (type,
     full  = x,
@@ -103,7 +116,6 @@ display_cor.cor_tbl <- function(x,
   }
   max.len <- max(nchar(corr), na.rm = TRUE)
   if(!is.finite(max.len)) {
-    warning("Don't have finite value.", call. = FALSE)
     nice.format <- FALSE
   }
   if(nice.format) {

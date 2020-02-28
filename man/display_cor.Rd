@@ -26,7 +26,7 @@ display_cor(x, ...)
 
 \method{display_cor}{cor_tbl}(x, type = "full", show.diag = FALSE,
   digits = 2, nsmall = 2, sig.level = c(0.05, 0.01, 0.001),
-  mark = c("*", "**", "***"), nice.format = TRUE, ...)
+  mark = c("*", "**", "***"), coef = NULL, nice.format = TRUE, ...)
 
 \method{display_cor}{mantel_tbl}(x, byrow = TRUE, ...)
 
@@ -54,6 +54,9 @@ the default value is 2.}
 \item{sig.level}{significance level，the defaults values is `c(0.05, 0.01, 0.001)`.}
 
 \item{mark}{significance mark，the defaults values is `c("*", "**", "***")`.}
+
+\item{coef}{string to specifies which column is the coefficient when "x"
+is a general_cor_tbl.}
 
 \item{nice.format}{a logical value indicating whether the output needs to be
 automatically optimized.}

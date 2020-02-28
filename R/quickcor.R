@@ -47,13 +47,18 @@ quickcor <- function(x,
                      ...)
 {
   data <- fortify_cor(x, y, ...)
+  is.general <- is_general_cor_tbl(data)
   type <- get_type(data)
   n <- length(get_row_name(data))
   m <- length(get_col_name(data))
   show.diag <- get_show_diag(data)
   name <- names(data)
   # handle mapping setting
-  base.aes <- aes_string(".col.id", ".row.id", r0 = "r", r = "r", fill = "r")
+  base.aes <- if(is.general) {
+    aes_string(".col.id", ".row.id")
+  } else {
+    aes_string(".col.id", ".row.id", r0 = "r", r = "r", fill = "r")
+  }
   if("p.value" %in% name)
     base.aes <- modifyList(base.aes, aes_string(p.value = "p.value"))
   if(all (c("lower.ci", "upper.ci") %in% name))

@@ -34,25 +34,32 @@ as_cor_network.cor_tbl <- function(x,
                                    p.thres = 0.05,
                                    ...)
 {
-  edges <- if(is.finite(r.thres)) {
-    if("p.value" %in% names(x) && is.finite(p.thres)) {
-      if(r.absolute) {
-        dplyr::filter(x, abs(r) > r.thres, p.value < p.thres)
-      } else {
-        dplyr::filter(x, r > r.thres, p.value < p.thres)
-      }
-    } else {
-      if(r.absolute) {
-        dplyr::filter(x, abs(r) > r.thres)
-      } else {
-        dplyr::filter(x, r > r.thres)
-      }
-    }
-  } else {
-    if("p.value" %in% names(x) && is.finite(p.thres)) {
+
+  if(is_general_cor_tbl(x)) {
+    edges <- if("p.value" %in% names(x) && is.finite(p.thres)) {
       dplyr::filter(x, p.value < p.thres)
+    } else x
+  } else {
+    edges <- if(is.finite(r.thres)) {
+      if("p.value" %in% names(x) && is.finite(p.thres)) {
+        if(r.absolute) {
+          dplyr::filter(x, abs(r) > r.thres, p.value < p.thres)
+        } else {
+          dplyr::filter(x, r > r.thres, p.value < p.thres)
+        }
+      } else {
+        if(r.absolute) {
+          dplyr::filter(x, abs(r) > r.thres)
+        } else {
+          dplyr::filter(x, r > r.thres)
+        }
+      }
     } else {
-      x
+      if("p.value" %in% names(x) && is.finite(p.thres)) {
+        dplyr::filter(x, p.value < p.thres)
+      } else {
+        x
+      }
     }
   }
 
@@ -60,9 +67,9 @@ as_cor_network.cor_tbl <- function(x,
   edges <- rename_cor_network_edge(edges, ".row.names", ".col.names")
 
   nodes <- if(simplify) {
-    tibble::tibble(name = unique(c(x$.col.names, x$.row.names)))
+    tibble::tibble(name = unique(c(edges$from, x$to)))
   } else {
-    tibble::tibble(name = unique(c(get_col_name(x), get_row_name(x))))
+    tibble::tibble(name = unique(c(x$.col.names, x$.row.names)))
   }
 
   if(!is.null(weight)) {

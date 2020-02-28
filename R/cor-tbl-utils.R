@@ -49,7 +49,11 @@ is_cor_tbl <- function(x) {
   inherits(x, "cor_tbl")
 }
 
-
+#' @rdname get_attr
+#' @export
+is_general_cor_tbl <- function(x) {
+  inherits(x, "general_cor_tbl")
+}
 
 
 

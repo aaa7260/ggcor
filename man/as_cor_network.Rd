@@ -21,7 +21,7 @@ as_cor_network(x, ...)
 
 \method{as_cor_network}{mantel_tbl}(x, ...)
 
-\method{as_cor_network}{matrix}(x, ...)
+\method{as_cor_network}{matrix}(x, is.cor = TRUE, ...)
 
 \method{as_cor_network}{data.frame}(x, ...)
 
