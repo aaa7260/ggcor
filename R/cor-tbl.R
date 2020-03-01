@@ -89,7 +89,7 @@ cor_tbl <- function(corr,
     if(nrow(first) != ncol(first)) {
       if(type != "full") {
         warning("'type=", type,
-                "' just supports for symmetric correlation matrix.", call. = FALSE)
+                "' just supports for square matrix.", call. = FALSE)
         type <- "full"
         if(type == "full") show.diag <- TRUE
       }
