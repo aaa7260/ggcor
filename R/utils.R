@@ -75,6 +75,52 @@ ggname <- function (prefix, grob)
 }
 
 #' @noRd
+aes_short_to_long <- function(data, prefix, short.aes)
+{
+  if(is.null(data)) {
+    return(data)
+  }
+  if (any(names(data) == "color")) {
+    names(data)[names(data) == "color"] <- "colour"
+  }
+  short.aes.id <- names(data) %in% short.aes
+  names(data)[short.aes.id] <- paste(prefix, names(data)[short.aes.id],
+                                     sep = "_")
+  data
+}
+
+#' @noRd
+aes_long_to_short <- function(data, prefix, long.aes)
+{
+  if(is.null(data)) {
+    return(data)
+  }
+  long.color <- paste(prefix, "color", sep = "_")
+  if (any(names(data) == long.color)) {
+    names(data)[names(data) == long.color] <- paste(prefix, "colour", sep = "_")
+  }
+  long.aes.id <- names(data) %in% long.aes
+  names(data)[long.aes.id] <- gsub(paste0(prefix, "_"), "",
+                                   names(data)[long.aes.id], fixed = TRUE)
+  data
+}
+
+#' @noRd
+remove_short_aes <- function(data, short.aes) {
+  data[ , !names(data) %in% short.aes, drop = FALSE]
+}
+
+#' @noRd
+short_aes <- c("color", "colour", "fill", "size", "linetype", "alpha", "r0",
+               "width", "height", "n", "ratio")
+
+#' @noRd
+long_aes_upper <- paste("upper", short_aes, sep = "_")
+
+#' @noRd
+long_aes_lower <- paste("lower", short_aes, sep = "_")
+
+#' @noRd
 utils::globalVariables(
   c(
     "r",

@@ -6,8 +6,7 @@
 #' @param method a character string indicating which correlation coefficient is to be used
 #'     for the test. One of "pearson", "kendall", or "spearman".
 #' @param use an optional character string giving a method for computing covariances in the presence of missing values.
-#' @param ... extra params passing to \code{cor.test} for \code{correlate},
-#'     passing to \code{WGCNA::corAndPvalue}.
+#' @param ... extra params, see Details.
 #' @details The columns of 'x' will be tested for each pair when y is NULL(the default),
 #'     otherwise each column in 'x' and each column in 'y' is tested for each pair.
 #' @return a list with correlation matrix, P values matrix, confidence intervals matrix.
@@ -26,8 +25,12 @@
 #' correlate(m1, m2, cor.test = TRUE)
 #'
 #' ## fast compute correlation
-#' if(require(WGCNA)) {
-#'   fast_correlate(m1, m2)
+#' \dontrun{
+#' require(WGCNA)
+#' fast_correlate(m1, m2)
+#'
+#' require(picante)
+#'   fast_correlate2(m1)
 #' }
 #' @seealso \code{\link[stats]{cor}}, \code{\link[stats]{cor.test}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
@@ -91,6 +94,20 @@ fast_correlate <- function(x,
   }
   corr <- WGCNA::corAndPvalue(x, y, use, ...)
   structure(.Data = list(r = corr$cor, p.value = corr$p),
+            class = "correlate")
+}
+
+#' @rdname corrlate
+#' @export
+fast_correlate2 <- function (x,
+                             method = "pearson",
+                             ...)
+{
+  if(!requireNamespace("picante", quietly = TRUE)) {
+    stop("'fast_correlate2' needs 'picante' package.", call. = FALSE)
+  }
+  corr <- picante::cor.table(x, method, ...)
+  structure(.Data = list(r = corr$r, p.value = corr$P),
             class = "correlate")
 }
 

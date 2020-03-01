@@ -3,12 +3,24 @@
 \docType{data}
 \name{geom_star}
 \alias{geom_star}
+\alias{geom_upper_star}
+\alias{geom_lower_star}
 \alias{GeomStar}
+\alias{GeomUpperStar}
+\alias{GeomLowerStar}
 \title{Star Geom}
 \usage{
 geom_star(mapping = NULL, data = NULL, stat = "identity",
   position = "identity", ..., na.rm = FALSE, show.legend = NA,
   inherit.aes = TRUE)
+
+geom_upper_star(mapping = NULL, data = get_data(type = "upper"),
+  stat = "identity", position = "identity", ..., na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE)
+
+geom_lower_star(mapping = NULL, data = get_data(type = "lower"),
+  stat = "identity", position = "identity", ..., na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -61,8 +73,8 @@ Star Geom
 }
 \section{Aesthetics}{
 
-    \code{geom_star()} understands the following aesthetics (required
-    aesthetics are in bold):
+\code{geom_star()}, \code{geom_upper_star()} and \code{geom_lower_star()}
+understands the following aesthetics (required aesthetics are in bold):
     \itemize{
       \item \strong{\code{x}}
       \item \strong{\code{y}}
@@ -74,6 +86,22 @@ Star Geom
       \item \code{fill}
       \item \code{linetype}
       \item \code{size}
+      \item \code{upper_n}
+      \item \code{upper_r0}
+      \item \code{upper_ratio}
+      \item \code{upper_alpha}
+      \item \code{upper_colour}
+      \item \code{upper_fill}
+      \item \code{upper_linetype}
+      \item \code{upper_size}
+      \item \code{lower_n}
+      \item \code{lower_r0}
+      \item \code{lower_ratio}
+      \item \code{lower_alpha}
+      \item \code{lower_colour}
+      \item \code{lower_fill}
+      \item \code{lower_linetype}
+      \item \code{lower_size}
    }
 }
 

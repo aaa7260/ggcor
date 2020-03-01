@@ -32,7 +32,7 @@ get_lower_data <- function(x, show.diag = TRUE)
 {
   stopifnot(is_cor_tbl(x))
   if(!is_symmet(x)) {
-    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric matrix.", call. = FALSE)
     return(x)
   }
   n <- length(get_col_name(x))
@@ -53,7 +53,7 @@ get_upper_data <- function(x, show.diag = TRUE)
 {
   stopifnot(is_cor_tbl(x))
   if(!is_symmet(x)) {
-    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric matrix.", call. = FALSE)
     return(x)
   }
   n <- length(get_col_name(x))
@@ -74,7 +74,7 @@ get_diag_tri <- function(x)
 {
   stopifnot(is_cor_tbl(x))
   if(!is_symmet(x)) {
-    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric matrix.", call. = FALSE)
     return(x)
   }
   n <- length(get_col_name(x))
@@ -91,7 +91,7 @@ get_diag_data <- function(x)
 {
   stopifnot(is_cor_tbl(x))
   if(!is_symmet(x)) {
-    warning("Just supports symmetric correlation matrix.", call. = FALSE)
+    warning("Just supports symmetric matrix.", call. = FALSE)
     return(x)
   }
   n <- length(get_col_name(x))

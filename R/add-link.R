@@ -13,8 +13,8 @@
 #' @param on.left add link plot on left or right when the type of correlation plot
 #'     is "full".
 #' @param diag.label logical (defaults to FALSE) to indicate whether add diag labels.
-#' @param extra.params other parameters that control link details can only be set using
-#'     the \code{\link[ggcor]{extra_params}} function.
+#' @param extra.params other parameters that control details can be setting
+#'     using the \code{extra_params} function.
 #' @param ... extra params passing to \code{\link[ggplot2]{geom_curve}}.
 #' @importFrom ggplot2 aes_ geom_curve geom_text geom_point
 #' @importFrom utils modifyList

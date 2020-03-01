@@ -57,13 +57,13 @@ significant digits (signif) to be used, the default value is 2.}
 point in formatting real/complex numbers in non-scientific formats,
 the default value is 2.}
 
-\item{sig.level}{significance level，the defaults values is `c(0.05, 0.01, 0.001)`.}
+\item{sig.level}{significance level，the default values is [0.05, 0.01, 0.001].}
 
-\item{mark}{significance mark，the defaults values is `c("*", "**", "***")`.}
+\item{mark}{significance mark，the default values is ["*", "**", "***"].}
 
-\item{sig.thres}{if not NULL, just when `p` is not larger than `sig.thres` will be ploted.}
+\item{sig.thres}{if not NULL, just when p.value is not larger than sig.thres will be ploted.}
 
-\item{sep}{a character string to separate the number ("r") and mark symbols.}
+\item{sep}{a character string to separate the number and mark symbols.}
 
 \item{parse}{If \code{TRUE}, the labels will be parsed into expressions and
 displayed as described in \code{?plotmath}.}

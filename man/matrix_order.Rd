@@ -4,10 +4,13 @@
 \alias{matrix_order}
 \title{Reorder Matrices}
 \usage{
-matrix_order(x, cluster.method = "complete", ...)
+matrix_order(x, is.cor = TRUE, cluster.method = "complete", ...)
 }
 \arguments{
 \item{x}{a matrix-like object.}
+
+\item{is.cor}{logical value (defaults to TRUE) indicating wheater
+\code{x} is a correlation matrix.}
 
 \item{cluster.method}{a character string with the name of agglomeration method.}
 

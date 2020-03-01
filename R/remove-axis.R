@@ -1,6 +1,6 @@
 #' Remove axis elements.
 #' @description A simple wrapper of the \code{\link[ggplot2]{theme}} function
-#'     to quickly remove axis elements.
+#' to quickly remove axis elements.
 #' @param index 'all' (default), 'x' or 'y' axis will be removed.
 #' @return The theme.
 #' @importFrom ggplot2 theme element_blank
@@ -48,4 +48,22 @@ remove_axis <- function(index = c("all", "x", "y")) {
   } else {
     thm_mv_y
   }
+}
+
+#' @rdname remove_axis
+#' @export
+remove_all_axis <- function() {
+  remove_axis("all")
+}
+
+#' @rdname remove_axis
+#' @export
+remove_x_axis <- function() {
+  remove_axis("x")
+}
+
+#' @rdname remove_axis
+#' @export
+remove_y_axis <- function() {
+  remove_axis("y")
 }

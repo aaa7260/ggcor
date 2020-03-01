@@ -5,10 +5,10 @@
 #' @param nsmall the minimum number of digits to the right of the decimal
 #'     point in formatting real/complex numbers in non-scientific formats,
 #'     the default value is 2.
-#' @param sig.level significance level，the defaults values is `c(0.05, 0.01, 0.001)`.
-#' @param mark significance mark，the defaults values is `c("*", "**", "***")`.
-#' @param sig.thres if not NULL, just when `p` is not larger than `sig.thres` will be ploted.
-#' @param sep a character string to separate the number ("r") and mark symbols.
+#' @param sig.level significance level，the default values is [0.05, 0.01, 0.001].
+#' @param mark significance mark，the default values is ["*", "**", "***"].
+#' @param sig.thres if not NULL, just when p.value is not larger than sig.thres will be ploted.
+#' @param sep a character string to separate the number and mark symbols.
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_text
 #' @section Aesthetics:

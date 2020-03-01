@@ -3,12 +3,15 @@
 \name{correlate}
 \alias{correlate}
 \alias{fast_correlate}
+\alias{fast_correlate2}
 \title{Matrix of Correlations, P-values and confidence intervals}
 \usage{
 correlate(x, y = NULL, cor.test = FALSE, method = "pearson",
   use = "everything", ...)
 
 fast_correlate(x, y = NULL, use = "everything", ...)
+
+fast_correlate2(x, method = "pearson", ...)
 }
 \arguments{
 \item{x, y}{a matrix object or NULL.}
@@ -20,8 +23,7 @@ for the test. One of "pearson", "kendall", or "spearman".}
 
 \item{use}{an optional character string giving a method for computing covariances in the presence of missing values.}
 
-\item{...}{extra params passing to \code{cor.test} for \code{correlate},
-passing to \code{WGCNA::corAndPvalue}.}
+\item{...}{extra params, see Details.}
 }
 \value{
 a list with correlation matrix, P values matrix, confidence intervals matrix.
@@ -46,8 +48,12 @@ correlate(m1, m2)
 correlate(m1, m2, cor.test = TRUE)
 
 ## fast compute correlation
-if(require(WGCNA)) {
-  fast_correlate(m1, m2)
+\dontrun{
+require(WGCNA)
+fast_correlate(m1, m2)
+
+require(picante)
+  fast_correlate2(m1)
 }
 }
 \seealso{

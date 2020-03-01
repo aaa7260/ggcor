@@ -29,8 +29,8 @@ is "full".}
 
 \item{diag.label}{logical (defaults to FALSE) to indicate whether add diag labels.}
 
-\item{extra.params}{other parameters that control link details can only be set using
-the \code{\link[ggcor]{extra_params}} function.}
+\item{extra.params}{other parameters that control details can be setting
+using the \code{extra_params} function.}
 
 \item{...}{extra params passing to \code{\link[ggplot2]{geom_curve}}.}
 }

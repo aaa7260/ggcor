@@ -1,4 +1,4 @@
-#' Ring and Pie Geom
+#' Ring Geom
 #'
 #' @param remain.fill the fill colour of the remaining area.
 #' @param start.radius inner circle radius.
@@ -7,8 +7,8 @@
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_polygon
 #' @section Aesthetics:
-#'     \code{geom_pie2()} understands the following aesthetics (required
-#'     aesthetics are in bold):
+#' \code{geom_ring()}, \code{geom_upper_ring()} and \code{geom_lower_ring()}
+#' understands the following aesthetics (required aesthetics are in bold):
 #'     \itemize{
 #'       \item \strong{\code{x}}
 #'       \item \strong{\code{y}}
@@ -18,6 +18,18 @@
 #'       \item \code{fill}
 #'       \item \code{linetype}
 #'       \item \code{size}
+#'       \item \code{upper_r0}
+#'       \item \code{upper_alpha}
+#'       \item \code{upper_colour}
+#'       \item \code{upper_fill}
+#'       \item \code{upper_linetype}
+#'       \item \code{upper_size}
+#'       \item \code{lower_r0}
+#'       \item \code{lower_alpha}
+#'       \item \code{lower_colour}
+#'       \item \code{lower_fill}
+#'       \item \code{lower_linetype}
+#'       \item \code{lower_size}
 #'    }
 #' @importFrom ggplot2 layer ggproto GeomPolygon aes
 #' @importFrom grid grobTree
@@ -54,6 +66,76 @@ geom_ring <- function(mapping = NULL, data = NULL,
 }
 
 #' @rdname geom_ring
+#' @export
+geom_upper_ring <- function(mapping = NULL,
+                            data = get_data(type = "upper"),
+                            stat = "identity",
+                            position = "identity",
+                            ...,
+                            remain.fill = NA,
+                            start.radius = 0.25,
+                            end.radius = 0.5,
+                            steps = 0.1,
+                            na.rm = FALSE,
+                            show.legend = NA,
+                            inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomUpperRing,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = aes_short_to_long(
+      list(
+        remain.fill = remain.fill,
+        start.radius = start.radius,
+        end.radius = end.radius,
+        steps = steps,
+        na.rm = na.rm,
+        ...
+      ), prefix = "upper", short_aes
+    )
+  )
+}
+
+#' @rdname geom_ring
+#' @export
+geom_lower_ring <- function(mapping = NULL,
+                            data = get_data(type = "lower"),
+                            stat = "identity",
+                            position = "identity",
+                            ...,
+                            remain.fill = NA,
+                            start.radius = 0.25,
+                            end.radius = 0.5,
+                            steps = 0.1,
+                            na.rm = FALSE,
+                            show.legend = NA,
+                            inherit.aes = TRUE) {
+  layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomLowerRing,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = aes_short_to_long(
+      list(
+        remain.fill = remain.fill,
+        start.radius = start.radius,
+        end.radius = end.radius,
+        steps = steps,
+        na.rm = na.rm,
+        ...
+      ), prefix = "lower", short_aes
+    )
+  )
+}
+
+#' @rdname geom_ring
 #' @format NULL
 #' @usage NULL
 #' @export
@@ -77,13 +159,53 @@ GeomRing <- ggproto(
   draw_key = draw_key_ring
 )
 
+#' @rdname geom_ring
+#' @format NULL
+#' @usage NULL
+#' @export
+GeomUpperRing <- ggproto(
+  "GeomUpperRing", GeomRing,
+  default_aes = aes(upper_r0 = 0.5, upper_colour = "grey60", upper_fill = NA,
+                    upper_size = 0.1, upper_linetype = 1, upper_alpha = NA),
+  required_aes = c("x", "y"),
+  draw_panel = function(self, data, panel_params, coord, remain.fill = NA,
+                        start.radius = 0.25, end.radius = 0.5, steps = 0.1,
+                        linejoin = "mitre") {
+    data <- remove_short_aes(data, short_aes)
+    data <- aes_long_to_short(data, "upper", long_aes_upper)
+    GeomRing$draw_panel(data, panel_params, coord)
+  },
+
+  draw_key = draw_key_upper_ring
+)
+
+#' @rdname geom_ring
+#' @format NULL
+#' @usage NULL
+#' @export
+GeomLowerRing <- ggproto(
+  "GeomLowRing", GeomRing,
+  default_aes = aes(lower_r0 = 0.5, lower_colour = "grey60", lower_fill = NA,
+                    lower_size = 0.1, lower_linetype = 1, lower_alpha = NA),
+  required_aes = c("x", "y"),
+  draw_panel = function(self, data, panel_params, coord, remain.fill = NA,
+                        start.radius = 0.25, end.radius = 0.5, steps = 0.1,
+                        linejoin = "mitre") {
+    data <- remove_short_aes(data, short_aes)
+    data <- aes_long_to_short(data, "lower", long_aes_lower)
+    GeomRing$draw_panel(data, panel_params, coord)
+  },
+
+  draw_key = draw_key_lower_ring
+)
+
 #' @noRd
 point_to_ring <- function(cx,
-                           cy,
-                           r0,
-                           start.radius = 0.25,
-                           end.radius = 0.5,
-                           steps = 0.1)
+                          cy,
+                          r0,
+                          start.radius = 0.25,
+                          end.radius = 0.5,
+                          steps = 0.1)
 {
   start.angle <- c(0.5 * pi,  0.5 * pi + r0 * 2 * pi)
   end.angle <- c(0.5 * pi + r0 * 2 * pi, 0.5 * pi  + sign(r0) * 2 * pi)

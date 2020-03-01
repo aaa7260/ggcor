@@ -11,10 +11,10 @@ fortify_cor(x, y = NULL, is.cor = FALSE, group = NULL,
 \arguments{
 \item{x}{any \code{R} object.}
 
-\item{y}{NULL (default) or a matrix or data
-frame with compatible dimensions to x.}
+\item{y}{NULL (default) or a matrix or data frame with compatible
+dimensions to x.}
 
-\item{is.cor}{logical value (default is FALSE) indicating wheater
+\item{is.cor}{logical value (default to FALSE) indicating wheater
 \code{x} is a correlation matrix.}
 
 \item{group}{NULL (default) or a vector that has the same number
@@ -36,15 +36,15 @@ the correlation matrix by cluster.}
 "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
 or "centroid" (= UPGMC).}
 
-\item{...}{extra params passing to \code{\link[ggcor]{matrix_order}}.}
+\item{...}{extra params passing to \code{matrix_order}.}
 }
 \value{
 cor_tbl object.
 }
 \description{
 The fortify_cor function is a deep encapsulation of
-    the \code{as_cor_tbl} function and also supports converting
-    raw data into cor_tbl objects by calculation.
+the \code{as_cor_tbl} function and also supports converting raw
+data into cor_tbl objects by calculation.
 }
 \examples{
 fortify_cor(mtcars)

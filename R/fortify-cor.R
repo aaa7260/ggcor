@@ -1,26 +1,26 @@
 #' Convert to cor_tbl based on input type.convert
 #' @description The fortify_cor function is a deep encapsulation of
-#'     the \code{as_cor_tbl} function and also supports converting
-#'     raw data into cor_tbl objects by calculation.
+#' the \code{as_cor_tbl} function and also supports converting raw
+#' data into cor_tbl objects by calculation.
 #' @param x any \code{R} object.
-#' @param y NULL (default) or a matrix or data
-#'     frame with compatible dimensions to x.
-#' @param is.cor logical value (default is FALSE) indicating wheater
-#'     \code{x} is a correlation matrix.
+#' @param y NULL (default) or a matrix or data frame with compatible
+#' dimensions to x.
+#' @param is.cor logical value (default to FALSE) indicating wheater
+#' \code{x} is a correlation matrix.
 #' @param group NULL (default) or a vector that has the same number
-#'     of rows as x.
+#' of rows as x.
 #' @param type a string, "full" (default), "upper" or "lower", display full,
-#'     lower triangular or upper triangular matrix.
+#' lower triangular or upper triangular matrix.
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @param cor.test logical value (default is FALSE) indicating whether test
-#'     for the correlation.
+#' for the correlation.
 #' @param cluster logical value (default is FALSE) indicating whether reorder
-#'    the correlation matrix by cluster.
+#' the correlation matrix by cluster.
 #' @param cluster.method the agglomeration method to be used. This should be
-#'     (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
-#'     "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
-#'     or "centroid" (= UPGMC).
-#' @param ... extra params passing to \code{\link[ggcor]{matrix_order}}.
+#' (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
+#' "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
+#' or "centroid" (= UPGMC).
+#' @param ... extra params passing to \code{matrix_order}.
 #' @return cor_tbl object.
 #' @importFrom dplyr %>% mutate
 #' @rdname fortify_cor

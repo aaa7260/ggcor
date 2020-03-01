@@ -13,8 +13,8 @@
 #' @param nsmall the minimum number of digits to the right of the decimal
 #'     point in formatting real/complex numbers in non-scientific formats,
 #'     the default value is 2.
-#' @param sig.level significance level，the defaults values is `c(0.05, 0.01, 0.001)`.
-#' @param mark significance mark，the defaults values is `c("*", "**", "***")`.
+#' @param sig.level significance level，the defaults values is [0.05, 0.01, 0.001].
+#' @param mark significance mark，the defaults values is ["*", "**", "***"].
 #' @param coef string to specifies which column is the coefficient when "x"
 #'    is a general_cor_tbl.
 #' @param nice.format a logical value indicating whether the output needs to be

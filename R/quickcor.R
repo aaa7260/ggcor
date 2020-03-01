@@ -87,23 +87,38 @@ quickcor <- function(x,
   p
 }
 
-#' @importFrom ggplot2 ggplot_add
+#' @importFrom ggplot2 ggplot_add scale_fill_gradientn
 #' @importFrom grid grid.draw
+#' @importFrom rlang quo_get_expr eval_tidy
 #' @method print quickcor
 #' @export
-print.quickcor <- function(x, title = "corr", nbin = 40, ...)
+print.quickcor <- function(x,
+                           style = getOption("ggcor.plot.style", "corrplot"),
+                           title = "corr",
+                           nbin = 40, ...)
 {
-  fill.scale <- x$scales$get_scales("fill")
-  if(is.null(fill.scale)) {
-    x <- x + scale_fill_gradient2n(colours = getOption("ggcor.fill.pal"),
-                                   breaks = c(-1, -0.5, 0, 0.5, 1),
-                                   labels = c(-1, -0.5, 0, 0.5, 1),
-                                   limits = c(-1, 1)) +
-      guides(fill = guide_colourbar(title = title,
-                                    nbin  = nbin))
+  style <- switch (style,
+    corrplot = "corrplot",
+    "ggplot2"
+  )
+  if(style == "corrplot") {
+    mapping <- unclass(x$mapping)
+    if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
+      fill.var.name <- as.character(quo_get_expr(mapping$fill))
+      fill.var <- eval_tidy(mapping$fill, x$data)
+      if(!is_general_cor_tbl(x$data) && fill.var.name == "r" &&
+         is.numeric(fill.var)) {
+        x <- x + scale_fill_gradient2n(colours = getOption("ggcor.fill.pal"),
+                                       breaks = c(-1, -0.5, 0, 0.5, 1),
+                                       labels = c(-1, -0.5, 0, 0.5, 1),
+                                       limits = c(-1, 1)) +
+          guides(fill = guide_colourbar(title = title,
+                                        nbin  = nbin))
+      }
+    }
   }
   class(x) <- setdiff(class(x), "quickcor")
-  grid::grid.draw(x, ...)
+  print(x, ...)
 }
 
 #' @importFrom graphics plot

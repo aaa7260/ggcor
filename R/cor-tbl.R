@@ -52,10 +52,13 @@ cor_tbl <- function(corr,
   if(missing.corr && is.null(p.value) && length(extra.mat) == 0) {
     stop("No matrix data input.", call. = FALSE)
   }
-  if(missing.corr && isTRUE(cluster)) {
-    warning("Non-correlation matrix don't support clustering.", call. = FALSE)
-    cluster <- FALSE
-  }
+
+  first <- if(missing.corr) {
+    if(length(extra.mat) == 0) p.value else extra.mat[[1]]
+  } else corr
+  if(!is.matrix(first))
+    first <- as.matrix(first)
+
   if(missing(corr)) {
     corr <- if(is.null(p.value)) list() else list(p.value = p.value)
   } else {
@@ -67,8 +70,6 @@ cor_tbl <- function(corr,
   corr <- lapply(corr, function(.x) {
     if(!is.matrix(.x)) as.matrix(.x) else .x
   })
-
-  first <- corr[[1]]
   name <- names(corr)
 
   if(length(corr) > 1) {
@@ -86,17 +87,17 @@ cor_tbl <- function(corr,
   ## handle cluster
   if(!isSymmetric(first) || any(colnames(first) != rownames(first))) {
     if(type != "full") {
-      warning("'type=", type, "' just supports for symmetric correlation matrix.", call. = FALSE)
+      warning("'type=", type, "' just supports for symmetric matrix.", call. = FALSE)
       type <- "full"
       if(type == "full") show.diag <- TRUE
     }
     if(isTRUE(cluster)) {
-      warning("'cluster' just spports for symmetric correlation matrix.", call. = FALSE)
+      warning("'cluster' just spports for symmetric matrix.", call. = FALSE)
       cluster <- FALSE
     }
   }
   if(isTRUE(cluster)) {
-    ord <- matrix_order(first, ...)
+    ord <- matrix_order(first, is.cor = !missing.corr, ...)
     corr <- lapply(corr, function(.x) {
       .x[ord, ord]
     })
