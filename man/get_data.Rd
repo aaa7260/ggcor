@@ -4,15 +4,15 @@
 \alias{get_data}
 \title{Create cor_tbl extractor function}
 \usage{
-get_data(..., type = "full", show.diag = FALSE)
+get_data(type = "full", show.diag = FALSE, ...)
 }
 \arguments{
-\item{...}{extra filter params, see Details.}
-
 \item{type}{a string, "full" (default), "upper" or "lower", display full,
 lower triangular or upper triangular matrix.}
 
 \item{show.diag}{a logical value indicating whether keep the diagonal.}
+
+\item{...}{extra filter params, see Details.}
 }
 \value{
 extractor function

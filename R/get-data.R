@@ -112,14 +112,14 @@ is_symmet <- function(x) {
 
 #' Create cor_tbl extractor function
 #' @description This function returns another function that can extract cor_tbl
-#'     subset from a cor_tbl object.
+#' subset from a cor_tbl object.
 #' @param type a string, "full" (default), "upper" or "lower", display full,
-#'     lower triangular or upper triangular matrix.
+#' lower triangular or upper triangular matrix.
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @param ... extra filter params, see Details.
 #' @details This function is mainly used in \code{ggplot2} geom_*() functions,
-#'     where data is filtered based on the \code{...} parameter, then subsets
-#'     are extracted based on the type and show.diag parameters.
+#' where data is filtered based on the \code{...} parameter, then subsets
+#' are extracted based on the type and show.diag parameters.
 #' @return extractor function
 #' @importFrom dplyr filter
 #' @rdname get_data
@@ -139,7 +139,7 @@ is_symmet <- function(x) {
 #' @seealso \code{\link[dplyr]{filter}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-get_data <- function(..., type = "full", show.diag = FALSE)
+get_data <- function(type = "full", show.diag = FALSE, ...)
 {
   type <- match.arg(type, c("full", "upper", "lower", "diag"))
   function(data) {
