@@ -4,6 +4,7 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  message = FALSE,
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
@@ -12,8 +13,11 @@ knitr::opts_chunk$set(
 ```
 
 # ggcor
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
 
-The `ggcor` package can be used to visualize simply and directly a correlation matrix based on 'ggplot2'. It provides a solution for reordering the correlation matrix, displaying the different significance level on the plot and other details. The most important parts, It also provides a graphical display of any correlation analysis and their combination (such as Mantel test, Partial correlation analysis, and so on).
+The goal of `ggcor` is to to provide a set of functions that be used to visualize simply and directly a correlation matrix based on 'ggplot2'.
 
 ## Installation
 
@@ -36,18 +40,6 @@ quickcor(mtcars, cor.test = TRUE) +
   geom_square(data = get_data(type = "lower", show.diag = FALSE)) +
   geom_mark(data = get_data(type = "upper", show.diag = FALSE), size = 2.5) +
   geom_abline(slope = -1, intercept = 12)
-```
-
-## Grouped by rows
-
-```{r example02, fig.height=2.5}
-grp <- mtcars$gear
-quickcor(mtcars[-10], type = "lower", group = grp) + 
-  geom_colour() +
-  add_diag_label(hjust = 0) +
-  expand_axis(x = 12) +
-  remove_axis("x") +
-  facet_wrap(~.group)
 ```
 
 ## Mantel test plot
@@ -106,5 +98,26 @@ ggraph(net, "circle") +
   coord_fixed(xlim = c(-1.5, 1.5), ylim = c(-1.5, 1.5)) +
   theme_graph()
 
+```
+
+# general heatmap
+
+```{r}
+mat <- matrix(rnorm(120), nrow = 15)
+cor_tbl(extra.mat = list(mat = mat)) %>% 
+  quickcor(mapping = aes(fill = mat)) + geom_colour()
+```
+
+# upper and lower with different geom
+
+```{r}
+d <- dist(t(mtcars))
+correlate(mtcars, cor.test = TRUE) %>% 
+  as_cor_tbl(extra.mat = list(dist = d)) %>% 
+  quickcor() +
+  geom_upper_square(aes(upper_fill = r, upper_r0 = r)) +
+  geom_lower_colour(aes(lower_fill = dist)) +
+  geom_diag_label() +
+  remove_all_axis()
 ```
 

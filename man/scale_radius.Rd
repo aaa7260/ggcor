@@ -5,7 +5,7 @@
 \title{Scale radius}
 \usage{
 scale_radius_area(..., range = c(-1, 1), midpoint = 0,
-  guide = "none")
+  guide = "legend")
 }
 \arguments{
 \item{...}{Arguments passed on to \code{continuous_scale}

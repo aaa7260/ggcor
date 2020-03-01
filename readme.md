@@ -1,13 +1,14 @@
 
 # ggcor
 
-The `ggcor` package can be used to visualize simply and directly a
-correlation matrix based on ‘ggplot2’. It provides a solution for
-reordering the correlation matrix, displaying the different significance
-level on the plot and other details. The most important parts, It also
-provides a graphical display of any correlation analysis and their
-combination (such as Mantel test, Partial correlation analysis, and so
-on).
+<!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
+
+The goal of `ggcor` is to to provide a set of functions that be used to
+visualize simply and directly a correlation matrix based on ‘ggplot2’.
 
 ## Installation
 
@@ -27,9 +28,6 @@ quickly:
 ``` r
 library(ggplot2)
 library(ggcor)
-#> Registered S3 method overwritten by 'ggcor':
-#>   method            from
-#>   print.correlation nlme
 quickcor(mtcars) + geom_colour()
 ```
 
@@ -50,39 +48,11 @@ quickcor(mtcars, cor.test = TRUE) +
 
 <img src="man/figures/README-example01-3.png" width="100%" />
 
-## Grouped by rows
-
-``` r
-grp <- mtcars$gear
-quickcor(mtcars[-10], type = "lower", group = grp) + 
-  geom_colour() +
-  add_diag_label(hjust = 0) +
-  expand_axis(x = 12) +
-  remove_axis("x") +
-  facet_wrap(~.group)
-#> Warning in cor(x, y, use = use, method = method): 标准差为零
-
-#> Warning in cor(x, y, use = use, method = method): 标准差为零
-```
-
-<img src="man/figures/README-example02-1.png" width="100%" />
-
 ## Mantel test plot
 
 ``` r
 library(vegan)
-#> Loading required package: permute
-#> Loading required package: lattice
-#> This is vegan 2.5-6
 library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
 data("varechem")
 data("varespec")
 set.seed(20191224)
@@ -114,6 +84,7 @@ quickcor(varechem, type = "upper") + geom_square() +
            diag.label = TRUE) +
   scale_size_manual(values = c(0.5, 1.5, 3)) +
   add_diag_label() + remove_axis("x")
+#> Warning: `add_diag_label()` is deprecated. Use `geom_diag_label()` instead.
 ```
 
 <img src="man/figures/README-example03-2.png" width="100%" />
@@ -122,16 +93,10 @@ quickcor(varechem, type = "upper") + geom_square() +
 
 ``` r
 library(tidygraph)
-#> 
-#> Attaching package: 'tidygraph'
-#> The following object is masked from 'package:stats':
-#> 
-#>     filter
 library(ggraph)
 net <- fast_correlate(varespec) %>% 
   as_tbl_graph(r.thres = 0.5, p.thres = 0.05) %>% 
   mutate(degree = tidygraph::centrality_degree(mode = "all"))
-#> 
 
 ggraph(net, "circle") + 
   geom_edge_fan(aes(edge_width = r, edge_linetype = r < 0), 
@@ -149,3 +114,28 @@ ggraph(net, "circle") +
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+
+# general heatmap
+
+``` r
+mat <- matrix(rnorm(120), nrow = 15)
+cor_tbl(extra.mat = list(mat = mat)) %>% 
+  quickcor(mapping = aes(fill = mat)) + geom_colour()
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+# upper and lower with different geom
+
+``` r
+d <- dist(t(mtcars))
+correlate(mtcars, cor.test = TRUE) %>% 
+  as_cor_tbl(extra.mat = list(dist = d)) %>% 
+  quickcor() +
+  geom_upper_square(aes(upper_fill = r, upper_r0 = r)) +
+  geom_lower_colour(aes(lower_fill = dist)) +
+  geom_diag_label() +
+  remove_all_axis()
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
