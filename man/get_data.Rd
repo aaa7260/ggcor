@@ -19,12 +19,12 @@ extractor function
 }
 \description{
 This function returns another function that can extract cor_tbl
-    subset from a cor_tbl object.
+subset from a cor_tbl object.
 }
 \details{
 This function is mainly used in \code{ggplot2} geom_*() functions,
-    where data is filtered based on the \code{...} parameter, then subsets
-    are extracted based on the type and show.diag parameters.
+where data is filtered based on the \code{...} parameter, then subsets
+are extracted based on the type and show.diag parameters.
 }
 \examples{
 ## arrange different elements in upper and lower

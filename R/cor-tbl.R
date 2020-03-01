@@ -85,15 +85,30 @@ cor_tbl <- function(corr,
     stop("'col.names' must have same length as columns of matrix.", call. = FALSE)
 
   ## handle cluster
-  if(!isSymmetric(first) || any(colnames(first) != rownames(first))) {
-    if(type != "full") {
-      warning("'type=", type, "' just supports for symmetric matrix.", call. = FALSE)
-      type <- "full"
-      if(type == "full") show.diag <- TRUE
+  if(missing.corr) {
+    if(nrow(first) != ncol(first)) {
+      if(type != "full") {
+        warning("'type=", type,
+                "' just supports for symmetric correlation matrix.", call. = FALSE)
+        type <- "full"
+        if(type == "full") show.diag <- TRUE
+      }
+      if(isTRUE(cluster)) {
+        warning("'cluster' just spports for square matrix.", call. = FALSE)
+        cluster <- FALSE
+      }
     }
-    if(isTRUE(cluster)) {
-      warning("'cluster' just spports for symmetric matrix.", call. = FALSE)
-      cluster <- FALSE
+  } else {
+    if(!isSymmetric(first) || any(colnames(first) != rownames(first))) {
+      if(type != "full") {
+        warning("'type=", type, "' just supports for symmetric matrix.", call. = FALSE)
+        type <- "full"
+        if(type == "full") show.diag <- TRUE
+      }
+      if(isTRUE(cluster)) {
+        warning("'cluster' just spports for symmetric matrix.", call. = FALSE)
+        cluster <- FALSE
+      }
     }
   }
   if(isTRUE(cluster)) {
