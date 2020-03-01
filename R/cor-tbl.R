@@ -93,10 +93,6 @@ cor_tbl <- function(corr,
         type <- "full"
         if(type == "full") show.diag <- TRUE
       }
-      if(isTRUE(cluster)) {
-        warning("'cluster' just spports for square matrix.", call. = FALSE)
-        cluster <- FALSE
-      }
     }
   } else {
     if(!isSymmetric(first) || any(colnames(first) != rownames(first))) {
@@ -114,10 +110,10 @@ cor_tbl <- function(corr,
   if(isTRUE(cluster)) {
     ord <- matrix_order(first, is.cor = !missing.corr, ...)
     corr <- lapply(corr, function(.x) {
-      .x[ord, ord]
+      .x[ord$row.order, ord$col.order]
     })
-    row.names <- row.names[ord]
-    col.names <- col.names[ord]
+    row.names <- row.names[ord$row.order]
+    col.names <- col.names[ord$col.order]
   }
   id <- list(
     .row.names = rep(row.names, ncol(first)),

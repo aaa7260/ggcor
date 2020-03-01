@@ -21,7 +21,17 @@ matrix_order <- function(x,
 {
   if(!is.matrix(x))
     x <- as.matrix(x)
-  d <- if(isTRUE(is.cor)) as.dist(1 - x) else dist(x)
-  cluster <- hclust(d, cluster.method, ...)
-  cluster$order
+  if(isTRUE(is.cor)) {
+    cluster <- hclust(as.dist(1 - x), cluster.method, ...)
+  } else {
+    row.cluster <- hclust(dist(x))
+    col.cluster <- hclust(dist(t(x)))
+  }
+  if(isTRUE(is.cor)) {
+    list(row.order = cluster$order,
+         col.order = cluster$order)
+  } else {
+    list(row.order = row.cluster$order,
+         col.order = col.cluster$order)
+  }
 }
