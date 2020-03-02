@@ -2,15 +2,21 @@
 % Please edit documentation in R/matrix-order.R
 \name{matrix_order}
 \alias{matrix_order}
+\alias{tidy_hc_rect}
 \title{Reorder Matrices}
 \usage{
-matrix_order(x, is.cor = TRUE, cluster.method = "complete", ...)
+matrix_order(x, is.cor = TRUE, k = 2, cluster.method = "complete",
+  ...)
+
+tidy_hc_rect(x, k = 2, cluster.method = "complete", ...)
 }
 \arguments{
 \item{x}{a matrix-like object.}
 
 \item{is.cor}{logical value (defaults to TRUE) indicating wheater
 \code{x} is a correlation matrix.}
+
+\item{k}{integer, the number of cluster group.}
 
 \item{cluster.method}{a character string with the name of agglomeration method.}
 

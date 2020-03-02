@@ -107,8 +107,11 @@ cor_tbl <- function(corr,
       }
     }
   }
+
+  hc.rect.df <- NULL
   if(isTRUE(cluster)) {
     ord <- matrix_order(first, is.cor = !missing.corr, ...)
+    hc.rect.df <- ord$hc.rect.df
     corr <- lapply(corr, function(.x) {
       .x[ord$row.order, ord$col.order]
     })
@@ -134,6 +137,7 @@ cor_tbl <- function(corr,
                     .col.names = col.names,
                     type = type,
                     show.diag = show.diag,
+                    hc.rect.df = hc.rect.df,
                     grouped = FALSE,
                     class = cls)
   switch (type,

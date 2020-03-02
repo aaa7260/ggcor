@@ -20,6 +20,7 @@
 #' (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
 #' "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
 #' or "centroid" (= UPGMC).
+#' @param k integer, the number of cluster group.
 #' @param ... extra params passing to \code{matrix_order}.
 #' @return cor_tbl object.
 #' @importFrom dplyr %>% mutate
@@ -43,6 +44,7 @@ fortify_cor <- function(x,
                         cor.test = FALSE,
                         cluster = FALSE,
                         cluster.method = "complete",
+                        k = 2,
                         ...)
 {
   type <- match.arg(type, c("full", "upper", "lower"))
@@ -76,7 +78,7 @@ fortify_cor <- function(x,
                       function(.x, .y, .group) {
                         correlate(.x, .y, cor.test, ...) %>%
                           as_cor_tbl(type = type, show.diag = show.diag, cluster = cluster,
-                                     cluster.method = cluster.method) %>%
+                                     cluster.method = cluster.method, k = k) %>%
                           mutate(.group = .group)
                       })
     attrs <- attributes(dfs[[1]])
@@ -86,7 +88,7 @@ fortify_cor <- function(x,
   } else {
     corr <- correlate(x, y, cor.test, ...)
     df <- as_cor_tbl(corr, type = type, show.diag = show.diag, cluster = cluster,
-               cluster.method = cluster.method)
+               cluster.method = cluster.method, k = k)
   }
   attr(df, "grouped") <- if(is.null(group)) FALSE else TRUE
   df
