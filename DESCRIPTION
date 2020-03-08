@@ -44,7 +44,7 @@ Suggests:
     rmarkdown,
     picante,
     WGCNA
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Collate: 
     'add-link-extra-params.R'
@@ -59,6 +59,7 @@ Collate:
     'cor-tbl.R'
     'cor-tbl-utils.R'
     'cor-test.R'
+    'create-layout.R'
     'display-cor.R'
     'dplyr.R'
     'draw-key.R'
@@ -74,6 +75,8 @@ Collate:
     'geom-ellipse2.R'
     'geom-grid.R'
     'geom-hc-rect.R'
+    'geom-link.R'
+    'geom-link2.R'
     'geom-mark.R'
     'geom-num.R'
     'geom-pie2.R'
