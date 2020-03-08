@@ -5,9 +5,19 @@
 \alias{print.cor_network}
 \title{Tidy co-occurrence network data}
 \usage{
-cor_network(corr, p.value = NULL, row.names = NULL, col.names = NULL,
-  rm.dup = TRUE, simplify = TRUE, weight = NULL, r.thres = 0.6,
-  r.absolute = TRUE, p.thres = 0.05, val.type = "tbl_graph")
+cor_network(
+  corr,
+  p.value = NULL,
+  row.names = NULL,
+  col.names = NULL,
+  rm.dup = TRUE,
+  simplify = TRUE,
+  weight = NULL,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  val.type = "tbl_graph"
+)
 
 \method{print}{cor_network}(x, n = 3, ...)
 }

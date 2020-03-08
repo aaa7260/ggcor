@@ -4,8 +4,14 @@
 \alias{fortify_mantel}
 \title{Tidy for mantel tests}
 \usage{
-fortify_mantel(spec, env, group = NULL, env.ctrl = NULL,
-  mantel.fun = "mantel", ...)
+fortify_mantel(
+  spec,
+  env,
+  group = NULL,
+  env.ctrl = NULL,
+  mantel.fun = "mantel",
+  ...
+)
 }
 \arguments{
 \item{spec, env}{data frame object.}

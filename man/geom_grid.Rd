@@ -5,8 +5,7 @@
 \alias{add_grid}
 \title{Add panel grid line on correlation plot}
 \usage{
-geom_grid(data = NULL, colour = "grey50", size = 0.25, ...,
-  color = NULL)
+geom_grid(data = NULL, colour = "grey50", size = 0.25, ..., color = NULL)
 
 add_grid(...)
 }

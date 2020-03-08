@@ -4,9 +4,17 @@
 \alias{cor_tbl}
 \title{Create a cor_tbl object}
 \usage{
-cor_tbl(corr, p.value = NULL, extra.mat = list(), type = "full",
-  show.diag = TRUE, row.names = NULL, col.names = NULL,
-  cluster = FALSE, ...)
+cor_tbl(
+  corr,
+  p.value = NULL,
+  extra.mat = list(),
+  type = "full",
+  show.diag = TRUE,
+  row.names = NULL,
+  col.names = NULL,
+  cluster = FALSE,
+  ...
+)
 }
 \arguments{
 \item{corr}{correlation matrix.}

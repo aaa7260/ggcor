@@ -4,8 +4,13 @@
 \alias{ggcor}
 \title{Create a correlation plot}
 \usage{
-ggcor(data, mapping = NULL, axis.x.position = "auto",
-  axis.y.position = "auto", axis.label.drop = TRUE)
+ggcor(
+  data,
+  mapping = NULL,
+  axis.x.position = "auto",
+  axis.y.position = "auto",
+  axis.label.drop = TRUE
+)
 }
 \arguments{
 \item{data}{cor_tbl object.}

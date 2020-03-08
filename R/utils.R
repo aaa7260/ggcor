@@ -126,6 +126,10 @@ utils::globalVariables(
     "r",
     "p.value",
     ".row.id",
-    ".col.id"
+    ".col.id",
+    "spec",
+    "env",
+    ".start.filter",
+    ".end.filter"
   )
 )

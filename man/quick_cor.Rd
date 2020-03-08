@@ -4,10 +4,18 @@
 \alias{quickcor}
 \title{Plot Correlation Matrix Quickly}
 \usage{
-quickcor(x, y = NULL, mapping = NULL, grid.colour = "grey50",
-  grid.size = 0.25, axis.x.position = "auto",
-  axis.y.position = "auto", axis.label.drop = TRUE,
-  legend.position = "auto", ...)
+quickcor(
+  x,
+  y = NULL,
+  mapping = NULL,
+  grid.colour = "grey50",
+  grid.size = 0.25,
+  axis.x.position = "auto",
+  axis.y.position = "auto",
+  axis.label.drop = TRUE,
+  legend.position = "auto",
+  ...
+)
 }
 \arguments{
 \item{x, y}{matrix or data frame.}

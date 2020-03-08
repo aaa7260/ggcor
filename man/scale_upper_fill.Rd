@@ -19,51 +19,131 @@
 \alias{scale_lower_fill_discrete}
 \title{Triangle colour scales}
 \usage{
-scale_upper_fill_hue(..., h = c(0, 360) + 15, c = 100, l = 65,
-  h.start = 0, direction = 1, na.value = "grey50")
+scale_upper_fill_hue(
+  ...,
+  h = c(0, 360) + 15,
+  c = 100,
+  l = 65,
+  h.start = 0,
+  direction = 1,
+  na.value = "grey50"
+)
 
-scale_upper_fill_gradient(..., low = "#132B43", high = "#56B1F7",
-  space = "Lab", na.value = "grey50", guide = "colourbar2")
+scale_upper_fill_gradient(
+  ...,
+  low = "#132B43",
+  high = "#56B1F7",
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar2"
+)
 
-scale_upper_fill_gradient2(..., low = muted("red"), mid = "white",
-  high = muted("blue"), midpoint = 0, space = "Lab",
-  guide = "colourbar2", na.value = "grey50")
+scale_upper_fill_gradient2(
+  ...,
+  low = muted("red"),
+  mid = "white",
+  high = muted("blue"),
+  midpoint = 0,
+  space = "Lab",
+  guide = "colourbar2",
+  na.value = "grey50"
+)
 
-scale_upper_fill_gradientn(..., colours, values = NULL,
-  guide = "colourbar2", space = "Lab", na.value = "grey50", colors)
+scale_upper_fill_gradientn(
+  ...,
+  colours,
+  values = NULL,
+  guide = "colourbar2",
+  space = "Lab",
+  na.value = "grey50",
+  colors
+)
 
 scale_upper_fill_identity(...)
 
 scale_upper_fill_manual(..., values, aesthetics = "upper_fill")
 
-scale_lower_fill_hue(..., h = c(0, 360) + 15, c = 100, l = 65,
-  h.start = 0, direction = 1, na.value = "grey50")
+scale_lower_fill_hue(
+  ...,
+  h = c(0, 360) + 15,
+  c = 100,
+  l = 65,
+  h.start = 0,
+  direction = 1,
+  na.value = "grey50"
+)
 
-scale_lower_fill_gradient(..., low = "#132B43", high = "#56B1F7",
-  space = "Lab", guide = "colourbar2", na.value = "grey50")
+scale_lower_fill_gradient(
+  ...,
+  low = "#132B43",
+  high = "#56B1F7",
+  space = "Lab",
+  guide = "colourbar2",
+  na.value = "grey50"
+)
 
-scale_lower_fill_gradient2(..., low = muted("red"), mid = "white",
-  high = muted("blue"), midpoint = 0, space = "Lab",
-  guide = "colourbar2", na.value = "grey50")
+scale_lower_fill_gradient2(
+  ...,
+  low = muted("red"),
+  mid = "white",
+  high = muted("blue"),
+  midpoint = 0,
+  space = "Lab",
+  guide = "colourbar2",
+  na.value = "grey50"
+)
 
-scale_lower_fill_gradientn(..., colours, values = NULL, space = "Lab",
-  guide = "colourbar2", na.value = "grey50", colors)
+scale_lower_fill_gradientn(
+  ...,
+  colours,
+  values = NULL,
+  space = "Lab",
+  guide = "colourbar2",
+  na.value = "grey50",
+  colors
+)
 
 scale_lower_fill_identity(...)
 
 scale_lower_fill_manual(..., values, aesthetics = "lower_fill")
 
-scale_upper_fill_continuous(..., low = "#132B43", high = "#56B1F7",
-  space = "Lab", na.value = "grey50", guide = "colourbar2")
+scale_upper_fill_continuous(
+  ...,
+  low = "#132B43",
+  high = "#56B1F7",
+  space = "Lab",
+  na.value = "grey50",
+  guide = "colourbar2"
+)
 
-scale_upper_fill_discrete(..., h = c(0, 360) + 15, c = 100, l = 65,
-  h.start = 0, direction = 1, na.value = "grey50")
+scale_upper_fill_discrete(
+  ...,
+  h = c(0, 360) + 15,
+  c = 100,
+  l = 65,
+  h.start = 0,
+  direction = 1,
+  na.value = "grey50"
+)
 
-scale_lower_fill_continuous(..., low = "#132B43", high = "#56B1F7",
-  space = "Lab", guide = "colourbar2", na.value = "grey50")
+scale_lower_fill_continuous(
+  ...,
+  low = "#132B43",
+  high = "#56B1F7",
+  space = "Lab",
+  guide = "colourbar2",
+  na.value = "grey50"
+)
 
-scale_lower_fill_discrete(..., h = c(0, 360) + 15, c = 100, l = 65,
-  h.start = 0, direction = 1, na.value = "grey50")
+scale_lower_fill_discrete(
+  ...,
+  h = c(0, 360) + 15,
+  c = 100,
+  l = 65,
+  h.start = 0,
+  direction = 1,
+  na.value = "grey50"
+)
 }
 \arguments{
 \item{...}{Arguments passed on to \code{continuous_scale}
@@ -111,7 +191,7 @@ Use \code{NA} to refer to the existing minimum or maximum
 new limits
 }}
   \item{rescaler}{Used by diverging and n colour gradients
-(i.e. \code{\link[=scale_colour_gradient2]{scale_colour_gradient2()}}, \code{\link[=scale_colour_gradientn]{scale_colour_gradientn()}}).
+(i.e. \code{\link[ggplot2:scale_colour_gradient2]{scale_colour_gradient2()}}, \code{\link[ggplot2:scale_colour_gradientn]{scale_colour_gradientn()}}).
 A function used to scale the input values to the range [0, 1].}
   \item{oob}{Function that handles limits outside of the scale limits
 (out of bounds). The default replaces out of bounds values with \code{NA}.}
@@ -131,7 +211,7 @@ scales, "top" or "bottom" for horizontal scales}
   \item{super}{The super class to use for the constructed scale}
   \item{expand}{Vector of range expansion constants used to add some
 padding around the data, to ensure that they are placed some distance
-away from the axes. Use the convenience function \code{\link[=expand_scale]{expand_scale()}}
+away from the axes. Use the convenience function \code{\link[ggplot2:expand_scale]{expand_scale()}}
 to generate the values for the \code{expand} argument. The defaults are to
 expand the scale by 5\% on each side for continuous variables, and by
 0.6 units on each side for discrete variables.}

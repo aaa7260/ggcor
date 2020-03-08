@@ -4,8 +4,15 @@
 \alias{point_params}
 \title{Extra points params}
 \usage{
-point_params(alpha = NA, colour = "black", fill = NA, shape = 21,
-  size = 1, stroke = 0.5, color = NULL)
+point_params(
+  alpha = NA,
+  colour = "black",
+  fill = NA,
+  shape = 21,
+  size = 1,
+  stroke = 0.5,
+  color = NULL
+)
 }
 \arguments{
 \item{alpha}{alpha channel for transparency.}

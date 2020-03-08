@@ -5,8 +5,7 @@
 \alias{get_hc_rect_df}
 \title{Draw square mark on correlation matrix plot}
 \usage{
-geom_hc_rect(data = NULL, fill = NA, colour = "black", size = 2,
-  color = NULL)
+geom_hc_rect(data = NULL, fill = NA, colour = "black", size = 2, color = NULL)
 
 get_hc_rect_df()
 }

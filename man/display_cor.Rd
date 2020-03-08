@@ -24,15 +24,32 @@ display_cor(x, ...)
 
 \method{display_cor}{corr.test}(x, ...)
 
-\method{display_cor}{cor_tbl}(x, type = "full", show.diag = FALSE,
-  digits = 2, nsmall = 2, sig.level = c(0.05, 0.01, 0.001),
-  mark = c("*", "**", "***"), coef = NULL, nice.format = TRUE, ...)
+\method{display_cor}{cor_tbl}(
+  x,
+  type = "full",
+  show.diag = FALSE,
+  digits = 2,
+  nsmall = 2,
+  sig.level = c(0.05, 0.01, 0.001),
+  mark = c("*", "**", "***"),
+  coef = NULL,
+  nice.format = TRUE,
+  ...
+)
 
 \method{display_cor}{mantel_tbl}(x, byrow = TRUE, ...)
 
-format_cor(corr, p.value = NULL, type = "full", show.diag = FALSE,
-  digits = 2, nsmall = 2, sig.level = c(0.05, 0.01, 0.001),
-  mark = c("*", "**", "***"), nice.format = TRUE)
+format_cor(
+  corr,
+  p.value = NULL,
+  type = "full",
+  show.diag = FALSE,
+  digits = 2,
+  nsmall = 2,
+  sig.level = c(0.05, 0.01, 0.001),
+  mark = c("*", "**", "***"),
+  nice.format = TRUE
+)
 }
 \arguments{
 \item{x}{any \code{R} object.}

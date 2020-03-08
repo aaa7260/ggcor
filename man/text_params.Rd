@@ -4,9 +4,17 @@
 \alias{text_params}
 \title{Extra text label params}
 \usage{
-text_params(colour = "black", size = 3.88, angle = 0, hjust = NULL,
-  vjust = 0.5, alpha = NA, family = "", fontface = 1,
-  color = NULL)
+text_params(
+  colour = "black",
+  size = 3.88,
+  angle = 0,
+  hjust = NULL,
+  vjust = 0.5,
+  alpha = NA,
+  family = "",
+  fontface = 1,
+  color = NULL
+)
 }
 \arguments{
 \item{colour, color}{colour of text.}

@@ -4,10 +4,19 @@
 \alias{add_link}
 \title{Add other association link plot on correlation plot.}
 \usage{
-add_link(df, mapping = NULL, spec.key = "spec", env.key = "env",
-  curvature = NULL, spec.label.hspace = NULL, spec.label.vspace = 0,
-  on.left = FALSE, diag.label = FALSE, extra.params = extra_params(),
-  ...)
+add_link(
+  df,
+  mapping = NULL,
+  spec.key = "spec",
+  env.key = "env",
+  curvature = NULL,
+  spec.label.hspace = NULL,
+  spec.label.vspace = 0,
+  on.left = FALSE,
+  diag.label = FALSE,
+  extra.params = extra_params(),
+  ...
+)
 }
 \arguments{
 \item{df}{a data frame object.}

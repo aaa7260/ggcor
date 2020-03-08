@@ -4,8 +4,7 @@
 \alias{scale_radius_area}
 \title{Scale radius}
 \usage{
-scale_radius_area(..., range = c(-1, 1), midpoint = 0,
-  guide = "legend")
+scale_radius_area(..., range = c(-1, 1), midpoint = 0, guide = "legend")
 }
 \arguments{
 \item{...}{Arguments passed on to \code{continuous_scale}
@@ -63,13 +62,13 @@ are defined in the scales package, and are called \code{name_trans}, e.g.
 \code{\link[scales:boxcox_trans]{scales::boxcox_trans()}}. You can create your own
 transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
   \item{guide}{A function used to create a guide or its name. See
-\code{\link[=guides]{guides()}} for more info.}
+\code{\link[ggplot2:guides]{guides()}} for more info.}
   \item{position}{The position of the axis. "left" or "right" for vertical
 scales, "top" or "bottom" for horizontal scales}
   \item{super}{The super class to use for the constructed scale}
   \item{expand}{Vector of range expansion constants used to add some
 padding around the data, to ensure that they are placed some distance
-away from the axes. Use the convenience function \code{\link[=expand_scale]{expand_scale()}}
+away from the axes. Use the convenience function \code{\link[ggplot2:expand_scale]{expand_scale()}}
 to generate the values for the \code{expand} argument. The defaults are to
 expand the scale by 5\% on each side for continuous variables, and by
 0.6 units on each side for discrete variables.}
@@ -81,7 +80,7 @@ maximum size of the plotting symbol after transformation.}
 \item{midpoint}{the midpoint (in data value) of the diverging scale. Defaults to 0.}
 
 \item{guide}{A function used to create a guide or its name. See
-\code{\link[=guides]{guides()}} for more info.}
+\code{\link[ggplot2:guides]{guides()}} for more info.}
 }
 \description{
 Scale radius

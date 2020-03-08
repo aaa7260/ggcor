@@ -5,8 +5,7 @@
 \alias{tidy_hc_rect}
 \title{Reorder Matrices}
 \usage{
-matrix_order(x, is.cor = TRUE, k = 2, cluster.method = "complete",
-  ...)
+matrix_order(x, is.cor = TRUE, k = 2, cluster.method = "complete", ...)
 
 tidy_hc_rect(x, k = 2, cluster.method = "complete", ...)
 }

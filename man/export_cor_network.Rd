@@ -14,39 +14,104 @@
 \usage{
 export_cor_network(x, file = "", what = "edges", sep = ",", ...)
 
-\method{export_cor_network}{cor_network}(x, file = "", what = "edges",
-  sep = ",", ...)
+\method{export_cor_network}{cor_network}(x, file = "", what = "edges", sep = ",", ...)
 
-\method{export_cor_network}{cor_tbl}(x, file = "", what = "edges",
-  sep = ",", simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05, ...)
+\method{export_cor_network}{cor_tbl}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  ...
+)
 
-\method{export_cor_network}{mantel_tbl}(x, file = "", what = "edges",
-  sep = ",", simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05, ...)
+\method{export_cor_network}{mantel_tbl}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  ...
+)
 
-\method{export_cor_network}{matrix}(x, file = "", what = "edges",
-  sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
-  simplify = TRUE, r.thres = 0.6, r.absolute = TRUE, ...)
+\method{export_cor_network}{matrix}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  row.names = NULL,
+  col.names = NULL,
+  rm.dup = TRUE,
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  ...
+)
 
-\method{export_cor_network}{data.frame}(x, file = "", what = "edges",
-  sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
-  simplify = TRUE, r.thres = 0.6, r.absolute = TRUE, ...)
+\method{export_cor_network}{data.frame}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  row.names = NULL,
+  col.names = NULL,
+  rm.dup = TRUE,
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  ...
+)
 
-\method{export_cor_network}{correlate}(x, file = "", what = "edges",
-  sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
-  simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05, ...)
+\method{export_cor_network}{correlate}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  row.names = NULL,
+  col.names = NULL,
+  rm.dup = TRUE,
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  ...
+)
 
-\method{export_cor_network}{rcorr}(x, file = "", what = "edges",
-  sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
-  simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05, ...)
+\method{export_cor_network}{rcorr}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  row.names = NULL,
+  col.names = NULL,
+  rm.dup = TRUE,
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  ...
+)
 
-\method{export_cor_network}{corr.test}(x, file = "", what = "edges",
-  sep = ",", row.names = NULL, col.names = NULL, rm.dup = TRUE,
-  simplify = TRUE, r.thres = 0.6, r.absolute = TRUE,
-  p.thres = 0.05, ...)
+\method{export_cor_network}{corr.test}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  row.names = NULL,
+  col.names = NULL,
+  rm.dup = TRUE,
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  ...
+)
 }
 \arguments{
 \item{x}{\code{R} object can be convert to \code{cor_network}.}

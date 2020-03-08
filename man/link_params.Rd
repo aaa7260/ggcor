@@ -4,8 +4,12 @@
 \alias{link_params}
 \title{Control the points position of link}
 \usage{
-link_params(env.point.hjust = NULL, env.point.vjust = NULL,
-  spec.point.hjust = NULL, spec.point.vjust = NULL)
+link_params(
+  env.point.hjust = NULL,
+  env.point.vjust = NULL,
+  spec.point.hjust = NULL,
+  spec.point.vjust = NULL
+)
 }
 \arguments{
 \item{env.point.hjust, env.point.vjust}{a numeric vector is used to set the distance that

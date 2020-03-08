@@ -4,9 +4,17 @@
 \alias{mantel_test}
 \title{Mantel and partial mantel test for dissimilarity matrices}
 \usage{
-mantel_test(spec, env, env.ctrl = NULL, mantel.fun = "mantel",
-  spec.select = NULL, env.select = NULL, spec.dist.method = "bray",
-  env.dist.method = "euclidean", ...)
+mantel_test(
+  spec,
+  env,
+  env.ctrl = NULL,
+  mantel.fun = "mantel",
+  spec.select = NULL,
+  env.select = NULL,
+  spec.dist.method = "bray",
+  env.dist.method = "euclidean",
+  ...
+)
 }
 \arguments{
 \item{spec, env}{data frame object.}

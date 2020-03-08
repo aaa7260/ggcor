@@ -6,8 +6,14 @@
 \alias{fast_correlate2}
 \title{Matrix of Correlations, P-values and confidence intervals}
 \usage{
-correlate(x, y = NULL, cor.test = FALSE, method = "pearson",
-  use = "everything", ...)
+correlate(
+  x,
+  y = NULL,
+  cor.test = FALSE,
+  method = "pearson",
+  use = "everything",
+  ...
+)
 
 fast_correlate(x, y = NULL, use = "everything", ...)
 

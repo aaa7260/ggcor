@@ -4,9 +4,12 @@
 \alias{extra_params}
 \title{Extra params for add_link}
 \usage{
-extra_params(spec.label = text_params(), spec.point = point_params(fill
-  = "blue"), env.point = point_params(fill = "grey60"),
-  link.params = link_params())
+extra_params(
+  spec.label = text_params(),
+  spec.point = point_params(fill = "blue"),
+  env.point = point_params(fill = "grey60"),
+  link.params = link_params()
+)
 }
 \arguments{
 \item{spec.label}{NULL or "text_params" object producing by

@@ -16,8 +16,15 @@
 \usage{
 as_cor_network(x, ...)
 
-\method{as_cor_network}{cor_tbl}(x, simplify = TRUE, weight = NULL,
-  r.thres = 0.6, r.absolute = TRUE, p.thres = 0.05, ...)
+\method{as_cor_network}{cor_tbl}(
+  x,
+  simplify = TRUE,
+  weight = NULL,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  ...
+)
 
 \method{as_cor_network}{mantel_tbl}(x, ...)
 

@@ -4,9 +4,19 @@
 \alias{fortify_cor}
 \title{Convert to cor_tbl based on input type.convert}
 \usage{
-fortify_cor(x, y = NULL, is.cor = FALSE, group = NULL,
-  type = "full", show.diag = FALSE, cor.test = FALSE,
-  cluster = FALSE, cluster.method = "complete", k = 2, ...)
+fortify_cor(
+  x,
+  y = NULL,
+  is.cor = FALSE,
+  group = NULL,
+  type = "full",
+  show.diag = FALSE,
+  cor.test = FALSE,
+  cluster = FALSE,
+  cluster.method = "complete",
+  k = 2,
+  ...
+)
 }
 \arguments{
 \item{x}{any \code{R} object.}
