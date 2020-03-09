@@ -9,21 +9,21 @@
 #' @return geom layer.
 #' @importFrom ggplot2 aes_string geom_curve geom_point geom_text
 #' @importFrom dplyr filter
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_link2 <- function(mapping = NULL,
+geom_link <- function(mapping = NULL,
                        data = NULL,
                        curvature = 0,
                        ...)
 {
-  mapping <- aes_intersect(
-    mapping, aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
+  mapping <- aes_modify(
+    aes_string(x = "x", y = "y", xend = "xend", yend = "yend"), mapping
   )
   geom_curve(mapping = mapping, data = data, curvature = curvature, ...)
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 geom_link_point <- function(...)
 {
@@ -33,7 +33,7 @@ geom_link_point <- function(...)
   )
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 geom_link_label <- function(...)
 {
@@ -43,7 +43,7 @@ geom_link_label <- function(...)
   )
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 geom_start_point <- function(mapping = NULL,
                              data = NULL,
@@ -57,13 +57,13 @@ geom_start_point <- function(mapping = NULL,
   } else {
     get_start_nodes()(data)
   }
-  mapping <- aes_intersect(
-    mapping, aes_string(x = "x", y = "y")
+  mapping <- aes_modify(
+    aes_string(x = "x", y = "y"), mapping
   )
   geom_point(mapping = mapping, data = data, ...)
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 geom_end_point <- function(mapping = NULL,
                            data = NULL,
@@ -77,13 +77,13 @@ geom_end_point <- function(mapping = NULL,
   } else {
     get_end_nodes()(data)
   }
-  mapping <- aes_intersect(
-    mapping, aes_string(x = "xend", y = "yend")
+  mapping <- aes_modify(
+    aes_string(x = "xend", y = "yend"), mapping
   )
   geom_point(mapping = mapping, data = data, ...)
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 geom_start_label <- function(mapping = NULL,
                              data = NULL,
@@ -97,13 +97,13 @@ geom_start_label <- function(mapping = NULL,
   } else {
     get_start_nodes()(data)
   }
-  mapping <- aes_intersect(
-    mapping, aes_string(x = "x", y = "y", label = "start.label")
+  mapping <- aes_modify(
+    aes_string(x = "x", y = "y", label = "start.label"), mapping
   )
   geom_text(mapping = mapping, data = data, ...)
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 geom_end_label <- function(mapping = NULL,
                            data = NULL,
@@ -117,13 +117,13 @@ geom_end_label <- function(mapping = NULL,
   } else {
     get_end_nodes()(data)
   }
-  mapping <- aes_intersect(
-    mapping, aes_string(x = "xend", y = "yend", label = "end.label")
+  mapping <- aes_modify(
+    aes_string(x = "xend", y = "yend", label = "end.label"), mapping
   )
   geom_text(mapping = mapping, data = data, ...)
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 get_start_nodes <- function() {
   function(data) {
@@ -132,7 +132,7 @@ get_start_nodes <- function() {
   }
 }
 
-#' @rdname geom-link2
+#' @rdname geom_link
 #' @export
 get_end_nodes <- function() {
   function(data) {
@@ -141,10 +141,11 @@ get_end_nodes <- function() {
   }
 }
 
+#' @importFrom utils modifyList
 #' @noRd
-aes_intersect <- function (aes1, aes2)
-{
-  aes <- c(as.list(aes1), aes2[!names(aes2) %in% names(aes1)])
+aes_modify <- function(aes1, aes2) {
+  aes <- modifyList(as.list(aes1), as.list(aes2))
   class(aes) <- "uneval"
   aes
 }
+

@@ -18,10 +18,10 @@
 #'   }
 #' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint draw_key_path
 #' @importFrom grid gTree
-#' @rdname geom_link
+#' @rdname geom_link2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_link <- function(mapping = NULL,
+geom_link2 <- function(mapping = NULL,
                       data = NULL,
                       stat = "identity",
                       position = "identity",
@@ -39,7 +39,7 @@ geom_link <- function(mapping = NULL,
     data = data,
     mapping = mapping,
     stat = stat,
-    geom = GeomLink,
+    geom = GeomLink2,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
@@ -56,12 +56,12 @@ geom_link <- function(mapping = NULL,
   )
 }
 
-#' @rdname geom_link
+#' @rdname geom_link2
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomLink <- ggproto(
-  "GeomLink", GeomCurve,
+GeomLink2 <- ggproto(
+  "GeomLink2", GeomCurve,
   draw_panel = function(self, data, panel_params, coord, start.point.shape = 21,
                         end.point.shape = 21, start.point.colour = NULL,
                         end.point.colour = NULL, start.point.fill = NULL,
