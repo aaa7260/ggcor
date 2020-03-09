@@ -1,107 +1,151 @@
-#' Link Geom
-#'
-#' @inheritParams ggplot2::layer
-#' @inheritParams ggplot2::geom_curve
-#' @section Aesthetics:
-#' \code{geom_link()} understands the following aesthetics (required aesthetics are in bold):
-#'     \itemize{
-#'       \item \strong{\code{x}}
-#'       \item \strong{\code{y}}
-#'       \item \strong{\code{xend}}
-#'       \item \strong{\code{yend}}
-#'       \item \code{alpha}
-#'       \item \code{colour}
-#'       \item \code{fill}
-#'       \item \code{group}
-#'       \item \code{linetype}
-#'       \item \code{size}
-#'   }
-#' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint draw_key_path
-#' @importFrom grid gTree
-#' @rdname geom_link2
+#' Special layer function for correlation link plot
+#' @description A set of custom layer functions that quickly add
+#' layers of curves, nodes, and labels.
+#' @param mapping aesthetic mappings parameters.
+#' @param data NULL or a layout_link_tbl object that create by
+#' \code{parallel_layout()} or \code{combination_layout()}.
+#' @param  curvature a numeric value giving the amount of curvature.
+#' @param ... extra parameters.
+#' @return geom layer.
+#' @importFrom ggplot2 aes_string geom_curve geom_point geom_text
+#' @importFrom dplyr filter
+#' @rdname geom_link
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_link2 <- function(mapping = NULL,
-                      data = NULL,
-                      stat = "identity",
-                      position = "identity",
-                      ...,
-                      curvature = 0,
-                      angle = 90,
-                      ncp = 5,
-                      arrow = NULL,
-                      arrow.fill = NULL,
-                      lineend = "butt",
-                      na.rm = FALSE,
-                      show.legend = NA,
-                      inherit.aes = TRUE) {
-  layer(
-    data = data,
-    mapping = mapping,
-    stat = stat,
-    geom = GeomLink2,
-    position = position,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = list(
-      curvature = curvature,
-      angle = angle,
-      ncp = ncp,
-      arrow = arrow,
-      arrow.fill = arrow.fill,
-      lineend = lineend,
-      na.rm = na.rm,
-      ...
-    )
+geom_link <- function(mapping = NULL,
+                       data = NULL,
+                       curvature = 0,
+                       ...)
+{
+  mapping <- aes_modify(
+    aes_string(x = "x", y = "y", xend = "xend", yend = "yend"), mapping
+  )
+  geom_curve(mapping = mapping, data = data, curvature = curvature, ...)
+}
+
+#' @rdname geom_link
+#' @export
+geom_link_point <- function(...)
+{
+  list(
+    geom_start_point(...),
+    geom_end_point(...)
   )
 }
 
-#' @rdname geom_link2
-#' @format NULL
-#' @usage NULL
+#' @rdname geom_link
 #' @export
-GeomLink2 <- ggproto(
-  "GeomLink2", GeomCurve,
-  draw_panel = function(self, data, panel_params, coord, start.point.shape = 21,
-                        end.point.shape = 21, start.point.colour = NULL,
-                        end.point.colour = NULL, start.point.fill = NULL,
-                        end.point.fill = NULL, start.point.size = 2,
-                        end.point.size = 2, curvature = 0, angle = 90,
-                        ncp = 5, arrow = NULL, arrow.fill = NULL, lineend = "butt",
-                        na.rm = FALSE) {
-    aesthetics <- setdiff(names(data), c("x", "y", "xend", "yend", "colour",
-                                         "fill", "size", "linetype"))
-    start.colour <- start.point.colour %||% data$colour
-    end.colour <- end.point.colour %||% data$colour
-    start.data <- new_data_frame(
-      list(x = data$x,
-           y = data$y,
-           colour = start.colour,
-           fill = start.point.fill %||% start.colour,
-           shape = start.point.shape,
-           size = start.point.size %||% data$size * 4,
-           stroke = 0.5))
-    end.data <- new_data_frame(
-      list(x = data$xend,
-           y = data$yend,
-           colour = end.colour,
-           fill = end.point.fill %||% end.colour,
-           shape = end.point.shape,
-           size = end.point.size %||% data$size * 4,
-           stroke = 0.5))
-    ggname(
-      "geom_link",
-      grid::gTree(
-        children = grid::gList(
-          GeomCurve$draw_panel(data, panel_params, coord, curvature = curvature,
-                               angle = angle, ncp = ncp, arrow = arrow,
-                               arrow.fill = arrow.fill, lineend = lineend,
-                               na.rm = na.rm),
-          GeomPoint$draw_panel(cbind(start.data, data[aesthetics]), panel_params, coord),
-          GeomPoint$draw_panel(cbind(end.data, data[aesthetics]), panel_params, coord)
-        )
-      )
-    )
-  },
-  draw_key = draw_key_path
-)
+geom_link_label <- function(...)
+{
+  list(
+    geom_start_label(...),
+    geom_end_label(...)
+  )
+}
+
+#' @rdname geom_link
+#' @export
+geom_start_point <- function(mapping = NULL,
+                             data = NULL,
+                             ...)
+{
+  if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
+    stop("Need a layout_link_tbl.", call. = FALSE)
+  }
+  data <- if(is.null(data)) {
+    get_start_nodes()
+  } else {
+    get_start_nodes()(data)
+  }
+  mapping <- aes_modify(
+    aes_string(x = "x", y = "y"), mapping
+  )
+  geom_point(mapping = mapping, data = data, ...)
+}
+
+#' @rdname geom_link
+#' @export
+geom_end_point <- function(mapping = NULL,
+                           data = NULL,
+                           ...)
+{
+  if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
+    stop("Need a layout_link_tbl.", call. = FALSE)
+  }
+  data <- if(is.null(data)) {
+    get_end_nodes()
+  } else {
+    get_end_nodes()(data)
+  }
+  mapping <- aes_modify(
+    aes_string(x = "xend", y = "yend"), mapping
+  )
+  geom_point(mapping = mapping, data = data, ...)
+}
+
+#' @rdname geom_link
+#' @export
+geom_start_label <- function(mapping = NULL,
+                             data = NULL,
+                             ...)
+{
+  if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
+    stop("Need a layout_link_tbl.", call. = FALSE)
+  }
+  data <- if(is.null(data)) {
+    get_start_nodes()
+  } else {
+    get_start_nodes()(data)
+  }
+  mapping <- aes_modify(
+    aes_string(x = "x", y = "y", label = "start.label"), mapping
+  )
+  geom_text(mapping = mapping, data = data, ...)
+}
+
+#' @rdname geom_link
+#' @export
+geom_end_label <- function(mapping = NULL,
+                           data = NULL,
+                           ...)
+{
+  if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
+    stop("Need a layout_link_tbl.", call. = FALSE)
+  }
+  data <- if(is.null(data)) {
+    get_end_nodes()
+  } else {
+    get_end_nodes()(data)
+  }
+  mapping <- aes_modify(
+    aes_string(x = "xend", y = "yend", label = "end.label"), mapping
+  )
+  geom_text(mapping = mapping, data = data, ...)
+}
+
+#' @rdname geom_link
+#' @export
+get_start_nodes <- function() {
+  function(data) {
+    stopifnot(inherits(data, "layout_link_tbl"))
+    dplyr::filter(data, .start.filter)
+  }
+}
+
+#' @rdname geom_link
+#' @export
+get_end_nodes <- function() {
+  function(data) {
+    stopifnot(inherits(data, "layout_link_tbl"))
+    dplyr::filter(data, .end.filter)
+  }
+}
+
+#' @importFrom utils modifyList
+#' @noRd
+aes_modify <- function(aes1, aes2) {
+  aes <- modifyList(as.list(aes1), as.list(aes2))
+  class(aes) <- "uneval"
+  aes
+}
+

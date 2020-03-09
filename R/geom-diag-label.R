@@ -28,6 +28,8 @@ geom_diag_label <- function(data = NULL, drop = FALSE, ...)
 }
 
 #' @rdname geom_diag_label
+#' @format NULL
+#' @usage NULL
 #' @export
 add_diag_label <- function(...) {
   warning("`add_diag_label()` is deprecated. ",

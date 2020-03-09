@@ -6,8 +6,6 @@
 \title{Add diagnoal labels on correlation plot}
 \usage{
 geom_diag_label(data = NULL, drop = FALSE, ...)
-
-add_diag_label(...)
 }
 \arguments{
 \item{data}{NULL (default) or a cor_tbl object.}

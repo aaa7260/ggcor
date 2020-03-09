@@ -76,7 +76,7 @@ quickcor <- function(x,
                                upper = "right")
   p <- ggcor(data, mapping = mapping, axis.x.position = axis.x.position,
              axis.y.position = axis.y.position, axis.label.drop = axis.label.drop) +
-    geom_grid(colour = grid.colour, size = grid.size)
+    geom_panel_grid(colour = grid.colour, size = grid.size)
 
   # add theme and coord
   xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)

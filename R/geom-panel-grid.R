@@ -6,15 +6,19 @@
 #' @param size size of grid lines.
 #' @param ... extra params for \code{\link[ggplot2]{geom_segment}}.
 #' @importFrom ggplot2 geom_segment aes_string
-#' @rdname geom_grid
+#' @rdname geom_panel_grid
 #' @examples
 #' df <- fortify_cor(mtcars)
-#' ggcor(df) + geom_grid()
+#' ggcor(df) + geom_panel_grid()
 #' require(ggplot2, quietly = TRUE)
-#' ggplot(df, aes(x, y)) + geom_grid()
+#' ggplot(df, aes(x, y)) + geom_panel_grid()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_grid <- function(data = NULL, colour = "grey50", size = 0.25, ..., color = NULL) {
+geom_panel_grid <- function(data = NULL,
+                            colour = "grey50",
+                            size = 0.25,
+                            ...,
+                            color = NULL) {
   if(!is.null(data)) {
     if(!is_cor_tbl(data)) {
       stop("Need a cor_tbl object.", call. = FALSE)
@@ -28,12 +32,14 @@ geom_grid <- function(data = NULL, colour = "grey50", size = 0.25, ..., color = 
                inherit.aes = FALSE, ...)
 }
 
-#' @rdname geom_grid
+#' @rdname geom_panel_grid
+#' @format NULL
+#' @usage NULL
 #' @export
 add_grid <- function(...) {
   warning("`add_grid()` is deprecated. ",
-          "Use `geom_grid()` instead.", call. = FALSE)
-  geom_grid(...)
+          "Use `geom_panel_grid()` instead.", call. = FALSE)
+  geom_panel_grid(...)
 }
 
 #' @noRd
