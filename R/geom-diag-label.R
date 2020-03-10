@@ -2,6 +2,7 @@
 #' @description \code{geom_diag_label} is mainly used with \code{ggcor} and
 #'     \code{quickcor} functions to add diagnoal labels on correct position
 #'     base on different type of cor_tbl object.
+#' @param mapping aesthetic mappings parameters.
 #' @param data NULL (default) or a cor_tbl object.
 #' @param drop logical value (default is TRUE). When type of plot is 'upper'
 #'     or 'lower' and 'show.diag' is FALSE, whether need to remove the blank label.
@@ -14,7 +15,7 @@
 #' @seealso \code{\link[ggplot2]{geom_text}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_diag_label <- function(data = NULL, drop = FALSE, ...)
+geom_diag_label <- function(mapping = NULL, data = NULL, drop = FALSE, ...)
 {
   if(!is.null(data)) {
     if(!is_cor_tbl(data)) {
@@ -22,7 +23,8 @@ geom_diag_label <- function(data = NULL, drop = FALSE, ...)
     }
     data <- get_diag_label_data(drop)(data)
   }
-  geom_text(mapping = aes_string("x", "y", label = "label"),
+  mapping <- aes_modify(aes_string("x", "y", label = "label"), mapping)
+  geom_text(mapping = mapping,
             data = data %||% get_diag_label_data(drop = drop),
             inherit.aes = FALSE, ...)
 }

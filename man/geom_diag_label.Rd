@@ -5,9 +5,11 @@
 \alias{add_diag_label}
 \title{Add diagnoal labels on correlation plot}
 \usage{
-geom_diag_label(data = NULL, drop = FALSE, ...)
+geom_diag_label(mapping = NULL, data = NULL, drop = FALSE, ...)
 }
 \arguments{
+\item{mapping}{aesthetic mappings parameters.}
+
 \item{data}{NULL (default) or a cor_tbl object.}
 
 \item{drop}{logical value (default is TRUE). When type of plot is 'upper'

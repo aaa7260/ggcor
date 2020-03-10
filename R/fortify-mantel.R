@@ -133,7 +133,7 @@ mantel_test <- function(spec,
   }
   if(mantel.fun == "mantel.partial") {
     if(is.null(env.ctrl))
-      stop("Did you forget to set the 'env.ctrl.list' param?", call. = FALSE)
+      stop("Did you forget to set the 'env.ctrl' param?", call. = FALSE)
     if(!is.data.frame(env.ctrl))
       env.ctrl <- as.data.frame(env.ctrl)
   }
