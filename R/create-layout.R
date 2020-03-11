@@ -71,23 +71,23 @@ parallel_layout <- function(data,
           call. = FALSE)
   }
   start.pos <- if(is.null(sort.start)) {
-    rlang::set_names(seq(1, n, length.out = length(unique.start)), unique.start)
+    rlang::set_names(seq(n, 1, length.out = length(unique.start)), unique.start)
   } else {
-    rlang::set_names(seq_len(length.out = length(sort.start)), sort.start)
+    rlang::set_names(seq(length(sort.start), 1), sort.start)
   }
   end.pos <- if(is.null(sort.start)) {
-    rlang::set_names(seq(1, n, length.out = length(unique.end)), unique.end)
+    rlang::set_names(seq(n, 1, length.out = length(unique.end)), unique.end)
   } else {
-    rlang::set_names(seq_len(length.out = length(sort.end)), sort.end)
+    rlang::set_names(seq(length(sort.end), 1), sort.end)
   }
   pos <- if(horiz) {
     tibble::tibble(x = start.pos[start], y = start.y %||% 0, xend = end.pos[end],
-                   start.label = start, end.label = end, yend = end.y %||% 1,
+                   yend = end.y %||% 1, start.label = start, end.label = end,
                    .start.filter = !duplicated(start) & !is.na(start),
                    .end.filter = !duplicated(end) & !is.na(end))
   } else {
     tibble::tibble(x = start.x %||% 0, y = start.pos[start], xend = end.x %||% 1,
-                   start.label = start, end.label = end, yend = end.pos[end],
+                   yend = end.pos[end], start.label = start, end.label = end,
                    .start.filter = !duplicated(start) & !is.na(start),
                    .end.filter = !duplicated(end) & !is.na(end))
   }
