@@ -1,4 +1,4 @@
-#' Transform data
+#' Transform data base on different layout
 #' @description These layout functions are not layout in the network diagram,
 #' it just converts the original data into a form that makes it easy to draw
 #' a curve graph.
@@ -8,6 +8,8 @@
 #' is forced to be converted.
 #' @param horiz a logical value. If FALSE, the parallel graph are drawn vertically.
 #' If TRUE, the parallel graph are drawn horizontally.
+#' @param stretch logical, indicating whether the heights/width of start points and
+#' end points are consistent.
 #' @param sort.start,sort.end charater vector, the nodes will be sorted by this parameter.
 #' @param start.x,start.y,end.x,end.y numeric to specify the x (horiz = TRUE) or y
 #' (horiz = FALSE) coordinates.
@@ -35,6 +37,7 @@ parallel_layout <- function(data,
                             start.var = NULL,
                             end.var = NULL,
                             horiz = FALSE,
+                            stretch = TRUE,
                             sort.start = NULL,
                             sort.end = NULL,
                             start.x = NULL,
@@ -59,26 +62,48 @@ parallel_layout <- function(data,
   if(!is.character(end))
     end <- as.character(end)
 
-  unique.start <- unique(start[!is.na(start)])
-  unique.end <- unique(end[!is.na(end)])
-  n <- max(length(unique.start), length(unique.end))
-  if(!is.null(sort.start) && length(sort.start) != length(unique.start)) {
+  start.unique <- unique(start[!is.na(start)])
+  end.unique <- unique(end[!is.na(end)])
+  start.len <- length(start.unique)
+  end.len <- length(end.unique)
+  n <- max(start.len, end.len)
+  if(!is.null(sort.start) && length(sort.start) != length(start.unique)) {
     stop("Length of 'sort.start' and unique elements of 'start' don't match.",
           call. = FALSE)
   }
-  if(!is.null(sort.end) && length(sort.end) != length(unique.end)) {
+  if(!is.null(sort.end) && length(sort.end) != length(end.unique)) {
     stop("Length of 'sort.end' and unique elements of 'end' don't match.",
           call. = FALSE)
   }
   start.pos <- if(is.null(sort.start)) {
-    rlang::set_names(seq(n, 1, length.out = length(unique.start)), unique.start)
+    if(start.len < n && !stretch) {
+      rlang::set_names(
+        seq(n, 1, length.out = start.len + 2)[-c(1, start.len + 2)], start.unique)
+    } else {
+      rlang::set_names(seq(n, 1, length.out = start.len), start.unique)
+    }
   } else {
-    rlang::set_names(seq(length(sort.start), 1), sort.start)
+    if(start.len < n && !stretch) {
+      rlang::set_names(
+        seq(n, 1, length.out = start.len + 2)[-c(1, start.len + 2)], sort.start)
+    } else {
+      rlang::set_names(seq(n, 1, length.out = start.len), sort.start)
+    }
   }
-  end.pos <- if(is.null(sort.start)) {
-    rlang::set_names(seq(n, 1, length.out = length(unique.end)), unique.end)
+  end.pos <- if(is.null(sort.end)) {
+    if(end.len < n && !stretch) {
+      rlang::set_names(
+        seq(n, 1, length.out = end.len + 2)[-c(1, end.len + 2)], end.unique)
+    } else {
+      rlang::set_names(seq(n, 1, length.out = end.len), end.unique)
+    }
   } else {
-    rlang::set_names(seq(length(sort.end), 1), sort.end)
+    if(end.len < n && !stretch) {
+      rlang::set_names(
+        seq(n, 1, length.out = end.len + 2)[-c(1, end.len + 2)], sort.end)
+    } else {
+      rlang::set_names(seq(n, 1, length.out = end.len), sort.end)
+    }
   }
   pos <- if(horiz) {
     tibble::tibble(x = start.pos[start], y = start.y %||% 0, xend = end.pos[end],

@@ -12,19 +12,45 @@
 \alias{get_end_nodes}
 \title{Special layer function for correlation link plot}
 \usage{
-geom_link(mapping = NULL, data = NULL, curvature = 0, ...)
+geom_link(
+  mapping = NULL,
+  data = NULL,
+  curvature = 0,
+  inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
+  ...
+)
 
 geom_link_point(...)
 
 geom_link_label(...)
 
-geom_start_point(mapping = NULL, data = NULL, ...)
+geom_start_point(
+  mapping = NULL,
+  data = NULL,
+  inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
+  ...
+)
 
-geom_end_point(mapping = NULL, data = NULL, ...)
+geom_end_point(
+  mapping = NULL,
+  data = NULL,
+  inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
+  ...
+)
 
-geom_start_label(mapping = NULL, data = NULL, ...)
+geom_start_label(
+  mapping = NULL,
+  data = NULL,
+  inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
+  ...
+)
 
-geom_end_label(mapping = NULL, data = NULL, ...)
+geom_end_label(
+  mapping = NULL,
+  data = NULL,
+  inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
+  ...
+)
 
 get_start_nodes()
 
@@ -38,7 +64,10 @@ get_end_nodes()
 
 \item{curvature}{a numeric value giving the amount of curvature.}
 
-\item{...}{extra parameters.}
+\item{inherit.aes}{If FALSE, overrides the default aesthetics, rather than
+combining with them.}
+
+\item{...}{extra parameters passing to layer function.}
 }
 \value{
 geom layer.

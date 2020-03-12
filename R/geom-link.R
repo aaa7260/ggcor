@@ -5,7 +5,9 @@
 #' @param data NULL or a layout_link_tbl object that create by
 #' \code{parallel_layout()} or \code{combination_layout()}.
 #' @param  curvature a numeric value giving the amount of curvature.
-#' @param ... extra parameters.
+#' @param inherit.aes If FALSE, overrides the default aesthetics, rather than
+#' combining with them.
+#' @param ... extra parameters passing to layer function.
 #' @return geom layer.
 #' @importFrom ggplot2 aes_string geom_curve geom_point geom_text
 #' @importFrom dplyr filter
@@ -13,14 +15,16 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 geom_link <- function(mapping = NULL,
-                       data = NULL,
-                       curvature = 0,
-                       ...)
+                      data = NULL,
+                      curvature = 0,
+                      inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
+                      ...)
 {
   mapping <- aes_modify(
     aes_string(x = "x", y = "y", xend = "xend", yend = "yend"), mapping
   )
-  geom_curve(mapping = mapping, data = data, curvature = curvature, ...)
+  geom_curve(mapping = mapping, data = data, curvature = curvature,
+             inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
@@ -47,6 +51,7 @@ geom_link_label <- function(...)
 #' @export
 geom_start_point <- function(mapping = NULL,
                              data = NULL,
+                             inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
                              ...)
 {
   if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
@@ -60,13 +65,14 @@ geom_start_point <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "x", y = "y"), mapping
   )
-  geom_point(mapping = mapping, data = data, ...)
+  geom_point(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
 #' @export
 geom_end_point <- function(mapping = NULL,
                            data = NULL,
+                           inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
                            ...)
 {
   if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
@@ -80,13 +86,14 @@ geom_end_point <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "xend", y = "yend"), mapping
   )
-  geom_point(mapping = mapping, data = data, ...)
+  geom_point(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
 #' @export
 geom_start_label <- function(mapping = NULL,
                              data = NULL,
+                             inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
                              ...)
 {
   if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
@@ -100,13 +107,14 @@ geom_start_label <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "x", y = "y", label = "start.label"), mapping
   )
-  geom_text(mapping = mapping, data = data, ...)
+  geom_text(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
 #' @export
 geom_end_label <- function(mapping = NULL,
                            data = NULL,
+                           inherit.aes = getOption("ggcor.link.inherit.aes", TRUE),
                            ...)
 {
   if(!is.null(data) && !inherits(data, "layout_link_tbl")) {
@@ -120,7 +128,7 @@ geom_end_label <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "xend", y = "yend", label = "end.label"), mapping
   )
-  geom_text(mapping = mapping, data = data, ...)
+  geom_text(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link

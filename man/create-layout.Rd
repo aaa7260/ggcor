@@ -3,13 +3,14 @@
 \name{parallel_layout}
 \alias{parallel_layout}
 \alias{combination_layout}
-\title{Transform data}
+\title{Transform data base on different layout}
 \usage{
 parallel_layout(
   data,
   start.var = NULL,
   end.var = NULL,
   horiz = FALSE,
+  stretch = TRUE,
   sort.start = NULL,
   sort.end = NULL,
   start.x = NULL,
@@ -38,6 +39,9 @@ is forced to be converted.}
 
 \item{horiz}{a logical value. If FALSE, the parallel graph are drawn vertically.
 If TRUE, the parallel graph are drawn horizontally.}
+
+\item{stretch}{logical, indicating whether the heights/width of start points and
+end points are consistent.}
 
 \item{sort.start, sort.end}{charater vector, the nodes will be sorted by this parameter.}
 
