@@ -8,7 +8,7 @@
 \usage{
 as_matrix(x, ...)
 
-\method{as_matrix}{cor_tbl}(x, index = "all", ...)
+\method{as_matrix}{cor_tbl}(x, index = "all", missing = NULL, ...)
 
 \method{as_matrix}{mantel_tbl}(x, ...)
 }
@@ -19,6 +19,8 @@ as_matrix(x, ...)
 
 \item{index}{character vector indicating which columns will be convert. If "all",
 all columns will be convert.}
+
+\item{missing}{If NULL (default), the missing value will be filled with NAs.}
 }
 \value{
 a list of matrix.

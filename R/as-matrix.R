@@ -3,6 +3,7 @@
 #' @param x any \code{R} object.
 #' @param index character vector indicating which columns will be convert. If "all",
 #' all columns will be convert.
+#' @param missing If NULL (default), the missing value will be filled with NAs.
 #' @param ... extra params.
 #' @return a list of matrix.
 #' @importFrom purrr walk walk2
@@ -21,15 +22,24 @@ as_matrix <- function(x, ...) {
 #' @rdname  as_matrix
 #' @export
 #' @method as_matrix cor_tbl
-as_matrix.cor_tbl <- function(x, index = "all", ...) {
+as_matrix.cor_tbl <- function(x,
+                              index = "all",
+                              missing = NULL,
+                              ...) {
   if(length(index) == 1 && index == "all") {
     index <- setdiff(names(x), c(".row.names", ".col.names", ".row.id", ".col.id",
                                  ".group"))
   }
   row.name <- get_row_name(x)
   col.name <- get_col_name(x)
-  mat <- matrix(nrow = length(row.name), ncol = length(col.name),
-                dimnames = list(row.name, col.name))
+  if(is.null(missing)) {
+    mat <- matrix(nrow = length(row.name), ncol = length(col.name),
+                  dimnames = list(row.name, col.name))
+  } else {
+    mat <- matrix(missing, nrow = length(row.name), ncol = length(col.name),
+                  dimnames = list(row.name, col.name))
+  }
+
   mat <- rlang::set_names(rep_len(list(mat), length(index)), index)
   if(isTRUE(attr(x, "grouped"))) {
     group <- unique(x$.group)
