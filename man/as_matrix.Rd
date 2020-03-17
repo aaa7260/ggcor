@@ -31,6 +31,8 @@ Functions to convert cor_tbl object to a list of matrix.
 \examples{
 cor(mtcars) \%>\% as_cor_tbl() \%>\% as_matrix()
 cor(mtcars) \%>\% as_cor_tbl() \%>\% as_matrix("r")
+fortify_cor(iris[-5],group = iris$Species, cor.test = TRUE) \%>\%
+  as_matrix()
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
