@@ -1,6 +1,7 @@
 #' Coerce to a cor_network object
 #' @description Functions to coerce a object to cor_network if possible.
 #' @param x any \code{R} object.
+#' @param directed 	logical value, whether or not to create a directed graph.
 #' @param simplify logical value (defaults to TRUE) indicating whether to
 #'     delete nodes without edge connections.
 #' @param weight NULL (default) or name of column in edges which will be renamed
@@ -27,6 +28,7 @@ as_cor_network <- function(x, ...) {
 #' @export
 #' @method as_cor_network cor_tbl
 as_cor_network.cor_tbl <- function(x,
+                                   directed = FALSE,
                                    simplify = TRUE,
                                    weight = NULL,
                                    r.thres = 0.6,
@@ -80,57 +82,60 @@ as_cor_network.cor_tbl <- function(x,
     edges <- dplyr::rename(edges, weight = !!weight)
   }
 
-  structure(.Data = list(nodes = nodes,
-                         edges  = edges), class = "cor_network")
+  structure(.Data = list(nodes = nodes, edges  = edges),
+            directed = directed, class = "cor_network")
 }
 
 #' @rdname  as_cor_network
 #' @export
 #' @method as_cor_network mantel_tbl
-as_cor_network.mantel_tbl <- function(x, ...) {
-  as_cor_network(as_cor_tbl(x), ...)
+as_cor_network.mantel_tbl <- function(x, directed = FALSE, ...) {
+  as_cor_network(as_cor_tbl(x), directed = directed, ...)
 }
 
 #' @rdname  as_cor_network
 #' @export
 #' @method as_cor_network matrix
-as_cor_network.matrix <- function(x, ...) {
-  cor_network(corr = x, ..., val.type = "list")
+as_cor_network.matrix <- function(x, directed = FALSE, ...) {
+  cor_network(corr = x, directed = directed, ..., val.type = "list")
 }
 #' @rdname  as_cor_network
 #' @export
 #' @method as_cor_network data.frame
-as_cor_network.data.frame <- function(x, ...) {
-  cor_network(corr = x, ..., val.type = "list")
+as_cor_network.data.frame <- function(x, directed = FALSE, ...) {
+  cor_network(corr = x, directed = directed, ..., val.type = "list")
 }
 
 #' @rdname  as_cor_network
 #' @export
 #' @method as_cor_network correlate
-as_cor_network.correlate <- function(x, ...) {
-  cor_network(corr = x$r, p.value = x$p.value, ..., val.type = "list")
+as_cor_network.correlate <- function(x, directed = FALSE, ...) {
+  cor_network(corr = x$r, p.value = x$p.value, directed = directed, ...,
+              val.type = "list")
 }
 
 #' @rdname  as_cor_network
 #' @export
 #' @method as_cor_network rcorr
-as_cor_network.rcorr <- function(x, ...)
+as_cor_network.rcorr <- function(x, directed = FALSE, ...)
 {
   p.value <- x$P
   diag(p.value) <- 0
-  cor_network(corr = x$r, p.value = p.value, ..., val.type = "list")
+  cor_network(corr = x$r, p.value = p.value, directed = directed, ...,
+              val.type = "list")
 }
 
 #' @rdname  as_cor_network
 #' @export
 #' @method as_cor_network corr.test
-as_cor_network.corr.test <- function(x, ...)
+as_cor_network.corr.test <- function(x, directed = FALSE, ...)
 {
-  cor_network(corr = x$r, p.value = x$p, ..., val.type = "list")
+  cor_network(corr = x$r, p.value = x$p, directed = directed, ...,
+              val.type = "list")
 }
 
 #' @importFrom tibble as_tibble
-#' @importFrom igraph as_data_frame
+#' @importFrom igraph as_data_frame is.directed
 #' @rdname  as_cor_network
 #' @export
 #' @method as_cor_network igraph
@@ -139,7 +144,7 @@ as_cor_network.igraph <- function(x, ...)
   nodes <- tibble::as_tibble(igraph::as_data_frame(x, "vertices"))
   edges <- tibble::as_tibble(igraph::as_data_frame(x, "edges"))
   structure(.Data = list(nodes = nodes, edges = edges),
-            class = "cor_network")
+            directed = igraph::is.directed(x), class = "cor_network")
 }
 
 #' @rdname  as_cor_network

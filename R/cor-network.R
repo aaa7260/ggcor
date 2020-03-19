@@ -4,6 +4,7 @@
 #' @param x a cor_network object.
 #' @param corr correlation matrix.
 #' @param p.value significant matrix of correlation.
+#' @param directed 	logical value, whether or not to create a directed graph.
 #' @param row.names,col.names row and column names of correlation matrix.
 #' @param rm.dup logical (defaults to TRUE) indicating whether remove duplicate
 #'     rows. If TRUE, the correlation between A-B and B-A is retained only A-B.
@@ -44,6 +45,7 @@
 #' @export
 cor_network <- function(corr,
                         p.value = NULL,
+                        directed = FALSE,
                         row.names = NULL,
                         col.names = NULL,
                         rm.dup = TRUE,
@@ -107,9 +109,10 @@ cor_network <- function(corr,
   }
 
   switch (val.type,
-          tbl_graph = tidygraph::tbl_graph(nodes = nodes, edges = edges, directed = FALSE),
-          igraph    = igraph::graph_from_data_frame(edges, directed = FALSE, vertices = nodes),
-          list      = structure(.Data = list(nodes = nodes, edges  = edges), class = "cor_network")
+          tbl_graph = tidygraph::tbl_graph(nodes = nodes, edges = edges, directed = directed),
+          igraph    = igraph::graph_from_data_frame(edges, directed = directed, vertices = nodes),
+          list      = structure(.Data = list(nodes = nodes, edges  = edges),
+                                directed = directed, class = "cor_network")
   )
 }
 

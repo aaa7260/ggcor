@@ -9,20 +9,22 @@
 \alias{as_tbl_graph.cor_network}
 \title{Corece to a graph_tbl object}
 \usage{
-\method{as_tbl_graph}{cor_tbl}(x, ...)
+\method{as_tbl_graph}{cor_tbl}(x, directed = FALSE, ...)
 
-\method{as_tbl_graph}{mantel_tbl}(x, ...)
+\method{as_tbl_graph}{mantel_tbl}(x, directed = FALSE, ...)
 
-\method{as_tbl_graph}{rcorr}(x, ...)
+\method{as_tbl_graph}{rcorr}(x, directed = FALSE, ...)
 
-\method{as_tbl_graph}{corr.test}(x, ...)
+\method{as_tbl_graph}{corr.test}(x, directed = FALSE, ...)
 
-\method{as_tbl_graph}{correlate}(x, ...)
+\method{as_tbl_graph}{correlate}(x, directed = FALSE, ...)
 
 \method{as_tbl_graph}{cor_network}(x, ...)
 }
 \arguments{
 \item{x}{\code{R} object.}
+
+\item{directed}{logical value, whether or not to create a directed graph.}
 
 \item{...}{extra params.}
 }

@@ -18,6 +18,7 @@ as_cor_network(x, ...)
 
 \method{as_cor_network}{cor_tbl}(
   x,
+  directed = FALSE,
   simplify = TRUE,
   weight = NULL,
   r.thres = 0.6,
@@ -26,17 +27,17 @@ as_cor_network(x, ...)
   ...
 )
 
-\method{as_cor_network}{mantel_tbl}(x, ...)
+\method{as_cor_network}{mantel_tbl}(x, directed = FALSE, ...)
 
-\method{as_cor_network}{matrix}(x, ...)
+\method{as_cor_network}{matrix}(x, directed = FALSE, ...)
 
-\method{as_cor_network}{data.frame}(x, ...)
+\method{as_cor_network}{data.frame}(x, directed = FALSE, ...)
 
-\method{as_cor_network}{correlate}(x, ...)
+\method{as_cor_network}{correlate}(x, directed = FALSE, ...)
 
-\method{as_cor_network}{rcorr}(x, ...)
+\method{as_cor_network}{rcorr}(x, directed = FALSE, ...)
 
-\method{as_cor_network}{corr.test}(x, ...)
+\method{as_cor_network}{corr.test}(x, directed = FALSE, ...)
 
 \method{as_cor_network}{igraph}(x, ...)
 
@@ -48,6 +49,8 @@ as_cor_network(x, ...)
 \item{x}{any \code{R} object.}
 
 \item{...}{extra params passing to \code{\link[ggcor]{cor_network}}.}
+
+\item{directed}{logical value, whether or not to create a directed graph.}
 
 \item{simplify}{logical value (defaults to TRUE) indicating whether to
 delete nodes without edge connections.}

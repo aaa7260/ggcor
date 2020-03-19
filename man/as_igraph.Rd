@@ -9,20 +9,22 @@
 \alias{as.igraph.cor_network}
 \title{Corece to a igraph object}
 \usage{
-\method{as.igraph}{cor_tbl}(x, ...)
+\method{as.igraph}{cor_tbl}(x, directed = FALSE, ...)
 
-\method{as.igraph}{mantel_tbl}(x, ...)
+\method{as.igraph}{mantel_tbl}(x, directed = FALSE, ...)
 
-\method{as.igraph}{rcorr}(x, ...)
+\method{as.igraph}{rcorr}(x, directed = FALSE, ...)
 
-\method{as.igraph}{corr.test}(x, ...)
+\method{as.igraph}{corr.test}(x, directed = FALSE, ...)
 
-\method{as.igraph}{correlate}(x, ...)
+\method{as.igraph}{correlate}(x, directed = FALSE, ...)
 
-\method{as.igraph}{cor_network}(x, ...)
+\method{as.igraph}{cor_network}(x, directed = FALSE, ...)
 }
 \arguments{
 \item{x}{\code{R} object.}
+
+\item{directed}{logical value, whether or not to create a directed graph.}
 
 \item{...}{extra params.}
 }
@@ -31,6 +33,10 @@ igraph object.
 }
 \description{
 Functions to coerce a object to igraph if possible.
+}
+\examples{
+fortify_cor(mtcars) \%>\% as.igraph()
+correlate(mtcars, cor.test = TRUE) \%>\% as.igraph()
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

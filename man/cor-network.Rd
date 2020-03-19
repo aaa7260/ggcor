@@ -8,6 +8,7 @@
 cor_network(
   corr,
   p.value = NULL,
+  directed = FALSE,
   row.names = NULL,
   col.names = NULL,
   rm.dup = TRUE,
@@ -25,6 +26,8 @@ cor_network(
 \item{corr}{correlation matrix.}
 
 \item{p.value}{significant matrix of correlation.}
+
+\item{directed}{logical value, whether or not to create a directed graph.}
 
 \item{row.names, col.names}{row and column names of correlation matrix.}
 
