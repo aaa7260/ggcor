@@ -23,7 +23,7 @@ geom_link <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "x", y = "y", xend = "xend", yend = "yend"), mapping
   )
-  geom_curve(mapping = mapping, data = data, curvature = curvature,
+  ggplot2::geom_curve(mapping = mapping, data = data, curvature = curvature,
              inherit.aes = inherit.aes, ...)
 }
 
@@ -65,7 +65,7 @@ geom_start_point <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "x", y = "y"), mapping
   )
-  geom_point(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
+  ggplot2::geom_point(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
@@ -86,7 +86,7 @@ geom_end_point <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "xend", y = "yend"), mapping
   )
-  geom_point(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
+  ggplot2::geom_point(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
@@ -107,7 +107,7 @@ geom_start_label <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "x", y = "y", label = "start.label"), mapping
   )
-  geom_text(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
+  ggplot2::geom_text(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
@@ -128,7 +128,7 @@ geom_end_label <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "xend", y = "yend", label = "end.label"), mapping
   )
-  geom_text(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
+  ggplot2::geom_text(mapping = mapping, data = data, inherit.aes = inherit.aes, ...)
 }
 
 #' @rdname geom_link
