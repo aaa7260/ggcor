@@ -90,6 +90,7 @@ parallel_layout <- function(data,
       rlang::set_names(seq(n, 1, length.out = start.len), sort.start)
     }
   }
+
   end.pos <- if(is.null(sort.end)) {
     if(end.len < n && !stretch) {
       rlang::set_names(
@@ -105,18 +106,29 @@ parallel_layout <- function(data,
       rlang::set_names(seq(n, 1, length.out = end.len), sort.end)
     }
   }
-  pos <- if(horiz) {
+
+  start.width <- if(start.len < n && !stretch) {
+    n / (start.len + 2)
+  } else n / start.len
+
+  end.width <- if(end.len < n && !stretch) {
+    n / (end.len + 2)
+  } else n / end.len
+
+  pos <- if(isTRUE(horiz)) {
     tibble::tibble(x = start.pos[start], y = start.y %||% 0, xend = end.pos[end],
                    yend = end.y %||% 1, start.label = start, end.label = end,
+                   start.width = start.width, end.width = end.width,
                    .start.filter = !duplicated(start) & !is.na(start),
                    .end.filter = !duplicated(end) & !is.na(end))
   } else {
     tibble::tibble(x = start.x %||% 0, y = start.pos[start], xend = end.x %||% 1,
                    yend = end.pos[end], start.label = start, end.label = end,
+                   start.width = start.width, end.width = end.width,
                    .start.filter = !duplicated(start) & !is.na(start),
                    .end.filter = !duplicated(end) & !is.na(end))
   }
-  structure(.Data = dplyr::bind_cols(pos, data),
+  structure(.Data = dplyr::bind_cols(pos, data), horiz = horiz,
             class = c("layout_link_tbl", class(pos)))
 }
 
