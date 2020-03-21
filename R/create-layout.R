@@ -17,10 +17,11 @@
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @param row.names,col.names row/column names of correlation matrix.
 #' @param cor_tbl a col_tbl object.
+#' @param ... extra parameters.
 #' @return a data frame.
 #' @importFrom rlang enquo eval_tidy set_names quo_is_null
 #' @importFrom dplyr filter
-#' @rdname create-layout
+#' @rdname create_layout
 #' @examples
 #' cor_tbl(cor(mtcars)) %>%
 #'   parallel_layout()
@@ -132,7 +133,7 @@ parallel_layout <- function(data,
             class = c("layout_link_tbl", class(pos)))
 }
 
-#' @rdname create-layout
+#' @rdname create_layout
 #' @export
 combination_layout <- function(data,
                                type = NULL,
@@ -231,4 +232,14 @@ combination_layout <- function(data,
                         .end.filter = !duplicated(end) & !is.na(end))
   structure(.Data = dplyr::bind_cols(pos, data),
             class = c("layout_link_tbl", class(pos)))
+}
+
+#' @rdname create_layout
+#' @format NULL
+#' @usage NULL
+#' @export
+add_link <- function(...) {
+  warning("`add_link()` is deprecated. ",
+          "Please see `?combination_layout` for more detail.", call. = FALSE)
+  list()
 }

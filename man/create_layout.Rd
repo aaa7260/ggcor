@@ -3,6 +3,7 @@
 \name{parallel_layout}
 \alias{parallel_layout}
 \alias{combination_layout}
+\alias{add_link}
 \title{Transform data base on different layout}
 \usage{
 parallel_layout(
@@ -55,6 +56,8 @@ end points are consistent.}
 \item{row.names, col.names}{row/column names of correlation matrix.}
 
 \item{cor_tbl}{a col_tbl object.}
+
+\item{...}{extra parameters.}
 }
 \value{
 a data frame.
