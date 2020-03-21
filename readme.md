@@ -56,38 +56,39 @@ library(dplyr)
 data("varechem")
 data("varespec")
 set.seed(20191224)
-sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
-mantel01 <- fortify_mantel(varespec, varechem, group = sam_grp,
-                           spec.select = list(spec01 = 1:5, 
-                                              spec02 = 6:12,
-                                              spec03 = 7:18,
-                                              spec04 = 20:29,
-                                              spec05 = 30:44),
-                           mantel.fun = "mantel.randtest")
-quickcor(mantel01, legend.title = "Mantel's r") + 
-  geom_colour() + geom_cross() + facet_grid(rows = vars(.group))
+
+corr <- fortify_cor(varechem, cor.test = TRUE, type = "upper")
+mantel <- mantel_test(varespec, varechem,
+                      spec.select = list(Spec01 = 1:7,
+                                         Spec02 = 8:18,
+                                         Spec03 = 19:37,
+                                         Spec04 = 38:44)) %>% 
+  combination_layout(cor_tbl = corr) %>% 
+  mutate(xend = xend + 1,
+         rd = cut(r, breaks = c(-Inf, 0.2, 0.4, Inf),
+                  labels = c("< 0.2", "0.2 - 0.4", ">= 0.4")),
+         pd = cut(p.value, breaks = c(-Inf, 0.01, 0.05, Inf),
+                  labels = c("< 0.01", "0.01 - 0.05", ">= 0.05")))
+
+options(ggcor.link.inherit.aes = FALSE)
+quickcor(corr) + geom_square() +
+  geom_link(aes(colour = pd, size = rd), data = mantel,
+            curvature = 0.05) +
+  geom_link_point(data = mantel) +
+  geom_start_label(aes(x = x - 0.5), hjust = 1, data = mantel) +
+  scale_size_manual(values = c(0.5, 1, 2)) +
+  scale_colour_manual(values = c("#D95F02", "#1B9E77", "#A2A2A288")) +
+  guides(size = guide_legend(title = "Mantel's r",
+                             override.aes = list(colour = "grey35"), 
+                             order = 2),
+         colour = guide_legend(title = "Mantel's p", 
+                               override.aes = list(size = 3), 
+                               order = 1),
+         fill = guide_colorbar(title = "Pearson's r", order = 3)) +
+  expand_axis(x = -6)
 ```
 
 <img src="man/figures/README-example03-1.png" width="100%" />
-
-``` r
-mantel02 <- fortify_mantel(varespec, varechem, 
-                         spec.select = list(1:10, 5:14, 7:22, 9:32)) %>% 
-  mutate(r = cut(r, breaks = c(-Inf, 0.25, 0.5, Inf), 
-                 labels = c("<0.25", "0.25-0.5", ">=0.5"),
-                 right = FALSE),
-         p.value = cut(p.value, breaks = c(-Inf, 0.001, 0.01, 0.05, Inf),
-                       labels = c("<0.001", "0.001-0.01", "0.01-0.05", ">=0.05"),
-                       right = FALSE))
-quickcor(varechem, type = "upper") + geom_square() + 
-  add_link(mantel02, mapping = aes(colour = p.value, size = r),
-           diag.label = TRUE) +
-  scale_size_manual(values = c(0.5, 1.5, 3)) +
-  add_diag_label() + remove_axis("x")
-#> Warning: `add_diag_label()` is deprecated. Use `geom_diag_label()` instead.
-```
-
-<img src="man/figures/README-example03-2.png" width="100%" />
 
 # network
 
@@ -114,28 +115,3 @@ ggraph(net, "circle") +
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
-
-# general heatmap
-
-``` r
-mat <- matrix(rnorm(120), nrow = 15)
-cor_tbl(extra.mat = list(mat = mat)) %>% 
-  quickcor(mapping = aes(fill = mat)) + geom_colour()
-```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
-
-# upper and lower with different geom
-
-``` r
-d <- dist(t(mtcars))
-correlate(mtcars, cor.test = TRUE) %>% 
-  as_cor_tbl(extra.mat = list(dist = d)) %>% 
-  quickcor() +
-  geom_upper_square(aes(upper_fill = r, upper_r0 = r)) +
-  geom_lower_colour(aes(lower_fill = dist)) +
-  geom_diag_label() +
-  remove_all_axis()
-```
-
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
