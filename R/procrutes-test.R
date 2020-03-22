@@ -2,6 +2,7 @@
 #' @description Perform procrutes test quickly and tidy up the data to
 #' data frame.
 #' @param spec,env data frame object.
+#' @param group vector for rows grouping.
 #' @param procrutes.fun string, name of procrutes test function.
 #'    \itemize{
 #'      \item{\code{"protest"} will use \code{vegan::protest} (default).}
@@ -12,10 +13,11 @@
 #' @param spec.pre.fun,env.pre.fun string, function name of transform the input data.
 #' @param spec.pre.params,env.pre.params list, extra parameters for \code{spec/env.pre.fun}.
 #' @param ... extra params for \code{procrutes.fun}.
+#' @return a data frame.
 #' @importFrom vegan protest
 #' @importFrom ade4 procuste.randtest procuste.rtest
-#' @importFrom dplyr %>%
-#' @importFrom purrr map map2
+#' @importFrom dplyr %>% mutate
+#' @importFrom purrr map map2 pmap_dfr
 #' @rdname procrutes_test
 #' @examples \dontrun{
 #' library(vegan)
@@ -28,10 +30,49 @@
 #' procrutes_test(varespec, varechem, spec.pre.fun = "mono_mds",
 #'             spec.select = list(spec01 = 1:6, spec02 = 7:12),
 #'             env.select = list(env01 = 1:4, env02 = 5:14))
+#' set.seed(20191224)
+#' sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
+#' fortify_procrutes(varespec, varechem, group = sam_grp)
 #' }
 #' @seealso \code{\link[vegan]{protest}}, \code{\link[ade4]{procuste.rtest}},
 #' \code{\link[ade4]{procuste.randtest}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
+fortify_procrutes <- function(spec,
+                              env,
+                              group = NULL,
+                              ...)
+{
+  if(!is.data.frame(spec))
+    spec <- as.data.frame(spec)
+  if(!is.data.frame(env))
+    env <- as.data.frame(env)
+  if(nrow(spec) != nrow(env)) {
+    stop("'spec' must have the same rows as 'env'.", call. = FALSE)
+  }
+
+  if(!is.null(group)) {
+    if(length(group) != nrow(spec))
+      stop("Length of 'group' and rows of 'spec' must be same.", call. = FALSE)
+    spec <- split(spec, group, drop = FALSE)
+    env <- split(env, group, drop = FALSE)
+
+    df <- suppressMessages(
+      purrr::pmap_dfr(list(spec, env, as.list(names(spec))),
+                      function(.spec, .env, .group) {
+                        procrutes_test(.spec, .env, ...) %>%
+                          dplyr::mutate(.group = .group)
+                      })
+    )
+  } else {
+    df <- procrutes_test(spec, env, ...)
+  }
+  grouped <- if(!is.null(group)) TRUE else FALSE
+  attr(df, "grouped") <- grouped
+  df
+}
+
+#' @rdname procrutes_test
 #' @export
 procrutes_test <- function(spec,
                            env,

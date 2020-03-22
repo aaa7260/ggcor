@@ -42,6 +42,7 @@ correlate <- function(x,
                       use = "everything",
                       ...)
 {
+  missing.y <- is.null(y)
   y <- y %||% x
   if(!is.matrix(x))
     x <- as.matrix(x)
@@ -50,21 +51,41 @@ correlate <- function(x,
   n <- ncol(x)
   m <- ncol(y)
   r <- cor(x, y, use = use, method = method)
-  if(cor.test) {
+  if(isTRUE(cor.test)) {
     p.value <- lower.ci <- upper.ci <- matrix(NA, ncol = m, nrow = n)
-    df <- expand.grid(1:n, 1:m)
-    purrr::walk2(df$Var1, df$Var2, function(.idx, .idy) {
-      tmp <- cor.test(x = x[ , .idx], y = y[ , .idy], method = method, ...)
-      p.value[.idx, .idy] <<- tmp$p.value
-      if(method == "pearson") {
-        if (nrow(x) > 3) {
-          lower.ci[.idx, .idy] <<- tmp$conf.int[1]
-          upper.ci[.idx, .idy] <<- tmp$conf.int[2]
-        } else {
-          warning("correlation test interval needs 4 observations at least.", call. = FALSE)
+    id <- expand.grid(1:n, 1:m)
+    if(missing.y) {
+      id <- id[id$Var1 > id$Var2, , drop = FALSE]
+      purrr::walk2(id$Var1, id$Var2, function(.idx, .idy) {
+        tmp <- cor.test(x = x[ , .idx], y = y[ , .idy], method = method, ...)
+        p.value[c(.idx, .idy), c(.idy, .idx)] <<- tmp$p.value
+        if(method == "pearson") {
+          if (nrow(x) > 3) {
+            lower.ci[c(.idx, .idy), c(.idy, .idx)] <<- tmp$conf.int[1]
+            upper.ci[c(.idx, .idy), c(.idy, .idx)] <<- tmp$conf.int[2]
+          } else {
+            warning("correlation test interval needs 4 observations at least.", call. = FALSE)
+          }
         }
+      })
+      diag(p.value) <- 0
+      if(method == "pearson") {
+        diag(lower.ci) <- diag(upper.ci) <- 1
       }
-    })
+    } else {
+      purrr::walk2(id$Var1, id$Var2, function(.idx, .idy) {
+        tmp <- cor.test(x = x[ , .idx], y = y[ , .idy], method = method, ...)
+        p.value[.idx, .idy] <<- tmp$p.value
+        if(method == "pearson") {
+          if (nrow(x) > 3) {
+            lower.ci[.idx, .idy] <<- tmp$conf.int[1]
+            upper.ci[.idx, .idy] <<- tmp$conf.int[2]
+          } else {
+            warning("correlation test interval needs 4 observations at least.", call. = FALSE)
+          }
+        }
+      })
+    }
   }
   if(cor.test) {
     lower.ci <- if(method == "pearson") lower.ci else NULL
