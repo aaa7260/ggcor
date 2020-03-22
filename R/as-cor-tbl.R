@@ -103,19 +103,46 @@ as_cor_tbl.mantel_tbl <- function(x, byrow = TRUE, ...) {
     class = c("cor_tbl", setdiff(class(df), "mantel_tbl"))
   )
 }
+
+#' @rdname  as_cor_tbl
+#' @export
+#' @method as_cor_tbl pro_tbl
+as_cor_tbl.pro_tbl <- function(x, byrow = TRUE, ...) {
+  env_nm <- unique(x$env)
+  spec_nm <- unique(x$spec)
+  if(byrow) {
+    col.names <- env_nm
+    row.names <- spec_nm
+    .col.names <- x$env
+    .row.names <- x$spec
+    .col.id <- as.integer(factor(x$env, levels = col.names))
+    .row.id <- as.integer(factor(x$spec, levels = rev(row.names)))
+  } else {
+    col.names <- spec_nm
+    row.names <- env_nm
+    .col.names <- x$spec
+    .row.names <- x$env
+    .col.id <- as.integer(factor(x$spec, levels = col.names))
+    .row.id <- as.integer(factor(x$env, levels = rev(row.names)))
+  }
+  df <- tibble::tibble(.col.names = .col.names, .row.names = .row.names,
+                       r = x$r, p.value = x$p.value, .row.id = .row.id,
+                       .col.id = .col.id) %>%
+    dplyr::bind_cols(x[setdiff(names(x), c("spec", "env", "r", "p.value"))])
+  structure(
+    .Data = df,
+    .row.names = row.names,
+    .col.names = col.names,
+    type = "full",
+    show.diag = TRUE,
+    grouped = attr(x, "grouped"),
+    class = c("cor_tbl", setdiff(class(df), "pro_tbl"))
+  )
+}
+
 #' @rdname as_cor_tbl
 #' @export
 #' @method as_cor_tbl default
 as_cor_tbl.default <- function(x, ...) {
   stop(class(x)[1], " hasn't been realized yet.", call. = FALSE)
-}
-
-#' @noRd
-check_dimension <- function(x, y) {
-  x_nm <- as.character(match.call()[["x"]])
-  y_nm <- as.character(match.call()[["y"]])
-  if(any(dim(x) != dim(y))) {
-    msg <- paste0(" Dimension error: ", y_nm, " must have same dimension as ", x_nm)
-    stop(msg, call. = FALSE)
-  }
 }

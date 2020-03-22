@@ -8,6 +8,7 @@
 \alias{as_cor_tbl.rcorr}
 \alias{as_cor_tbl.corr.test}
 \alias{as_cor_tbl.mantel_tbl}
+\alias{as_cor_tbl.pro_tbl}
 \alias{as_cor_tbl.default}
 \title{Coerce to a cor_tbl object}
 \usage{
@@ -24,6 +25,8 @@ as_cor_tbl(x, ...)
 \method{as_cor_tbl}{corr.test}(x, ...)
 
 \method{as_cor_tbl}{mantel_tbl}(x, byrow = TRUE, ...)
+
+\method{as_cor_tbl}{pro_tbl}(x, byrow = TRUE, ...)
 
 \method{as_cor_tbl}{default}(x, ...)
 }

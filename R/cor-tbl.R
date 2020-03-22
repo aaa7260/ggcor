@@ -167,3 +167,14 @@ check_extra_mat_name <- function(l)
     }
   }
 }
+
+#' @noRd
+check_dimension <- function(x, y) {
+  x_nm <- as.character(match.call()[["x"]])
+  y_nm <- as.character(match.call()[["y"]])
+  if(any(dim(x) != dim(y))) {
+    msg <- paste0(" Dimension error: ", y_nm, " must have same dimension as ", x_nm)
+    stop(msg, call. = FALSE)
+  }
+}
+

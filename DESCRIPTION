@@ -1,7 +1,7 @@
 Package: ggcor
 Type: Package
 Title: Extended tools for correlation analysis and visualization
-Version: 0.9.4.4
+Version: 0.9.4.5
 Authors@R: c(
     person("Houyun", "Huang", email = "houyunhuang@163.com", role = c("aut", "cre")),
     person("Lei", "Zhou", email = "zhoulei@scau.edu.cn", role = "aut"),
@@ -86,6 +86,7 @@ Collate:
     'ggcor.R'
     'guide-colourbar2.R'
     'matrix-order.R'
+    'procrutes-test.R'
     'quickcor.R'
     'reexport.R'
     'remove-axis.R'
