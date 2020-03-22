@@ -3,6 +3,7 @@
 \name{as.igraph.cor_tbl}
 \alias{as.igraph.cor_tbl}
 \alias{as.igraph.mantel_tbl}
+\alias{as.igraph.pro_tbl}
 \alias{as.igraph.rcorr}
 \alias{as.igraph.corr.test}
 \alias{as.igraph.correlate}
@@ -12,6 +13,8 @@
 \method{as.igraph}{cor_tbl}(x, directed = FALSE, ...)
 
 \method{as.igraph}{mantel_tbl}(x, directed = FALSE, ...)
+
+\method{as.igraph}{pro_tbl}(x, directed = FALSE, ...)
 
 \method{as.igraph}{rcorr}(x, directed = FALSE, ...)
 

@@ -25,6 +25,13 @@ as_tbl_graph.mantel_tbl <- function(x, directed = FALSE, ...)
 
 #' @rdname  as_tbl_graph
 #' @export
+as_tbl_graph.pro_tbl <- function(x, directed = FALSE, ...)
+{
+  as_tbl_graph(as_cor_tbl(x), directed = directed, ...)
+}
+
+#' @rdname  as_tbl_graph
+#' @export
 as_tbl_graph.rcorr <- function(x, directed = FALSE, ...)
 {
   p.value <- x$P

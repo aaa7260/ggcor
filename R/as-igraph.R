@@ -26,6 +26,13 @@ as.igraph.mantel_tbl <- function(x, directed = FALSE, ...)
 }
 
 #' @rdname  as_igraph
+#' @export
+as.igraph.pro_tbl <- function(x, directed = FALSE, ...)
+{
+  as.igraph(as_cor_tbl(x), directed = directed, ...)
+}
+
+#' @rdname  as_igraph
 #' @importFrom tidygraph tbl_graph
 #' @export
 as.igraph.rcorr <- function(x, directed = FALSE, ...)

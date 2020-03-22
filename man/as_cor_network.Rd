@@ -4,6 +4,7 @@
 \alias{as_cor_network}
 \alias{as_cor_network.cor_tbl}
 \alias{as_cor_network.mantel_tbl}
+\alias{as_cor_network.pro_tbl}
 \alias{as_cor_network.matrix}
 \alias{as_cor_network.data.frame}
 \alias{as_cor_network.correlate}
@@ -28,6 +29,8 @@ as_cor_network(x, ...)
 )
 
 \method{as_cor_network}{mantel_tbl}(x, directed = FALSE, ...)
+
+\method{as_cor_network}{pro_tbl}(x, directed = FALSE, ...)
 
 \method{as_cor_network}{matrix}(x, directed = FALSE, ...)
 

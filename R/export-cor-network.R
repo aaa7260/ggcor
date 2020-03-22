@@ -77,6 +77,24 @@ export_cor_network.mantel_tbl <- function(x,
 
 #' @rdname  export_cor_network
 #' @export
+#' @method export_cor_network pro_tbl
+export_cor_network.pro_tbl <- function(x,
+                                       file = "",
+                                       what = "edges",
+                                       sep = ",",
+                                       simplify = TRUE,
+                                       r.thres = 0.6,
+                                       r.absolute = TRUE,
+                                       p.thres = 0.05,
+                                       ...)
+{
+  what <- match.arg(what, c("edges", "nodes"))
+  x <- as_cor_network(x, simplify, r.thres, r.absolute, p.thres)
+  export_cor_network(x, file, what, sep, ...)
+}
+
+#' @rdname  export_cor_network
+#' @export
 #' @method export_cor_network matrix
 export_cor_network.matrix <- function(x,
                                       file = "",

@@ -56,7 +56,7 @@ fortify_cor <- function(x,
       lower = get_lower_data(x, show.diag)
     ))
   }
-  clss <- c("correlate", "rcorr", "corr.test", "mantel_tbl")
+  clss <- c("correlate", "rcorr", "corr.test", "mantel_tbl", "pro_tbl")
   if(any(clss %in% class(x)) || is.cor) {
     return(as_cor_tbl(x, type = type, show.diag = show.diag, cluster = cluster,
                       cluster.method = cluster.method, ...))

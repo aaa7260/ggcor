@@ -3,6 +3,7 @@
 \name{as_tbl_graph.cor_tbl}
 \alias{as_tbl_graph.cor_tbl}
 \alias{as_tbl_graph.mantel_tbl}
+\alias{as_tbl_graph.pro_tbl}
 \alias{as_tbl_graph.rcorr}
 \alias{as_tbl_graph.corr.test}
 \alias{as_tbl_graph.correlate}
@@ -12,6 +13,8 @@
 \method{as_tbl_graph}{cor_tbl}(x, directed = FALSE, ...)
 
 \method{as_tbl_graph}{mantel_tbl}(x, directed = FALSE, ...)
+
+\method{as_tbl_graph}{pro_tbl}(x, directed = FALSE, ...)
 
 \method{as_tbl_graph}{rcorr}(x, directed = FALSE, ...)
 

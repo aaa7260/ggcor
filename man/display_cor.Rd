@@ -9,6 +9,7 @@
 \alias{display_cor.corr.test}
 \alias{display_cor.cor_tbl}
 \alias{display_cor.mantel_tbl}
+\alias{display_cor.pro_tbl}
 \alias{format_cor}
 \title{Display correlation matrix with nice format}
 \usage{
@@ -38,6 +39,8 @@ display_cor(x, ...)
 )
 
 \method{display_cor}{mantel_tbl}(x, byrow = TRUE, ...)
+
+\method{display_cor}{pro_tbl}(x, byrow = TRUE, ...)
 
 format_cor(
   corr,

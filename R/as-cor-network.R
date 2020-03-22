@@ -95,6 +95,13 @@ as_cor_network.mantel_tbl <- function(x, directed = FALSE, ...) {
 
 #' @rdname  as_cor_network
 #' @export
+#' @method as_cor_network pro_tbl
+as_cor_network.pro_tbl <- function(x, directed = FALSE, ...) {
+  as_cor_network(as_cor_tbl(x), directed = directed, ...)
+}
+
+#' @rdname  as_cor_network
+#' @export
 #' @method as_cor_network matrix
 as_cor_network.matrix <- function(x, directed = FALSE, ...) {
   cor_network(corr = x, directed = directed, ..., val.type = "list")

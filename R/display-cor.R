@@ -162,6 +162,14 @@ display_cor.mantel_tbl <- function(x, byrow = TRUE, ...) {
   display_cor(x, ...)
 }
 
+#' @rdname  display_cor
+#' @export
+#' @method display_cor pro_tbl
+display_cor.pro_tbl <- function(x, byrow = TRUE, ...) {
+  x <- as_cor_tbl(x, byrow = byrow)
+  display_cor(x, ...)
+}
+
 #' @importFrom purrr map_chr
 #' @rdname display_cor
 #' @export

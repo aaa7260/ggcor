@@ -5,6 +5,7 @@
 \alias{export_cor_network.cor_network}
 \alias{export_cor_network.cor_tbl}
 \alias{export_cor_network.mantel_tbl}
+\alias{export_cor_network.pro_tbl}
 \alias{export_cor_network.matrix}
 \alias{export_cor_network.data.frame}
 \alias{export_cor_network.correlate}
@@ -29,6 +30,18 @@ export_cor_network(x, file = "", what = "edges", sep = ",", ...)
 )
 
 \method{export_cor_network}{mantel_tbl}(
+  x,
+  file = "",
+  what = "edges",
+  sep = ",",
+  simplify = TRUE,
+  r.thres = 0.6,
+  r.absolute = TRUE,
+  p.thres = 0.05,
+  ...
+)
+
+\method{export_cor_network}{pro_tbl}(
   x,
   file = "",
   what = "edges",
