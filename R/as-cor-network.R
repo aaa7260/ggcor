@@ -69,7 +69,7 @@ as_cor_network.cor_tbl <- function(x,
   edges <- rename_cor_network_edge(edges, ".row.names", ".col.names")
 
   nodes <- if(simplify) {
-    tibble::tibble(name = unique(c(edges$from, x$to)))
+    tibble::tibble(name = unique(c(edges$from, edges$to)))
   } else {
     tibble::tibble(name = unique(c(x$.col.names, x$.row.names)))
   }
@@ -175,7 +175,7 @@ rename_cor_network_edge <- function(x, from, to)
   stopifnot(is.data.frame(x))
   name <- names(x)
   name[name %in% c(from, to)] <- c("from", "to")
-  name <- c(c("from", "to"), setdiff(name, c("from", "to")))
   names(x) <- name
-  x
+  new <- c(c("from", "to"), setdiff(name, c("from", "to")))
+  x[new]
 }
