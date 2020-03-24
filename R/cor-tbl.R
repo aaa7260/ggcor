@@ -59,7 +59,7 @@ cor_tbl <- function(corr,
   if(!is.matrix(first))
     first <- as.matrix(first)
 
-  if(missing(corr)) {
+  if(missing.corr) {
     corr <- if(is.null(p.value)) list() else list(p.value = p.value)
   } else {
     corr <- if(is.null(p.value)) list(r = corr) else list(r = corr, p.value = p.value)
