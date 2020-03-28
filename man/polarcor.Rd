@@ -7,7 +7,7 @@
 \alias{set_arc_axis_y}
 \title{Visualize correlation matrix on polar coordinate}
 \usage{
-polarcor(data, mapping = NULL, no.axis = FALSE, ...)
+polarcor(data, no.axis = FALSE, ...)
 
 geom_arc_colour(mapping = NULL, data = NULL, ...)
 
@@ -17,8 +17,6 @@ set_arc_axis_y(mapping = NULL, data = NULL, ...)
 }
 \arguments{
 \item{data}{a data.frame.}
-
-\item{mapping}{set of aesthetic mappings.}
 
 \item{no.axis}{if TRUE, don't add axis labels for plot.}
 

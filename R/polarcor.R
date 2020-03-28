@@ -2,7 +2,6 @@
 #' @description The \code{trans_polar} function transforms the cor_tbl
 #' object into polar coordinate format, and \code{polarcor}, \code{geom_arc_colour}
 #' and other functions are used for visualization.
-#' @param mapping set of aesthetic mappings.
 #' @param data a data.frame.
 #' @param groups character vectors.
 #' @param no.axis if TRUE, don't add axis labels for plot.
@@ -13,7 +12,6 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 polarcor <- function(data,
-                     mapping = NULL,
                      no.axis = FALSE,
                      ...) {
   data <- trans_polar(data, ...)
