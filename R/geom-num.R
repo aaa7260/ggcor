@@ -29,15 +29,15 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 geom_number <- function(mapping = NULL, data = NULL,
-                      stat = "identity", position = "identity",
-                      ...,
-                      nudge_x = 0,
-                      nudge_y = 0,
-                      digits = 2,
-                      nsmall = 2,
-                      na.rm = FALSE,
-                      show.legend = NA,
-                      inherit.aes = TRUE)
+                        stat = "identity", position = "identity",
+                        ...,
+                        nudge_x = 0,
+                        nudge_y = 0,
+                        digits = 2,
+                        nsmall = 2,
+                        na.rm = FALSE,
+                        show.legend = NA,
+                        inherit.aes = TRUE)
 {
   if (!missing(nudge_x) || !missing(nudge_y)) {
     if (!missing(position)) {

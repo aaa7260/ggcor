@@ -123,7 +123,14 @@ long_aes_lower <- paste("lower", short_aes, sep = "_")
 #' @noRd
 utils::globalVariables(
   c(
+    "x",
+    "y",
     "r",
+    "r1",
+    "r2",
+    "start",
+    "end",
+    "angle",
     "p.value",
     ".row.id",
     ".col.id",
