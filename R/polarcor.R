@@ -144,6 +144,10 @@ trans_polar <- function(data,
     end.angle <- degree_radius(end.angle %% 360)
   }
 
+  if(identical(end.angle, 0)) {
+    end.angle <- 2 * pi
+  }
+
   if(start.angle > end.angle) {
     temp <- start.angle
     start.angle <- end.angle
