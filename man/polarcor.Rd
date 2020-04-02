@@ -22,6 +22,8 @@ set_arc_axis_y(mapping = NULL, data = NULL, ...)
 
 \item{...}{extra parameters.}
 
+\item{mapping}{NULL (default) or a list of aesthetic mappings to use for plot.}
+
 \item{groups}{character vectors.}
 }
 \description{

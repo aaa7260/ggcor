@@ -3,6 +3,7 @@
 #' object into polar coordinate format, and \code{polarcor}, \code{geom_arc_colour}
 #' and other functions are used for visualization.
 #' @param data a data.frame.
+#' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
 #' @param groups character vectors.
 #' @param no.axis if TRUE, don't add axis labels for plot.
 #' @param ... extra parameters.
@@ -144,8 +145,8 @@ trans_polar <- function(data,
     end.angle <- degree_radius(end.angle %% 360)
   }
 
-  if(identical(end.angle, 0)) {
-    end.angle <- 2 * pi
+  if(identical(end.angle, start.angle)) {
+    end.angle <- start.angle + 2 * pi
   }
 
   if(start.angle > end.angle) {

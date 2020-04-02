@@ -93,8 +93,12 @@ quickcor <- function(x,
 #' @method print quickcor
 #' @export
 print.quickcor <- function(x,
+                           colours = getOption("ggcor.fill.pal"),
                            style = getOption("ggcor.plot.style", "corrplot"),
                            title = "corr",
+                           breaks = c(-1, -0.5, 0, 0.5, 1),
+                           labels = c(-1, -0.5, 0, 0.5, 1),
+                           limits = c(-1, 1),
                            nbin = 40, ...)
 {
   style <- switch (style,
@@ -108,10 +112,10 @@ print.quickcor <- function(x,
       fill.var <- eval_tidy(mapping$fill, x$data)
       if(!is_general_cor_tbl(x$data) && fill.var.name == "r" &&
          is.numeric(fill.var)) {
-        x <- x + scale_fill_gradient2n(colours = getOption("ggcor.fill.pal"),
-                                       breaks = c(-1, -0.5, 0, 0.5, 1),
-                                       labels = c(-1, -0.5, 0, 0.5, 1),
-                                       limits = c(-1, 1)) +
+        x <- x + scale_fill_gradient2n(colours = colours,
+                                       breaks = breaks,
+                                       labels = labels,
+                                       limits = limits) +
           guides(fill = guide_colourbar(title = title,
                                         nbin  = nbin))
       }
