@@ -10,6 +10,7 @@ quickcor(
   mapping = NULL,
   grid.colour = "grey50",
   grid.size = 0.25,
+  fixed.xy = TRUE,
   axis.x.position = "auto",
   axis.y.position = "auto",
   axis.label.drop = TRUE,
@@ -25,6 +26,8 @@ quickcor(
 \item{grid.colour}{colour of grid lines.}
 
 \item{grid.size}{size of grid lines.}
+
+\item{fixed.xy}{if TRUE (default), the coordinates will with fixed aspect ratio.}
 
 \item{axis.x.position, axis.y.position}{the position of the axis. 'auto' (default)
 is set according to the plot type, 'bottom' or 'top' for x axes, 'left' or 'right'

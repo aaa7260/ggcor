@@ -3,6 +3,7 @@
 #' of correlation matrix plots because of adding some extra settings by default.
 #' @param x,y matrix or data frame.
 #' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
+#' @param fixed.xy if TRUE (default), the coordinates will with fixed aspect ratio.
 #' @param grid.colour colour of grid lines.
 #' @param grid.size size of grid lines.
 #' @param axis.x.position,axis.y.position the position of the axis. 'auto' (default)
@@ -13,7 +14,7 @@
 #'     label.
 #' @param legend.position position of legend.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
-#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed
+#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed coord_cartesian
 #' @rdname quick_cor
 #' @examples
 #' require(ggplot2, quietly = TRUE)
@@ -40,6 +41,7 @@ quickcor <- function(x,
                      mapping = NULL,
                      grid.colour = "grey50",
                      grid.size = 0.25,
+                     fixed.xy = TRUE,
                      axis.x.position = "auto",
                      axis.y.position = "auto",
                      axis.label.drop = TRUE,
@@ -81,8 +83,14 @@ quickcor <- function(x,
   # add theme and coord
   xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
   ylim <- c(0.5 - 0.002 * n, n + 0.5 + 0.002 * n)
-  p <- p + coord_fixed(xlim = xlim, ylim = ylim) +
-    theme_cor(legend.position = legend.position)
+
+  if(isTRUE(fixed.xy)) {
+    p <- p + coord_fixed(xlim = xlim, ylim = ylim) +
+      theme_cor(legend.position = legend.position)
+  } else {
+    p <- p + coord_cartesian(xlim = xlim, ylim = ylim) +
+      theme_cor(legend.position = legend.position)
+  }
   class(p) <- c("quickcor", class(p))
   p
 }
