@@ -72,3 +72,10 @@ as_matrix.mantel_tbl <- function(x, ...) {
   as_matrix(as_cor_tbl(x), ...)
 }
 
+#' @rdname  as_matrix
+#' @export
+#' @method as_matrix pro_tbl
+as_matrix.mantel_tbl <- function(x, ...) {
+  as_matrix(as_cor_tbl(x), ...)
+}
+

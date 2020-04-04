@@ -11,6 +11,8 @@ as_matrix(x, ...)
 \method{as_matrix}{cor_tbl}(x, index = "all", missing = NULL, ...)
 
 \method{as_matrix}{mantel_tbl}(x, ...)
+
+\method{as_matrix}{pro_tbl}(x, ...)
 }
 \arguments{
 \item{x}{any \code{R} object.}
