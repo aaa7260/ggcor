@@ -2,15 +2,17 @@
 #' @description \code{correlate} uses \code{cor} to find the correlations and use \code{cor.test} to find
 #'     the p values, confidence intervals for all possible pairs of columns ofmatrix.
 #' @param x,y a matrix object or NULL.
-#' @param cor.test logical, if \code{TRUE} (default) will test for correlation.
+#' @param cor.test logical, if TRUE (default) will test for correlation.
+#' @param p.adjust logical, if TRUE (default) will adjust p value for multiple comparisons.
 #' @param method a character string indicating which correlation coefficient is to be used
 #'     for the test. One of "pearson", "kendall", or "spearman".
+#' @param p.adjust.method correction method.
 #' @param use an optional character string giving a method for computing covariances in the presence of missing values.
 #' @param ... extra params, see Details.
 #' @details The columns of 'x' will be tested for each pair when y is NULL(the default),
 #'     otherwise each column in 'x' and each column in 'y' is tested for each pair.
 #' @return a list with correlation matrix, P values matrix, confidence intervals matrix.
-#' @importFrom stats cor cor.test
+#' @importFrom stats cor cor.test p.adjust p.adjust.methods
 #' @importFrom purrr walk2
 #' @rdname corrlate
 #' @examples
@@ -38,7 +40,9 @@
 correlate <- function(x,
                       y = NULL,
                       cor.test = FALSE,
+                      p.adjust = FALSE,
                       method = "pearson",
+                      p.adjust.method = p.adjust.methods,
                       use = "everything",
                       ...)
 {
@@ -87,9 +91,13 @@ correlate <- function(x,
       })
     }
   }
-  if(cor.test) {
+  if(isTRUE(cor.test)) {
     lower.ci <- if(method == "pearson") lower.ci else NULL
     upper.ci <- if(method == "pearson") upper.ci else NULL
+    if(isTRUE(p.adjust)) {
+      p.adjust.method <- match.arg(p.adjust.method, p.adjust.methods)
+      p.value[] <- p.adjust(p.value, p.adjust.method)
+    }
   } else {
     p.value <- lower.ci <- upper.ci <- NULL
   }
@@ -107,6 +115,8 @@ correlate <- function(x,
 #' @export
 fast_correlate <- function(x,
                            y = NULL,
+                           p.adjust = FALSE,
+                           p.adjust.method = p.adjust.methods,
                            use = "everything",
                            ...)
 {
@@ -114,6 +124,10 @@ fast_correlate <- function(x,
     stop("'fast_correlate' needs 'WGCNA' package.", call. = FALSE)
   }
   corr <- WGCNA::corAndPvalue(x, y, use, ...)
+  if(isTRUE(p.adjust)) {
+    p.adjust.method <- match.arg(p.adjust.method, p.adjust.methods)
+    corr$p.value <- p.adjust(corr$p.value, p.adjust.method)
+  }
   structure(.Data = list(r = corr$cor, p.value = corr$p),
             class = "correlate")
 }
@@ -122,12 +136,18 @@ fast_correlate <- function(x,
 #' @export
 fast_correlate2 <- function (x,
                              method = "pearson",
+                             p.adjust = FALSE,
+                             p.adjust.method = p.adjust.methods,
                              ...)
 {
   if(!requireNamespace("picante", quietly = TRUE)) {
     stop("'fast_correlate2' needs 'picante' package.", call. = FALSE)
   }
   corr <- picante::cor.table(x, method, ...)
+  if(isTRUE(p.adjust)) {
+    p.adjust.method <- match.arg(p.adjust.method, p.adjust.methods)
+    corr$p.value <- p.adjust(corr$p.value, p.adjust.method)
+  }
   structure(.Data = list(r = corr$r, p.value = corr$P),
             class = "correlate")
 }

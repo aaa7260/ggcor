@@ -10,22 +10,41 @@ correlate(
   x,
   y = NULL,
   cor.test = FALSE,
+  p.adjust = FALSE,
   method = "pearson",
+  p.adjust.method = p.adjust.methods,
   use = "everything",
   ...
 )
 
-fast_correlate(x, y = NULL, use = "everything", ...)
+fast_correlate(
+  x,
+  y = NULL,
+  p.adjust = FALSE,
+  p.adjust.method = p.adjust.methods,
+  use = "everything",
+  ...
+)
 
-fast_correlate2(x, method = "pearson", ...)
+fast_correlate2(
+  x,
+  method = "pearson",
+  p.adjust = FALSE,
+  p.adjust.method = p.adjust.methods,
+  ...
+)
 }
 \arguments{
 \item{x, y}{a matrix object or NULL.}
 
-\item{cor.test}{logical, if \code{TRUE} (default) will test for correlation.}
+\item{cor.test}{logical, if TRUE (default) will test for correlation.}
+
+\item{p.adjust}{logical, if TRUE (default) will adjust p value for multiple comparisons.}
 
 \item{method}{a character string indicating which correlation coefficient is to be used
 for the test. One of "pearson", "kendall", or "spearman".}
+
+\item{p.adjust.method}{correction method.}
 
 \item{use}{an optional character string giving a method for computing covariances in the presence of missing values.}
 
