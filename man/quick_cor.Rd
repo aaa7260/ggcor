@@ -2,6 +2,7 @@
 % Please edit documentation in R/quickcor.R
 \name{quickcor}
 \alias{quickcor}
+\alias{print.quickcor}
 \title{Plot Correlation Matrix Quickly}
 \usage{
 quickcor(
@@ -17,9 +18,21 @@ quickcor(
   legend.position = "auto",
   ...
 )
+
+\method{print}{quickcor}(
+  x,
+  colours = getOption("ggcor.fill.pal"),
+  style = getOption("ggcor.plot.style", "corrplot"),
+  title = "corr",
+  breaks = c(-1, -0.5, 0, 0.5, 1),
+  labels = c(-1, -0.5, 0, 0.5, 1),
+  limits = c(-1, 1),
+  nbin = 40,
+  ...
+)
 }
 \arguments{
-\item{x, y}{matrix or data frame.}
+\item{x, y}{matrix, data frame or quickcor object in \code{print()}.}
 
 \item{mapping}{NULL (default) or a list of aesthetic mappings to use for plot.}
 
@@ -39,7 +52,21 @@ label.}
 
 \item{legend.position}{position of legend.}
 
-\item{...}{extra params for \code{\link[ggcor]{fortify_cor}}.}
+\item{...}{ignore.}
+
+\item{colours}{colour palette for filling.}
+
+\item{style}{style of plot, one of "corrplot" (default) or "ggplot".}
+
+\item{title}{guide title.}
+
+\item{breaks}{breaks of guide_colourbar.}
+
+\item{labels}{labels of guide_colourbar.}
+
+\item{limits}{limits of guide_colourbar.}
+
+\item{nbin}{a numeric specifying the number of bins for drawing the guide_colourbar.}
 }
 \description{
 quickcor is convenient wrapper for creating a number of different types
@@ -47,21 +74,37 @@ of correlation matrix plots because of adding some extra settings by default.
 }
 \examples{
 require(ggplot2, quietly = TRUE)
+
+# Initialize the plot
 quickcor(mtcars)
-quickcor(mtcars, type = "upper")
-quickcor(mtcars, type = "lower", show.diag = FALSE)
+
+# layer of tile
 quickcor(mtcars) + geom_colour()
+
+# layer of circle and trim the lower triangle
 quickcor(mtcars, type = "upper") + geom_circle2()
+
+# layer of ellipse and not show diagonal
 quickcor(mtcars, type = "lower", show.diag = FALSE) + geom_ellipse2()
+
+# layer of square and reorder correlation matrix by cluster
 quickcor(mtcars, cluster = TRUE) + geom_square()
+
+# layer of confidence box
 quickcor(mtcars, cor.test = TRUE) + geom_confbox()
-quickcor(mtcars, cor.test = TRUE) + geom_colour() + geom_cross()
-quickcor(mtcars, cor.test = TRUE) + geom_star(n = 5)
-quickcor(mtcars, cor.test = TRUE) + geom_colour() + geom_number(aes(num = r))
+
+# different layer of upper/lower triangle
 quickcor(mtcars, cor.test = TRUE) +
   geom_square(data = get_data(type = "lower", show.diag = FALSE)) +
   geom_mark(data = get_data(type = "upper", show.diag = FALSE)) +
   geom_abline(slope = -1, intercept = 12)
+
+## print quickcor object
+p <- quickcor(mtcars) + geom_colour()
+col <- c("blue", "white", "red")
+print(p, colours = col)
+print(p, colours = col, title = "Pearson's r")
+print(p, style = "ggplot")
 }
 \seealso{
 \code{\link[ggcor]{fortify_cor}}.

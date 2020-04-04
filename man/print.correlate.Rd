@@ -2,12 +2,12 @@
 % Please edit documentation in R/cor-test.R
 \name{print.correlate}
 \alias{print.correlate}
-\title{Print for correlate object.}
+\title{Print correlate object.}
 \usage{
 \method{print}{correlate}(x, all = FALSE, ...)
 }
 \arguments{
-\item{x}{an object used to select a method.}
+\item{x}{a correlate object.}
 
 \item{all}{if FALSE (default) just print correlation matrix, else will
 print all values.}
@@ -15,7 +15,7 @@ print all values.}
 \item{...}{extra params passing to \code{print}.}
 }
 \description{
-Print for correlate object.
+Print correlate object.
 }
 \examples{
 m <- correlate(mtcars, cor.test = TRUE)

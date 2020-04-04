@@ -152,8 +152,8 @@ fast_correlate2 <- function (x,
             class = "correlate")
 }
 
-#' Print for correlate object.
-#' @param x an object used to select a method.
+#' Print correlate object.
+#' @param x a correlate object.
 #' @param all if FALSE (default) just print correlation matrix, else will
 #'     print all values.
 #' @param ... extra params passing to \code{print}.
