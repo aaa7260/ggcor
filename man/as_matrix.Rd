@@ -4,6 +4,7 @@
 \alias{as_matrix}
 \alias{as_matrix.cor_tbl}
 \alias{as_matrix.mantel_tbl}
+\alias{as_matrix.pro_tbl}
 \title{Convert a object to matrix}
 \usage{
 as_matrix(x, ...)
