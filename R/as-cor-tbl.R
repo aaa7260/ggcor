@@ -30,6 +30,7 @@ as_cor_tbl <- function(x, ...) {
 #' @export
 #' @method as_cor_tbl matrix
 as_cor_tbl.matrix <- function(x, ...) {
+  check_corr(x)
   cor_tbl(corr = x, ...)
 }
 #' @rdname  as_cor_tbl
@@ -145,4 +146,14 @@ as_cor_tbl.pro_tbl <- function(x, byrow = TRUE, ...) {
 #' @method as_cor_tbl default
 as_cor_tbl.default <- function(x, ...) {
   stop(class(x)[1], " hasn't been realized yet.", call. = FALSE)
+}
+
+#' @noRd
+check_corr <- function(x) {
+  if(!is.matrix(x))
+    x <- as.matrix(x)
+  rng <- range(x, na.rm = TRUE)
+  if(!(rng[1] >= -1 && rng[2] <= 1)) {
+    stop("Not a correlation matrix.", call. = FALSE)
+  }
 }
