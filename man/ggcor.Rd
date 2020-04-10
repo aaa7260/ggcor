@@ -9,7 +9,8 @@ ggcor(
   mapping = NULL,
   axis.x.position = "auto",
   axis.y.position = "auto",
-  axis.label.drop = TRUE
+  drop = TRUE,
+  ...
 )
 }
 \arguments{
@@ -21,17 +22,17 @@ ggcor(
 is set according to the plot type, 'bottom' or 'top' for x axes, 'left' or 'right'
 for y axes.}
 
-\item{axis.label.drop}{logical value (default is TRUE). When type of plot is 'upper'
-or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
-label.}
+\item{drop}{logical value, if TRUE (default) will drop the unused factor levels.}
+
+\item{...}{extra parameters.}
 }
 \value{
 an object of class gg onto which layers, scales, etc. can be added.
 }
 \description{
 This function is the equivalent of \code{\link[ggplot2]{ggplot}}
-    in ggplot2. It takes care of setting up the position of axis and legend for
-    the plot based on the plot type.
+in ggplot2. It takes care of setting up the position of axis and legend for
+the plot based on the plot type.
 }
 \examples{
 df <- fortify_cor(mtcars)

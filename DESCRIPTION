@@ -31,6 +31,7 @@ Imports:
     purrr,
     RColorBrewer,
     rlang,
+    rvcheck,
     scales,
     stats,
     tibble,
@@ -39,6 +40,7 @@ Imports:
     vegan
 Suggests:
     ggforce,
+    ggimage,
     ggraph,
     knitr,
     latex2exp,

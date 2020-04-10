@@ -5,17 +5,14 @@
 \alias{add_diag_label}
 \title{Add diagnoal labels on correlation plot}
 \usage{
-geom_diag_label(mapping = NULL, data = NULL, drop = FALSE, ...)
+geom_diag_label(..., geom = "text", remove.axis = TRUE)
 }
 \arguments{
-\item{mapping}{aesthetic mappings parameters.}
+\item{...}{extra parameters.}
 
-\item{data}{NULL (default) or a cor_tbl object.}
+\item{geom}{one of "text", "label" or "image".}
 
-\item{drop}{logical value (default is TRUE). When type of plot is 'upper'
-or 'lower' and 'show.diag' is FALSE, whether need to remove the blank label.}
-
-\item{...}{extra params for \code{\link[ggplot2]{geom_text}}.}
+\item{remove.axis}{if TRUE, will remove the axis.}
 }
 \description{
 \code{geom_diag_label} is mainly used with \code{ggcor} and
@@ -27,7 +24,7 @@ quickcor(mtcars, type = "upper") + geom_colour() + geom_diag_label()
 quickcor(mtcars, type = "lower") + geom_colour() + geom_diag_label()
 }
 \seealso{
-\code{\link[ggplot2]{geom_text}}.
+\code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_label}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

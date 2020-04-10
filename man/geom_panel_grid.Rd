@@ -5,16 +5,12 @@
 \alias{add_grid}
 \title{Add panel grid line on correlation plot}
 \usage{
-geom_panel_grid(data = NULL, colour = "grey50", size = 0.25, ..., color = NULL)
+geom_panel_grid(colour = "grey50", size = 0.25, color = NULL)
 }
 \arguments{
-\item{data}{NULL (default) or a cor_tbl object.}
-
 \item{colour, color}{colour of grid lines.}
 
 \item{size}{size of grid lines.}
-
-\item{...}{extra params for \code{\link[ggplot2]{geom_segment}}.}
 }
 \description{
 \code{geom_grid} is mainly used with \code{ggcor} or \code{quickcor}

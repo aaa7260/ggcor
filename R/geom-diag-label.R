@@ -2,31 +2,23 @@
 #' @description \code{geom_diag_label} is mainly used with \code{ggcor} and
 #'     \code{quickcor} functions to add diagnoal labels on correct position
 #'     base on different type of cor_tbl object.
-#' @param mapping aesthetic mappings parameters.
-#' @param data NULL (default) or a cor_tbl object.
-#' @param drop logical value (default is TRUE). When type of plot is 'upper'
-#'     or 'lower' and 'show.diag' is FALSE, whether need to remove the blank label.
-#' @param ... extra params for \code{\link[ggplot2]{geom_text}}.
-#' @importFrom ggplot2 geom_text aes_string
+#' @param geom one of "text", "label" or "image".
+#' @param remove.axis if TRUE, will remove the axis.
+#' @param ... extra parameters.
+#' @importFrom ggplot2 aes_string
 #' @rdname geom_diag_label
 #' @examples
 #' quickcor(mtcars, type = "upper") + geom_colour() + geom_diag_label()
 #' quickcor(mtcars, type = "lower") + geom_colour() + geom_diag_label()
-#' @seealso \code{\link[ggplot2]{geom_text}}.
+#' @seealso \code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_label}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_diag_label <- function(mapping = NULL, data = NULL, drop = FALSE, ...)
+geom_diag_label <- function(..., geom = "text", remove.axis = TRUE)
 {
-  if(!is.null(data)) {
-    if(!is_cor_tbl(data)) {
-      stop("Need a cor_tbl object.", call. = FALSE)
-    }
-    data <- get_diag_label_data(drop)(data)
-  }
-  mapping <- aes_modify(aes_string("x", "y", label = "label"), mapping)
-  geom_text(mapping = mapping,
-            data = data %||% get_diag_label_data(drop = drop),
-            inherit.aes = FALSE, ...)
+  geom <- match.arg(geom, c("text", "label", "image"))
+  params <- list(...)
+  structure(.Data = list(params = params, geom = geom, remove.axis = remove.axis),
+            class = "geom_diag_label")
 }
 
 #' @rdname geom_diag_label
@@ -38,51 +30,56 @@ add_diag_label <- function(...) {
   "Use `geom_diag_label()` instead.", call. = FALSE)
   geom_diag_label(...)
 }
-#' @noRd
-get_diag_label_data <- function(drop = FALSE) {
-  function(data) {
-    empty <- new_data_frame(list(x = numeric(0),
-                                 y = numeric(0),
-                                 label = character(0)))
-    if(!is_cor_tbl(data)) {
-      warning("Need a cor_tbl.", call. = FALSE)
-      return(empty)
+
+#' @importFrom ggplot2 ggplot_add
+#' @export
+ggplot_add.geom_diag_label <- function(object, plot, object_name) {
+  geom_fun <- switch (object$geom,
+    text = rvcheck::get_fun_from_pkg("ggplot2", "geom_text"),
+    label = rvcheck::get_fun_from_pkg("ggplot2", "geom_label"),
+    image = rvcheck::get_fun_from_pkg("ggimage", "geom_image")
+  )
+
+  type <- get_type(plot$data)
+  row.names <- get_row_name(plot$data)
+  show.diag <- get_show_diag(plot$data)
+
+  n <- length(row.names)
+  x <- 1:n
+  y <- n:1
+  if(isTRUE(plot$plot_env$drop)) {
+    if(type == "lower") {
+      plot <- plot + ggplot2::expand_limits(x = c(0.5, n + 0.5),
+                                            y = c(0.5, n + 0.5))
+
     }
-    if(!is_symmet(data)) {
-      warning("'add_diag_label' just supports for symmetrical correlation matrxi.", call. = FALSE)
-      return(empty)
-    }
-    type <- get_type(data)
-    show.diag <- get_show_diag(data)
-    row.names <- rev(get_row_name(data))
-    n <- length(row.names)
-    y <- 1:n
-    lab <- row.names
     if(type == "upper") {
-      if(show.diag) {
-        x <- n - y
-      } else {
-        x <- n - y + 1
-        if(drop) {
-          x <- x[2:n]
-          y <- y[2:n]
-          lab <- lab[2:n]
-        }
+      if(!isTRUE(show.diag)) {
+        plot <- plot + ggplot2::expand_limits(x = c(-0.5, n - 0.5),
+                                              y = c(-0.5, n - 0.5))
+        x <- x - 1
+        y <- y - 1
       }
-    } else if(type == "lower") {
-      if(show.diag) {
-        x <- n - y + 2
-      } else {
-        x <- n - y + 1
-        if(drop) {
-          x <- x[1:(n - 1)]
-          y <- y[1:(n - 1)]
-          lab <- lab[1:(n - 1)]
-        }
-      }
-    } else {
-      x <- n - y + 1
     }
-    new_data_frame(list(x = x, y = y, label = lab))
   }
+  d <- new_data_frame(list(x = x, y = y, label = row.names))
+  if(object$geom == "image") {
+    if(!"image" %in% names(object$params)) {
+      stop("Did you forget to set the 'image' parameter?", call. = FALSE)
+    }
+    if(!is.null(names(object$params$image))) {
+      object$params$image <- object$params$image[row.names]
+    }
+    mapping <- aes_string(x = "x", y = "y")
+  } else {
+    mapping <- aes_string(x = "x", y = "y", label = "label")
+  }
+  oparams <- list(mapping = aes_string(x = "x", y = "y", label = "label"),
+                  data = d, inherit.aes = FALSE)
+  params <- utils::modifyList(oparams, object$params)
+  obj <- do.call(geom_fun, params)
+  if(isTRUE(object$remove.axis)) {
+    plot <- plot + remove_axis()
+  }
+  ggplot_add(object = obj, plot = plot)
 }

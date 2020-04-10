@@ -69,6 +69,15 @@ ggname <- function (prefix, grob)
 }
 
 #' @noRd
+aes_intersect <- function (aes1, aes2, .except = NULL)
+{
+  id <- names(aes1) %in% c(names(aes2), .except)
+  aes <- unclass(aes1)[id]
+  class(aes) <- "uneval"
+  aes
+}
+
+#' @noRd
 `%||%` <- function(x, y)
 {
   if(is.null(x)) y else x
