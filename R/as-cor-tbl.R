@@ -37,7 +37,8 @@ as_cor_tbl.matrix <- function(x, ...) {
 #' @export
 #' @method as_cor_tbl data.frame
 as_cor_tbl.data.frame <- function(x, ...) {
- cor_tbl(corr = x, ...)
+  check_corr(x)
+  cor_tbl(corr = x, ...)
 }
 
 #' @rdname  as_cor_tbl
