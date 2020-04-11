@@ -77,6 +77,14 @@ aes_intersect <- function (aes1, aes2, .except = NULL)
   aes
 }
 
+#' @importFrom utils modifyList
+#' @noRd
+aes_modify <- function(aes1, aes2) {
+  aes <- modifyList(as.list(aes1), as.list(aes2))
+  class(aes) <- "uneval"
+  aes
+}
+
 #' @noRd
 `%||%` <- function(x, y)
 {

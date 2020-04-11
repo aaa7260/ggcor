@@ -48,15 +48,15 @@ parallel_layout <- function(data,
 {
   if(!is.data.frame(data))
     data <- as.data.frame(data)
-  start <- if(rlang::quo_is_null(enquo(start.var))) {
+  start <- if(quo_is_null(enquo(start.var))) {
     data[[1]]
   } else {
-    rlang::eval_tidy(rlang::enquo(start.var), data)
+    eval_tidy(enquo(start.var), data)
   }
-  end <- if(rlang::quo_is_null(enquo(end.var))) {
+  end <- if(quo_is_null(enquo(end.var))) {
     data[[2]]
   } else {
-    rlang::eval_tidy(rlang::enquo(end.var), data)
+    eval_tidy(enquo(end.var), data)
   }
   if(!is.character(start))
     start <- as.character(start)
@@ -85,52 +85,47 @@ parallel_layout <- function(data,
     }
   } else {
     if(start.len < n && !stretch) {
-      rlang::set_names(
+      set_names(
         seq(n, 1, length.out = start.len + 2)[-c(1, start.len + 2)], sort.start)
     } else {
-      rlang::set_names(seq(n, 1, length.out = start.len), sort.start)
+      set_names(seq(n, 1, length.out = start.len), sort.start)
     }
   }
 
   end.pos <- if(is.null(sort.end)) {
     if(end.len < n && !stretch) {
-      rlang::set_names(
+      set_names(
         seq(n, 1, length.out = end.len + 2)[-c(1, end.len + 2)], end.unique)
     } else {
-      rlang::set_names(seq(n, 1, length.out = end.len), end.unique)
+      set_names(seq(n, 1, length.out = end.len), end.unique)
     }
   } else {
     if(end.len < n && !stretch) {
-      rlang::set_names(
+      set_names(
         seq(n, 1, length.out = end.len + 2)[-c(1, end.len + 2)], sort.end)
     } else {
-      rlang::set_names(seq(n, 1, length.out = end.len), sort.end)
+      set_names(seq(n, 1, length.out = end.len), sort.end)
     }
   }
 
-  start.width <- if(start.len < n && !stretch) {
-    n / (start.len + 2)
-  } else n / start.len
-
-  end.width <- if(end.len < n && !stretch) {
-    n / (end.len + 2)
-  } else n / end.len
-
-  pos <- if(isTRUE(horiz)) {
-    tibble::tibble(x = start.pos[start], y = start.y %||% 0, xend = end.pos[end],
-                   yend = end.y %||% 1, start.label = start, end.label = end,
-                   start.width = start.width, end.width = end.width,
-                   .start.filter = !duplicated(start) & !is.na(start),
-                   .end.filter = !duplicated(end) & !is.na(end))
+  if(isTRUE(horiz)) {
+    edge.pos <- tibble(x = start.pos[start], y = start.y %||% 0,
+                       xend = end.pos[end], yend = end.y %||% 1)
+    node.pos <- tibble(x = c(start.pos[start.unique], end.pos[end.unique]),
+                        y = rep(c(start.y %||% 0, end.y %||% 1), c(start.len, end.len)),
+                        label = c(start.unique, end.unique),
+                        is.start = rep(c(TRUE, FALSE), c(start.len, end.len)))
   } else {
-    tibble::tibble(x = start.x %||% 0, y = start.pos[start], xend = end.x %||% 1,
-                   yend = end.pos[end], start.label = start, end.label = end,
-                   start.width = start.width, end.width = end.width,
-                   .start.filter = !duplicated(start) & !is.na(start),
-                   .end.filter = !duplicated(end) & !is.na(end))
+    edge.pos <- tibble(x = start.x %||% 0, y = start.pos[start],
+                       xend = end.x %||% 1, yend = end.pos[end])
+    node.pos <- tibble(x = rep(c(start.x %||% 0, end.x %||% 1), c(start.len, end.len)),
+                        y = c(start.pos[start.unique], end.pos[end.unique]),
+                        label = c(start.unique, end.unique),
+                        is.start = rep(c(TRUE, FALSE), c(start.len, end.len)))
   }
-  structure(.Data = dplyr::bind_cols(pos, data), horiz = horiz,
-            class = c("layout_link_tbl", class(pos)))
+
+  structure(.Data = dplyr::bind_cols(edge.pos, data), node.pos = node.pos,
+            horiz = horiz, class = c("parallel_layout_tbl", "layout_tbl", class(edge.pos)))
 }
 
 #' @rdname create_layout
@@ -144,27 +139,27 @@ combination_layout <- function(data,
                                end.var = NULL,
                                cor_tbl)
 {
-  non.cor.tbl <- missing(cor_tbl)
-  if(!non.cor.tbl) {
+  no.cor.tbl <- missing(cor_tbl)
+  if(!no.cor.tbl) {
     if(!is_cor_tbl(cor_tbl) || !is_symmet(cor_tbl))
       stop("Need a symmetric cor_tbl.", call. = FALSE)
   }
-  row.names <- if(non.cor.tbl) {
+  row.names <- if(no.cor.tbl) {
     rev(row.names) %||% col.names
   } else {
     rev(get_row_name(cor_tbl))
   }
-  type <- if(non.cor.tbl) type else get_type(cor_tbl)
-  show.diag <- if(non.cor.tbl) show.diag else get_show_diag(cor_tbl)
-  start <- if(rlang::quo_is_null(enquo(start.var))) {
+  type <- if(no.cor.tbl) type else get_type(cor_tbl)
+  show.diag <- if(no.cor.tbl) show.diag else get_show_diag(cor_tbl)
+  start <- if(quo_is_null(enquo(start.var))) {
     data[[1]]
   } else {
-    rlang::eval_tidy(rlang::enquo(start.var), data)
+    eval_tidy(enquo(start.var), data)
   }
-  end <- if(rlang::quo_is_null(enquo(end.var))) {
+  end <- if(quo_is_null(enquo(end.var))) {
     data[[2]]
   } else {
-    rlang::eval_tidy(rlang::enquo(end.var), data)
+    eval_tidy(enquo(end.var), data)
   }
   if(!is.character(start))
     start <- as.character(start)
@@ -202,36 +197,39 @@ combination_layout <- function(data,
       x <- seq(0.5 + 0.75 * n, 0.5 + 1.3 * n, length.out = m)
     }
   }
-  x <- rlang::set_names(x, spec.name)
-  y <- rlang::set_names(y, spec.name)
+  x <- set_names(x, spec.name)
+  y <- set_names(y, spec.name)
 
   ## get position of env point
   xend <- n:1
   yend <- 1:n
   if(type == "upper") {
     if(show.diag) {
-      xend <- xend - 2
+      xend <- xend - 1
     } else {
       xend <- xend - 1
+      yend <- yend - 1
     }
   } else {
     if(show.diag) {
-      xend <- xend + 2
+      xend <- xend + 1
     } else {
       xend <- xend + 1
+      yend <- yend + 1
     }
   }
   xend <- rlang::set_names(xend, row.names)
   yend <- rlang::set_names(yend, row.names)
 
   ## bind postion end data
-  pos <- tibble::tibble(x = x[start], y = y[start],
-                        xend = xend[end], yend = yend[end],
-                        start.label = start, end.label = end,
-                        .start.filter = !duplicated(start) & !is.na(start),
-                        .end.filter = !duplicated(end) & !is.na(end))
-  structure(.Data = dplyr::bind_cols(pos, data),
-            class = c("layout_link_tbl", class(pos)))
+  edge.pos <- tibble::tibble(x = x[start], y = y[start],
+                             xend = xend[end], yend = yend[end])
+  node.pos <- tibble::tibble(x = c(x[spec.name], xend[row.names]),
+                             y = c(y[spec.name], yend[row.names]),
+                             label = c(spec.name, row.names),
+                             is.start = rep(c(TRUE, FALSE), c(m, n)))
+  structure(.Data = dplyr::bind_cols(edge.pos, data), node.pos = node.pos, type = type,
+            class = c("combination_layout_tbl", "layout_tbl", class(edge.pos)))
 }
 
 #' @rdname create_layout
