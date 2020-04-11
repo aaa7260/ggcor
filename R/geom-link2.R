@@ -18,10 +18,10 @@
 #'   }
 #' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint draw_key_path
 #' @importFrom grid gTree
-#' @rdname geom_link2
+#' @rdname geom_links
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_link2 <- function(mapping = NULL,
+geom_links <- function(mapping = NULL,
                       data = NULL,
                       stat = "identity",
                       position = "identity",
@@ -39,7 +39,7 @@ geom_link2 <- function(mapping = NULL,
     data = data,
     mapping = mapping,
     stat = stat,
-    geom = GeomLink2,
+    geom = GeomLinks,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
@@ -56,38 +56,41 @@ geom_link2 <- function(mapping = NULL,
   )
 }
 
-#' @rdname geom_link2
+#' @rdname geom_links
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomLink2 <- ggproto(
-  "GeomLink2", GeomCurve,
-  draw_panel = function(self, data, panel_params, coord, start.point.shape = 21,
-                        end.point.shape = 21, start.point.colour = NULL,
-                        end.point.colour = NULL, start.point.fill = NULL,
-                        end.point.fill = NULL, start.point.size = 2,
-                        end.point.size = 2, curvature = 0, angle = 90,
-                        ncp = 5, arrow = NULL, arrow.fill = NULL, lineend = "butt",
-                        na.rm = FALSE) {
+GeomLinks <- ggproto(
+  "GeomLinks", GeomCurve,
+  draw_panel = function(self, data, panel_params, coord, node.shape = 21,
+                        node.colour = "blue", node.fill = "red", node.size = 2,
+                        curvature = 0, angle = 90, ncp = 5, arrow = NULL,
+                        arrow.fill = NULL, lineend = "butt", na.rm = FALSE) {
     aesthetics <- setdiff(names(data), c("x", "y", "xend", "yend", "colour",
                                          "fill", "size", "linetype"))
-    start.colour <- start.point.colour %||% data$colour
-    end.colour <- end.point.colour %||% data$colour
+    start.colour <- node.colour[1]
+    end.colour <- if(length(node.colour) > 1) node.colour[2] else node.colour[1]
+    start.fill <- node.fill[1]
+    end.fill <- if(length(node.fill) > 1) node.fill[2] else node.fill[1]
+    start.shape <- node.shape[1]
+    end.shape <- if(length(node.shape) > 1) node.shape[2] else node.shape[1]
+    start.size <- node.size[1]
+    end.size <- if(length(node.size) > 1) node.size[2] else node.size[1]
     start.data <- new_data_frame(
       list(x = data$x,
            y = data$y,
            colour = start.colour,
-           fill = start.point.fill %||% start.colour,
-           shape = start.point.shape,
-           size = start.point.size %||% data$size * 4,
+           fill = start.fill,
+           shape = start.shape,
+           size = start.size,
            stroke = 0.5))
     end.data <- new_data_frame(
       list(x = data$xend,
            y = data$yend,
            colour = end.colour,
-           fill = end.point.fill %||% end.colour,
-           shape = end.point.shape,
-           size = end.point.size %||% data$size * 4,
+           fill = end.fill,
+           shape = end.shape,
+           size = end.size,
            stroke = 0.5))
     ggname(
       "geom_link",

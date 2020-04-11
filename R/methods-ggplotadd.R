@@ -117,9 +117,32 @@ ggplot_add.geom_links <- function(object, plot, object_name) {
   if(layout != "combination") {
     stop("Currently just support for 'combination' layout.", call. = FALSE)
   }
-  layout.params <- modifyList(object$layout.params, list(cor_tbl = plot$data))
+  pdata <- plot$data
+  type <- get_type(pdata)
+  show.diag <- get_show_diag(pdata)
+  drop <- plot$plot_env$drop
+  n <- length(get_col_name(pdata))
+  layout.params <- modifyList(object$layout.params, list(cor_tbl = pdata))
   data <- do.call(combination_layout, layout.params)
-  obj <- do.call(geom_link2, object$params)
+  params <- modifyList(list(data = data), object$params)
+  
+  min <- min(data$x, na.rm = TRUE)
+  max <- max(data$x, na.rm = TRUE)
+  if(type == "upper") {
+    if(isTRUE(show.diag)) {
+      xrange <- c(min(0.5, min - 0.2 * n), n + 0.5)
+      yrange <- c(0.5, n + 0.5)
+    } else {
+      xrange <- c(min(-0.5, min - 0.2 * n), n - 0.5)
+      yrange <- c(-0.5, n - 0.5)
+    }
+    
+  } else {
+    xrange <- c(0.5, max(max + 0.2 * n, n + 0.5))
+    yrange <- c(0.5, n + 0.5)
+  }
+  plot <- plot + ggplot2::expand_limits(x = xrange, y = yrange)
+  obj <- do.call(geom_links, params)
   ggplot_add(object = obj, plot = plot)
 }
 

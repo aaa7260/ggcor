@@ -7,10 +7,11 @@
 #' @return a ggplot layer.
 #' @importFrom ggplot2 aes_string geom_curve geom_point geom_text
 #' @importFrom dplyr filter
-#' @rdname geom_links
+#' @rdname geom_links2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_links <- function(mapping = NULL,
+geom_links2 <- function(mapping = NULL,
+                       data,
                        curvature = 0,
                        layout = "parallel",
                        layout.params = list(),
@@ -19,14 +20,15 @@ geom_links <- function(mapping = NULL,
   mapping <- aes_modify(
     aes_string(x = "x", y = "y", xend = "xend", yend = "yend"), mapping
   )
+  layout.params <- modifyList(list(data = data), layout.params)
   params <- list(mapping = mapping, curvature = curvature,
                  inherit.aes = FALSE)
   params <- modifyList(params, list(...))
-  structure(.Data = params, layout = layout, layout.params = layout.params,
+  structure(.Data = list(params = params, layout = layout, layout.params = layout.params),
             class = "geom_links")
 }
 
-#' @rdname geom_links
+#' @rdname geom_links2
 #' @export
 geom_links_label <- function(mapping = NULL, geom = "text", ...)
 {
