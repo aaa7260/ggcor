@@ -2,25 +2,23 @@
 % Please edit documentation in R/create-layout.R
 \name{parallel_layout}
 \alias{parallel_layout}
-\alias{combination_layout}
+\alias{triangle_layout}
 \alias{add_link}
 \title{Transform data base on different layout}
 \usage{
 parallel_layout(
   data,
+  type = NULL,
+  show.diag = NULL,
+  row.names = NULL,
+  col.names = NULL,
   start.var = NULL,
   end.var = NULL,
-  horiz = FALSE,
-  stretch = TRUE,
-  sort.start = NULL,
-  sort.end = NULL,
-  start.x = NULL,
-  start.y = NULL,
-  end.x = NULL,
-  end.y = NULL
+  stretch = FALSE,
+  cor_tbl
 )
 
-combination_layout(
+triangle_layout(
   data,
   type = NULL,
   show.diag = NULL,
@@ -34,30 +32,20 @@ combination_layout(
 \arguments{
 \item{data}{a data frame.}
 
-\item{start.var, end.var}{character to specify which variable is the starting
-points and which is the ending points. if the variable is not character, it
-is forced to be converted.}
-
-\item{horiz}{a logical value. If FALSE, the parallel graph are drawn vertically.
-If TRUE, the parallel graph are drawn horizontally.}
-
-\item{stretch}{logical, indicating whether the heights/width of start points and
-end points are consistent.}
-
-\item{sort.start, sort.end}{charater vector, the nodes will be sorted by this parameter.}
-
-\item{start.x, start.y, end.x, end.y}{numeric to specify the x (horiz = TRUE) or y
-(horiz = FALSE) coordinates.}
-
 \item{type}{the type (""upper" or "lower") of the correlation matrix plot.}
 
 \item{show.diag}{a logical value indicating whether keep the diagonal.}
 
 \item{row.names, col.names}{row/column names of correlation matrix.}
 
-\item{cor_tbl}{a col_tbl object.}
+\item{start.var, end.var}{character to specify which variable is the starting
+points and which is the ending points. if the variable is not character, it
+is forced to be converted.}
 
-\item{...}{extra parameters.}
+\item{stretch}{logical, indicating whether the heights/width of start points and
+end points are consistent.}
+
+\item{cor_tbl}{a col_tbl object.}
 }
 \value{
 a data frame.

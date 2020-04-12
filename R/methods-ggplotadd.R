@@ -114,32 +114,54 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
 #' @export
 ggplot_add.geom_links <- function(object, plot, object_name) {
   layout <- object$layout
-  if(layout != "combination") {
-    stop("Currently just support for 'combination' layout.", call. = FALSE)
-  }
   pdata <- plot$data
   type <- get_type(pdata)
   show.diag <- get_show_diag(pdata)
-  drop <- plot$plot_env$drop
   n <- length(get_col_name(pdata))
+  m <- length(get_row_name(pdata))
+  
+  if(type != "full" ) {
+    if(is.null(layout)) {
+      layout <- "triangle"
+    }
+    if(layout != "triangle") {
+      stop("The 'type' of cor_tbl is not supported.", call. = FALSE)
+    }
+  } else {
+    layout <- "parallel"
+  }
+
   layout.params <- modifyList(object$layout.params, list(cor_tbl = pdata))
-  data <- do.call(combination_layout, layout.params)
+  data <- if(layout == "triangle") {
+    do.call(triangle_layout, layout.params)
+  } else {
+    do.call(parallel_layout, layout.params)
+  }
+  
   params <- modifyList(list(data = data), object$params)
   
   min <- min(data$x, na.rm = TRUE)
   max <- max(data$x, na.rm = TRUE)
   if(type == "upper") {
     if(isTRUE(show.diag)) {
-      xrange <- c(min(0.5, min - 0.2 * n), n + 0.5)
+      xrange <- c(min(-0.5, min - 0.2 * n), n + 0.5)
       yrange <- c(0.5, n + 0.5)
     } else {
       xrange <- c(min(-0.5, min - 0.2 * n), n - 0.5)
       yrange <- c(-0.5, n - 0.5)
     }
     
+  } else if (type == "lower") {
+    if(isTRUE(show.diag)) {
+      xrange <- c(0.5, max(max + 0.2 * n, n + 1.5))
+      yrange <- c(0.5, n + 0.5)
+    } else {
+      xrange <- c(0.5, max(max + 0.2 * n, n + 0.5))
+      yrange <- c(0.5, n + 0.5)
+    }
   } else {
-    xrange <- c(0.5, max(max + 0.2 * n, n + 0.5))
-    yrange <- c(0.5, n + 0.5)
+    xrange <- c(n + 1.5, max + 0.2 * n)
+    yrange <- c(0.5, m + 0.5)
   }
   plot <- plot + ggplot2::expand_limits(x = xrange, y = yrange)
   obj <- do.call(geom_links, params)

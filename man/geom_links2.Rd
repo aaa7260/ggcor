@@ -9,7 +9,7 @@ geom_links2(
   mapping = NULL,
   data,
   curvature = 0,
-  layout = "parallel",
+  layout = NULL,
   layout.params = list(),
   ...
 )

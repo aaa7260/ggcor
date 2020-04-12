@@ -6,18 +6,12 @@
 #' @param start.var,end.var character to specify which variable is the starting
 #' points and which is the ending points. if the variable is not character, it
 #' is forced to be converted.
-#' @param horiz a logical value. If FALSE, the parallel graph are drawn vertically.
-#' If TRUE, the parallel graph are drawn horizontally.
 #' @param stretch logical, indicating whether the heights/width of start points and
 #' end points are consistent.
-#' @param sort.start,sort.end charater vector, the nodes will be sorted by this parameter.
-#' @param start.x,start.y,end.x,end.y numeric to specify the x (horiz = TRUE) or y
-#' (horiz = FALSE) coordinates.
 #' @param type the type (""upper" or "lower") of the correlation matrix plot.
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @param row.names,col.names row/column names of correlation matrix.
 #' @param cor_tbl a col_tbl object.
-#' @param ... extra parameters.
 #' @return a data frame.
 #' @importFrom rlang enquo eval_tidy set_names quo_is_null
 #' @importFrom dplyr filter
@@ -35,19 +29,26 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 parallel_layout <- function(data,
+                            type = NULL,
+                            show.diag = NULL,
+                            row.names = NULL,
+                            col.names = NULL,
                             start.var = NULL,
                             end.var = NULL,
-                            horiz = FALSE,
-                            stretch = TRUE,
-                            sort.start = NULL,
-                            sort.end = NULL,
-                            start.x = NULL,
-                            start.y = NULL,
-                            end.x = NULL,
-                            end.y = NULL)
+                            stretch = FALSE,
+                            cor_tbl)
 {
   if(!is.data.frame(data))
     data <- as.data.frame(data)
+  no.cor.tbl <- missing(cor_tbl)
+  if(!no.cor.tbl) {
+    if(!is_cor_tbl(cor_tbl))
+      stop("Need a cor_tbl.", call. = FALSE)
+  }
+  row.names <- if(no.cor.tbl) rev(row.names) else rev(get_row_name(cor_tbl))
+  col.names <- if(no.cor.tbl) col.names else get_col_name(cor_tbl)
+  type <- if(no.cor.tbl) type else get_type(cor_tbl)
+  show.diag <- if(no.cor.tbl) show.diag else get_show_diag(cor_tbl)
   start <- if(quo_is_null(enquo(start.var))) {
     data[[1]]
   } else {
@@ -62,82 +63,41 @@ parallel_layout <- function(data,
     start <- as.character(start)
   if(!is.character(end))
     end <- as.character(end)
+  spec.name <- unique(start[!is.na(start)])
+  n <- length(row.names)
+  m <- length(spec.name)
+  x1 <- max(length(col.names), n) * 0.45 + length(col.names)
+  x2 <- length(col.names) + 1
 
-  start.unique <- unique(start[!is.na(start)])
-  end.unique <- unique(end[!is.na(end)])
-  start.len <- length(start.unique)
-  end.len <- length(end.unique)
-  n <- max(start.len, end.len)
-  if(!is.null(sort.start) && length(sort.start) != length(start.unique)) {
-    stop("Length of 'sort.start' and unique elements of 'start' don't match.",
-          call. = FALSE)
-  }
-  if(!is.null(sort.end) && length(sort.end) != length(end.unique)) {
-    stop("Length of 'sort.end' and unique elements of 'end' don't match.",
-          call. = FALSE)
-  }
-  start.pos <- if(is.null(sort.start)) {
-    if(start.len < n && !stretch) {
-      rlang::set_names(
-        seq(n, 1, length.out = start.len + 2)[-c(1, start.len + 2)], start.unique)
-    } else {
-      rlang::set_names(seq(n, 1, length.out = start.len), start.unique)
-    }
+  if(m == 1) stretch <- FALSE
+  start.pos <- if(m < n && !stretch) {
+    set_names(seq(1, n, length.out = m + 2)[-c(1, m + 2)], spec.name)
   } else {
-    if(start.len < n && !stretch) {
-      set_names(
-        seq(n, 1, length.out = start.len + 2)[-c(1, start.len + 2)], sort.start)
-    } else {
-      set_names(seq(n, 1, length.out = start.len), sort.start)
-    }
+    set_names(seq(1, n, length.out = m), spec.name)
   }
 
-  end.pos <- if(is.null(sort.end)) {
-    if(end.len < n && !stretch) {
-      set_names(
-        seq(n, 1, length.out = end.len + 2)[-c(1, end.len + 2)], end.unique)
-    } else {
-      set_names(seq(n, 1, length.out = end.len), end.unique)
-    }
-  } else {
-    if(end.len < n && !stretch) {
-      set_names(
-        seq(n, 1, length.out = end.len + 2)[-c(1, end.len + 2)], sort.end)
-    } else {
-      set_names(seq(n, 1, length.out = end.len), sort.end)
-    }
-  }
+  end.pos <- set_names(seq(1, n, length.out = n), row.names)
 
-  if(isTRUE(horiz)) {
-    edge.pos <- tibble(x = start.pos[start], y = start.y %||% 0,
-                       xend = end.pos[end], yend = end.y %||% 1)
-    node.pos <- tibble(x = c(start.pos[start.unique], end.pos[end.unique]),
-                        y = rep(c(start.y %||% 0, end.y %||% 1), c(start.len, end.len)),
-                        label = c(start.unique, end.unique),
-                        is.start = rep(c(TRUE, FALSE), c(start.len, end.len)))
-  } else {
-    edge.pos <- tibble(x = start.x %||% 0, y = start.pos[start],
-                       xend = end.x %||% 1, yend = end.pos[end])
-    node.pos <- tibble(x = rep(c(start.x %||% 0, end.x %||% 1), c(start.len, end.len)),
-                        y = c(start.pos[start.unique], end.pos[end.unique]),
-                        label = c(start.unique, end.unique),
-                        is.start = rep(c(TRUE, FALSE), c(start.len, end.len)))
-  }
+  edge.pos <- tibble(x = x1, y = start.pos[start], xend = x2, yend = end.pos[end])
+  node.pos <- tibble(x = rep(c(x1, x2), c(m, n)),
+                     y = c(start.pos[spec.name], end.pos[row.names]),
+                     label = c(spec.name, row.names),
+                     is.start = rep(c(TRUE, FALSE), c(m, n)))
 
   structure(.Data = dplyr::bind_cols(edge.pos, data), node.pos = node.pos,
-            horiz = horiz, class = c("parallel_layout_tbl", "layout_tbl", class(edge.pos)))
+            class = c("parallel_layout_tbl", "layout_tbl", class(edge.pos)))
 }
 
 #' @rdname create_layout
 #' @export
-combination_layout <- function(data,
-                               type = NULL,
-                               show.diag = NULL,
-                               row.names = NULL,
-                               col.names = NULL,
-                               start.var = NULL,
-                               end.var = NULL,
-                               cor_tbl)
+triangle_layout <- function(data,
+                            type = NULL,
+                            show.diag = NULL,
+                            row.names = NULL,
+                            col.names = NULL,
+                            start.var = NULL,
+                            end.var = NULL,
+                            cor_tbl)
 {
   no.cor.tbl <- missing(cor_tbl)
   if(!no.cor.tbl) {
@@ -213,13 +173,10 @@ combination_layout <- function(data,
   } else {
     if(show.diag) {
       xend <- xend + 1
-    } else {
-      xend <- xend + 1
-      yend <- yend + 1
     }
   }
-  xend <- rlang::set_names(xend, row.names)
-  yend <- rlang::set_names(yend, row.names)
+  xend <- set_names(xend, row.names)
+  yend <- set_names(yend, row.names)
 
   ## bind postion end data
   edge.pos <- tibble::tibble(x = x[start], y = y[start],

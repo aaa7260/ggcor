@@ -11,11 +11,11 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 geom_links2 <- function(mapping = NULL,
-                       data,
-                       curvature = 0,
-                       layout = "parallel",
-                       layout.params = list(),
-                       ...)
+                        data,
+                        curvature = 0,
+                        layout = NULL,
+                        layout.params = list(),
+                        ...)
 {
   mapping <- aes_modify(
     aes_string(x = "x", y = "y", xend = "xend", yend = "yend"), mapping
