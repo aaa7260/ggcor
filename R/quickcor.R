@@ -6,10 +6,15 @@
 #' @param fixed.xy if TRUE (default), the coordinates will with fixed aspect ratio.
 #' @param grid.colour colour of grid lines.
 #' @param grid.size size of grid lines.
-#' @param drop logical value, if TRUE (default) will drop the unused factor levels.
+#' @param axis.x.position,axis.y.position the position of the axis. 'auto' (default)
+#'     is set according to the plot type, 'bottom' or 'top' for x axes, 'left' or 'right'
+#'     for y axes.
+#' @param axis.label.drop logical value (default is TRUE). When type of plot is 'upper'
+#'     or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
+#'     label.
 #' @param legend.position position of legend.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
-#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed
+#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed coord_cartesian
 #' @rdname quick_cor
 #' @examples
 #' require(ggplot2, quietly = TRUE)
@@ -47,38 +52,54 @@ quickcor <- function(x,
                      grid.colour = "grey50",
                      grid.size = 0.25,
                      fixed.xy = TRUE,
-                     drop = TRUE,
+                     axis.x.position = "auto",
+                     axis.y.position = "auto",
+                     axis.label.drop = TRUE,
                      legend.position = "auto",
                      ...)
 {
   data <- fortify_cor(x, y, ...)
   is.general <- is_general_cor_tbl(data)
   type <- get_type(data)
+  n <- length(get_row_name(data))
+  m <- length(get_col_name(data))
+  show.diag <- get_show_diag(data)
   name <- names(data)
   # handle mapping setting
-  base.aes <- if(!is.general) {
-    aes_string(r0 = "r", r = "r", fill = "r", p.value = "p.value",
-               lower.ci = "lower.ci", upper.ci = "upper.ci")
+  base.aes <- if(is.general) {
+    aes_string(".col.id", ".row.id")
+  } else {
+    aes_string(".col.id", ".row.id", r0 = "r", r = "r", fill = "r")
   }
-  base.aes <- aes_intersect(base.aes, ggplot2::aes_all(name), c("r", "r0", "fill"))
-  mapping <- if(!is.null(mapping)) {
-    aes_modify(base.aes, mapping)
-  } else base.aes
-
+  if("p.value" %in% name)
+    base.aes <- modifyList(base.aes, aes_string(p.value = "p.value"))
+  if(all (c("lower.ci", "upper.ci") %in% name))
+    base.aes <- modifyList(base.aes, aes_string(lower.ci = "lower.ci", upper.ci = "upper.ci"))
+  if(is.null(mapping)) {
+    mapping <- base.aes
+  } else {
+    mapping <- modifyList(base.aes, mapping)
+  }
   # handle legend setting
   if(legend.position == "auto")
     legend.position <- switch (type,
                                full = "right",
                                lower = "left",
                                upper = "right")
-  p <- ggcor(data, mapping = mapping, drop = drop) +
+  p <- ggcor(data, mapping = mapping, axis.x.position = axis.x.position,
+             axis.y.position = axis.y.position, axis.label.drop = axis.label.drop) +
     geom_panel_grid(colour = grid.colour, size = grid.size)
 
+  # add theme and coord
+  xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
+  ylim <- c(0.5 - 0.002 * n, n + 0.5 + 0.002 * n)
+
   if(isTRUE(fixed.xy)) {
-    p <- p + coord_fixed() +
+    p <- p + coord_fixed(xlim = xlim, ylim = ylim) +
       theme_cor(legend.position = legend.position)
   } else {
-    p <- p + theme_cor(legend.position = legend.position)
+    p <- p + coord_cartesian(xlim = xlim, ylim = ylim) +
+      theme_cor(legend.position = legend.position)
   }
   class(p) <- c("quickcor", class(p))
   p
@@ -117,8 +138,8 @@ print.quickcor <- function(x,
                            ...)
 {
   style <- switch (style,
-    corrplot = "corrplot",
-    "ggplot2"
+                   corrplot = "corrplot",
+                   "ggplot2"
   )
   if(style == "corrplot") {
     mapping <- unclass(x$mapping)

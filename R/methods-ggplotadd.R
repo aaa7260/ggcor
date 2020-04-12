@@ -1,7 +1,6 @@
 #' @importFrom ggplot2 ggplot_add geom_segment
 #' @export
 ggplot_add.geom_panel_grid <- function(object, plot, object_name) {
-  drop <- plot$plot_env$drop
   obj <- geom_segment(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
                       data = get_grid_data(plot$data, drop = drop),
                       colour = object$colour, size = object$size,
@@ -17,13 +16,7 @@ get_grid_data <- function(data, drop) {
   m <- length(get_row_name(data))
   type <- get_type(data)
   show.diag <- get_show_diag(data)
-  if(type != "full" && !isTRUE(show.diag)) {
-    if(isTRUE(drop)) {
-      show.diag <- TRUE
-      n <- n - 1
-      m <- m - 1
-    }
-  }
+
   if(type == "full") {
     xx <- c(0:n + 0.5, rep_len(0.5, m + 1))
     yy <- c(rep_len(0.5, n + 1), 0:m + 0.5)
@@ -60,6 +53,7 @@ get_grid_data <- function(data, drop) {
 #' @importFrom ggplot2 ggplot_add
 #' @export
 ggplot_add.geom_diag_label <- function(object, plot, object_name) {
+  geom <- match.arg(object$geom, c("text", "label", "image"))
   geom_fun <- switch (object$geom,
                       text = rvcheck::get_fun_from_pkg("ggplot2", "geom_text"),
                       label = rvcheck::get_fun_from_pkg("ggplot2", "geom_label"),
@@ -71,24 +65,7 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
   show.diag <- get_show_diag(plot$data)
   
   n <- length(row.names)
-  x <- 1:n
-  y <- n:1
-  if(isTRUE(plot$plot_env$drop)) {
-    if(type == "lower") {
-      plot <- plot + ggplot2::expand_limits(x = c(0.5, n + 0.5),
-                                            y = c(0.5, n + 0.5))
-      
-    }
-    if(type == "upper") {
-      if(!isTRUE(show.diag)) {
-        plot <- plot + ggplot2::expand_limits(x = c(-0.5, n - 0.5),
-                                              y = c(-0.5, n - 0.5))
-        x <- x - 1
-        y <- y - 1
-      }
-    }
-  }
-  d <- new_data_frame(list(x = x, y = y, label = row.names))
+  d <- new_data_frame(list(x = 1:n, y = n:1, label = row.names))
   if(object$geom == "image") {
     if(!"image" %in% names(object$params)) {
       stop("Did you forget to set the 'image' parameter?", call. = FALSE)
@@ -137,7 +114,7 @@ ggplot_add.geom_links <- function(object, plot, object_name) {
   } else {
     do.call(parallel_layout, layout.params)
   }
-  
+  plot$plot_env$layout_tbl <- data
   params <- modifyList(list(data = data), object$params)
   
   min <- min(data$x, na.rm = TRUE)
@@ -163,19 +140,57 @@ ggplot_add.geom_links <- function(object, plot, object_name) {
     xrange <- c(n + 1.5, max + 0.2 * n)
     yrange <- c(0.5, m + 0.5)
   }
-  plot <- plot + ggplot2::expand_limits(x = xrange, y = yrange)
-  obj <- do.call(geom_links, params)
+  plot <- plot + expand_axis(x = xrange, y = yrange)
+  obj <- do.call(geom_links2, params)
   ggplot_add(object = obj, plot = plot)
 }
 
 #' @importFrom ggplot2 ggplot_add
 #' @export
 ggplot_add.geom_links_label <- function(object, plot, object_name) {
-  geom_fun <- switch (object$geom,
+  layout_tbl <- plot$plot_env$layout_tbl
+  if(is.null(layout_tbl)) {
+    warning("Can only be used after `geom_links2()`.", call. = FALSE)
+    return(plot)
+  }
+  
+  geom <- match.arg(object$geom, c("text", "label", "image"))
+  geom_fun <- switch (geom,
                       text = rvcheck::get_fun_from_pkg("ggplot2", "geom_text"),
                       label = rvcheck::get_fun_from_pkg("ggplot2", "geom_label"),
-                      image = rvcheck::get_fun_from_pkg("ggimage", "geom_image")
-  )
+                      image = rvcheck::get_fun_from_pkg("ggimage", "geom_image"))
   
+  type <- get_type(plot$data)
+  data <- attr(layout_tbl, "node.pos")
   
+  if(!is.null(object$is.start)) {
+    is.start <- NULL
+    if(isTRUE(object$is.start)) {
+      data <- dplyr::filter(data, is.start)
+    } else {
+      data <- dplyr::filter(data, !is.start)
+    }
+  }
+  
+  if(type == "upper") {
+    data$hjust <- ifelse(data$is.start, 1, 0)
+    nudge_x <- ifelse(data$is.start, -object$nudge_x, object$nudge_x)
+  } else {
+    data$hjust <- ifelse(data$is.start, 0, 1)
+    nudge_x <- ifelse(data$is.start, object$nudge_x, -object$nudge_x)
+  }
+  
+  mapping <- if(geom == "image") {
+    if(!"image" %in% names(object$params)) {
+      stop("Did you forget to set the 'image' parameter?", call. = FALSE)
+    }
+    aes_string(x = "x", y = "y")
+  } else aes_string(x = "x", y = "y", label = "label", hjust = "hjust")
+  mapping <- aes_modify(mapping, object$mapping)
+  
+  args <- list(mapping = mapping, data = data, inherit.aes = FALSE,
+               nudge_x = nudge_x)
+  params <- modifyList(args, object$params)
+  obj <- do.call(geom_fun, params)
+  ggplot_add(obj, plot)
 }

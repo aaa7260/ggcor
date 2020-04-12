@@ -166,9 +166,6 @@ triangle_layout <- function(data,
   if(type == "upper") {
     if(show.diag) {
       xend <- xend - 1
-    } else {
-      xend <- xend - 1
-      yend <- yend - 1
     }
   } else {
     if(show.diag) {

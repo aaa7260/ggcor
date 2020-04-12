@@ -1,9 +1,9 @@
-#' Link Geom
+#' Links layer
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_curve
 #' @section Aesthetics:
-#' \code{geom_link()} understands the following aesthetics (required aesthetics are in bold):
+#' \code{geom_links()} understands the following aesthetics (required aesthetics are in bold):
 #'     \itemize{
 #'       \item \strong{\code{x}}
 #'       \item \strong{\code{y}}
@@ -18,28 +18,28 @@
 #'   }
 #' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint draw_key_path
 #' @importFrom grid gTree
-#' @rdname geom_links
+#' @rdname geom_links2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_links <- function(mapping = NULL,
-                      data = NULL,
-                      stat = "identity",
-                      position = "identity",
-                      ...,
-                      curvature = 0,
-                      angle = 90,
-                      ncp = 5,
-                      arrow = NULL,
-                      arrow.fill = NULL,
-                      lineend = "butt",
-                      na.rm = FALSE,
-                      show.legend = NA,
-                      inherit.aes = TRUE) {
+geom_links2 <- function(mapping = NULL,
+                        data = NULL,
+                        stat = "identity",
+                        position = "identity",
+                        ...,
+                        curvature = 0,
+                        angle = 90,
+                        ncp = 5,
+                        arrow = NULL,
+                        arrow.fill = NULL,
+                        lineend = "butt",
+                        na.rm = FALSE,
+                        show.legend = NA,
+                        inherit.aes = TRUE) {
   layer(
     data = data,
     mapping = mapping,
     stat = stat,
-    geom = GeomLinks,
+    geom = GeomLinks2,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
@@ -60,8 +60,8 @@ geom_links <- function(mapping = NULL,
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomLinks <- ggproto(
-  "GeomLinks", GeomCurve,
+GeomLinks2 <- ggproto(
+  "GeomLinks2", GeomCurve,
   draw_panel = function(self, data, panel_params, coord, node.shape = 21,
                         node.colour = "blue", node.fill = "red", node.size = 2,
                         curvature = 0, angle = 90, ncp = 5, arrow = NULL,

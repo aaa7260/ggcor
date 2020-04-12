@@ -12,7 +12,9 @@ quickcor(
   grid.colour = "grey50",
   grid.size = 0.25,
   fixed.xy = TRUE,
-  drop = TRUE,
+  axis.x.position = "auto",
+  axis.y.position = "auto",
+  axis.label.drop = TRUE,
   legend.position = "auto",
   ...
 )
@@ -40,7 +42,13 @@ quickcor(
 
 \item{fixed.xy}{if TRUE (default), the coordinates will with fixed aspect ratio.}
 
-\item{drop}{logical value, if TRUE (default) will drop the unused factor levels.}
+\item{axis.x.position, axis.y.position}{the position of the axis. 'auto' (default)
+is set according to the plot type, 'bottom' or 'top' for x axes, 'left' or 'right'
+for y axes.}
+
+\item{axis.label.drop}{logical value (default is TRUE). When type of plot is 'upper'
+or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
+label.}
 
 \item{legend.position}{position of legend.}
 

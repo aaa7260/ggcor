@@ -15,9 +15,7 @@
 #' @export
 geom_diag_label <- function(..., geom = "text", remove.axis = TRUE)
 {
-  geom <- match.arg(geom, c("text", "label", "image"))
-  params <- list(...)
-  structure(.Data = list(params = params, geom = geom, remove.axis = remove.axis),
+  structure(.Data = list(geom = geom, remove.axis = remove.axis, params = list(...)),
             class = "geom_diag_label")
 }
 

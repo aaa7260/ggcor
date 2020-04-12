@@ -2,15 +2,19 @@
 #' @description A set of custom layer functions that quickly add
 #' layers of curves, nodes, and labels.
 #' @param mapping aesthetic mappings parameters.
+#' @param nudge_x horizontal adjustment to nudge labels by.
 #' @param  curvature a numeric value giving the amount of curvature.
+#' @param layout one of "triangle" or "parallel".
+#' @param layout.params parameters passing to layout function.
+#' @param is.start NULL (default), TRUE or FALSE.
 #' @param ... extra parameters passing to layer function.
 #' @return a ggplot layer.
 #' @importFrom ggplot2 aes_string geom_curve geom_point geom_text
 #' @importFrom dplyr filter
-#' @rdname geom_links2
+#' @rdname geom_links
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_links2 <- function(mapping = NULL,
+geom_links <- function(mapping = NULL,
                         data,
                         curvature = 0,
                         layout = NULL,
@@ -28,17 +32,15 @@ geom_links2 <- function(mapping = NULL,
             class = "geom_links")
 }
 
-#' @rdname geom_links2
+#' @rdname geom_links
 #' @export
-geom_links_label <- function(mapping = NULL, geom = "text", ...)
+geom_links_label <- function(mapping = NULL,
+                             nudge_x = 0.1,
+                             geom = "text",
+                             is.start = TRUE,
+                             ...)
 {
-  geom <- match.arg(geom, c("text", "label", "image"))
-  mapping <- if(geom == "image") {
-    aes_modify(aes_string(x = "x", y = "y"), mapping)
-  } else {
-    aes_modify(aes_string(x = "x", y = "y", label = "label"), mapping)
-  }
-  params <- modifyList(list(mapping = mapping, inherit.aes = FALSE),
-                       list(...))
-  structure(.Data = params, geom = geom, class = "geom_links_label")
+  structure(.Data = list(mapping = mapping, nudge_x = nudge_x, geom = geom,
+                         is.start = is.start, params = list(...)),
+            class = "geom_links_label")
 }
