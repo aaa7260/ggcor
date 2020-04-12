@@ -3,7 +3,7 @@
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_curve
 #' @section Aesthetics:
-#' \code{geom_links()} understands the following aesthetics (required aesthetics are in bold):
+#' \code{geom_links2()} understands the following aesthetics (required aesthetics are in bold):
 #'     \itemize{
 #'       \item \strong{\code{x}}
 #'       \item \strong{\code{y}}
@@ -93,7 +93,7 @@ GeomLinks2 <- ggproto(
            size = end.size,
            stroke = 0.5))
     ggname(
-      "geom_link",
+      "geom_link2",
       grid::gTree(
         children = grid::gList(
           GeomCurve$draw_panel(data, panel_params, coord, curvature = curvature,

@@ -27,6 +27,8 @@ geom_links_label(
 \arguments{
 \item{mapping}{aesthetic mappings parameters.}
 
+\item{data}{a data frame.}
+
 \item{curvature}{a numeric value giving the amount of curvature.}
 
 \item{layout}{one of "triangle" or "parallel".}
@@ -36,6 +38,8 @@ geom_links_label(
 \item{...}{extra parameters passing to layer function.}
 
 \item{nudge_x}{horizontal adjustment to nudge labels by.}
+
+\item{geom}{one of "text", "label" or "image".}
 
 \item{is.start}{NULL (default), TRUE or FALSE.}
 }

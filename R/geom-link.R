@@ -2,8 +2,10 @@
 #' @description A set of custom layer functions that quickly add
 #' layers of curves, nodes, and labels.
 #' @param mapping aesthetic mappings parameters.
+#' @param data a data frame.
+#' @param geom one of "text", "label" or "image".
 #' @param nudge_x horizontal adjustment to nudge labels by.
-#' @param  curvature a numeric value giving the amount of curvature.
+#' @param curvature a numeric value giving the amount of curvature.
 #' @param layout one of "triangle" or "parallel".
 #' @param layout.params parameters passing to layout function.
 #' @param is.start NULL (default), TRUE or FALSE.
@@ -15,11 +17,11 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 geom_links <- function(mapping = NULL,
-                        data,
-                        curvature = 0,
-                        layout = NULL,
-                        layout.params = list(),
-                        ...)
+                       data,
+                       curvature = 0,
+                       layout = NULL,
+                       layout.params = list(),
+                       ...)
 {
   mapping <- aes_modify(
     aes_string(x = "x", y = "y", xend = "xend", yend = "yend"), mapping
