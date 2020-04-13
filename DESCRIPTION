@@ -87,6 +87,7 @@ Collate:
     'geom-star.R'
     'get-data.R'
     'ggcor.R'
+    'ggcor-packages.R'
     'guide-colourbar2.R'
     'methods-ggplotadd.R'
     'matrix-order.R'
