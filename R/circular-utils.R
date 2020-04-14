@@ -1,0 +1,29 @@
+#' @noRd
+calc_polar_params <- function(cor_tbl, open =  90) {
+  row.names <- get_row_name(cor_tbl)
+  col.names <- get_col_name(cor_tbl)
+  rows <- length(row.names)
+  cols <- length(col.names)
+  open <- open %% 360
+  ratio <- open / 360
+  xlim <- c(- cols, cols * 1.5) + 0.5
+  ylim <- c(0, rows / (1 - ratio))
+  start <- - (1 - ratio) * pi / rows
+  ut.degree <- diff(ylim) / 360
+  angle <- 1:rows * 360 / diff(ylim) + 90
+  hjust <- ifelse(angle > 90 & angle < 270, 1, 0)
+  angle <- ifelse(angle > 90 & angle < 270, angle + 180, angle)
+
+
+  yaxis_df <- new_data_frame(list(x = 0.5 + 1.05 * cols,
+                                  y = 1:rows,
+                                  label = row.names,
+                                  angle = angle,
+                                  hjust = hjust))
+  xaxis_df <- new_data_frame(list(x = 1:cols,
+                                  y = ylim[1] - ut.degree,
+                                  label = col.names))
+
+  list(xlim = xlim, ylim = ylim, start = start,
+       xaxis_df = xaxis_df, yaxis_df = yaxis_df)
+}
