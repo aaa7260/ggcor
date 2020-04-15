@@ -3,6 +3,10 @@
 #' of correlation matrix plots because of adding some extra settings by default.
 #' @param x,y matrix, data frame or quickcor object in \code{print()}.
 #' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
+#' @param circular logical, if TRUE will draw in polar coordinates.
+#' @param open angle of opening (in degree).
+#' @param inner,expand the ratio of inner circle and outer margin.
+#' @param paxis one of "all", "x", "y" or "none".
 #' @param fixed.xy if TRUE (default), the coordinates will with fixed aspect ratio.
 #' @param grid.colour colour of grid lines.
 #' @param grid.size size of grid lines.
@@ -14,7 +18,7 @@
 #'     label.
 #' @param legend.position position of legend.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
-#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed coord_cartesian
+#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed coord_cartesian coord_polar
 #' @rdname quick_cor
 #' @examples
 #' require(ggplot2, quietly = TRUE)
@@ -51,6 +55,11 @@ quickcor <- function(x,
                      mapping = NULL,
                      grid.colour = "grey50",
                      grid.size = 0.25,
+                     circular = FALSE,
+                     open = 90,
+                     inner = 1,
+                     expand = 0.6,
+                     paxis = "all",
                      fixed.xy = TRUE,
                      axis.x.position = "auto",
                      axis.y.position = "auto",
@@ -67,9 +76,9 @@ quickcor <- function(x,
   name <- names(data)
   # handle mapping setting
   base.aes <- if(is.general) {
-    aes_string(".col.id", ".row.id")
+    aes_string(x = ".col.id", y = ".row.id")
   } else {
-    aes_string(".col.id", ".row.id", r0 = "r", r = "r", fill = "r")
+    aes_string(x = ".col.id", y = ".row.id", r0 = "r", r = "r", fill = "r")
   }
   if("p.value" %in% name)
     base.aes <- modifyList(base.aes, aes_string(p.value = "p.value"))
@@ -80,26 +89,53 @@ quickcor <- function(x,
   } else {
     mapping <- modifyList(base.aes, mapping)
   }
-  # handle legend setting
-  if(legend.position == "auto")
-    legend.position <- switch (type,
-                               full = "right",
-                               lower = "left",
-                               upper = "right")
-  p <- ggcor(data, mapping = mapping, axis.x.position = axis.x.position,
-             axis.y.position = axis.y.position, axis.label.drop = axis.label.drop) +
-    geom_panel_grid(colour = grid.colour, size = grid.size)
-
-  # add theme and coord
-  xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
-  ylim <- c(0.5 - 0.002 * n, n + 0.5 + 0.002 * n)
-
-  if(isTRUE(fixed.xy)) {
-    p <- p + coord_fixed(xlim = xlim, ylim = ylim) +
-      theme_cor(legend.position = legend.position)
+  if(isTRUE(circular)) {
+    params <- calc_polar_params(data, open = open, inner = inner, expand = expand)
+    p <- ggplot(data, mapping = mapping) +
+      geom_panel_grid(colour = grid.colour, size = grid.size) +
+      scale_x_continuous(limits = params$xlim) +
+      scale_y_continuous(limits = params$ylim) +
+      coord_polar(theta = "y", start = params$start, direction = -1) +
+      theme_void()
+    if(paxis == "all") {
+      p <- p +
+        geom_text(aes(x, y, label = label, angle = angle, hjust = hjust),
+                         data = params$yaxis_df, inherit.aes = FALSE) +
+        geom_text(aes(x, y, label = label, hjust = 0),
+                  data = params$xaxis_df, inherit.aes = FALSE)
+    }
+    if (paxis == "x") {
+      p <- p +
+        geom_text(aes(x, y, label = label, hjust = 0),
+                  data = params$xaxis_df, inherit.aes = FALSE)
+    }
+    if(paxis == "y") {
+      p <- p +
+        geom_text(aes(x, y, label = label, angle = angle, hjust = hjust),
+                  data = params$yaxis_df, inherit.aes = FALSE)
+    }
   } else {
-    p <- p + coord_cartesian(xlim = xlim, ylim = ylim) +
-      theme_cor(legend.position = legend.position)
+    # handle legend setting
+    if(legend.position == "auto")
+      legend.position <- switch (type,
+                                 full = "right",
+                                 lower = "left",
+                                 upper = "right")
+    p <- ggcor(data, mapping = mapping, axis.x.position = axis.x.position,
+               axis.y.position = axis.y.position, axis.label.drop = axis.label.drop) +
+      geom_panel_grid(colour = grid.colour, size = grid.size)
+
+    # add theme and coord
+    xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
+    ylim <- c(0.5 - 0.002 * n, n + 0.5 + 0.002 * n)
+
+    if(isTRUE(fixed.xy)) {
+      p <- p + coord_fixed(xlim = xlim, ylim = ylim) +
+        theme_cor(legend.position = legend.position)
+    } else {
+      p <- p + coord_cartesian(xlim = xlim, ylim = ylim) +
+        theme_cor(legend.position = legend.position)
+    }
   }
   class(p) <- c("quickcor", class(p))
   p

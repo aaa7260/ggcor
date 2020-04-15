@@ -12,7 +12,7 @@ calc_polar_params <- function(cor_tbl, open =  90, inner = 1, expand = 0.5) {
   ut.degree <- diff(ylim) / 360
   angle <- 1:rows * 360 / diff(ylim) + 90
   hjust <- ifelse(angle > 90 & angle < 270, 1, 0)
-  angle <- ifelse(angle > 90 & angle < 270, angle + 180, angle)
+  angle <- ifelse(angle > 90 & angle < 270, angle + 180, angle) - 1 / 2 / ut.degree
 
 
   yaxis_df <- new_data_frame(list(x = 0.5 + 1.05 * cols,
