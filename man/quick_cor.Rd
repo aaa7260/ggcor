@@ -11,6 +11,11 @@ quickcor(
   mapping = NULL,
   grid.colour = "grey50",
   grid.size = 0.25,
+  circular = FALSE,
+  open = 90,
+  inner = 1,
+  expand = 0.6,
+  paxis = "all",
   fixed.xy = TRUE,
   axis.x.position = "auto",
   axis.y.position = "auto",
@@ -39,6 +44,14 @@ quickcor(
 \item{grid.colour}{colour of grid lines.}
 
 \item{grid.size}{size of grid lines.}
+
+\item{circular}{logical, if TRUE will draw in polar coordinates.}
+
+\item{open}{angle of opening (in degree).}
+
+\item{inner, expand}{the ratio of inner circle and outer margin.}
+
+\item{paxis}{one of "all", "x", "y" or "none".}
 
 \item{fixed.xy}{if TRUE (default), the coordinates will with fixed aspect ratio.}
 

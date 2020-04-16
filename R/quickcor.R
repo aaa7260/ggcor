@@ -18,7 +18,13 @@
 #'     label.
 #' @param legend.position position of legend.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
-#' @importFrom ggplot2 ggplot_add guides guide_colourbar coord_fixed coord_cartesian coord_polar
+#' @importFrom ggplot2 ggplot_add
+#' @importFrom ggplot2 guides
+#' @importFrom ggplot2 guide_colourbar
+#' @importFrom ggplot2 coord_fixed
+#' @importFrom ggplot2 coord_cartesian
+#' @importFrom ggplot2 coord_polar
+#' @importFrom ggplot2 theme_void
 #' @rdname quick_cor
 #' @examples
 #' require(ggplot2, quietly = TRUE)
@@ -90,29 +96,22 @@ quickcor <- function(x,
     mapping <- modifyList(base.aes, mapping)
   }
   if(isTRUE(circular)) {
-    params <- calc_polar_params(data, open = open, inner = inner, expand = expand)
+    polar.args <- calc_polar_params(data, open = open, inner = inner, expand = expand)
     p <- ggplot(data, mapping = mapping) +
       geom_panel_grid(colour = grid.colour, size = grid.size) +
-      scale_x_continuous(limits = params$xlim) +
-      scale_y_continuous(limits = params$ylim) +
-      coord_polar(theta = "y", start = params$start, direction = -1) +
+      scale_x_continuous(limits = polar.args$xlim) +
+      scale_y_continuous(limits = polar.args$ylim) +
+      coord_polar(theta = "y", start = polar.args$start, direction = -1) +
       theme_void()
+    p$plot_env$polar.args <- polar.args
     if(paxis == "all") {
-      p <- p +
-        geom_text(aes(x, y, label = label, angle = angle, hjust = hjust),
-                         data = params$yaxis_df, inherit.aes = FALSE) +
-        geom_text(aes(x, y, label = label, hjust = 0),
-                  data = params$xaxis_df, inherit.aes = FALSE)
+      p <- p + set_p_xaxis() + set_p_yaxis()
     }
     if (paxis == "x") {
-      p <- p +
-        geom_text(aes(x, y, label = label, hjust = 0),
-                  data = params$xaxis_df, inherit.aes = FALSE)
+      p <- p + set_p_xaxis()
     }
     if(paxis == "y") {
-      p <- p +
-        geom_text(aes(x, y, label = label, angle = angle, hjust = hjust),
-                  data = params$yaxis_df, inherit.aes = FALSE)
+      p <- p + set_p_yaxis()
     }
   } else {
     # handle legend setting
