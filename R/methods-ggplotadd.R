@@ -59,11 +59,11 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
                       label = rvcheck::get_fun_from_pkg("ggplot2", "geom_label"),
                       image = rvcheck::get_fun_from_pkg("ggimage", "geom_image")
   )
-  
+
   type <- get_type(plot$data)
   row.names <- get_row_name(plot$data)
   show.diag <- get_show_diag(plot$data)
-  
+
   n <- length(row.names)
   d <- new_data_frame(list(x = 1:n, y = n:1, label = row.names))
   if(object$geom == "image") {
@@ -96,7 +96,7 @@ ggplot_add.geom_links <- function(object, plot, object_name) {
   show.diag <- get_show_diag(pdata)
   n <- length(get_col_name(pdata))
   m <- length(get_row_name(pdata))
-  
+
   if(type != "full" ) {
     if(is.null(layout)) {
       layout <- "triangle"
@@ -116,7 +116,7 @@ ggplot_add.geom_links <- function(object, plot, object_name) {
   }
   plot$plot_env$layout_tbl <- data
   params <- modifyList(list(data = data), object$params)
-  
+
   min <- min(data$x, na.rm = TRUE)
   max <- max(data$x, na.rm = TRUE)
   if(type == "upper") {
@@ -127,7 +127,7 @@ ggplot_add.geom_links <- function(object, plot, object_name) {
       xrange <- c(min(-0.5, min - 0.2 * n), n - 0.5)
       yrange <- c(-0.5, n - 0.5)
     }
-    
+
   } else if (type == "lower") {
     if(isTRUE(show.diag)) {
       xrange <- c(0.5, max(max + 0.2 * n, n + 1.5))
@@ -153,16 +153,16 @@ ggplot_add.geom_links_label <- function(object, plot, object_name) {
     warning("Can only be used after `geom_links2()`.", call. = FALSE)
     return(plot)
   }
-  
+
   geom <- match.arg(object$geom, c("text", "label", "image"))
   geom_fun <- switch (geom,
                       text = rvcheck::get_fun_from_pkg("ggplot2", "geom_text"),
                       label = rvcheck::get_fun_from_pkg("ggplot2", "geom_label"),
                       image = rvcheck::get_fun_from_pkg("ggimage", "geom_image"))
-  
+
   type <- get_type(plot$data)
   data <- attr(layout_tbl, "node.pos")
-  
+
   if(!is.null(object$is.start)) {
     is.start <- NULL
     if(isTRUE(object$is.start)) {
@@ -171,7 +171,7 @@ ggplot_add.geom_links_label <- function(object, plot, object_name) {
       data <- dplyr::filter(data, !is.start)
     }
   }
-  
+
   if(type == "upper") {
     data$hjust <- ifelse(data$is.start, 1, 0)
     nudge_x <- ifelse(data$is.start, -object$nudge_x, object$nudge_x)
@@ -179,7 +179,7 @@ ggplot_add.geom_links_label <- function(object, plot, object_name) {
     data$hjust <- ifelse(data$is.start, 0, 1)
     nudge_x <- ifelse(data$is.start, object$nudge_x, -object$nudge_x)
   }
-  
+
   mapping <- if(geom == "image") {
     if(!"image" %in% names(object$params)) {
       stop("Did you forget to set the 'image' parameter?", call. = FALSE)
@@ -187,10 +187,36 @@ ggplot_add.geom_links_label <- function(object, plot, object_name) {
     aes_string(x = "x", y = "y")
   } else aes_string(x = "x", y = "y", label = "label", hjust = "hjust")
   mapping <- aes_modify(mapping, object$mapping)
-  
+
   args <- list(mapping = mapping, data = data, inherit.aes = FALSE,
                nudge_x = nudge_x)
   params <- modifyList(args, object$params)
   obj <- do.call(geom_fun, params)
+  ggplot_add(obj, plot)
+}
+
+#' @importFrom ggplot2 ggplot_add geom_text
+#' @export
+ggplot_add.p_xaxis <- function(object, plot, object_name) {
+  if(!isTRUE(plot$plot_env$circular)) {
+    stop("Only supports for polar coordinates.", call. = FALSE)
+  }
+  data <- plot$plot_env$polar.args$xaxis_df
+  args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$params$mapping),
+               data = data, inherit.aes = FALSE)
+  obj <- do.call(geom_text, modifyList(args, object$params))
+  ggplot_add(obj, plot)
+}
+
+#' @importFrom ggplot2 ggplot_add geom_text
+#' @export
+ggplot_add.p_yaxis <- function(object, plot, object_name) {
+  if(!isTRUE(plot$plot_env$circular)) {
+    stop("Only supports for polar coordinates.", call. = FALSE)
+  }
+  data <- plot$plot_env$polar.args$yaxis_df
+  args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$params$mapping),
+               data = data, inherit.aes = FALSE)
+  obj <- do.call(geom_text, modifyList(args, object$params))
   ggplot_add(obj, plot)
 }

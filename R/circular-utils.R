@@ -1,3 +1,26 @@
+#' Set axis labels on circular plot
+#' @title Set axis labels
+#' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
+#' @param ... extra parameters passing to \code{ggplot2::geom_text()}.
+#' @rdname set_axis
+#' @examples
+#' p <- quickcor(mtcars, circular = TRUE, paxis = "none")
+#' p + set_p_xaxis()
+#' p + set_p_yaxis()
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
+set_p_xaxis <- function(mapping = NULL, ...) {
+  structure(.Data = list(mapping = mapping, params = list(...)),
+            class = "p_xaxis")
+}
+
+#' @rdname set_axis
+#' @export
+set_p_yaxis <- function(mapping = NULL, ...) {
+  structure(.Data = list(mapping = mapping, params = list(...)),
+            class = "p_yaxis")
+}
+
 #' @noRd
 calc_polar_params <- function(cor_tbl, open =  90, inner = 1, expand = 0.5) {
   row.names <- get_row_name(cor_tbl)
@@ -22,7 +45,9 @@ calc_polar_params <- function(cor_tbl, open =  90, inner = 1, expand = 0.5) {
                                   hjust = hjust))
   xaxis_df <- new_data_frame(list(x = 1:cols,
                                   y = 0.5 - ut.degree,
-                                  label = col.names))
+                                  label = col.names,
+                                  angle = 0,
+                                  hjust = 0))
 
   list(xlim = xlim, ylim = ylim, start = start,
        xaxis_df = xaxis_df, yaxis_df = yaxis_df)
