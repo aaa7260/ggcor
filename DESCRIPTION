@@ -92,7 +92,6 @@ Collate:
     'guide-colourbar2.R'
     'methods-ggplotadd.R'
     'matrix-order.R'
-    'polarcor.R'
     'procrutes-test.R'
     'quickcor.R'
     'reexport.R'

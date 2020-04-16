@@ -22,7 +22,7 @@ set_p_yaxis <- function(mapping = NULL, ...) {
 }
 
 #' @noRd
-calc_polar_params <- function(cor_tbl, open =  90, inner = 1, expand = 0.5) {
+calc_polar_params <- function(cor_tbl, open =  90, inner = 0.6, expand = 0.3) {
   row.names <- get_row_name(cor_tbl)
   col.names <- get_col_name(cor_tbl)
   rows <- length(row.names)
