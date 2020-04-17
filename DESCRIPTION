@@ -39,6 +39,7 @@ Imports:
     utils,
     vegan
 Suggests:
+    ambient,
     ggforce,
     ggimage,
     ggraph,
@@ -94,6 +95,7 @@ Collate:
     'matrix-order.R'
     'procrutes-test.R'
     'quickcor.R'
+    'rand-correlate.R'
     'reexport.R'
     'remove-axis.R'
     'reorder-cor-tbl.R'
