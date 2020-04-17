@@ -23,7 +23,7 @@ rand_correlate <- function(rows = 12,
                            row.names = NULL,
                            col.names = NULL,
                            type = "cubic",
-                           frequency = 0.25,
+                           frequency = 0.15,
                            reorder = TRUE,
                            seed = NULL,
                            ...)
@@ -49,7 +49,7 @@ rand_dataset <- function(vars = 12,
                          row.names = NULL,
                          col.names = NULL,
                          type = "cubic",
-                         frequency = 0.25,
+                         frequency = 0.15,
                          seed = NULL,
                          ...) {
   if(!requireNamespace("ambient", quietly = TRUE)) {
@@ -74,6 +74,13 @@ rand_dataset <- function(vars = 12,
     col.ord <- sample(vars)
     m <- m[row.ord, col.ord]
   }
+  n <- max(floor(frequency * vars), floor(0.4 * vars))
+  if(n >= 1) {
+    set.seed(seed)
+    id <- sample(vars, n)
+    m[, id] <- -m[, id]
+  }
+
   rownames(m) <- row.names
   colnames(m) <- col.names
   as.data.frame(m)
