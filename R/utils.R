@@ -1,4 +1,12 @@
 #' @noRd
+get_function <- function(pkg, fun) {
+  if(!require(pkg, quietly = TRUE)) {
+    stop(pkg, " package has not been installed", call. = FALSE)
+  }
+  eval(parse(text = paste0(pkg, "::", fun)))
+}
+
+#' @noRd
 make_list_names <- function(x, pre = "X", sep = "")
 {
   stopifnot(is.list(x))
@@ -153,8 +161,6 @@ utils::globalVariables(
     ".col.id",
     ".group",
     "spec",
-    "env",
-    ".start.filter",
-    ".end.filter"
+    "env"
   )
 )
