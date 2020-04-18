@@ -56,10 +56,6 @@ GeomCross <- ggproto(
 
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
                         sig.level = 0.05, r0 = 0.6) {
-    if (!coord$is_linear()) {
-      warning("geom_cross is not implemented for non-linear coordinates",
-              call. = FALSE)
-    }
     aesthetics <- setdiff(names(data), c("x", "y", "p.value"))
     data <- with(data, subset(data, p.value > sig.level))
     dd <- point_to_cross(data$x, data$y, r0)
