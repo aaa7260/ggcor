@@ -5,7 +5,7 @@
 #' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
 #' @param circular logical, if TRUE will draw in polar coordinates.
 #' @param open angle of opening (in degree).
-#' @param inner,expand the ratio of inner circle and outer margin.
+#' @param inner,outer the ratio of inner circle and outer margin.
 #' @param paxis one of "all", "x", "y" or "none".
 #' @param fixed.xy if TRUE (default), the coordinates will with fixed aspect ratio.
 #' @param grid.colour colour of grid lines.
@@ -64,7 +64,7 @@ quickcor <- function(x,
                      circular = FALSE,
                      open = 90,
                      inner = 0.6,
-                     expand = 0.3,
+                     outer = 0.3,
                      paxis = "all",
                      fixed.xy = TRUE,
                      axis.x.position = "auto",
@@ -96,7 +96,7 @@ quickcor <- function(x,
     mapping <- modifyList(base.aes, mapping)
   }
   if(isTRUE(circular)) {
-    polar.args <- calc_polar_params(data, open = open, inner = inner, expand = expand)
+    polar.args <- calc_polar_params(data, open = open, inner = inner, outer = outer)
     p <- ggplot(data, mapping = mapping) +
       geom_panel_grid(colour = grid.colour, size = grid.size) +
       scale_x_continuous(limits = polar.args$xlim) +

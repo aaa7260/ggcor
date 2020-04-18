@@ -14,7 +14,7 @@ quickcor(
   circular = FALSE,
   open = 90,
   inner = 0.6,
-  expand = 0.3,
+  outer = 0.3,
   paxis = "all",
   fixed.xy = TRUE,
   axis.x.position = "auto",
@@ -49,7 +49,7 @@ quickcor(
 
 \item{open}{angle of opening (in degree).}
 
-\item{inner, expand}{the ratio of inner circle and outer margin.}
+\item{inner, outer}{the ratio of inner circle and outer margin.}
 
 \item{paxis}{one of "all", "x", "y" or "none".}
 

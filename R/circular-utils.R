@@ -26,7 +26,7 @@ set_p_yaxis <- function(mapping = NULL, ...) {
 calc_polar_params <- function(cor_tbl,
                               open =  90,
                               inner = 0.6,
-                              expand = 0.3,
+                              outer = 0.3,
                               stretch = FALSE) {
   row.names <- get_row_name(cor_tbl)
   col.names <- get_col_name(cor_tbl)
@@ -34,7 +34,7 @@ calc_polar_params <- function(cor_tbl,
   cols <- length(col.names)
   open <- open %% 360
   ratio <- open / 360
-  xlim <- c(- cols * inner, cols * (1 + expand)) + 0.5
+  xlim <- c(- cols * inner, cols * (1 + outer)) + 0.5
   ylim <- c(0, rows / (1 - ratio))
   start <- - (1 - ratio) * pi / rows + one_degree()
   ut.degree <- diff(ylim) / 360
