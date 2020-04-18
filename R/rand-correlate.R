@@ -28,6 +28,13 @@ rand_correlate <- function(rows = 12,
                            seed = NULL,
                            ...)
 {
+  if(is.null(cols)) {
+    row.names <- row.names %||% col.names %||% paste0("row", 1:rows)
+    col.names <- col.names %||% row.names
+  } else {
+    row.names <- row.names %||% paste0("row", 1:rows)
+    col.names <- col.names %||% paste0("col", 1:cols)
+  }
   d1 <- rand_dataset(vars = rows, obs = obs, reorder = reorder,
                      col.names = row.names, type = type,
                      frequency = frequency, seed = seed)
