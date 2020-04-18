@@ -12,7 +12,7 @@ rand_correlate(
   row.names = NULL,
   col.names = NULL,
   type = "cubic",
-  frequency = 0.25,
+  frequency = 0.15,
   reorder = TRUE,
   seed = NULL,
   ...
@@ -25,7 +25,7 @@ rand_dataset(
   row.names = NULL,
   col.names = NULL,
   type = "cubic",
-  frequency = 0.25,
+  frequency = 0.15,
   seed = NULL,
   ...
 )

@@ -87,35 +87,29 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
   ggplot_add(object = obj, plot = plot)
 }
 
-#' @importFrom ggplot2 ggplot_add
+#' @importFrom ggplot2 ggplot_add aes_string
 #' @export
 ggplot_add.geom_links <- function(object, plot, object_name) {
-  layout <- object$layout
   pdata <- plot$data
   type <- get_type(pdata)
   show.diag <- get_show_diag(pdata)
   n <- length(get_col_name(pdata))
   m <- length(get_row_name(pdata))
+  mapping <- aes_modify(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
+                        object$mapping)
 
-  if(type != "full" ) {
-    if(is.null(layout)) {
-      layout <- "triangle"
-    }
-    if(layout != "triangle") {
-      stop("The 'type' of cor_tbl is not supported.", call. = FALSE)
-    }
-  } else {
-    layout <- "parallel"
-  }
-
-  layout.params <- modifyList(object$layout.params, list(cor_tbl = pdata))
+  layout <- if(type != "full") "triangle" else "parallel"
+  layout.params <- modifyList(object$layout.params,
+                              list(data = object$data, cor_tbl = pdata))
   data <- if(layout == "triangle") {
     do.call(triangle_layout, layout.params)
   } else {
     do.call(parallel_layout, layout.params)
   }
   plot$plot_env$layout_tbl <- data
-  params <- modifyList(list(data = data), object$params)
+
+
+  params <- modifyList(list(data = data, mapping = mapping), object$params)
 
   min <- min(data$x, na.rm = TRUE)
   max <- max(data$x, na.rm = TRUE)

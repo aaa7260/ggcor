@@ -56,7 +56,7 @@ geom_links2 <- function(mapping = NULL,
   )
 }
 
-#' @rdname geom_links
+#' @rdname geom_links2
 #' @format NULL
 #' @usage NULL
 #' @export
