@@ -57,7 +57,10 @@ GeomCross <- ggproto(
   draw_panel = function(self, data, panel_params, coord, linejoin = "mitre",
                         sig.level = 0.05, r0 = 0.6) {
     aesthetics <- setdiff(names(data), c("x", "y", "p.value"))
-    data <- with(data, subset(data, p.value > sig.level))
+    data <- with(data, subset(data, p.value >= sig.level))
+    if(nrow(data) == 0) {
+      return(ggplot2::zeroGrob())
+    }
     dd <- point_to_cross(data$x, data$y, r0)
     aes <- data[rep(1:nrow(data), each = 2) , aesthetics, drop = FALSE]
     GeomSegment$draw_panel(cbind(dd, aes), panel_params, coord)
