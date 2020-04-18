@@ -196,7 +196,10 @@ ggplot_add.p_xaxis <- function(object, plot, object_name) {
     stop("Only supports for polar coordinates.", call. = FALSE)
   }
   data <- plot$plot_env$polar.args$xaxis_df
-  args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$params$mapping),
+  if(isTRUE(object$stretch)) {
+    data$x <- seq(1, plot$plot_env$polar.args$xlim[2], length.out = nrow(data))
+  }
+  args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$mapping),
                data = data, inherit.aes = FALSE)
   obj <- do.call(geom_text, modifyList(args, object$params))
   ggplot_add(obj, plot)
@@ -209,7 +212,7 @@ ggplot_add.p_yaxis <- function(object, plot, object_name) {
     stop("Only supports for polar coordinates.", call. = FALSE)
   }
   data <- plot$plot_env$polar.args$yaxis_df
-  args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$params$mapping),
+  args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$mapping),
                data = data, inherit.aes = FALSE)
   obj <- do.call(geom_text, modifyList(args, object$params))
   ggplot_add(obj, plot)

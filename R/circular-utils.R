@@ -1,6 +1,7 @@
 #' Set axis labels on circular plot
 #' @title Set axis labels
 #' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
+#' @param stretch logical, if TRUE, the labels of x axis will be stretch.
 #' @param ... extra parameters passing to \code{ggplot2::geom_text()}.
 #' @rdname set_axis
 #' @examples
@@ -9,9 +10,9 @@
 #' p + set_p_yaxis()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-set_p_xaxis <- function(mapping = NULL, ...) {
-  structure(.Data = list(mapping = mapping, params = list(...)),
-            class = "p_xaxis")
+set_p_xaxis <- function(mapping = NULL, stretch = FALSE, ...) {
+  structure(.Data = list(mapping = mapping, stretch = stretch,
+                         params = list(...)), class = "p_xaxis")
 }
 
 #' @rdname set_axis
@@ -22,7 +23,11 @@ set_p_yaxis <- function(mapping = NULL, ...) {
 }
 
 #' @noRd
-calc_polar_params <- function(cor_tbl, open =  90, inner = 0.6, expand = 0.3) {
+calc_polar_params <- function(cor_tbl,
+                              open =  90,
+                              inner = 0.6,
+                              expand = 0.3,
+                              stretch = FALSE) {
   row.names <- get_row_name(cor_tbl)
   col.names <- get_col_name(cor_tbl)
   rows <- length(row.names)
@@ -43,11 +48,13 @@ calc_polar_params <- function(cor_tbl, open =  90, inner = 0.6, expand = 0.3) {
                                   label = rev(row.names),
                                   angle = angle,
                                   hjust = hjust))
-  xaxis_df <- new_data_frame(list(x = 1:cols,
-                                  y = 0.5 - ut.degree,
-                                  label = col.names,
-                                  angle = 0,
-                                  hjust = 0))
+  xaxis_df <- new_data_frame(
+    list(x = if(isTRUE(stretch)) seq(1, xlim[2], length.out = cols) else 1:cols,
+         y = 0.5 - ut.degree,
+         label = col.names,
+         angle = 0,
+         hjust = 0)
+  )
 
   list(xlim = xlim, ylim = ylim, start = start,
        xaxis_df = xaxis_df, yaxis_df = yaxis_df)
