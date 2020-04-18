@@ -66,7 +66,7 @@ rand_dataset <- function(vars = 12,
   f <- rvcheck::get_fun_from_pkg("ambient", paste0("noise_", type))
 
   row.names <- row.names %||% paste0("sample", 1:obs)
-  col.names <- col.names %||% paste0("val", 1:vars)
+  col.names <- col.names %||% paste0("var", 1:vars)
 
   if(is.null(seed)) {
     seed <- as.numeric(Sys.time())
