@@ -3,7 +3,7 @@
 \name{rand_correlate}
 \alias{rand_correlate}
 \alias{rand_dataset}
-\title{make dataset}
+\title{Make dataset}
 \usage{
 rand_correlate(
   rows = 12,
@@ -53,7 +53,7 @@ rand_dataset(
 a correlate object or data.frame.
 }
 \description{
-make rand dataset
+Make rand dataset
 }
 \examples{
 rand_dataset()

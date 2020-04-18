@@ -1,5 +1,5 @@
-#' make rand dataset
-#' @title make dataset
+#' Make rand dataset
+#' @title Make dataset
 #' @param rows,cols number of rows and columns.
 #' @param vars number of variables.
 #' @param obs number of observation.
