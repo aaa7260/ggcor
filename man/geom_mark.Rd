@@ -3,6 +3,7 @@
 \docType{data}
 \name{geom_mark}
 \alias{geom_mark}
+\alias{geom_mark2}
 \alias{GeomMark}
 \title{Significant marks Geom}
 \usage{
@@ -25,6 +26,8 @@ geom_mark(
   show.legend = NA,
   inherit.aes = TRUE
 )
+
+geom_mark2(...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or

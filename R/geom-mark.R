@@ -33,21 +33,23 @@
 #' @rdname geom_mark
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_mark <- function(mapping = NULL, data = NULL,
-                     stat = "identity", position = "identity",
-                     ...,
-                     nudge_x = 0,
-                     nudge_y = 0,
-                     digits = 2,
-                     nsmall = 2,
-                     sig.level = c(0.05, 0.01, 0.001),
-                     mark = c("*", "**", "***"),
-                     sig.thres = NULL,
-                     sep = "",
-                     parse = FALSE,
-                     na.rm = FALSE,
-                     show.legend = NA,
-                     inherit.aes = TRUE)
+geom_mark <- function(mapping = NULL,
+                      data = NULL,
+                      stat = "identity",
+                      position = "identity",
+                      ...,
+                      nudge_x = 0,
+                      nudge_y = 0,
+                      digits = 2,
+                      nsmall = 2,
+                      sig.level = c(0.05, 0.01, 0.001),
+                      mark = c("*", "**", "***"),
+                      sig.thres = NULL,
+                      sep = "",
+                      parse = FALSE,
+                      na.rm = FALSE,
+                      show.legend = NA,
+                      inherit.aes = TRUE)
 {
   if (!missing(nudge_x) || !missing(nudge_y)) {
     if (!missing(position)) {
@@ -76,6 +78,12 @@ geom_mark <- function(mapping = NULL, data = NULL,
       ...
     )
   )
+}
+
+#' @rdname geom_mark
+#' @export
+geom_mark2 <- function(...) {
+  structure(.Data = list(...), class = "geom_mark2")
 }
 
 #' @rdname geom_mark

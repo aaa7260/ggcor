@@ -217,3 +217,19 @@ ggplot_add.p_yaxis <- function(object, plot, object_name) {
   obj <- do.call(geom_text, modifyList(args, object$params))
   ggplot_add(obj, plot)
 }
+
+#' @importFrom ggplot2 ggplot_add
+#' @export
+ggplot_add.geom_mark2 <- function(object, plot, object_name) {
+  args <- plot$plot_env$polar.args
+  if(!isTRUE(plot$plot_env$circular)) {
+    warning("`geom_mark2()` only supports for polar coordinates, ",
+            "use `geom_mark()` instead.", call. = FALSE)
+    obj <- do.call(geom_mark, object)
+  } else {
+    angle <- args$angle[plot$data$.row.id] + 90 - 180 / diff(args$ylim)
+    obj <- do.call(geom_mark, modifyList(object, list(angle = angle)))
+  }
+
+  ggplot_add(obj, plot)
+}
