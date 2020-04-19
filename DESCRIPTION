@@ -51,6 +51,7 @@ Suggests:
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Collate: 
+    'annotation.R'
     'as-cor-network.R'
     'as-cor-tbl.R'
     'as-igraph.R'
@@ -63,6 +64,7 @@ Collate:
     'cor-tbl-utils.R'
     'cor-test.R'
     'create-layout.R'
+    'dendrogram-utils.R'
     'display-cor.R'
     'dplyr.R'
     'draw-key.R'
