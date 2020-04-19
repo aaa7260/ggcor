@@ -7,7 +7,7 @@
 #' @param cluster.method a character string with the name of agglomeration method.
 #' @param ... extra params passing to \code{\link[stats]{hclust}}.
 #' @details Now it just supports for square matrix.
-#' @return a numeric vector of new order.
+#' @return a list of hclust object.
 #' @importFrom stats as.dist dist hclust
 #' @rdname matrix_order
 #' @examples
@@ -18,29 +18,24 @@
 #' @export
 matrix_order <- function(x,
                          is.cor = TRUE,
-                         k = 2,
                          cluster.method = "complete",
                          ...)
 {
   if(!is.matrix(x))
     x <- as.matrix(x)
   if(isTRUE(is.cor)) {
-    cluster <- hclust(as.dist(1 - x), cluster.method, ...)
-    hc.rect.df <- tidy_hc_rect(x, k, cluster.method, ...)
+    if(!isSymmetric(x) || any(colnames(x) != rownames(x))) {
+      row.cluster <- hclust(dist(x), cluster.method, ...)
+      col.cluster <- hclust(dist(t(x)), cluster.method, ...)
+    } else {
+      row.cluster <- col.cluster <- hclust(as.dist(1 - x), cluster.method, ...)
+    }
   } else {
     row.cluster <- hclust(dist(x))
     col.cluster <- hclust(dist(t(x)))
-    hc.rect.df <- NULL
   }
-  if(isTRUE(is.cor)) {
-    list(row.order = cluster$order,
-         col.order = cluster$order,
-         hc.rect.df = hc.rect.df)
-  } else {
-    list(row.order = row.cluster$order,
-         col.order = col.cluster$order,
-         hc.rect.df = hc.rect.df)
-  }
+  list(row.cluster = row.cluster,
+       col.cluster = col.cluster)
 }
 
 #' @importFrom stats hclust cutree

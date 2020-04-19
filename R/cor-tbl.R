@@ -101,22 +101,19 @@ cor_tbl <- function(corr,
         type <- "full"
         if(type == "full") show.diag <- TRUE
       }
-      if(isTRUE(cluster)) {
-        warning("'cluster' just spports for symmetric matrix.", call. = FALSE)
-        cluster <- FALSE
-      }
     }
   }
 
-  hc.rect.df <- NULL
+  hc <- NULL
   if(isTRUE(cluster)) {
-    ord <- matrix_order(first, is.cor = !missing.corr, ...)
-    hc.rect.df <- ord$hc.rect.df
+    hc <- matrix_order(first, is.cor = !missing.corr, ...)
+    row.ord <- hc$row.cluster$order
+    col.ord <- hc$col.cluster$order
     corr <- lapply(corr, function(.x) {
-      .x[ord$row.order, ord$col.order]
+      .x[row.ord, col.ord]
     })
-    row.names <- row.names[ord$row.order]
-    col.names <- col.names[ord$col.order]
+    row.names <- row.names[row.ord]
+    col.names <- col.names[col.ord]
   }
   id <- list(
     .row.names = rep(row.names, ncol(first)),
@@ -137,7 +134,7 @@ cor_tbl <- function(corr,
                     .col.names = col.names,
                     type = type,
                     show.diag = show.diag,
-                    hc.rect.df = hc.rect.df,
+                    hc = hc,
                     grouped = FALSE,
                     class = cls)
   switch (type,

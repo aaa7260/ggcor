@@ -233,3 +233,58 @@ ggplot_add.geom_mark2 <- function(object, plot, object_name) {
 
   ggplot_add(obj, plot)
 }
+
+#' @importFrom ggplot2 ggplot_add
+#' @export
+ggplot_add.anno_tree <- function(object, plot, object_name) {
+  args <- plot$plot_env$polar.args
+  pdata <- plot$data
+  circular <- plot$plot_env$circular
+  type <- get_type(pdata)
+  n <- length(get_row_name(pdata))
+  m <- length(get_col_name(pdata))
+  if(!isTRUE(circular) && type != "full") {
+    stop("Now `anno_tree()` only supports polar coordinates or 'type = full'.", call. = FALSE)
+  }
+  hc <- attr(plot$data, "hc")
+  if(is.null(hc)) {
+    stop("Did you forget to set 'cluster = TRUE' in `quickcor()`?", call. = FALSE)
+  }
+  if(isTRUE(circular)) {
+    row.rng <- c(args$xlim[1], 0.5)
+    col.rng <- c(n + 0.5, n + 0.5 + 0.3 * (args$ylim[2] - n - 0.5))
+  } else {
+    row.rng <- c(m + 0.5, 1.35 * m + 0.5)
+    col.rng <- c(n + 0.5, 1.35 * n + 0.5)
+  }
+  row.data <- dend_tbl(as.dendrogram(hc$row.cluster), TRUE, row.rng, circular)
+  col.data <- dend_tbl(as.dendrogram(hc$col.cluster), FALSE, col.rng, circular)
+  mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
+  rparams <- suppressWarnings(
+    list(mapping = mapping, data = row.data,
+         colour = object$colour %||% row.data$colour %||% "black",
+         size = object$size %||% row.data$size %||% 0.5,
+         linetype = object$linetype %||% row.data$linetype %||% "solid",
+         inherit.aes = FALSE)
+  )
+  cparams <- suppressWarnings(
+    list(mapping = mapping, data = col.data,
+         colour = object$colour %||% col.data$colour %||% "black",
+         size = object$size %||% col.data$size %||% 0.5,
+         linetype = object$linetype %||% col.data$linetype %||% "solid",
+         inherit.aes = FALSE)
+  )
+  row.tree <- do.call(geom_segment, rparams)
+  col.tree <- do.call(geom_segment, cparams)
+
+  if(object$index == "all") {
+    plot <- plot + expand_axis(x = row.rng, y = col.rng)
+    ggplot_add(list(row.tree, col.tree), plot)
+  } else if(object$index == "row") {
+    plot <- plot + expand_axis(x = row.rng)
+    ggplot_add(row.tree, plot)
+  } else {
+    plot <- plot + expand_axis(y = col.rng)
+    ggplot_add(col.tree, plot)
+  }
+}

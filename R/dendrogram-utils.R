@@ -1,7 +1,7 @@
 ### copy from ComplexHeatmap packages
 ### see https://github.com/jokergoo/ComplexHeatmap/blob/master/R/grid.dendrogram.R for details.
 #' @noRd
-dend_tbl <- function(dend) {
+dend_tbl <- function(dend, horiz, height.range, circular) {
   if(is.null(attr(dend, "x"))) {
     dend <- adjust_dend(dend)
   }
@@ -38,8 +38,9 @@ dend_tbl <- function(dend) {
     }
   }
   generate_children_dendrogram_segments(dend, env)
-  new_data_frame(as.list(env)) %>%
-    rename(colour = col, size = lwd, linetype = lty)
+  data <- new_data_frame(as.list(env)) %>%
+    dplyr::rename(colour = col, size = lwd, linetype = lty)
+  adjust_dend_tbl(data, horiz, height.range, circular)
 }
 
 #' @noRd
@@ -90,4 +91,26 @@ adjust_dend <- function(dend) {
   adj_dend()
   dend <- env$dend
   return(dend)
+}
+
+#' @noRd
+adjust_dend_tbl <- function(dend_tbl, horiz, height.range, circular) {
+  maxheight <- max(dend_tbl$y, dend_tbl$yend, na.rm = TRUE)
+  dend_tbl$y <- scales::rescale(dend_tbl$y, height.range, c(0, maxheight))
+  dend_tbl$yend <- scales::rescale(dend_tbl$yend, height.range, c(0, maxheight))
+  if(isTRUE(horiz)) {
+    dend_tbl <- with(dend_tbl, {
+      max.x <- max(x, xend, na.rm = TRUE)
+      tempx <- max.x - x + 1
+      tempxend <- max.x - xend + 1
+      tibble::tibble(x = y, y = tempx, xend = yend, yend = tempxend)
+    })
+    if(isTRUE(circular)) {
+      dend_tbl <- with(dend_tbl, {
+        min.x <- min(x, xend, na.rm = TRUE)
+        tibble::tibble(x = min.x - x + 0.5, y = y, xend = min.x - xend + 0.5, yend = yend)
+      })
+    }
+  }
+  dend_tbl
 }
