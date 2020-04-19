@@ -88,7 +88,7 @@ quickcor <- function(x,
   }
   if("p.value" %in% name)
     base.aes <- modifyList(base.aes, aes_string(p.value = "p.value"))
-  if(all (c("lower.ci", "upper.ci") %in% name))
+  if(all(c("lower.ci", "upper.ci") %in% name))
     base.aes <- modifyList(base.aes, aes_string(lower.ci = "lower.ci", upper.ci = "upper.ci"))
   if(is.null(mapping)) {
     mapping <- base.aes

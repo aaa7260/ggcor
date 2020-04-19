@@ -118,7 +118,7 @@ GeomSquare <- ggproto(
     aesthetics <- setdiff(names(data), c("x", "y", "xmin", "ymin", "xmax", "ymax"))
     dd <- point_to_square(data$x, data$y, data$r0)
     data <- cbind(dd, data[, aesthetics, drop = FALSE])
-    GeomPolygon$draw_panel(data, panel_params, coord)
+    GeomRect$draw_panel(data, panel_params, coord)
   },
 
   draw_key = draw_key_square
