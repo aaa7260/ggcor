@@ -250,6 +250,7 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
   if(is.null(hc)) {
     stop("Did you forget to set 'cluster = TRUE' in `quickcor()`?", call. = FALSE)
   }
+  xlim <- ylim <- NULL
   if(isTRUE(circular)) {
     row.rng <- c(args$xlim[1], 0.5)
     col.rng <- c(n + 0.5, n + 0.5 + 0.3 * (args$ylim[2] - n - 0.5))
@@ -260,11 +261,13 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
     } else {
       c(m + 0.5, (1 + object$row.height) * m + 0.5)
     }
-    row.rng <- if(is.null(object$row.height)) {
+    col.rng <- if(is.null(object$row.height)) {
       c(n + 0.5, 0.3 * min + n + 0.5)
     } else {
       c(n + 0.5, (1 + object$col.height) * n + 0.5)
     }
+    xlim <- c(row.rng[1], row.rng[2] + 0.05 * min)
+    ylim <- c(col.rng[1], col.rng[2] + 0.05 * min)
   }
   row.data <- dend_tbl(as.dendrogram(hc$row.cluster), TRUE, row.rng, circular)
   col.data <- dend_tbl(as.dendrogram(hc$col.cluster), FALSE, col.rng, circular)
@@ -287,13 +290,13 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
   col.tree <- do.call(geom_segment, cparams)
 
   if(object$index == "all") {
-    plot <- plot + expand_axis(x = row.rng, y = col.rng)
+    plot <- plot + expand_axis(x = xlim, y = ylim)
     ggplot_add(list(row.tree, col.tree), plot)
   } else if(object$index == "row") {
-    plot <- plot + expand_axis(x = row.rng)
+    plot <- plot + expand_axis(x = xlim)
     ggplot_add(row.tree, plot)
   } else {
-    plot <- plot + expand_axis(y = col.rng)
+    plot <- plot + expand_axis(y = ylim)
     ggplot_add(col.tree, plot)
   }
 }
