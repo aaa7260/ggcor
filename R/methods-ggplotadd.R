@@ -89,7 +89,7 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
 
 #' @importFrom ggplot2 ggplot_add aes_string
 #' @export
-ggplot_add.geom_links <- function(object, plot, object_name) {
+ggplot_add.anno_link <- function(object, plot, object_name) {
   pdata <- plot$data
   type <- get_type(pdata)
   show.diag <- get_show_diag(pdata)
@@ -141,7 +141,7 @@ ggplot_add.geom_links <- function(object, plot, object_name) {
 
 #' @importFrom ggplot2 ggplot_add
 #' @export
-ggplot_add.geom_links_label <- function(object, plot, object_name) {
+ggplot_add.anno_link_label <- function(object, plot, object_name) {
   layout_tbl <- plot$plot_env$layout_tbl
   if(is.null(layout_tbl)) {
     warning("Can only be used after `geom_links2()`.", call. = FALSE)
@@ -254,8 +254,17 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
     row.rng <- c(args$xlim[1], 0.5)
     col.rng <- c(n + 0.5, n + 0.5 + 0.3 * (args$ylim[2] - n - 0.5))
   } else {
-    row.rng <- c(m + 0.5, 1.35 * m + 0.5)
-    col.rng <- c(n + 0.5, 1.35 * n + 0.5)
+    min <- min(n, m)
+    row.rng <- if(is.null(object$row.height)) {
+      c(m + 0.5, 0.3 * min + m + 0.5)
+    } else {
+      c(m + 0.5, (1 + object$row.height) * m + 0.5)
+    }
+    row.rng <- if(is.null(object$row.height)) {
+      c(n + 0.5, 0.3 * min + n + 0.5)
+    } else {
+      c(n + 0.5, (1 + object$col.height) * n + 0.5)
+    }
   }
   row.data <- dend_tbl(as.dendrogram(hc$row.cluster), TRUE, row.rng, circular)
   col.data <- dend_tbl(as.dendrogram(hc$col.cluster), FALSE, col.rng, circular)

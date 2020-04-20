@@ -4,10 +4,20 @@
 \alias{anno_tree}
 \title{Annotation for correlation matrix plot}
 \usage{
-anno_tree(index = "all", colour = NULL, size = NULL, linetype = NULL, color)
+anno_tree(
+  index = "all",
+  row.height = NULL,
+  col.height = NULL,
+  colour = NULL,
+  size = NULL,
+  linetype = NULL,
+  color
+)
 }
 \arguments{
 \item{index}{one of "all", "row" or "col".}
+
+\item{row.height, col.height}{height of row/columns tree.}
 
 \item{colour, color}{colour of segments.}
 

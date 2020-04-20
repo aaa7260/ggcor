@@ -79,7 +79,6 @@ Collate:
     'geom-diag-label.R'
     'geom-ellipse2.R'
     'geom-hc-rect.R'
-    'geom-link.R'
     'geom-link2.R'
     'geom-mark.R'
     'geom-num.R'

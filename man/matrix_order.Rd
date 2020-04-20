@@ -5,7 +5,7 @@
 \alias{tidy_hc_rect}
 \title{Reorder Matrices}
 \usage{
-matrix_order(x, is.cor = TRUE, k = 2, cluster.method = "complete", ...)
+matrix_order(x, is.cor = TRUE, cluster.method = "complete", ...)
 
 tidy_hc_rect(x, k = 2, cluster.method = "complete", ...)
 }
@@ -15,14 +15,14 @@ tidy_hc_rect(x, k = 2, cluster.method = "complete", ...)
 \item{is.cor}{logical value (defaults to TRUE) indicating wheater
 \code{x} is a correlation matrix.}
 
-\item{k}{integer, the number of cluster group.}
-
 \item{cluster.method}{a character string with the name of agglomeration method.}
 
 \item{...}{extra params passing to \code{\link[stats]{hclust}}.}
+
+\item{k}{integer, the number of cluster group.}
 }
 \value{
-a numeric vector of new order.
+a list of hclust object.
 }
 \description{
 Tries to find an order for matrix by different cluster methods.

@@ -1,13 +1,17 @@
 #' Annotation for correlation matrix plot
 #' @title Annotation for correlation matrix plot
 #' @param index one of "all", "row" or "col".
+#' @param row.height,col.height height of row/columns tree.
 #' @param colour,color colour of segments.
 #' @param size width of segments.
 #' @param linetype line type of segments.
 #' @return anno_tree object.
+#' @rdname anno_tree
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 anno_tree <- function(index = "all",
+                      row.height = NULL,
+                      col.height = NULL,
                       colour = NULL,
                       size = NULL,
                       linetype = NULL,
@@ -15,7 +19,43 @@ anno_tree <- function(index = "all",
   if(!missing(color))
     colour <- color
   index <- match.arg(index, c("all", "row", "col"))
-  structure(.Data = list(index = index, colour = colour,
-                         size = size, linetype = linetype),
+  structure(.Data = list(index = index, row.height = row.height, col.height = col.height,
+                         colour = colour, size = size, linetype = linetype),
             class = "anno_tree")
+}
+
+#' Special annotation function for correlation link plot
+#' @description a set of custom layer functions that quickly add
+#' layers of curves, nodes, and labels.
+#' @param mapping aesthetic mappings parameters.
+#' @param data a data frame.
+#' @param geom one of "text", "label" or "image".
+#' @param nudge_x horizontal adjustment to nudge labels by.
+#' @param layout.params parameters passing to layout function.
+#' @param is.start NULL (default), TRUE or FALSE.
+#' @param ... extra parameters passing to layer function.
+#' @return a ggplot layer.
+#' @rdname anno_link
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
+anno_link <- function(mapping = NULL,
+                      data,
+                      layout.params = list(),
+                      ...)
+{
+  structure(.Data = list(mapping = mapping, data = data, layout.params = layout.params,
+                         params = list(...)), class = "anno_link")
+}
+
+#' @rdname anno_link
+#' @export
+anno_link_label <- function(mapping = NULL,
+                            nudge_x = 0.1,
+                            geom = "text",
+                            is.start = TRUE,
+                            ...)
+{
+  structure(.Data = list(mapping = mapping, nudge_x = nudge_x, geom = geom,
+                         is.start = is.start, params = list(...)),
+            class = "anno_link_label")
 }

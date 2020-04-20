@@ -14,7 +14,6 @@ fortify_cor(
   cor.test = FALSE,
   cluster = FALSE,
   cluster.method = "complete",
-  k = 2,
   ...
 )
 }
@@ -45,8 +44,6 @@ the correlation matrix by cluster.}
 (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
 "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
 or "centroid" (= UPGMC).}
-
-\item{k}{integer, the number of cluster group.}
 
 \item{...}{extra params passing to \code{matrix_order}.}
 }
