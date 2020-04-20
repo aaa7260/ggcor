@@ -25,17 +25,17 @@ matrix_order <- function(x,
     x <- as.matrix(x)
   if(isTRUE(is.cor)) {
     if(!isSymmetric(x) || any(colnames(x) != rownames(x))) {
-      row.cluster <- hclust(dist(x), cluster.method, ...)
-      col.cluster <- hclust(dist(t(x)), cluster.method, ...)
+      row.hc <- hclust(dist(x), cluster.method, ...)
+      col.hc <- hclust(dist(t(x)), cluster.method, ...)
     } else {
-      row.cluster <- col.cluster <- hclust(as.dist(1 - x), cluster.method, ...)
+      row.hc <- col.hc <- hclust(as.dist(1 - x), cluster.method, ...)
     }
   } else {
-    row.cluster <- hclust(dist(x))
-    col.cluster <- hclust(dist(t(x)))
+    row.hc <- hclust(dist(x))
+    col.hc <- hclust(dist(t(x)))
   }
-  list(row.cluster = row.cluster,
-       col.cluster = col.cluster)
+  list(row.hc = row.hc,
+       col.hc = col.hc)
 }
 
 #' @importFrom stats hclust cutree

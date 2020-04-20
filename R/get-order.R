@@ -1,0 +1,39 @@
+#' Extract order
+#' @title Extract order
+#' @param x any \code{R} object.
+#' @param ... ignore.
+#' @return a character or numeric vector.
+#' @rdname get_order
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
+get_order <- function(x, ...) {
+  UseMethod("get_order")
+}
+
+#' @rdname get_order
+#' @export
+#' @method get_order numeric
+get_order.numeric <- function(x, ...) {
+  x
+}
+
+#' @rdname get_order
+#' @export
+#' @method get_order character
+get_order.character <- function(x, ...) {
+  rlang::set_names(seq_along(x), x)
+}
+
+#' @rdname get_order
+#' @export
+#' @method get_order hclust
+get_order.hclust <- function(x, ...) {
+  x$order
+}
+
+#' @rdname get_order
+#' @export
+#' @method get_order dendrogram
+get_order.dendrogram <- function(x, ...) {
+  get_order(stats::as.hclust(x))
+}

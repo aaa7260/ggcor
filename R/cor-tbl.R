@@ -1,4 +1,5 @@
 #' Create a cor_tbl object
+#' @title Create a cor_tbl object
 #' @description Functions to create cor_tbl object from correlation matrix.
 #' @param corr correlation matrix.
 #' @param p.value significance value matrix of correaltion.
@@ -7,6 +8,7 @@
 #'     lower triangular or upper triangular matrix.
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @param row.names,col.names row/column names of correlation matrix.
+#' @param row.order,col.order row/column order of correlation matrix.
 #' @param cluster a logical value indicating whether reorder the correlation matrix
 #'     by clustering, default is FALSE.
 #' @param ... extra params passing to \code{\link[ggcor]{cor_tbl}}.
@@ -42,6 +44,8 @@ cor_tbl <- function(corr,
                     show.diag = TRUE,
                     row.names = NULL,
                     col.names = NULL,
+                    row.order = NULL,
+                    col.order = NULL,
                     cluster = FALSE,
                     ...)
 {
@@ -84,7 +88,7 @@ cor_tbl <- function(corr,
   if(length(col.names) != ncol(first))
     stop("'col.names' must have same length as columns of matrix.", call. = FALSE)
 
-  ## handle cluster
+  ## check type
   if(missing.corr) {
     if(nrow(first) != ncol(first)) {
       if(type != "full") {
@@ -104,11 +108,46 @@ cor_tbl <- function(corr,
     }
   }
 
-  hc <- NULL
+  ## check cluster and row/col.order
+  not.null.order <- any(!is.null(row.order), !is.null(col.order))
+  row.hc <- col.hc <- NULL
+  if(not.null.order) {
+    if(isTRUE(cluster)) {
+      warning("'row/col.order' has been specified, cluster will not be used.", call. = FALSE)
+      cluster <- FALSE
+    }
+    row.ord <- 1:length(row.names)
+    col.ord <- 1:length(col.names)
+    if(!is.null(row.order)) {
+      row.ord <- get_order(row.order)
+      if(is.character(row.order)) {
+        row.ord <- row.ord[row.names]
+      }
+      if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram")) {
+        row.hc <- as.hclust(row.order)
+      }
+    }
+
+    if(!is.null(col.order)) {
+      col.ord <- get_order(col.order)
+      if(is.character(col.order)) {
+        col.ord <- col.ord[col.names]
+      }
+      if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram")) {
+        col.hc <- as.hclust(col.order)
+      }
+    }
+  }
+
   if(isTRUE(cluster)) {
     hc <- matrix_order(first, is.cor = !missing.corr, ...)
-    row.ord <- hc$row.cluster$order
-    col.ord <- hc$col.cluster$order
+    row.hc <- hc$row.hc
+    col.hc <- hc$col.hc
+    row.ord <- row.hc$order
+    col.ord <- col.hc$order
+  }
+
+  if(not.null.order || isTRUE(cluster)) {
     corr <- lapply(corr, function(.x) {
       .x[row.ord, col.ord]
     })
@@ -134,7 +173,7 @@ cor_tbl <- function(corr,
                     .col.names = col.names,
                     type = type,
                     show.diag = show.diag,
-                    hc = hc,
+                    hclust = list(row.hc = row.hc, col.hc = col.hc),
                     grouped = FALSE,
                     class = cls)
   switch (type,

@@ -239,17 +239,19 @@ ggplot_add.geom_mark2 <- function(object, plot, object_name) {
 ggplot_add.anno_tree <- function(object, plot, object_name) {
   args <- plot$plot_env$polar.args
   pdata <- plot$data
+  hc <- attr(pdata, "hclust")
   circular <- plot$plot_env$circular
+  index <- object$index
   type <- get_type(pdata)
   n <- length(get_row_name(pdata))
   m <- length(get_col_name(pdata))
+
+  check_tree_params(index, hc)
+
   if(!isTRUE(circular) && type != "full") {
     stop("Now `anno_tree()` only supports polar coordinates or 'type = full'.", call. = FALSE)
   }
-  hc <- attr(plot$data, "hc")
-  if(is.null(hc)) {
-    stop("Did you forget to set 'cluster = TRUE' in `quickcor()`?", call. = FALSE)
-  }
+
   xlim <- ylim <- NULL
   if(isTRUE(circular)) {
     row.rng <- c(args$xlim[1], 0.5)
@@ -269,34 +271,67 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
     xlim <- c(row.rng[1], row.rng[2] + 0.05 * min)
     ylim <- c(col.rng[1], col.rng[2] + 0.05 * min)
   }
-  row.data <- dend_tbl(as.dendrogram(hc$row.cluster), TRUE, row.rng, circular)
-  col.data <- dend_tbl(as.dendrogram(hc$col.cluster), FALSE, col.rng, circular)
-  mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
-  rparams <- suppressWarnings(
-    list(mapping = mapping, data = row.data,
-         colour = object$colour %||% row.data$colour %||% "black",
-         size = object$size %||% row.data$size %||% 0.5,
-         linetype = object$linetype %||% row.data$linetype %||% "solid",
-         inherit.aes = FALSE)
-  )
-  cparams <- suppressWarnings(
-    list(mapping = mapping, data = col.data,
-         colour = object$colour %||% col.data$colour %||% "black",
-         size = object$size %||% col.data$size %||% 0.5,
-         linetype = object$linetype %||% col.data$linetype %||% "solid",
-         inherit.aes = FALSE)
-  )
-  row.tree <- do.call(geom_segment, rparams)
-  col.tree <- do.call(geom_segment, cparams)
 
   if(object$index == "all") {
+    row.data <- dend_tbl(as.dendrogram(hc$row.hc), TRUE, row.rng, circular)
+    col.data <- dend_tbl(as.dendrogram(hc$col.hc), FALSE, col.rng, circular)
+    mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
+    rparams <- suppressWarnings(
+      list(mapping = mapping, data = row.data,
+           colour = object$colour %||% row.data$colour %||% "black",
+           size = object$size %||% row.data$size %||% 0.5,
+           linetype = object$linetype %||% row.data$linetype %||% "solid",
+           inherit.aes = FALSE)
+    )
+    cparams <- suppressWarnings(
+      list(mapping = mapping, data = col.data,
+           colour = object$colour %||% col.data$colour %||% "black",
+           size = object$size %||% col.data$size %||% 0.5,
+           linetype = object$linetype %||% col.data$linetype %||% "solid",
+           inherit.aes = FALSE)
+    )
+    row.tree <- do.call(geom_segment, rparams)
+    col.tree <- do.call(geom_segment, cparams)
     plot <- plot + expand_axis(x = xlim, y = ylim)
     ggplot_add(list(row.tree, col.tree), plot)
   } else if(object$index == "row") {
+    row.data <- dend_tbl(as.dendrogram(hc$row.hc), TRUE, row.rng, circular)
+    mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
+    rparams <- suppressWarnings(
+      list(mapping = mapping, data = row.data,
+           colour = object$colour %||% row.data$colour %||% "black",
+           size = object$size %||% row.data$size %||% 0.5,
+           linetype = object$linetype %||% row.data$linetype %||% "solid",
+           inherit.aes = FALSE)
+    )
+    row.tree <- do.call(geom_segment, rparams)
     plot <- plot + expand_axis(x = xlim)
     ggplot_add(row.tree, plot)
   } else {
+    col.data <- dend_tbl(as.dendrogram(hc$col.hc), FALSE, col.rng, circular)
+    mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
+    cparams <- suppressWarnings(
+      list(mapping = mapping, data = col.data,
+           colour = object$colour %||% col.data$colour %||% "black",
+           size = object$size %||% col.data$size %||% 0.5,
+           linetype = object$linetype %||% col.data$linetype %||% "solid",
+           inherit.aes = FALSE)
+    )
+    col.tree <- do.call(geom_segment, cparams)
     plot <- plot + expand_axis(y = ylim)
     ggplot_add(col.tree, plot)
+  }
+}
+
+#' @noRd
+check_tree_params <- function(index, hc) {
+  if(index == "all" && any(vapply(hc, is.null, logical(1)))) {
+    stop("Did you forget to cluster the matrix?", call. = FALSE)
+  }
+  if(index == "row" && is.null(hc$row.hc)) {
+    stop("Did you forget to cluster rows of the matrix?", call. = FALSE)
+  }
+  if(index == "col" && is.null(hc$col.hc)) {
+    stop("Did you forget to cluster columns of the matrix?", call. = FALSE)
   }
 }

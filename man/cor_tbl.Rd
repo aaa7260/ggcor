@@ -12,6 +12,8 @@ cor_tbl(
   show.diag = TRUE,
   row.names = NULL,
   col.names = NULL,
+  row.order = NULL,
+  col.order = NULL,
   cluster = FALSE,
   ...
 )
@@ -30,6 +32,8 @@ lower triangular or upper triangular matrix.}
 
 \item{row.names, col.names}{row/column names of correlation matrix.}
 
+\item{row.order, col.order}{row/column order of correlation matrix.}
+
 \item{cluster}{a logical value indicating whether reorder the correlation matrix
 by clustering, default is FALSE.}
 
@@ -42,6 +46,8 @@ a cor_tbl object.
 Functions to create cor_tbl object from correlation matrix.
 }
 \details{
+Create a cor_tbl object
+
 \code{cluster = TRUE} just supports for symmetric correlation matrix.
 }
 \examples{
