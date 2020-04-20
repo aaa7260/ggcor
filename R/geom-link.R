@@ -17,7 +17,6 @@ geom_links <- function(mapping = NULL,
                        layout.params = list(),
                        ...)
 {
-
   structure(.Data = list(mapping = mapping, data = data, layout.params = layout.params,
                          params = list(...)), class = "geom_links")
 }
