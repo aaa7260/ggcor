@@ -263,7 +263,7 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
     } else {
       c(m + 0.5, (1 + object$row.height) * m + 0.5)
     }
-    col.rng <- if(is.null(object$row.height)) {
+    col.rng <- if(is.null(object$col.height)) {
       c(n + 0.5, 0.3 * min + n + 0.5)
     } else {
       c(n + 0.5, (1 + object$col.height) * n + 0.5)
