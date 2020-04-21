@@ -59,3 +59,26 @@ anno_link_label <- function(mapping = NULL,
                          is.start = is.start, params = list(...)),
             class = "anno_link_label")
 }
+
+#' Square annotation
+#' @title Square annotation
+#' @description Draw the cluster square mark on the correlation matrix plot.
+#' @param k an integer scalar or vector with the desired number of groups.
+#' @param fill NA (default) or the fill colour of square.
+#' @param colour,color the colour of square boder.
+#' @param size size of square boder line.
+#' @return square layer.
+#' @rdname anno_hc_rect
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
+anno_hc_rect <- function(k = 2,
+                         fill = NA,
+                         colour = "black",
+                         size = 2,
+                         color)
+{
+  if(!missing(color))
+    colour <- color
+  structure(.Data = list(k = k, fill = fill, colour = colour,
+                         size = size), class = "anno_hc_rect")
+}

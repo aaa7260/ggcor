@@ -335,3 +335,27 @@ check_tree_params <- function(index, hc) {
     stop("Did you forget to cluster columns of the matrix?", call. = FALSE)
   }
 }
+
+#' @importFrom ggplot2 ggplot_add geom_rect
+#' @export
+ggplot_add.anno_hc_rect <- function(object, plot, object_name) {
+  pdata <- plot$data
+  if(!is_symmet(pdata)) {
+    stop("Just supports for symmetric correlation matrix.", call. = FALSE)
+  }
+  hc <- attr(pdata, "hclust")$row.hc %||% attr(pdata, "hclust")$col.hc
+  if(is.null(hc)) {
+    return(plot)
+  }
+  n <- length(get_col_name(pdata))
+  k <- object$k
+  tree <- cutree(hc, k = k)
+  v <- table(tree)[unique(tree[hc$order])]
+  cv <- c(0, cumsum(v))
+  data <- data.frame(xmin = cv[-(k + 1)] + 0.5, ymin = n - cv[-(k + 1)] + 0.5,
+                     xmax = cv[-1] + 0.5, ymax = n - cv[-1] + 0.5)
+  mapping <- aes_string(xmin = "xmin", ymin = "ymin", xmax = "xmax", ymax = "ymax")
+  obj <- ggplot2::geom_rect(mapping = mapping, data = data, fill = object$fill,
+                            colour = object$colour, size = object$size, inherit.aes = FALSE)
+  ggplot_add(obj, plot)
+}
