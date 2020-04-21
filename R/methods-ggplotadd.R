@@ -55,9 +55,9 @@ get_grid_data <- function(data, drop) {
 ggplot_add.geom_diag_label <- function(object, plot, object_name) {
   geom <- match.arg(object$geom, c("text", "label", "image"))
   geom_fun <- switch (object$geom,
-                      text = rvcheck::get_fun_from_pkg("ggplot2", "geom_text"),
-                      label = rvcheck::get_fun_from_pkg("ggplot2", "geom_label"),
-                      image = rvcheck::get_fun_from_pkg("ggimage", "geom_image")
+                      text = get_function("ggplot2", "geom_text"),
+                      label = get_function("ggplot2", "geom_label"),
+                      image = get_function("ggimage", "geom_image")
   )
 
   type <- get_type(plot$data)
@@ -150,9 +150,9 @@ ggplot_add.anno_link_label <- function(object, plot, object_name) {
 
   geom <- match.arg(object$geom, c("text", "label", "image"))
   geom_fun <- switch (geom,
-                      text = rvcheck::get_fun_from_pkg("ggplot2", "geom_text"),
-                      label = rvcheck::get_fun_from_pkg("ggplot2", "geom_label"),
-                      image = rvcheck::get_fun_from_pkg("ggimage", "geom_image"))
+                      text = get_function("ggplot2", "geom_text"),
+                      label = get_function("ggplot2", "geom_label"),
+                      image = get_function("ggimage", "geom_image"))
 
   type <- get_type(plot$data)
   data <- attr(layout_tbl, "node.pos")
@@ -337,6 +337,7 @@ check_tree_params <- function(index, hc) {
 }
 
 #' @importFrom ggplot2 ggplot_add geom_rect
+#' @importFrom stats cutree
 #' @export
 ggplot_add.anno_hc_rect <- function(object, plot, object_name) {
   pdata <- plot$data

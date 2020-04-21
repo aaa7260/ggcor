@@ -63,7 +63,7 @@ rand_dataset <- function(vars = 12,
     stop("'make_data()' needs 'ambient' package.", call. = TRUE)
   }
   type <- match.arg(type, c("perlin", "cubic", "simplex", "value", "worley", "white"))
-  f <- rvcheck::get_fun_from_pkg("ambient", paste0("noise_", type))
+  f <- get_function("ambient", paste0("noise_", type))
 
   row.names <- row.names %||% paste0("sample", 1:obs)
   col.names <- col.names %||% paste0("var", 1:vars)

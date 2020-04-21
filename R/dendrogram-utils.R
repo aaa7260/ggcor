@@ -1,5 +1,6 @@
 ### copy from ComplexHeatmap packages
 ### see https://github.com/jokergoo/ComplexHeatmap/blob/master/R/grid.dendrogram.R for details.
+#' @importFrom stats as.dendrogram as.hclust is.leaf nobs order.dendrogram
 #' @noRd
 dend_tbl <- function(dend, horiz, height.range, circular) {
   if(is.null(attr(dend, "x"))) {
@@ -38,6 +39,7 @@ dend_tbl <- function(dend, horiz, height.range, circular) {
     }
   }
   generate_children_dendrogram_segments(dend, env)
+  col <- lwd <- lty <- NULL
   data <- new_data_frame(as.list(env)) %>%
     dplyr::rename(colour = col, size = lwd, linetype = lty)
   adjust_dend_tbl(data, horiz, height.range, circular)

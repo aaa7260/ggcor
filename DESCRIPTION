@@ -40,7 +40,7 @@ Imports:
     vegan
 Suggests:
     ambient,
-    ggforce,
+    dendextend,
     ggimage,
     ggraph,
     knitr,
