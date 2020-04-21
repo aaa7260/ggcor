@@ -183,6 +183,30 @@ cor_tbl <- function(corr,
   )
 }
 
+#' Create a general cor_tbl object
+#' @title Create a general cor_tbl object
+#' @param x a matrix-like object.
+#' @param name variable name.
+#' @param extra.mat extra matrix data.
+#' @param ... parameters passing to \code{cor_tbl}.
+#' @return a general_cor_tbl object.
+#' @rdname gcor_tbl
+#' @examples
+#' gcor_tbl(mtcars)
+#' @export
+gcor_tbl <- function(x,
+                     name = NULL,
+                     extra.mat = list(),
+                     ...)
+{
+  if("corr" %in% names(list(...))) {
+    stop("please use `cor_tbl()` to tidy correlation matrix.", call. = FALSE)
+  }
+  nm <- name %||% as.character(match.call()[["x"]])
+  extra.mat[[nm]] <- x
+  cor_tbl(extra.mat = extra.mat, ...)
+}
+
 #' @noRd
 check_extra_mat_name <- function(l)
 {
