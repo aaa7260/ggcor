@@ -202,7 +202,7 @@ gcor_tbl <- function(x,
   if("corr" %in% names(list(...))) {
     stop("please use `cor_tbl()` to tidy correlation matrix.", call. = FALSE)
   }
-  nm <- name %||% as.character(match.call()[["x"]])
+  nm <- name %||% deparse(substitute(x))
   extra.mat[[nm]] <- x
   cor_tbl(extra.mat = extra.mat, ...)
 }
