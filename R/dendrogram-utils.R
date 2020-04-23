@@ -3,6 +3,9 @@
 #' @importFrom stats as.dendrogram as.hclust is.leaf nobs order.dendrogram
 #' @noRd
 dend_tbl <- function(dend, horiz, height.range, circular) {
+  if(!inherits(dend, "dendrogram")) {
+    dend <- stats::as.dendrogram(dend)
+  }
   if(is.null(attr(dend, "x"))) {
     dend <- adjust_dend(dend)
   }
@@ -97,6 +100,7 @@ adjust_dend <- function(dend) {
 
 #' @noRd
 adjust_dend_tbl <- function(dend_tbl, horiz, height.range, circular) {
+  aes <- setdiff(names(dend_tbl), c("x", "y", "xend", "yend"))
   maxheight <- max(dend_tbl$y, dend_tbl$yend, na.rm = TRUE)
   dend_tbl$y <- scales::rescale(dend_tbl$y, height.range, c(0, maxheight))
   dend_tbl$yend <- scales::rescale(dend_tbl$yend, height.range, c(0, maxheight))
@@ -105,12 +109,14 @@ adjust_dend_tbl <- function(dend_tbl, horiz, height.range, circular) {
       max.x <- max(x, xend, na.rm = TRUE)
       tempx <- max.x - x + 1
       tempxend <- max.x - xend + 1
-      tibble::tibble(x = y, y = tempx, xend = yend, yend = tempxend)
+      pos <- tibble::tibble(x = y, y = tempx, xend = yend, yend = tempxend)
+      if(length(aes) > 0) dplyr::bind_cols(pos, dend_tbl[aes]) else pos
     })
     if(isTRUE(circular)) {
       dend_tbl <- with(dend_tbl, {
         min.x <- min(x, xend, na.rm = TRUE)
-        tibble::tibble(x = min.x - x + 0.5, y = y, xend = min.x - xend + 0.5, yend = yend)
+        pos <- tibble::tibble(x = min.x - x + 0.5, y = y, xend = min.x - xend + 0.5, yend = yend)
+        if(length(aes) > 0) dplyr::bind_cols(pos, dend_tbl[aes]) else pos
       })
     }
   }

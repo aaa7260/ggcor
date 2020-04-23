@@ -124,7 +124,7 @@ cor_tbl <- function(corr,
         row.ord <- row.ord[row.names]
       }
       if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram")) {
-        row.hc <- as.hclust(row.order)
+        row.hc <- row.order
       }
     }
 
@@ -134,7 +134,7 @@ cor_tbl <- function(corr,
         col.ord <- col.ord[col.names]
       }
       if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram")) {
-        col.hc <- as.hclust(col.order)
+        col.hc <- col.order
       }
     }
   }
