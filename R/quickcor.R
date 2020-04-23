@@ -6,6 +6,7 @@
 #' @param circular logical, if TRUE will draw in polar coordinates.
 #' @param open angle of opening (in degree).
 #' @param inner,outer the ratio of inner circle and outer margin.
+#' @param bcols colours of branchs.
 #' @param paxis one of "all", "x", "y" or "none".
 #' @param fixed.xy if TRUE (default), the coordinates will with fixed aspect ratio.
 #' @param grid.colour colour of grid lines.
@@ -65,6 +66,7 @@ quickcor <- function(x,
                      open = 90,
                      inner = 1,
                      outer = 0.3,
+                     bcols = NULL,
                      paxis = "all",
                      fixed.xy = TRUE,
                      axis.x.position = "auto",
@@ -105,13 +107,13 @@ quickcor <- function(x,
       theme_void()
     p$plot_env$polar.args <- polar.args
     if(paxis == "all") {
-      p <- p + set_p_xaxis() + set_p_yaxis()
+      p <- p + set_p_xaxis(bcols = bcols) + set_p_yaxis(bcols = bcols)
     }
     if (paxis == "x") {
-      p <- p + set_p_xaxis()
+      p <- p + set_p_xaxis(bcols = bcols)
     }
     if(paxis == "y") {
-      p <- p + set_p_yaxis()
+      p <- p + set_p_yaxis(bcols = bcols)
     }
   } else {
     # handle legend setting

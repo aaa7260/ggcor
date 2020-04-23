@@ -190,14 +190,26 @@ ggplot_add.anno_link_label <- function(object, plot, object_name) {
 }
 
 #' @importFrom ggplot2 ggplot_add geom_text
+#' @importFrom stats order.dendrogram as.dendrogram cutree as.hclust
 #' @export
 ggplot_add.p_xaxis <- function(object, plot, object_name) {
   if(!isTRUE(plot$plot_env$circular)) {
     stop("Only supports for polar coordinates.", call. = FALSE)
   }
+  col.hc <- attr(plot$data, "hclust")$col.hc
   data <- plot$plot_env$polar.args$xaxis_df
   if(isTRUE(object$stretch)) {
     data$x <- seq(1, plot$plot_env$polar.args$xlim[2], length.out = nrow(data))
+  }
+  if(!is.null(object$bcols)) {
+    if(!is.null(col.hc)) {
+      bcols <- unique(object$bcols)
+      order <- order.dendrogram(as.dendrogram(col.hc))
+      ctree <- cutree(as.hclust(col.hc), length(bcols))[order]
+      times <- table(ctree)[unique(ctree)]
+      id <- rlang::set_names(rep(seq_along(bcols), times = times), names(ctree))
+      object$params$colour <- bcols[id]
+    }
   }
   args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$mapping),
                data = data, inherit.aes = FALSE)
@@ -206,12 +218,24 @@ ggplot_add.p_xaxis <- function(object, plot, object_name) {
 }
 
 #' @importFrom ggplot2 ggplot_add geom_text
+#' @importFrom stats order.dendrogram as.dendrogram cutree as.hclust
 #' @export
 ggplot_add.p_yaxis <- function(object, plot, object_name) {
   if(!isTRUE(plot$plot_env$circular)) {
     stop("Only supports for polar coordinates.", call. = FALSE)
   }
+  row.hc <- attr(plot$data, "hclust")$row.hc
   data <- plot$plot_env$polar.args$yaxis_df
+  if(!is.null(object$bcols)) {
+    if(!is.null(row.hc)) {
+      bcols <- rev(unique(object$bcols))
+      order <- order.dendrogram(as.dendrogram(row.hc))
+      ctree <- rev(cutree(as.hclust(row.hc), length(bcols))[order])
+      times <- table(ctree)[unique(ctree)]
+      id <- rlang::set_names(rep(seq_along(bcols), times = times), names(ctree))
+      object$params$colour <- bcols[id]
+    }
+  }
   args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$mapping),
                data = data, inherit.aes = FALSE)
   obj <- do.call(geom_text, modifyList(args, object$params))
@@ -239,6 +263,7 @@ ggplot_add.geom_mark2 <- function(object, plot, object_name) {
 ggplot_add.anno_tree <- function(object, plot, object_name) {
   args <- plot$plot_env$polar.args
   pdata <- plot$data
+  bcols <- object$bcols %||% plot$plot_env$bcols
   hc <- attr(pdata, "hclust")
   circular <- plot$plot_env$circular
   index <- object$index
@@ -273,8 +298,8 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
   }
 
   if(object$index == "all") {
-    row.data <- dend_tbl(as.dendrogram(hc$row.hc), TRUE, row.rng, circular)
-    col.data <- dend_tbl(as.dendrogram(hc$col.hc), FALSE, col.rng, circular)
+    row.data <- dend_tbl(hc$row.hc, bcols, TRUE, row.rng, circular)
+    col.data <- dend_tbl(hc$col.hc, bcols, FALSE, col.rng, circular)
     mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
     rparams <- suppressWarnings(
       list(mapping = mapping, data = row.data,
@@ -295,7 +320,7 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
     plot <- plot + expand_axis(x = xlim, y = ylim)
     ggplot_add(list(row.tree, col.tree), plot)
   } else if(object$index == "row") {
-    row.data <- dend_tbl(as.dendrogram(hc$row.hc), TRUE, row.rng, circular)
+    row.data <- dend_tbl(hc$row.hc, bcols, TRUE, row.rng, circular)
     mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
     rparams <- suppressWarnings(
       list(mapping = mapping, data = row.data,
@@ -308,7 +333,7 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
     plot <- plot + expand_axis(x = xlim)
     ggplot_add(row.tree, plot)
   } else {
-    col.data <- dend_tbl(as.dendrogram(hc$col.hc), FALSE, col.rng, circular)
+    col.data <- dend_tbl(hc$col.hc, bcols, FALSE, col.rng, circular)
     mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
     cparams <- suppressWarnings(
       list(mapping = mapping, data = col.data,

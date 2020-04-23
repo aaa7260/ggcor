@@ -1,6 +1,7 @@
 #' Annotation for correlation matrix plot
 #' @title Annotation for correlation matrix plot
 #' @param index one of "all", "row" or "col".
+#' @param bcols colours of branchs.
 #' @param row.height,col.height height of row/columns tree.
 #' @param colour,color colour of segments.
 #' @param size width of segments.
@@ -10,6 +11,7 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 anno_tree <- function(index = "all",
+                      bcols = NULL,
                       row.height = NULL,
                       col.height = NULL,
                       colour = NULL,
@@ -19,9 +21,9 @@ anno_tree <- function(index = "all",
   if(!missing(color))
     colour <- color
   index <- match.arg(index, c("all", "row", "col"))
-  structure(.Data = list(index = index, row.height = row.height, col.height = col.height,
-                         colour = colour, size = size, linetype = linetype),
-            class = "anno_tree")
+  structure(.Data = list(index = index, bcols = bcols, row.height = row.height,
+                         col.height = col.height, colour = colour, size = size,
+                         linetype = linetype), class = "anno_tree")
 }
 
 #' Special annotation function for correlation link plot

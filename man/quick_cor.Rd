@@ -15,6 +15,7 @@ quickcor(
   open = 90,
   inner = 1,
   outer = 0.3,
+  bcols = NULL,
   paxis = "all",
   fixed.xy = TRUE,
   axis.x.position = "auto",
@@ -50,6 +51,8 @@ quickcor(
 \item{open}{angle of opening (in degree).}
 
 \item{inner, outer}{the ratio of inner circle and outer margin.}
+
+\item{bcols}{colours of branchs.}
 
 \item{paxis}{one of "all", "x", "y" or "none".}
 

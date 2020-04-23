@@ -2,12 +2,17 @@
 ### see https://github.com/jokergoo/ComplexHeatmap/blob/master/R/grid.dendrogram.R for details.
 #' @importFrom stats as.dendrogram as.hclust is.leaf nobs order.dendrogram
 #' @noRd
-dend_tbl <- function(dend, horiz, height.range, circular) {
+dend_tbl <- function(dend, bcols, horiz, height.range, circular) {
   if(!inherits(dend, "dendrogram")) {
     dend <- stats::as.dendrogram(dend)
   }
   if(is.null(attr(dend, "x"))) {
     dend <- adjust_dend(dend)
+  }
+  if(!is.null(bcols)) {
+    branches_color <- get_function("dendextend", "branches_color")
+    bcols <- unique(bcols)
+    dend <- branches_color(dend, k = length(bcols), col = bcols)
   }
   env <- as.environment(list(x = NULL, y = NULL, xend = NULL, yend = NULL,
                              col = NULL, lty = NULL, lwd = NULL))
@@ -118,6 +123,12 @@ adjust_dend_tbl <- function(dend_tbl, horiz, height.range, circular) {
         pos <- tibble::tibble(x = min.x - x + 0.5, y = y, xend = min.x - xend + 0.5, yend = yend)
         if(length(aes) > 0) dplyr::bind_cols(pos, dend_tbl[aes]) else pos
       })
+    } else {
+      if(isTRUE(circular)) {
+        max.x <- max(dend_tbl$x, dend_tbl$xend, na.rm = TRUE)
+        dend_tbl$x <- max.x - dend_tbl$x + 1
+        dend_tbl$xend <- max.x - dend_tbl$xend + 1
+      }
     }
   }
   dend_tbl

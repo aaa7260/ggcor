@@ -1,6 +1,7 @@
 #' Set axis labels on circular plot
 #' @title Set axis labels
 #' @param mapping NULL (default) or a list of aesthetic mappings to use for plot.
+#' @param bcols colours of branchs.
 #' @param stretch logical, if TRUE, the labels of x axis will be stretch.
 #' @param ... extra parameters passing to \code{ggplot2::geom_text()}.
 #' @rdname set_axis
@@ -10,15 +11,15 @@
 #' p + set_p_yaxis()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-set_p_xaxis <- function(mapping = NULL, stretch = FALSE, ...) {
-  structure(.Data = list(mapping = mapping, stretch = stretch,
+set_p_xaxis <- function(mapping = NULL, stretch = FALSE, bcols = NULL, ...) {
+  structure(.Data = list(mapping = mapping, stretch = stretch, bcols = bcols,
                          params = list(...)), class = "p_xaxis")
 }
 
 #' @rdname set_axis
 #' @export
-set_p_yaxis <- function(mapping = NULL, ...) {
-  structure(.Data = list(mapping = mapping, params = list(...)),
+set_p_yaxis <- function(mapping = NULL, bcols = NULL, ...) {
+  structure(.Data = list(mapping = mapping, bcols = bcols, params = list(...)),
             class = "p_yaxis")
 }
 

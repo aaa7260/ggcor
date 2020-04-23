@@ -5,14 +5,16 @@
 \alias{set_p_yaxis}
 \title{Set axis labels}
 \usage{
-set_p_xaxis(mapping = NULL, stretch = FALSE, ...)
+set_p_xaxis(mapping = NULL, stretch = FALSE, bcols = NULL, ...)
 
-set_p_yaxis(mapping = NULL, ...)
+set_p_yaxis(mapping = NULL, bcols = NULL, ...)
 }
 \arguments{
 \item{mapping}{NULL (default) or a list of aesthetic mappings to use for plot.}
 
 \item{stretch}{logical, if TRUE, the labels of x axis will be stretch.}
+
+\item{bcols}{colours of branchs.}
 
 \item{...}{extra parameters passing to \code{ggplot2::geom_text()}.}
 }
