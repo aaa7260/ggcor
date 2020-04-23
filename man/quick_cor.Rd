@@ -13,7 +13,7 @@ quickcor(
   grid.size = 0.25,
   circular = FALSE,
   open = 90,
-  inner = 0.6,
+  inner = 1,
   outer = 0.3,
   paxis = "all",
   fixed.xy = TRUE,
