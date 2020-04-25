@@ -11,13 +11,21 @@
 #' @importFrom rlang enquo eval_tidy set_names quo_is_null
 #' @importFrom dplyr filter
 #' @rdname link_tbl
+#' @examples \dontrun{
+#' data(varespec, package = "vegan")
+#' data(varechem, package = "vegan")
+#' m <- mantel_test(varespec, varechem, spec.select = list(1:10, 11:44))
+#' corr <- fortify_cor(varechem)
+#' link_tbl(m, corr) ## full
+#' link_tbl(m, get_upper_data(corr)) ## upper
+#' link_tbl(m, get_lower_data(corr)) ## lower
+#' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 link_tbl <- function(data,
                      cor_tbl,
                      start.var = NULL,
-                     end.var = NULL,
-                     stretch = FALSE)
+                     end.var = NULL)
 {
   if(!is.data.frame(data))
     data <- as.data.frame(data)
