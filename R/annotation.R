@@ -31,9 +31,11 @@ anno_tree <- function(index = "all",
 #' layers of curves, nodes, and labels.
 #' @param mapping aesthetic mappings parameters.
 #' @param data a data frame.
+#' @param start.var,end.var character to specify which variable is the starting
+#' points and which is the ending points. if the variable is not character, it
+#' will be converted.
 #' @param geom one of "text", "label" or "image".
 #' @param nudge_x horizontal adjustment to nudge labels by.
-#' @param layout.params parameters passing to layout function.
 #' @param is.start NULL (default), TRUE or FALSE.
 #' @param ... extra parameters passing to layer function.
 #' @return a ggplot layer.
@@ -44,13 +46,12 @@ anno_link <- function(mapping = NULL,
                       data,
                       start.var = NULL,
                       end.var = NULL,
-                      stretch = FALSE,
                       ...)
 {
   start.var <- rlang::enquo(start.var)
   end.var <- rlang::enquo(end.var)
   structure(.Data = list(mapping = mapping, data = data, start.var = start.var, end.var = end.var,
-                         stretch = stretch, params = list(...)), class = "anno_link")
+                         params = list(...)), class = "anno_link")
 }
 
 #' @rdname anno_link

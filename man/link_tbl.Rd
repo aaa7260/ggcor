@@ -15,9 +15,6 @@ link_tbl(data, cor_tbl, start.var = NULL, end.var = NULL, stretch = FALSE)
 \item{start.var, end.var}{character to specify which variable is the starting
 points and which is the ending points. if the variable is not character, it
 is forced to be converted.}
-
-\item{stretch}{logical, indicating whether the heights/width of start points and
-end points are consistent.}
 }
 \value{
 a data frame.

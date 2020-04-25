@@ -5,14 +5,7 @@
 \alias{anno_link_label}
 \title{Special annotation function for correlation link plot}
 \usage{
-anno_link(
-  mapping = NULL,
-  data,
-  start.var = NULL,
-  end.var = NULL,
-  stretch = FALSE,
-  ...
-)
+anno_link(mapping = NULL, data, start.var = NULL, end.var = NULL, ...)
 
 anno_link_label(
   mapping = NULL,
@@ -27,6 +20,10 @@ anno_link_label(
 
 \item{data}{a data frame.}
 
+\item{start.var, end.var}{character to specify which variable is the starting
+points and which is the ending points. if the variable is not character, it
+will be converted.}
+
 \item{...}{extra parameters passing to layer function.}
 
 \item{nudge_x}{horizontal adjustment to nudge labels by.}
@@ -34,8 +31,6 @@ anno_link_label(
 \item{geom}{one of "text", "label" or "image".}
 
 \item{is.start}{NULL (default), TRUE or FALSE.}
-
-\item{layout.params}{parameters passing to layout function.}
 }
 \value{
 a ggplot layer.

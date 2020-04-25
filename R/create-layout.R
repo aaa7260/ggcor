@@ -7,8 +7,6 @@
 #' @param start.var,end.var character to specify which variable is the starting
 #' points and which is the ending points. if the variable is not character, it
 #' is forced to be converted.
-#' @param stretch logical, indicating whether the heights/width of start points and
-#' end points are consistent.
 #' @return a data frame.
 #' @importFrom rlang enquo eval_tidy set_names quo_is_null
 #' @importFrom dplyr filter
@@ -55,13 +53,7 @@ link_tbl <- function(data,
     x1 <- max(length(col.names), n) * 0.45 + length(col.names)
     x2 <- length(col.names) + 1
 
-    if(m == 1) stretch <- FALSE
-    start.pos <- if(m < n && !stretch) {
-      set_names(seq(1, n, length.out = m + 2)[-c(1, m + 2)], spec.name)
-    } else {
-      set_names(seq(1, n, length.out = m), spec.name)
-    }
-
+    start.pos <- set_names(seq(1, n, length.out = m + 2)[-c(1, m + 2)], spec.name)
     end.pos <- set_names(seq(1, n, length.out = n), row.names)
 
     edge.pos <- tibble(x = x1, y = start.pos[start], xend = x2, yend = end.pos[end])

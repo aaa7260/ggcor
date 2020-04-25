@@ -96,7 +96,7 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
   n <- length(get_col_name(pdata))
   m <- length(get_row_name(pdata))
 
-  data <- link_tbl(object$data, pdata, object$start.var, object$end.var, object$stretch)
+  data <- link_tbl(object$data, pdata, object$start.var, object$end.var)
   plot$plot_env$link_tbl <- data
 
   mapping <- aes_modify(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
