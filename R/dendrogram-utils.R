@@ -1,4 +1,4 @@
-### copy from ComplexHeatmap packages
+### modified from ComplexHeatmap packages
 ### see https://github.com/jokergoo/ComplexHeatmap/blob/master/R/grid.dendrogram.R for details.
 #' @importFrom stats as.dendrogram as.hclust is.leaf nobs order.dendrogram
 #' @noRd
