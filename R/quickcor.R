@@ -6,7 +6,7 @@
 #' @param circular logical, if TRUE will draw in polar coordinates.
 #' @param open angle of opening (in degree).
 #' @param inner,outer the ratio of inner circle and outer margin.
-#' @param bcols colours of branchs.
+#' @param bcols  branch colours.
 #' @param paxis one of "all", "x", "y" or "none".
 #' @param fixed.xy if TRUE (default), the coordinates will with fixed aspect ratio.
 #' @param grid.colour colour of grid lines.

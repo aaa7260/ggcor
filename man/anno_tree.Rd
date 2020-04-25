@@ -18,7 +18,7 @@ anno_tree(
 \arguments{
 \item{index}{one of "all", "row" or "col".}
 
-\item{bcols}{colours of branchs.}
+\item{bcols}{branch colours.}
 
 \item{row.height, col.height}{height of row/columns tree.}
 

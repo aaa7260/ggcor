@@ -1,7 +1,7 @@
 #' Annotation for correlation matrix plot
 #' @title Annotation for correlation matrix plot
 #' @param index one of "all", "row" or "col".
-#' @param bcols colours of branchs.
+#' @param bcols branch colours.
 #' @param row.height,col.height height of row/columns tree.
 #' @param colour,color colour of segments.
 #' @param size width of segments.

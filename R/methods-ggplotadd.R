@@ -201,9 +201,9 @@ ggplot_add.p_xaxis <- function(object, plot, object_name) {
   if(isTRUE(object$stretch)) {
     data$x <- seq(1, plot$plot_env$polar.args$xlim[2], length.out = nrow(data))
   }
-  if(!is.null(object$bcols)) {
+  bcols <- if(is.list(object$bcols)) object$bcols$col.bcols else object$bcols
+  if(!is.null(bcols)) {
     if(!is.null(col.hc)) {
-      bcols <- unique(object$bcols)
       order <- order.dendrogram(as.dendrogram(col.hc))
       ctree <- cutree(as.hclust(col.hc), length(bcols))[order]
       times <- table(ctree)[unique(ctree)]
@@ -226,9 +226,10 @@ ggplot_add.p_yaxis <- function(object, plot, object_name) {
   }
   row.hc <- attr(plot$data, "hclust")$row.hc
   data <- plot$plot_env$polar.args$yaxis_df
-  if(!is.null(object$bcols)) {
+  bcols <- if(is.list(object$bcols)) object$bcols$row.bcols else object$bcols
+  if(!is.null(bcols)) {
     if(!is.null(row.hc)) {
-      bcols <- rev(unique(object$bcols))
+      bcols <- rev(bcols)
       order <- order.dendrogram(as.dendrogram(row.hc))
       ctree <- rev(cutree(as.hclust(row.hc), length(bcols))[order])
       times <- table(ctree)[unique(ctree)]
@@ -280,6 +281,8 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
   args <- plot$plot_env$polar.args
   pdata <- plot$data
   bcols <- object$bcols %||% plot$plot_env$bcols
+  row.bcols <- if(is.list(bcols)) bcols$row.bcols else bcols
+  col.bcols <- if(is.list(bcols)) bcols$col.bcols else bcols
   hc <- attr(pdata, "hclust")
   circular <- plot$plot_env$circular
   index <- object$index
@@ -314,8 +317,8 @@ ggplot_add.anno_tree <- function(object, plot, object_name) {
   }
 
   if(object$index == "all") {
-    row.data <- dend_tbl(hc$row.hc, bcols, TRUE, row.rng, circular)
-    col.data <- dend_tbl(hc$col.hc, bcols, FALSE, col.rng, circular)
+    row.data <- dend_tbl(hc$row.hc, row.bcols, TRUE, row.rng, circular)
+    col.data <- dend_tbl(hc$col.hc, col.bcols, FALSE, col.rng, circular)
     mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
     rparams <- suppressWarnings(
       list(mapping = mapping, data = row.data,

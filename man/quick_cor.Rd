@@ -52,7 +52,7 @@ quickcor(
 
 \item{inner, outer}{the ratio of inner circle and outer margin.}
 
-\item{bcols}{colours of branchs.}
+\item{bcols}{branch colours.}
 
 \item{paxis}{one of "all", "x", "y" or "none".}
 
