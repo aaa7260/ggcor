@@ -73,7 +73,7 @@ rand_dataset <- function(vars = 12,
   }
   set.seed(seed)
   m <- do.call(f, modifyList(list(dim = c(obs, vars), frequency = frequency),
-                              list(...)))
+                              list(...))) * 100
   if(isTRUE(reorder)) {
     set.seed(seed)
     row.ord <- sample(obs)
