@@ -5,7 +5,7 @@
 \alias{add_link}
 \title{Transform data base on different layout}
 \usage{
-link_tbl(data, cor_tbl, start.var = NULL, end.var = NULL, stretch = FALSE)
+link_tbl(data, cor_tbl, start.var = NULL, end.var = NULL)
 }
 \arguments{
 \item{data}{a data frame.}
@@ -23,6 +23,17 @@ a data frame.
 These layout functions are not layout in the network diagram,
 it just converts the original data into a form that makes it easy to draw
 a curve graph.
+}
+\examples{
+\dontrun{
+data(varespec, package = "vegan")
+data(varechem, package = "vegan")
+m <- mantel_test(varespec, varechem, spec.select = list(1:10, 11:44))
+corr <- fortify_cor(varechem)
+link_tbl(m, corr) ## full
+link_tbl(m, get_upper_data(corr)) ## upper
+link_tbl(m, get_lower_data(corr)) ## lower
+}
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
