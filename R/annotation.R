@@ -42,11 +42,15 @@ anno_tree <- function(index = "all",
 #' @export
 anno_link <- function(mapping = NULL,
                       data,
-                      layout.params = list(),
+                      start.var = NULL,
+                      end.var = NULL,
+                      stretch = FALSE,
                       ...)
 {
-  structure(.Data = list(mapping = mapping, data = data, layout.params = layout.params,
-                         params = list(...)), class = "anno_link")
+  start.var <- rlang::enquo(start.var)
+  end.var <- rlang::enquo(end.var)
+  structure(.Data = list(mapping = mapping, data = data, start.var = start.var, end.var = end.var,
+                         stretch = stretch, params = list(...)), class = "anno_link")
 }
 
 #' @rdname anno_link

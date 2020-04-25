@@ -95,43 +95,35 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
   show.diag <- get_show_diag(pdata)
   n <- length(get_col_name(pdata))
   m <- length(get_row_name(pdata))
+
+  data <- link_tbl(object$data, pdata, object$start.var, object$end.var, object$stretch)
+  plot$plot_env$link_tbl <- data
+
   mapping <- aes_modify(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
                         object$mapping)
-
-  layout <- if(type != "full") "triangle" else "parallel"
-  layout.params <- modifyList(object$layout.params,
-                              list(data = object$data, cor_tbl = pdata))
-  data <- if(layout == "triangle") {
-    do.call(triangle_layout, layout.params)
-  } else {
-    do.call(parallel_layout, layout.params)
-  }
-  plot$plot_env$layout_tbl <- data
-
-
   params <- modifyList(list(data = data, mapping = mapping), object$params)
 
-  min <- min(data$x, na.rm = TRUE)
-  max <- max(data$x, na.rm = TRUE)
+  xmin <- min(data$x, na.rm = TRUE)
+  xmax <- max(data$x, na.rm = TRUE)
   if(type == "upper") {
     if(isTRUE(show.diag)) {
-      xrange <- c(min(-0.5, min - 0.2 * n), n + 0.5)
+      xrange <- c(min(-0.5, xmin - 0.2 * n), n + 0.5)
       yrange <- c(0.5, n + 0.5)
     } else {
-      xrange <- c(min(-0.5, min - 0.2 * n), n - 0.5)
+      xrange <- c(min(-0.5, xmin - 0.2 * n), n - 0.5)
       yrange <- c(-0.5, n - 0.5)
     }
 
   } else if (type == "lower") {
     if(isTRUE(show.diag)) {
-      xrange <- c(0.5, max(max + 0.2 * n, n + 1.5))
+      xrange <- c(0.5, max(xmax + 0.2 * n, n + 1.5))
       yrange <- c(0.5, n + 0.5)
     } else {
-      xrange <- c(0.5, max(max + 0.2 * n, n + 0.5))
+      xrange <- c(0.5, max(xmax + 0.2 * n, n + 0.5))
       yrange <- c(0.5, n + 0.5)
     }
   } else {
-    xrange <- c(n + 1.5, max + 0.2 * n)
+    xrange <- c(n + 1.5, xmax + 0.2 * n)
     yrange <- c(0.5, m + 0.5)
   }
   plot <- plot + expand_axis(x = xrange, y = yrange)
@@ -142,9 +134,9 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
 #' @importFrom ggplot2 ggplot_add
 #' @export
 ggplot_add.anno_link_label <- function(object, plot, object_name) {
-  layout_tbl <- plot$plot_env$layout_tbl
-  if(is.null(layout_tbl)) {
-    warning("Can only be used after `geom_links2()`.", call. = FALSE)
+  link_tbl <- plot$plot_env$link_tbl
+  if(is.null(link_tbl)) {
+    warning("Can only be used after `anno_link()`.", call. = FALSE)
     return(plot)
   }
 
@@ -155,7 +147,7 @@ ggplot_add.anno_link_label <- function(object, plot, object_name) {
                       image = get_function("ggimage", "geom_image"))
 
   type <- get_type(plot$data)
-  data <- attr(layout_tbl, "node.pos")
+  data <- attr(link_tbl, "node.pos")
 
   if(!is.null(object$is.start)) {
     is.start <- NULL
@@ -179,7 +171,9 @@ ggplot_add.anno_link_label <- function(object, plot, object_name) {
       stop("Did you forget to set the 'image' parameter?", call. = FALSE)
     }
     aes_string(x = "x", y = "y")
-  } else aes_string(x = "x", y = "y", label = "label", hjust = "hjust")
+  } else {
+    aes_string(x = "x", y = "y", label = "label", hjust = "hjust")
+  }
   mapping <- aes_modify(mapping, object$mapping)
 
   args <- list(mapping = mapping, data = data, inherit.aes = FALSE,
