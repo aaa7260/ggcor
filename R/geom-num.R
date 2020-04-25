@@ -63,6 +63,12 @@ geom_number <- function(mapping = NULL, data = NULL,
 }
 
 #' @rdname geom_number
+#' @export
+geom_number2 <- function(...) {
+  structure(.Data = list(...), class = "geom_number2")
+}
+
+#' @rdname geom_number
 #' @format NULL
 #' @usage NULL
 #' @export

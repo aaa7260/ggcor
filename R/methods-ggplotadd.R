@@ -260,6 +260,22 @@ ggplot_add.geom_mark2 <- function(object, plot, object_name) {
 
 #' @importFrom ggplot2 ggplot_add
 #' @export
+ggplot_add.geom_number2 <- function(object, plot, object_name) {
+  args <- plot$plot_env$polar.args
+  if(!isTRUE(plot$plot_env$circular)) {
+    warning("`geom_number2()` only supports for polar coordinates, ",
+            "use `geom_number()` instead.", call. = FALSE)
+    obj <- do.call(geom_number, object)
+  } else {
+    angle <- args$angle[plot$data$.row.id] + 90 - 180 / diff(args$ylim)
+    obj <- do.call(geom_number, modifyList(object, list(angle = angle)))
+  }
+
+  ggplot_add(obj, plot)
+}
+
+#' @importFrom ggplot2 ggplot_add
+#' @export
 ggplot_add.anno_tree <- function(object, plot, object_name) {
   args <- plot$plot_env$polar.args
   pdata <- plot$data

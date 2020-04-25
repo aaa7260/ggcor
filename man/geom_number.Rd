@@ -3,6 +3,7 @@
 \docType{data}
 \name{geom_number}
 \alias{geom_number}
+\alias{geom_number2}
 \alias{GeomNumber}
 \title{Format number Geom}
 \usage{
@@ -20,6 +21,8 @@ geom_number(
   show.legend = NA,
   inherit.aes = TRUE
 )
+
+geom_number2(...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
