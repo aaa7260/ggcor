@@ -8,6 +8,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
+  fig.align = "center",
   out.width = "100%"
 )
 ```
@@ -17,7 +18,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
-The goal of `ggcor` is to to provide a set of functions that be used to visualize simply and directly a correlation matrix based on 'ggplot2'.
+The goal of `ggcor` is to provide a set of functions that can be used to visualize a correlation matrix quickly.
 
 ## Installation
 
@@ -27,14 +28,12 @@ Now `ggcor` is not on cran, You can install the development version of ggcor fro
 # install.packages("devtools")
 devtools::install_github("houyunhuang/ggcor")
 ```
-## Draw correlation plot quickly
-
-This is a basic example which shows you how to draw correlation plot quickly:
+## Correlation plot
 
 ```{r example01}
 library(ggplot2)
 library(ggcor)
-quickcor(mtcars) + geom_colour()
+quickcor(mtcars) + geom_square()
 quickcor(mtcars, type = "upper") + geom_circle2()
 quickcor(mtcars, cor.test = TRUE) +
   geom_square(data = get_data(type = "lower", show.diag = FALSE)) +
@@ -45,31 +44,24 @@ quickcor(mtcars, cor.test = TRUE) +
 ## Mantel test plot
 
 ```{r example03,fig.height=4.6}
-library(vegan)
 library(dplyr)
-data("varechem")
-data("varespec")
-set.seed(20191224)
+data("varechem", package = "vegan")
+data("varespec", package = "vegan")
 
-corr <- fortify_cor(varechem, cor.test = TRUE, type = "upper")
 mantel <- mantel_test(varespec, varechem,
                       spec.select = list(Spec01 = 1:7,
                                          Spec02 = 8:18,
                                          Spec03 = 19:37,
                                          Spec04 = 38:44)) %>% 
-  combination_layout(cor_tbl = corr) %>% 
-  mutate(xend = xend + 1,
-         rd = cut(r, breaks = c(-Inf, 0.2, 0.4, Inf),
+  mutate(rd = cut(r, breaks = c(-Inf, 0.2, 0.4, Inf),
                   labels = c("< 0.2", "0.2 - 0.4", ">= 0.4")),
          pd = cut(p.value, breaks = c(-Inf, 0.01, 0.05, Inf),
                   labels = c("< 0.01", "0.01 - 0.05", ">= 0.05")))
 
-options(ggcor.link.inherit.aes = FALSE)
-quickcor(corr) + geom_square() +
-  geom_link(aes(colour = pd, size = rd), data = mantel,
-            curvature = 0.05) +
-  geom_link_point(data = mantel) +
-  geom_start_label(aes(x = x - 0.5), hjust = 1, data = mantel) +
+quickcor(varechem, type = "upper") +
+  geom_square() +
+  anno_link(aes(colour = pd, size = rd), data = mantel) +
+  anno_link_label(geom = "label") +
   scale_size_manual(values = c(0.5, 1, 2)) +
   scale_colour_manual(values = c("#D95F02", "#1B9E77", "#A2A2A288")) +
   guides(size = guide_legend(title = "Mantel's r",
@@ -78,33 +70,27 @@ quickcor(corr) + geom_square() +
          colour = guide_legend(title = "Mantel's p", 
                                override.aes = list(size = 3), 
                                order = 1),
-         fill = guide_colorbar(title = "Pearson's r", order = 3)) +
-  expand_axis(x = -6)
+         fill = guide_colorbar(title = "Pearson's r", order = 3))
 ```
 
-# network
+# Circular heatmap
 
-```{r}
-library(tidygraph)
-library(ggraph)
-net <- fast_correlate(varespec) %>% 
-  as_tbl_graph(r.thres = 0.5, p.thres = 0.05) %>% 
-  mutate(degree = tidygraph::centrality_degree(mode = "all"))
-
-ggraph(net, "circle") + 
-  geom_edge_fan(aes(edge_width = r, edge_linetype = r < 0), 
-                edge_colour = "grey80", show.legend = FALSE) +
-  geom_node_point(aes(size = degree, colour = name), 
-                  show.legend = FALSE) +
-  geom_node_text(aes(x = x * 1.08, y = y * 1.08, 
-                     angle = -((-node_angle(x, y) + 90) %% 180) + 90, 
-                     label = name), size = 4, hjust= "outward",
-                 show.legend = FALSE)  +
-  scale_edge_color_gradientn(colours = c("blue", "red")) +
-  scale_edge_width_continuous(range = c(0.1, 1)) +
-  coord_fixed(xlim = c(-1.5, 1.5), ylim = c(-1.5, 1.5)) +
-  theme_graph()
-
+```{r,fig.height=8}
+rand_correlate(100, 8) %>% ## require ambient packages
+  quickcor(circular = TRUE, cluster = TRUE) +
+  geom_colour(colour = "white", size = 0.125) +
+  anno_tree()
 ```
 
+# General heatmap
 
+```{r,fig.height=8}
+cols <- RColorBrewer::brewer.pal(4, "Set2")
+rand_dataset(vars = 8) %>% ## require ambient packages
+  gcor_tbl("var", cluster = TRUE) %>% 
+  quickcor(circular = TRUE, cluster = TRUE, open = 30, 
+           bcols = list(row.bcols = cols)) +
+  geom_colour(aes(fill = var), colour = NA) +
+  anno_tree() +
+  scale_fill_viridis_c()
+```
