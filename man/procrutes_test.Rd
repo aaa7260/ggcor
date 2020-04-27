@@ -25,13 +25,13 @@ procrutes_test(
 
 \item{group}{vector for rows grouping.}
 
-\item{...}{extra params for \code{procrutes.fun}.}
+\item{...}{extra params passing to \code{procrutes.fun}.}
 
 \item{procrutes.fun}{string, name of procrutes test function.
  \itemize{
-   \item{\code{"protest"} will use \code{vegan::protest} (default).}
-   \item{\code{"procuste.randtest"} will use \code{ade4::procuste.randtest}.}
-   \item{\code{"procuste.rtest"} will use \code{ade4::procuste.rtest}.}
+   \item{\code{"protest"} will use \code{vegan::protest()} (default).}
+   \item{\code{"procuste.randtest"} will use \code{ade4::procuste.randtest()}.}
+   \item{\code{"procuste.rtest"} will use \code{ade4::procuste.rtest()}.}
 }}
 
 \item{spec.select, env.select}{NULL (default), numeric or character vector index of columns.}
@@ -63,10 +63,6 @@ set.seed(20191224)
 sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
 fortify_procrutes(varespec, varechem, group = sam_grp)
 }
-}
-\seealso{
-\code{\link[vegan]{protest}}, \code{\link[ade4]{procuste.rtest}},
-\code{\link[ade4]{procuste.randtest}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

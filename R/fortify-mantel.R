@@ -4,11 +4,12 @@
 #' @param group vector for rows grouping.
 #' @param env.ctrl NULL (default), data frame or named list of data frame.
 #' @param mantel.fun string, function of mantel test.
-#' @param ... extra params for \code{\link[ggcor]{mantel_test}}.
+#' @param ... extra params for \code{\link{mantel_test}}.
+#' @return a data.frame.
 #' @importFrom dplyr %>% mutate
 #' @importFrom purrr pmap_dfr
 #' @rdname fortify_mantel
-#' @examples
+#' @examples \dontrun{
 #' library(vegan)
 #' data("varespec")
 #' data("varechem")
@@ -20,7 +21,8 @@
 #' set.seed(20191224)
 #' sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
 #' fortify_mantel(varespec, varechem, group = sam_grp)
-#' @seealso \code{\link[ggcor]{mantel_test}}.
+#' }
+#' @seealso \code{\link{mantel_test}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 fortify_mantel <- function(spec,
@@ -79,23 +81,22 @@ fortify_mantel <- function(spec,
 #' @param env.ctrl NULL (default), data frame.
 #' @param mantel.fun string, function of mantel test.
 #'    \itemize{
-#'      \item{\code{"mantel"} will use \code{vegan::mantel} (default).}
-#'      \item{\code{"mantel.randtest"} will use \code{ade4::mantel.randtest}.}
-#'      \item{\code{"mantel.rtest"} will use \code{ade4::mantel.rtest}.}
-#'      \item{\code{"mantel.partial"} will use \code{vegan::mantel.partial} (default).}
+#'      \item{\code{"mantel"} will use \code{vegan::mantel()} (default).}
+#'      \item{\code{"mantel.randtest"} will use \code{ade4::mantel.randtest()}.}
+#'      \item{\code{"mantel.rtest"} will use \code{ade4::mantel.rtest()}.}
+#'      \item{\code{"mantel.partial"} will use \code{vegan::mantel.partial()} (default).}
 #'   }
 #' @param spec.select,env.select NULL (default), numeric or character vector index of columns.
-#' @param spec.dist.method dissimilarity index (default is 'bray'), pass to \code{method}
-#'     params of \code{\link[vegan]{vegdist}}.
-#' @param env.dist.method dissimilarity index (default is euclidean'), pass to \code{method}
-#'     params of \code{\link[vegan]{vegdist}}.
-#' @param ... extra params for \code{mantel.fun}.
-#' @importFrom vegan vegdist mantel mantel.partial
-#' @importFrom ade4 mantel.randtest mantel.rtest
+#' @param spec.dist.method dissimilarity index (default is 'bray'), passing to \code{method}
+#'     params of \code{vegan::vegdist}.
+#' @param env.dist.method dissimilarity index (default is euclidean'), passing to \code{method}
+#'     params of \code{vegan::vegdist()}.
+#' @param ... extra params passing to \code{mantel.fun}.
+#' @return a data.frame.
 #' @importFrom dplyr %>%
 #' @importFrom purrr map map2
 #' @rdname mantel_test
-#' @examples
+#' @examples \dontrun{
 #' library(vegan)
 #' data("varespec")
 #' data("varechem")
@@ -110,8 +111,7 @@ fortify_mantel <- function(spec,
 #' mantel_test(varespec, varechem, env.ctrl = varechem[10:14],
 #'   mantel.fun = "mantel.partial",
 #'   env.select = as.list(setNames(nm, nm)))
-#' @seealso \code{\link[vegan]{vegdist}}, \code{\link[vegan]{mantel}},
-#'     \code{\link[ade4]{mantel.rtest}}, \code{\link[ade4]{mantel.randtest}}.
+#' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 mantel_test <- function(spec,
@@ -124,6 +124,13 @@ mantel_test <- function(spec,
                         env.dist.method = "euclidean",
                         ...)
 {
+  .FUN <- switch (mantel.fun,
+    mantel = get_function("vegan", "mantel"),
+    mantel.partial = get_function("vegan", "mantel.partial"),
+    mantel.randtest = get_function("ade4", "mantel.randtest"),
+    mantel.rtest = get_function("ade4", "mantel.rtest"),
+    stop("Invalid 'mantel.fun' parameter.", call. = FALSE)
+  )
   if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
   if(!is.data.frame(env))
@@ -162,12 +169,11 @@ mantel_test <- function(spec,
     if(mantel.fun == "mantel.partial") {
       env.ctrl.dist <- vegan::vegdist(env.ctrl, method = env.dist.method)
     }
-    switch (mantel.fun,
-            mantel.partial  = vegan::mantel.partial(spec.dist, env.dist, env.ctrl.dist, ...),
-            mantel          = vegan::mantel(spec.dist, env.dist, ...),
-            mantel.randtest = ade4::mantel.randtest(spec.dist, env.dist, ...),
-            mantel.rtest    = ade4::mantel.rtest(spec.dist, env.dist, ...),
-    )
+    if(mantel.fun == "mantel.partial") {
+      .FUN(spec.dist, env.dist, env.ctrl.dist, ...)
+    } else {
+      .FUN(spec.dist, env.dist, ...)
+    }
   }) %>% extract_mantel(mantel.fun)
 
     structure(.Data = tibble::tibble(spec = spec.name,

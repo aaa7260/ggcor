@@ -22,11 +22,10 @@ Encoding: UTF-8
 Depends:
     R (>= 3.5.0)
 Imports:
-    grid,
-    ade4,
     dplyr,
     digest,
     ggplot2 (>= 3.0.0),
+    grid,
     igraph,
     purrr,
     RColorBrewer,
@@ -36,9 +35,9 @@ Imports:
     stats,
     tibble,
     tidygraph,
-    utils,
-    vegan
+    utils
 Suggests:
+    ade4,
     ambient,
     dendextend,
     ggimage,
@@ -47,6 +46,7 @@ Suggests:
     latex2exp,
     rmarkdown,
     picante,
+    vegan,
     WGCNA
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr

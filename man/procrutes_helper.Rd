@@ -20,12 +20,8 @@ dudi_pca(x, ...)
 a matrix.
 }
 \description{
-\code{mono_mds} is used to transform data by \code{\link[vegan]{monoMDS}},
-and \code{dudi_pca} is used to transform data by \code{\link[ade4]{dudi.pca}}.
-}
-\seealso{
-\code{\link[vegan]{vegdist}}, \code{\link[vegan]{monoMDS}},
-\code{\link[ade4]{dudi.pca}}.
+\code{mono_mds} is used to transform data by \code{vegan::monoMDS()},
+and \code{dudi_pca} is used to transform data by \code{ade4::dudi.pca()}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

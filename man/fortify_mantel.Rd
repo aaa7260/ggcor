@@ -22,12 +22,16 @@ fortify_mantel(
 
 \item{mantel.fun}{string, function of mantel test.}
 
-\item{...}{extra params for \code{\link[ggcor]{mantel_test}}.}
+\item{...}{extra params for \code{\link{mantel_test}}.}
+}
+\value{
+a data.frame.
 }
 \description{
 Enhanced encapsulation of the mantel_test function.
 }
 \examples{
+\dontrun{
 library(vegan)
 data("varespec")
 data("varechem")
@@ -40,8 +44,9 @@ set.seed(20191224)
 sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
 fortify_mantel(varespec, varechem, group = sam_grp)
 }
+}
 \seealso{
-\code{\link[ggcor]{mantel_test}}.
+\code{\link{mantel_test}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

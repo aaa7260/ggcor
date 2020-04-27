@@ -5,17 +5,15 @@
 #' @param group vector for rows grouping.
 #' @param procrutes.fun string, name of procrutes test function.
 #'    \itemize{
-#'      \item{\code{"protest"} will use \code{vegan::protest} (default).}
-#'      \item{\code{"procuste.randtest"} will use \code{ade4::procuste.randtest}.}
-#'      \item{\code{"procuste.rtest"} will use \code{ade4::procuste.rtest}.}
+#'      \item{\code{"protest"} will use \code{vegan::protest()} (default).}
+#'      \item{\code{"procuste.randtest"} will use \code{ade4::procuste.randtest()}.}
+#'      \item{\code{"procuste.rtest"} will use \code{ade4::procuste.rtest()}.}
 #'   }
 #' @param spec.select,env.select NULL (default), numeric or character vector index of columns.
 #' @param spec.pre.fun,env.pre.fun string, function name of transform the input data.
 #' @param spec.pre.params,env.pre.params list, extra parameters for \code{spec/env.pre.fun}.
-#' @param ... extra params for \code{procrutes.fun}.
+#' @param ... extra params passing to \code{procrutes.fun}.
 #' @return a data frame.
-#' @importFrom vegan protest
-#' @importFrom ade4 procuste.randtest procuste.rtest
 #' @importFrom dplyr %>% mutate
 #' @importFrom purrr map map2 pmap_dfr
 #' @rdname procrutes_test
@@ -34,8 +32,6 @@
 #' sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
 #' fortify_procrutes(varespec, varechem, group = sam_grp)
 #' }
-#' @seealso \code{\link[vegan]{protest}}, \code{\link[ade4]{procuste.rtest}},
-#' \code{\link[ade4]{procuste.randtest}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 fortify_procrutes <- function(spec,
@@ -85,8 +81,12 @@ procrutes_test <- function(spec,
                            env.pre.params = spec.pre.params,
                            ...)
 {
-  procrutes.fun <- match.arg(procrutes.fun, c("protest", "procuste.randtest", "procuste.rtest"))
-
+  .FUN <- switch (procrutes.fun,
+                  protest = get_function("vegan", "protest"),
+                  procuste.randtest = get_function("ade4", "procuste.randtest"),
+                  procuste.rtest = get_function("ade4", "procuste.rtest"),
+                  stop("Invalid 'procrutes.fun' parameter.", call. = FALSE)
+  )
   if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
   if(!is.data.frame(env))
@@ -128,11 +128,7 @@ procrutes_test <- function(spec,
       }
     }
 
-    switch (procrutes.fun,
-            protest           = vegan::protest(.x, .y, ...),
-            procuste.randtest = ade4::procuste.randtest(.x, .y, ...),
-            procuste.rtest    = ade4::procuste.rtest(.x, .y, ...),
-    )
+    .FUN(.x, .y, ...)
   }) %>% extract_procrutes(procrutes.fun)
 
   structure(.Data = tibble::tibble(spec = spec.name,
@@ -144,28 +140,29 @@ procrutes_test <- function(spec,
 }
 
 #' Helper functions for procrutes test
-#' @description \code{mono_mds} is used to transform data by \code{\link[vegan]{monoMDS}},
-#' and \code{dudi_pca} is used to transform data by \code{\link[ade4]{dudi.pca}}.
+#' @description \code{mono_mds} is used to transform data by \code{vegan::monoMDS()},
+#' and \code{dudi_pca} is used to transform data by \code{ade4::dudi.pca()}.
 #' @param x a data frame.
 #' @param method the distance measure to be used.
 #' @param ... extra parameters
 #' @return a matrix.
 #' @rdname procrutes_helper
-#' @seealso \code{\link[vegan]{vegdist}}, \code{\link[vegan]{monoMDS}},
-#' \code{\link[ade4]{dudi.pca}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 mono_mds <- function(x,
                      method="bray",
                      ...) {
-  d <- vegan::vegdist(x, method = method)
-  vegan::monoMDS(d, ...)
+  vegdist <- get_function("vegan", "vegdist")
+  monoMDS <- get_function("vegan", "monoMDS")
+  d <- vegdist(x, method = method)
+  monoMDS(d, ...)
 }
 #' @rdname procrutes_helper
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 dudi_pca <- function(x, ...) {
-  pca <- ade4::dudi.pca(df = x, scannf = FALSE, ...)
+  dudi.pca <- get_function("ade4", "dudi.pca")
+  pca <- dudi.pca(df = x, scannf = FALSE, ...)
   pca$tab
 }
 

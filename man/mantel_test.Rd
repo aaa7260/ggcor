@@ -23,27 +23,31 @@ mantel_test(
 
 \item{mantel.fun}{string, function of mantel test.
  \itemize{
-   \item{\code{"mantel"} will use \code{vegan::mantel} (default).}
-   \item{\code{"mantel.randtest"} will use \code{ade4::mantel.randtest}.}
-   \item{\code{"mantel.rtest"} will use \code{ade4::mantel.rtest}.}
-   \item{\code{"mantel.partial"} will use \code{vegan::mantel.partial} (default).}
+   \item{\code{"mantel"} will use \code{vegan::mantel()} (default).}
+   \item{\code{"mantel.randtest"} will use \code{ade4::mantel.randtest()}.}
+   \item{\code{"mantel.rtest"} will use \code{ade4::mantel.rtest()}.}
+   \item{\code{"mantel.partial"} will use \code{vegan::mantel.partial()} (default).}
 }}
 
 \item{spec.select, env.select}{NULL (default), numeric or character vector index of columns.}
 
-\item{spec.dist.method}{dissimilarity index (default is 'bray'), pass to \code{method}
-params of \code{\link[vegan]{vegdist}}.}
+\item{spec.dist.method}{dissimilarity index (default is 'bray'), passing to \code{method}
+params of \code{vegan::vegdist}.}
 
-\item{env.dist.method}{dissimilarity index (default is euclidean'), pass to \code{method}
-params of \code{\link[vegan]{vegdist}}.}
+\item{env.dist.method}{dissimilarity index (default is euclidean'), passing to \code{method}
+params of \code{vegan::vegdist()}.}
 
-\item{...}{extra params for \code{mantel.fun}.}
+\item{...}{extra params passing to \code{mantel.fun}.}
+}
+\value{
+a data.frame.
 }
 \description{
 Perform mantel test quickly and tidy up the data to
     data frame.
 }
 \examples{
+\dontrun{
 library(vegan)
 data("varespec")
 data("varechem")
@@ -59,9 +63,6 @@ mantel_test(varespec, varechem, env.ctrl = varechem[10:14],
   mantel.fun = "mantel.partial",
   env.select = as.list(setNames(nm, nm)))
 }
-\seealso{
-\code{\link[vegan]{vegdist}}, \code{\link[vegan]{mantel}},
-    \code{\link[ade4]{mantel.rtest}}, \code{\link[ade4]{mantel.randtest}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
