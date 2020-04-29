@@ -62,9 +62,9 @@ geom_links2 <- function(mapping = NULL,
 #' @export
 GeomLinks2 <- ggproto(
   "GeomLinks2", GeomCurve,
-  draw_panel = function(self, data, panel_params, coord, node.shape = 21,
-                        node.colour = "blue", node.fill = "red", node.size = 2,
-                        curvature = 0, angle = 90, ncp = 5, arrow = NULL,
+  draw_panel = function(self, data, panel_params, coord, rm.dup = TRUE,
+                        node.shape = 21, node.colour = "blue", node.fill = "red",
+                        node.size = 2, curvature = 0, angle = 90, ncp = 5, arrow = NULL,
                         arrow.fill = NULL, lineend = "butt", na.rm = FALSE) {
     aesthetics <- setdiff(names(data), c("x", "y", "xend", "yend", "colour",
                                          "fill", "size", "linetype"))
@@ -92,16 +92,23 @@ GeomLinks2 <- ggproto(
            shape = end.shape,
            size = end.size,
            stroke = 0.5))
+    if(isTRUE(rm.dup)) {
+      start.data <- cbind(start.data, data[aesthetics])[!duplicated(start.data), , drop = FALSE]
+      end.data <- cbind(end.data, data[aesthetics])[!duplicated(end.data), , drop = FALSE]
+    } else {
+      start.data <- cbind(start.data, data[aesthetics])
+      end.data <- cbind(end.data, data[aesthetics])
+    }
     ggname(
-      "geom_link2",
+      "geom_links2",
       grid::gTree(
         children = grid::gList(
           GeomCurve$draw_panel(data, panel_params, coord, curvature = curvature,
                                angle = angle, ncp = ncp, arrow = arrow,
                                arrow.fill = arrow.fill, lineend = lineend,
                                na.rm = na.rm),
-          GeomPoint$draw_panel(cbind(start.data, data[aesthetics]), panel_params, coord),
-          GeomPoint$draw_panel(cbind(end.data, data[aesthetics]), panel_params, coord)
+          GeomPoint$draw_panel(start.data, panel_params, coord),
+          GeomPoint$draw_panel(end.data, panel_params, coord)
         )
       )
     )
