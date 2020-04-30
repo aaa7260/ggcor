@@ -119,20 +119,14 @@ cor_tbl <- function(corr,
     row.ord <- 1:length(row.names)
     col.ord <- 1:length(col.names)
     if(!is.null(row.order)) {
-      row.ord <- get_order(row.order)
-      if(is.character(row.order)) {
-        row.ord <- row.ord[row.names]
-      }
+      row.ord <- get_order(row.order, name = row.names)
       if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram")) {
         row.hc <- row.order
       }
     }
 
     if(!is.null(col.order)) {
-      col.ord <- get_order(col.order)
-      if(is.character(col.order)) {
-        col.ord <- col.ord[col.names]
-      }
+      col.ord <- get_order(col.order, name = col.names)
       if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram")) {
         col.hc <- col.order
       }

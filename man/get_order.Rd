@@ -12,7 +12,7 @@ get_order(x, ...)
 
 \method{get_order}{numeric}(x, ...)
 
-\method{get_order}{character}(x, ...)
+\method{get_order}{character}(x, name = NULL, ...)
 
 \method{get_order}{hclust}(x, ...)
 
@@ -22,12 +22,18 @@ get_order(x, ...)
 \item{x}{any \code{R} object.}
 
 \item{...}{ignore.}
+
+\item{name}{old name.}
 }
 \value{
 a character or numeric vector.
 }
 \description{
 Extract order
+}
+\examples{
+hc <- utils::hclust(dist(mtcars))
+get_order(hc)
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

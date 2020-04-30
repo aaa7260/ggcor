@@ -12,8 +12,7 @@ expand_axis <- function(x = NULL, y = NULL)
   reset_axis_lim <- function(p) {
     if(!is.null(x) && !is.numeric(x)) x <- NULL
     if(!is.null(y) && !is.numeric(y)) y <- NULL
-    if(is.null(x) && is.null(y))
-      return(p)
+    if(is.null(x) && is.null(y)) return(p)
     x.scale <- p$scales$get_scales("x")
     y.scale <- p$scales$get_scales("y")
     scale.x.limits <- if(!is.null(x.scale)) {
