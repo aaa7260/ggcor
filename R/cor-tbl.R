@@ -187,6 +187,7 @@ cor_tbl <- function(corr,
 #' @rdname gcor_tbl
 #' @examples
 #' gcor_tbl(mtcars)
+#' gcor_tbl(mtcars, "var")
 #' @export
 gcor_tbl <- function(x,
                      name = NULL,

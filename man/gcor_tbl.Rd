@@ -23,4 +23,5 @@ Create a general cor_tbl object
 }
 \examples{
 gcor_tbl(mtcars)
+gcor_tbl(mtcars, "var")
 }
