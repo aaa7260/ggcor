@@ -7,6 +7,7 @@
 #' @param start.var,end.var character to specify which variable is the starting
 #' points and which is the ending points. if the variable is not character, it
 #' is forced to be converted.
+#' @param start.name names of start point.
 #' @return a data frame.
 #' @importFrom rlang enquo eval_tidy set_names quo_is_null
 #' @importFrom dplyr filter
@@ -25,6 +26,7 @@
 link_tbl <- function(data,
                      cor_tbl,
                      start.var = NULL,
+                     start.name = NULL,
                      end.var = NULL)
 {
   if(!is.data.frame(data))
@@ -54,7 +56,7 @@ link_tbl <- function(data,
     start <- as.character(start)
   if(!is.character(end))
     end <- as.character(end)
-  spec.name <- unique(start[!is.na(start)])
+  spec.name <- start.name[!is.na(start.name)] %||% unique(start[!is.na(start)])
   n <- length(row.names)
   m <- length(spec.name)
   if(type == "full") {

@@ -5,7 +5,14 @@
 \alias{anno_link_label}
 \title{Special annotation function for correlation link plot}
 \usage{
-anno_link(mapping = NULL, data, start.var = NULL, end.var = NULL, ...)
+anno_link(
+  mapping = NULL,
+  data,
+  start.var = NULL,
+  start.name = NULL,
+  end.var = NULL,
+  ...
+)
 
 anno_link_label(
   mapping = NULL,
