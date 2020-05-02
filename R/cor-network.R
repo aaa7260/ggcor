@@ -13,7 +13,7 @@
 #' @param weight NULL (default) or name of column in edges which will be renamed
 #'     to "weight".
 #' @param r.thres a numeric value.
-#' @param r.absolute logical value (defaults to TRUE).
+#' @param r.abs logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
 #' @param val.type type return value:
 #'   \itemize{
@@ -52,7 +52,7 @@ cor_network <- function(corr,
                         simplify = TRUE,
                         weight = NULL,
                         r.thres = 0.6,
-                        r.absolute = TRUE,
+                        r.abs = TRUE,
                         p.thres = 0.05,
                         val.type = "tbl_graph")
 {
@@ -74,7 +74,7 @@ cor_network <- function(corr,
     edges <- dplyr::filter(edges, lower.tri(corr))
   }
   edges <- if(is.finite(r.thres)) {
-    if(r.absolute) {
+    if(r.abs) {
       if(is.null(p.value) || !is.finite(p.thres)) {
         dplyr::filter(edges, abs(r) > r.thres)
       } else {

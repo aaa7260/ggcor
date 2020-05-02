@@ -23,7 +23,7 @@ as_cor_network(x, ...)
   simplify = TRUE,
   weight = NULL,
   r.thres = 0.6,
-  r.absolute = TRUE,
+  r.abs = TRUE,
   p.thres = 0.05,
   ...
 )
@@ -63,7 +63,7 @@ to "weight".}
 
 \item{r.thres}{a numeric value.}
 
-\item{r.absolute}{logical value (defaults to TRUE).}
+\item{r.abs}{logical value (defaults to TRUE).}
 
 \item{p.thres}{a numeric value.}
 }

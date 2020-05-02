@@ -7,7 +7,7 @@
 #' @param weight NULL (default) or name of column in edges which will be renamed
 #'     to "weight".
 #' @param r.thres a numeric value.
-#' @param r.absolute logical value (defaults to TRUE).
+#' @param r.abs logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
 #' @param ... extra params passing to \code{\link[ggcor]{cor_network}}.
 #' @return a cor_network object.
@@ -32,7 +32,7 @@ as_cor_network.cor_tbl <- function(x,
                                    simplify = TRUE,
                                    weight = NULL,
                                    r.thres = 0.6,
-                                   r.absolute = TRUE,
+                                   r.abs = TRUE,
                                    p.thres = 0.05,
                                    ...)
 {
@@ -44,13 +44,13 @@ as_cor_network.cor_tbl <- function(x,
   } else {
     edges <- if(is.finite(r.thres)) {
       if("p.value" %in% names(x) && is.finite(p.thres)) {
-        if(r.absolute) {
+        if(r.abs) {
           dplyr::filter(x, abs(r) > r.thres, p.value < p.thres)
         } else {
           dplyr::filter(x, r > r.thres, p.value < p.thres)
         }
       } else {
-        if(r.absolute) {
+        if(r.abs) {
           dplyr::filter(x, abs(r) > r.thres)
         } else {
           dplyr::filter(x, r > r.thres)
