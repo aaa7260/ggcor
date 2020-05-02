@@ -6,7 +6,7 @@
 #' @return a character or numeric vector.
 #' @rdname get_order
 #' @examples
-#' hc <- utils::hclust(dist(mtcars))
+#' hc <- hclust(dist(mtcars))
 #' get_order(hc)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export

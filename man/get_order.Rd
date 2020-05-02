@@ -32,7 +32,7 @@ a character or numeric vector.
 Extract order
 }
 \examples{
-hc <- utils::hclust(dist(mtcars))
+hc <- hclust(dist(mtcars))
 get_order(hc)
 }
 \author{
