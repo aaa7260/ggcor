@@ -2,11 +2,13 @@
 % Please edit documentation in R/fortify-mantel.R
 \name{mantel_test}
 \alias{mantel_test}
-\title{Mantel and partial mantel test for dissimilarity matrices}
+\alias{fortify_mantel}
+\title{Mantel test}
 \usage{
 mantel_test(
   spec,
   env,
+  group = NULL,
   env.ctrl = NULL,
   mantel.fun = "mantel",
   spec.select = NULL,
@@ -18,6 +20,8 @@ mantel_test(
 }
 \arguments{
 \item{spec, env}{data frame object.}
+
+\item{group}{vector for grouping the rows.}
 
 \item{env.ctrl}{NULL (default), data frame.}
 
@@ -43,26 +47,25 @@ params of \code{vegan::vegdist()}.}
 a data.frame.
 }
 \description{
-Perform mantel test quickly and tidy up the data to
-    data frame.
+Mantel and partial mantel test for dissimilarity matrices
 }
 \examples{
 \dontrun{
 library(vegan)
 data("varespec")
 data("varechem")
-mantel_test(varespec, varechem)
-mantel_test(varespec, varechem, mantel.fun = "mantel.randtest")
-mantel_test(varespec, varechem, mantel.fun = "mantel.randtest",
-  spec.select = list(spec01 = 1:6, spec02 = 7:12))
-mantel_test(varespec, varechem, mantel.fun = "mantel.randtest",
-  spec.select = list(spec01 = 1:6, spec02 = 7:12),
-  env.select = list(env01 = 1:4, env02 = 5:14))
-nm <- names(varechem[1:9])
-mantel_test(varespec, varechem, env.ctrl = varechem[10:14],
-  mantel.fun = "mantel.partial",
-  env.select = as.list(setNames(nm, nm)))
+mantel_test(varespec, varechem,
+  spec.select = list(spec01 = 1:5, spec02 = 6:12))
+mantel_test(varespec, varechem,
+  spec.select = list(spec01 = 1:5, spec02 = 6:12),
+  env.select = list(env01 = 1:5, env02 = 6:10, env03 = 11:14))
+set.seed(20191224)
+sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
+mantel_test(varespec, varechem, group = sam_grp)
 }
+}
+\seealso{
+\code{\link{mantel_test}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

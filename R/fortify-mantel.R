@@ -1,36 +1,51 @@
-#' Tidy for mantel tests
-#' @description Enhanced encapsulation of the mantel_test function.
+#' Mantel and partial mantel test for dissimilarity matrices
+#' @title Mantel test
 #' @param spec,env data frame object.
-#' @param group vector for rows grouping.
-#' @param env.ctrl NULL (default), data frame or named list of data frame.
+#' @param group vector for grouping the rows.
+#' @param env.ctrl NULL (default), data frame.
 #' @param mantel.fun string, function of mantel test.
-#' @param ... extra params for \code{\link{mantel_test}}.
+#'    \itemize{
+#'      \item{\code{"mantel"} will use \code{vegan::mantel()} (default).}
+#'      \item{\code{"mantel.randtest"} will use \code{ade4::mantel.randtest()}.}
+#'      \item{\code{"mantel.rtest"} will use \code{ade4::mantel.rtest()}.}
+#'      \item{\code{"mantel.partial"} will use \code{vegan::mantel.partial()} (default).}
+#'   }
+#' @param spec.select,env.select NULL (default), numeric or character vector index of columns.
+#' @param spec.dist.method dissimilarity index (default is 'bray'), passing to \code{method}
+#'     params of \code{vegan::vegdist}.
+#' @param env.dist.method dissimilarity index (default is euclidean'), passing to \code{method}
+#'     params of \code{vegan::vegdist()}.
+#' @param ... extra params passing to \code{mantel.fun}.
 #' @return a data.frame.
 #' @importFrom dplyr %>% mutate
 #' @importFrom purrr pmap_dfr
-#' @rdname fortify_mantel
+#' @rdname mantel_test
 #' @examples \dontrun{
 #' library(vegan)
 #' data("varespec")
 #' data("varechem")
-#' fortify_mantel(varespec, varechem,
+#' mantel_test(varespec, varechem,
 #'   spec.select = list(spec01 = 1:5, spec02 = 6:12))
-#' fortify_mantel(varespec, varechem,
+#' mantel_test(varespec, varechem,
 #'   spec.select = list(spec01 = 1:5, spec02 = 6:12),
 #'   env.select = list(env01 = 1:5, env02 = 6:10, env03 = 11:14))
 #' set.seed(20191224)
 #' sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
-#' fortify_mantel(varespec, varechem, group = sam_grp)
+#' mantel_test(varespec, varechem, group = sam_grp)
 #' }
 #' @seealso \code{\link{mantel_test}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-fortify_mantel <- function(spec,
-                           env,
-                           group = NULL,
-                           env.ctrl = NULL, # named list if grouped
-                           mantel.fun = "mantel",
-                           ...)
+mantel_test <- function(spec,
+                        env,
+                        group = NULL,
+                        env.ctrl = NULL, # named list if grouped
+                        mantel.fun = "mantel",
+                        spec.select = NULL, # a list of index vector
+                        env.select = NULL,
+                        spec.dist.method = "bray",
+                        env.dist.method = "euclidean",
+                        ...)
 {
   if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
@@ -60,61 +75,39 @@ fortify_mantel <- function(spec,
       env.ctrl <- as.list(rep(NA, length(names(spec))))
     }
     df <- suppressMessages(
-      purrr::pmap_dfr(list(spec, env, env.ctrl, as.list(names(spec))),
-                      function(.spec, .env, .env.ctrl, .group) {
-                        mantel_test(.spec, .env, .env.ctrl, mantel.fun, ...) %>%
-                          dplyr::mutate(.group = .group)
-                      })
-    )
+      purrr::pmap_dfr(
+        list(spec, env, env.ctrl, as.list(names(spec))),
+        function(.spec, .env, .env.ctrl, .group) {
+          .mantel_test(spec = .spec, env = .env, env.ctrl = .env.ctrl,
+                       mantel.fun = mantel.fun, spec.select = spec.select,
+                       env.select = env.select, spec.dist.method = spec.dist.method,
+                       env.dist.method = env.dist.method, ...) %>%
+            dplyr::mutate(.group = .group)
+          })
+      )
   } else {
-    df <- mantel_test(spec, env, env.ctrl, mantel.fun, ...)
+    df <- .mantel_test(spec = spec, env = env, env.ctrl = env.ctrl,
+                       mantel.fun = mantel.fun, spec.select = spec.select,
+                       env.select = env.select, spec.dist.method = spec.dist.method,
+                       env.dist.method = env.dist.method, ...)
   }
   grouped <- if(!is.null(group)) TRUE else FALSE
   attr(df, "grouped") <- grouped
   df
 }
 
-#' Mantel and partial mantel test for dissimilarity matrices
-#' @description Perform mantel test quickly and tidy up the data to
-#'     data frame.
-#' @param spec,env data frame object.
-#' @param env.ctrl NULL (default), data frame.
-#' @param mantel.fun string, function of mantel test.
-#'    \itemize{
-#'      \item{\code{"mantel"} will use \code{vegan::mantel()} (default).}
-#'      \item{\code{"mantel.randtest"} will use \code{ade4::mantel.randtest()}.}
-#'      \item{\code{"mantel.rtest"} will use \code{ade4::mantel.rtest()}.}
-#'      \item{\code{"mantel.partial"} will use \code{vegan::mantel.partial()} (default).}
-#'   }
-#' @param spec.select,env.select NULL (default), numeric or character vector index of columns.
-#' @param spec.dist.method dissimilarity index (default is 'bray'), passing to \code{method}
-#'     params of \code{vegan::vegdist}.
-#' @param env.dist.method dissimilarity index (default is euclidean'), passing to \code{method}
-#'     params of \code{vegan::vegdist()}.
-#' @param ... extra params passing to \code{mantel.fun}.
-#' @return a data.frame.
-#' @importFrom dplyr %>%
-#' @importFrom purrr map map2
 #' @rdname mantel_test
-#' @examples \dontrun{
-#' library(vegan)
-#' data("varespec")
-#' data("varechem")
-#' mantel_test(varespec, varechem)
-#' mantel_test(varespec, varechem, mantel.fun = "mantel.randtest")
-#' mantel_test(varespec, varechem, mantel.fun = "mantel.randtest",
-#'   spec.select = list(spec01 = 1:6, spec02 = 7:12))
-#' mantel_test(varespec, varechem, mantel.fun = "mantel.randtest",
-#'   spec.select = list(spec01 = 1:6, spec02 = 7:12),
-#'   env.select = list(env01 = 1:4, env02 = 5:14))
-#' nm <- names(varechem[1:9])
-#' mantel_test(varespec, varechem, env.ctrl = varechem[10:14],
-#'   mantel.fun = "mantel.partial",
-#'   env.select = as.list(setNames(nm, nm)))
-#' }
-#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @format NULL
+#' @usage NULL
 #' @export
-mantel_test <- function(spec,
+fortify_mantel <- function(...) {
+  warning("`fortify_mantel()` is deprecated. ",
+          "Use `mantel_test()` instead.", call. = FALSE)
+  mantel_test(...)
+}
+
+#' @noRd
+.mantel_test <- function(spec,
                         env,
                         env.ctrl = NULL, # named list if grouped
                         mantel.fun = "mantel",
