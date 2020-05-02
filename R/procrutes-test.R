@@ -30,14 +30,21 @@
 #'             env.select = list(env01 = 1:4, env02 = 5:14))
 #' set.seed(20191224)
 #' sam_grp <- sample(paste0("sample", 1:3), 24, replace = TRUE)
-#' fortify_procrutes(varespec, varechem, group = sam_grp)
+#' procrutes_test(varespec, varechem, group = sam_grp)
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-fortify_procrutes <- function(spec,
-                              env,
-                              group = NULL,
-                              ...)
+procrutes_test <- function(spec,
+                           env,
+                           group = NULL,
+                           procrutes.fun = "protest",
+                           spec.select = NULL, # a list of index vector
+                           env.select = NULL,
+                           spec.pre.fun = "identity",
+                           spec.pre.params = list(),
+                           env.pre.fun = spec.pre.fun,
+                           env.pre.params = spec.pre.params,
+                           ...)
 {
   if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
@@ -54,14 +61,23 @@ fortify_procrutes <- function(spec,
     env <- split(env, group, drop = FALSE)
 
     df <- suppressMessages(
-      purrr::pmap_dfr(list(spec, env, as.list(names(spec))),
-                      function(.spec, .env, .group) {
-                        procrutes_test(.spec, .env, ...) %>%
-                          dplyr::mutate(.group = .group)
-                      })
-    )
+      purrr::pmap_dfr(
+        list(spec, env, as.list(names(spec))),
+        function(.spec, .env, .group) {
+          .procrutes_test(spec = .spec, env = .env, procrutes.fun = procrutes.fun,
+                          spec.select = spec.select, env.select = env.select,
+                          spec.pre.fun = spec.pre.fun, spec.pre.params = spec.pre.params,
+                          env.pre.fun = env.pre.fun, env.pre.params = env.pre.params,
+                          ...) %>%
+            dplyr::mutate(.group = .group)
+          })
+      )
   } else {
-    df <- procrutes_test(spec, env, ...)
+    df <- .procrutes_test(spec = spec, env = env, procrutes.fun = procrutes.fun,
+                          spec.select = spec.select, env.select = env.select,
+                          spec.pre.fun = spec.pre.fun, spec.pre.params = spec.pre.params,
+                          env.pre.fun = env.pre.fun, env.pre.params = env.pre.params,
+                          ...)
   }
   grouped <- if(!is.null(group)) TRUE else FALSE
   attr(df, "grouped") <- grouped
@@ -69,17 +85,26 @@ fortify_procrutes <- function(spec,
 }
 
 #' @rdname procrutes_test
+#' @format NULL
+#' @usage NULL
 #' @export
-procrutes_test <- function(spec,
-                           env,
-                           procrutes.fun = "protest",
-                           spec.select = NULL, # a list of index vector
-                           env.select = NULL,
-                           spec.pre.fun = "identity",
-                           spec.pre.params = list(),
-                           env.pre.fun = spec.pre.fun,
-                           env.pre.params = spec.pre.params,
-                           ...)
+fortify_procrutes <- function(...) {
+  warning("`fortify_procrutes()` is deprecated. ",
+          "Use `procrutes_test()` instead.", call. = FALSE)
+  procrutes_test(...)
+}
+
+#' @noRd
+.procrutes_test <- function(spec,
+                            env,
+                            procrutes.fun = "protest",
+                            spec.select = NULL, # a list of index vector
+                            env.select = NULL,
+                            spec.pre.fun = "identity",
+                            spec.pre.params = list(),
+                            env.pre.fun = spec.pre.fun,
+                            env.pre.params = spec.pre.params,
+                            ...)
 {
   .FUN <- switch (procrutes.fun,
                   protest = get_function("vegan", "protest"),
