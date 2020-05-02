@@ -101,7 +101,8 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
 
   mapping <- aes_modify(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
                         object$mapping)
-  params <- modifyList(list(data = data, mapping = mapping), object$params)
+  params <- modifyList(list(data = data, mapping = mapping, inherit.aes = FALSE),
+                       object$params)
 
   xmin <- min(data$x, na.rm = TRUE)
   xmax <- max(data$x, na.rm = TRUE)
