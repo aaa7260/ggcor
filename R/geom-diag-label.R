@@ -19,14 +19,4 @@ geom_diag_label <- function(..., geom = "text", remove.axis = TRUE)
             class = "geom_diag_label")
 }
 
-#' @rdname geom_diag_label
-#' @format NULL
-#' @usage NULL
-#' @export
-add_diag_label <- function(...) {
-  warning("`add_diag_label()` is deprecated. ",
-  "Use `geom_diag_label()` instead.", call. = FALSE)
-  geom_diag_label(...)
-}
-
 

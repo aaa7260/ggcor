@@ -84,16 +84,6 @@ procrutes_test <- function(spec,
   df
 }
 
-#' @rdname procrutes_test
-#' @format NULL
-#' @usage NULL
-#' @export
-fortify_procrutes <- function(...) {
-  warning("`fortify_procrutes()` is deprecated. ",
-          "Use `procrutes_test()` instead.", call. = FALSE)
-  procrutes_test(...)
-}
-
 #' @noRd
 .procrutes_test <- function(spec,
                             env,

@@ -96,16 +96,6 @@ mantel_test <- function(spec,
   df
 }
 
-#' @rdname mantel_test
-#' @format NULL
-#' @usage NULL
-#' @export
-fortify_mantel <- function(...) {
-  warning("`fortify_mantel()` is deprecated. ",
-          "Use `mantel_test()` instead.", call. = FALSE)
-  mantel_test(...)
-}
-
 #' @noRd
 .mantel_test <- function(spec,
                         env,

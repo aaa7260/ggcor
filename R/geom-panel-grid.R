@@ -20,13 +20,3 @@ geom_panel_grid <- function(colour = "grey50",
   structure(.Data = list(colour = colour, size = size),
             class = "geom_panel_grid")
 }
-
-#' @rdname geom_panel_grid
-#' @format NULL
-#' @usage NULL
-#' @export
-add_grid <- function(...) {
-  warning("`add_grid()` is deprecated. ",
-          "Use `geom_panel_grid()` instead.", call. = FALSE)
-  geom_panel_grid(...)
-}

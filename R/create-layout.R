@@ -125,12 +125,3 @@ link_tbl <- function(data,
   structure(.Data = dplyr::bind_cols(edge.pos, data), node.pos = node.pos,
             class = c("link_tbl", class(edge.pos)))
 }
-
-#' @rdname link_tbl
-#' @format NULL
-#' @usage NULL
-#' @export
-add_link <- function(...) {
-  warning("`add_link()` is deprecated. ",
-          "Please see `?anno_link()` for more detail.", call. = FALSE)
-}

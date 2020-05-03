@@ -64,6 +64,7 @@ Collate:
     'cor-test.R'
     'create-layout.R'
     'dendrogram-utils.R'
+    'deprecated.R'
     'display-cor.R'
     'dplyr.R'
     'draw-key.R'
