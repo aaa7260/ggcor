@@ -101,12 +101,13 @@ To cite the `ggcor` package in publications use:
 
 A BibTeX entry for LaTeX users is
 ```
-  @Manual{,
-    title = {ggcor: Extended tools for correlation analysis and visualization},
+  @Manual{
+    entry  = "manual",
+    title  = {ggcor: Extended tools for correlation analysis and visualization},
     author = {Houyun Huang, Lei Zhou, Jian Chen and Taiyun Wei},
-    year = {2020},
-    note = {R package version 0.9.6},
-    url = {https://github.com/houyunhuang/ggcor},
+    year   = {2020},
+    note   = {R package version 0.9.6},
+    url    = {https://github.com/houyunhuang/ggcor},
   }
 ```
 
