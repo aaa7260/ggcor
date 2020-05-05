@@ -53,7 +53,9 @@ is_dplot <- function(.plot) {
 
 #' @rdname dplot_utils
 #' @export
-anno_col_custom <- function(obj, height = 0.2, pos = "top") {
+anno_col_custom <- function(obj,
+                            height = 0.2,
+                            pos = "top") {
   if(!inherits(obj, "gg")) {
     stop("'obj' must be a 'gg' object.", call. = FALSE)
   }
@@ -63,7 +65,9 @@ anno_col_custom <- function(obj, height = 0.2, pos = "top") {
 
 #' @rdname dplot_utils
 #' @export
-anno_row_custom <- function(obj, width = 0.2, pos = "right") {
+anno_row_custom <- function(obj,
+                            width = 0.2,
+                            pos = "right") {
   if(!inherits(obj, "gg")) {
     stop("'obj' must be a 'gg' object.", call. = FALSE)
   }
@@ -72,7 +76,10 @@ anno_row_custom <- function(obj, width = 0.2, pos = "right") {
 }
 
 #' @noRd
-.anno_row <- function(.plot, obj, width = 0.2, pos = "right") {
+.anno_row <- function(.plot,
+                      obj,
+                      width = 0.2,
+                      pos = "right") {
   .plot <- as_dplot(.plot)
   if(!inherits(obj, "gg")) {
     stop("'obj' must be a 'gg' object.", call. = FALSE)
@@ -97,7 +104,10 @@ anno_row_custom <- function(obj, width = 0.2, pos = "right") {
 }
 
 #' @noRd
-.anno_col <- function(.plot, obj, height = 0.2, pos = "top") {
+.anno_col <- function(.plot,
+                      obj,
+                      height = 0.2,
+                      pos = "top") {
   .plot <- as_dplot(.plot)
   if(!inherits(obj, "gg")) {
     stop("'obj' must be a 'gg' object.", call. = FALSE)
@@ -129,8 +139,22 @@ ggplot_add.anno_col_custom <- function(object, plot, object_name) {
 
 #' @rdname dplot_utils
 #' @export
-empty_plot <- function() {
-  ggplot() + geom_blank() + theme_void()
+empty_plot <- function()
+{
+  ggplot() +
+    geom_blank() +
+    theme_void()
+}
+
+#' @noRd
+liner_trans <- function (from, to)
+{
+  force(from)
+  force(to)
+  trans <- function(x) scales::rescale(x, from = from, to = to)
+  inv <- function(x) scales::rescale(x, from = to, to = from)
+  scales::trans_new(paste0("liner-from-", format(from), "-to-", format(to)),
+                    transform = trans, inverse = inv)
 }
 
 #' @rdname dplot_utils
