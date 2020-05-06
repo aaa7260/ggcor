@@ -151,9 +151,13 @@ liner_trans <- function (from, to)
 {
   force(from)
   force(to)
+  nm <- paste0("liner-trans:\nfrom ",
+               paste0("(", format(from[1]), "->", format(from[2]), ")"),
+               " to ",
+               paste0("(", format(to[1]), "->", format(to[2]), ")"))
   trans <- function(x) scales::rescale(x, from = from, to = to)
   inv <- function(x) scales::rescale(x, from = to, to = from)
-  scales::trans_new(paste0("liner-from-", format(from), "-to-", format(to)),
+  scales::trans_new(nm,
                     transform = trans, inverse = inv)
 }
 
