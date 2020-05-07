@@ -2,7 +2,11 @@
 ### see https://github.com/jokergoo/ComplexHeatmap/blob/master/R/grid.dendrogram.R for details.
 #' @importFrom stats as.dendrogram as.hclust is.leaf nobs order.dendrogram
 #' @noRd
-dend_tbl <- function(dend, bcols, horiz, height.range, circular) {
+dend_tbl <- function(dend,
+                     bcols = NULL,
+                     direction = "top",
+                     hrange = c(1, 3)) {
+  direction <- match.arg(direction, c("top", "bottom", "left", "right"))
   if(!inherits(dend, "dendrogram")) {
     dend <- stats::as.dendrogram(dend)
   }
@@ -50,7 +54,27 @@ dend_tbl <- function(dend, bcols, horiz, height.range, circular) {
   col <- lwd <- lty <- NULL
   data <- new_data_frame(as.list(env)) %>%
     dplyr::rename(colour = col, size = lwd, linetype = lty)
-  adjust_dend_tbl(data, horiz, height.range, circular)
+
+
+  xmax <- max(data$x, data$xend, na.rm = TRUE)
+  hmax <- max(data$y, data$yend, na.rm = TRUE)
+  hrange <- switch(direction,
+                   top = sort(hrange),
+                   bottom = sort(hrange, TRUE),
+                   left = sort(hrange, TRUE),
+                   right = sort(hrange))
+  data$y <- scales::rescale(data$y, hrange, c(0, hmax))
+  data$yend <- scales::rescale(data$yend, hrange, c(0, hmax))
+
+  if(direction %in% c("right", "left")) {
+    temp.x <- xmax - data$x + 1
+    temp.xend <- xmax - data$xend + 1
+    data$x <- data$y
+    data$xend <- data$yend
+    data$y <- temp.x
+    data$yend <- temp.xend
+  }
+  data
 }
 
 #' @noRd
@@ -103,33 +127,53 @@ adjust_dend <- function(dend) {
   return(dend)
 }
 
+
 #' @noRd
-adjust_dend_tbl <- function(dend_tbl, horiz, height.range, circular) {
-  aes <- setdiff(names(dend_tbl), c("x", "y", "xend", "yend"))
-  maxheight <- max(dend_tbl$y, dend_tbl$yend, na.rm = TRUE)
-  dend_tbl$y <- scales::rescale(dend_tbl$y, height.range, c(0, maxheight))
-  dend_tbl$yend <- scales::rescale(dend_tbl$yend, height.range, c(0, maxheight))
-  if(isTRUE(horiz)) {
-    dend_tbl <- with(dend_tbl, {
-      max.x <- max(x, xend, na.rm = TRUE)
-      tempx <- max.x - x + 1
-      tempxend <- max.x - xend + 1
-      pos <- tibble::tibble(x = y, y = tempx, xend = yend, yend = tempxend)
-      if(length(aes) > 0) dplyr::bind_cols(pos, dend_tbl[aes]) else pos
-    })
-    if(isTRUE(circular)) {
-      dend_tbl <- with(dend_tbl, {
-        min.x <- min(x, xend, na.rm = TRUE)
-        pos <- tibble::tibble(x = min.x - x + 0.5, y = y, xend = min.x - xend + 0.5, yend = yend)
-        if(length(aes) > 0) dplyr::bind_cols(pos, dend_tbl[aes]) else pos
-      })
+build_dendro <- function(dend,
+                        circular,
+                        bcols,
+                        direction,
+                        fixed.xy,
+                        hrange) {
+  n <- stats::nobs(as.dendrogram(dend))
+  data <- dend_tbl(dend, bcols, direction, hrange)
+  hmax <- max(data$y, data$yend, na.rm = TRUE)
+  colour <- suppressWarnings(data$colour %||% "black")
+  size <- suppressWarnings(data$size %||% 0.5)
+  linetype <- suppressWarnings(data$linetype %||% "solid")
+  mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
+
+  if(isTRUE(circular)) {
+    return(
+      geom_segment(mapping = mapping,
+                   colour = colour,
+                   size = size,
+                   linetype = linetype,
+                   data = data)
+    )
+  }
+  p <- ggplot(data, mapping = mapping) +
+    geom_segment(colour = colour,
+                 size = size,
+                 linetype = linetype) +
+    theme_void()
+  if(direction %in% c("top", "bottom")) {
+    p <- p + scale_x_continuous(limits = c(0.5, n + 0.5), expand = c(0, 0))
+    if(direction == "top") {
+      p <- p + scale_y_continuous(expand = c(0, 0.05))
     } else {
-      if(isTRUE(circular)) {
-        max.x <- max(dend_tbl$x, dend_tbl$xend, na.rm = TRUE)
-        dend_tbl$x <- max.x - dend_tbl$x + 1
-        dend_tbl$xend <- max.x - dend_tbl$xend + 1
-      }
+      p <- p + scale_y_continuous(expand = c(0.05, 0))
+    }
+  } else {
+    p <- p + scale_y_continuous(limits = c(0.5, n + 0.5))
+    if(direction == "left") {
+      p <- p + scale_x_continuous(expand = c(0.05, 0))
+    } else {
+      p <- p + scale_x_continuous(expand = c(0, 0.05))
     }
   }
-  dend_tbl
+  if(isTRUE(fixed.xy)) {
+    p <- p + coord_fixed()
+  }
+  p
 }
