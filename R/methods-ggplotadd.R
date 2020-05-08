@@ -273,93 +273,69 @@ ggplot_add.geom_number2 <- function(object, plot, object_name) {
 #' @importFrom ggplot2 ggplot_add
 #' @export
 ggplot_add.anno_tree <- function(object, plot, object_name) {
-  args <- plot$plot_env$polar.args
+  hc <- attr(pdata, "hclust")
+  index <- object$index
+  check_tree_params(index, hc)
+
   pdata <- plot$data
   bcols <- object$bcols %||% plot$plot_env$bcols
   row.bcols <- if(is.list(bcols)) bcols$row.bcols else bcols
   col.bcols <- if(is.list(bcols)) bcols$col.bcols else bcols
-  hc <- attr(pdata, "hclust")
   circular <- plot$plot_env$circular
-  index <- object$index
-  type <- get_type(pdata)
+  row.height <- object$row.height
+  col.height <- object$col.height
+  row.pos <- object$row.pos
+  col.pos <- object$col.pos
   n <- length(get_row_name(pdata))
   m <- length(get_col_name(pdata))
 
-  check_tree_params(index, hc)
-
-  if(!isTRUE(circular) && type != "full") {
-    stop("Now `anno_tree()` only supports polar coordinates or 'type = full'.", call. = FALSE)
-  }
-
-  xlim <- ylim <- NULL
   if(isTRUE(circular)) {
-    row.rng <- c(args$xlim[1], 0.5)
-    col.rng <- c(n + 0.5, n + 0.5 + 0.3 * (args$ylim[2] - n - 0.5))
+    args <- plot$plot_env$polar.args
+    row.pos <- "left"
+    col.pos <- "bottom"
+    row.hrange <- if(!is.null(row.height)) {
+      c(- m * row.height, 0.5)
+    } else {
+      c(- args$xlim[1], 0.5)
+    }
+
+    col.hrange <- if(!is.null(col.height)) {
+      c(- n * col.hrange, 0.5))
+    } else {
+      c(- 0.3 * (args$ylim[2] - n - 0.5), 0.5)
+    }
   } else {
     min <- min(n, m)
-    row.rng <- if(is.null(object$row.height)) {
+    row.hrange <- if(is.null(row.height)) {
       c(m + 0.5, 0.3 * min + m + 0.5)
     } else {
-      c(m + 0.5, (1 + object$row.height) * m + 0.5)
+      c(m + 0.5, (1 + row.height) * m + 0.5)
     }
-    col.rng <- if(is.null(object$col.height)) {
+    col.hrange <- if(is.null(col.height)) {
       c(n + 0.5, 0.3 * min + n + 0.5)
     } else {
-      c(n + 0.5, (1 + object$col.height) * n + 0.5)
+      c(n + 0.5, (1 + col.height) * n + 0.5)
     }
-    xlim <- c(row.rng[1], row.rng[2] + 0.05 * min)
-    ylim <- c(col.rng[1], col.rng[2] + 0.05 * min)
   }
 
-  if(object$index == "all") {
-    row.data <- dend_tbl(hc$row.hc, row.bcols, TRUE, row.rng, circular)
-    col.data <- dend_tbl(hc$col.hc, col.bcols, FALSE, col.rng, circular)
-    mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
-    rparams <- suppressWarnings(
-      list(mapping = mapping, data = row.data,
-           colour = object$colour %||% row.data$colour %||% "black",
-           size = object$size %||% row.data$size %||% 0.5,
-           linetype = object$linetype %||% row.data$linetype %||% "solid",
-           inherit.aes = FALSE)
-    )
-    cparams <- suppressWarnings(
-      list(mapping = mapping, data = col.data,
-           colour = object$colour %||% col.data$colour %||% "black",
-           size = object$size %||% col.data$size %||% 0.5,
-           linetype = object$linetype %||% col.data$linetype %||% "solid",
-           inherit.aes = FALSE)
-    )
-    row.tree <- do.call(geom_segment, rparams)
-    col.tree <- do.call(geom_segment, cparams)
-    plot <- plot + expand_axis(x = xlim, y = ylim)
-    ggplot_add(list(row.tree, col.tree), plot)
-  } else if(object$index == "row") {
-    row.data <- dend_tbl(hc$row.hc, bcols, TRUE, row.rng, circular)
-    mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
-    rparams <- suppressWarnings(
-      list(mapping = mapping, data = row.data,
-           colour = object$colour %||% row.data$colour %||% "black",
-           size = object$size %||% row.data$size %||% 0.5,
-           linetype = object$linetype %||% row.data$linetype %||% "solid",
-           inherit.aes = FALSE)
-    )
-    row.tree <- do.call(geom_segment, rparams)
-    plot <- plot + expand_axis(x = xlim)
-    ggplot_add(row.tree, plot)
-  } else {
-    col.data <- dend_tbl(hc$col.hc, bcols, FALSE, col.rng, circular)
-    mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
-    cparams <- suppressWarnings(
-      list(mapping = mapping, data = col.data,
-           colour = object$colour %||% col.data$colour %||% "black",
-           size = object$size %||% col.data$size %||% 0.5,
-           linetype = object$linetype %||% col.data$linetype %||% "solid",
-           inherit.aes = FALSE)
-    )
-    col.tree <- do.call(geom_segment, cparams)
-    plot <- plot + expand_axis(y = ylim)
-    ggplot_add(col.tree, plot)
+  if(index == "all") {
+    row.obj <- plot_dendro(hc$row.hc, circular, row.bcols, row.pos,
+                           plot$plot_env$fixed.xy, row.hrange)
+    col.obj <- plot_dendro(hc$col.hc, circular, col.bcols, col.pos,
+                           plot$plot_env$fixed.xy, col.hrange)
+    ggplot_add(col.obj, ggplot_add(row.obj, plot))
   }
+  if(index == "row") {
+    row.obj <- plot_dendro(hc$row.hc, circular, row.bcols, row.pos,
+                           plot$plot_env$fixed.xy, row.hrange)
+    ggplot_add(row.obj, plot)
+  }
+  if(index == "col") {
+    col.obj <- plot_dendro(hc$col.hc, circular, col.bcols, col.pos,
+                           plot$plot_env$fixed.xy, col.hrange)
+    ggplot_add(col.obj, plot)
+  }
+
 }
 
 #' @noRd

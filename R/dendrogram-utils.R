@@ -130,17 +130,20 @@ adjust_dend <- function(dend) {
 
 #' @noRd
 build_dendro <- function(dend,
-                        circular,
-                        bcols,
-                        direction,
-                        fixed.xy,
-                        hrange) {
+                         circular,
+                         bcols,
+                         direction,
+                         fixed.xy,
+                         hrange,
+                         colour = NULL,
+                         size = NULL,
+                         linetype = NULL) {
   n <- stats::nobs(as.dendrogram(dend))
   data <- dend_tbl(dend, bcols, direction, hrange)
   hmax <- max(data$y, data$yend, na.rm = TRUE)
-  colour <- suppressWarnings(data$colour %||% "black")
-  size <- suppressWarnings(data$size %||% 0.5)
-  linetype <- suppressWarnings(data$linetype %||% "solid")
+  colour <- suppressWarnings(data$colour %||% colour %||% "black")
+  size <- suppressWarnings(data$size %||% size %||% 0.5)
+  linetype <- suppressWarnings(data$linetype %||% linetype %||% "solid")
   mapping <- aes_string(x = "x", y = "y", xend = "xend", yend = "yend")
 
   if(isTRUE(circular)) {

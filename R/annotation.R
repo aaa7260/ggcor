@@ -3,6 +3,7 @@
 #' @param index one of "all", "row" or "col".
 #' @param bcols branch colours.
 #' @param row.height,col.height height of row/columns tree.
+#' @param row.pos,col.pos position of row/columns tree.
 #' @param colour,color colour of segments.
 #' @param size width of segments.
 #' @param linetype line type of segments.
@@ -14,6 +15,8 @@ anno_tree <- function(index = "all",
                       bcols = NULL,
                       row.height = NULL,
                       col.height = NULL,
+                      row.pos = NULL,
+                      col.pos = NULL,
                       colour = NULL,
                       size = NULL,
                       linetype = NULL,
@@ -22,8 +25,9 @@ anno_tree <- function(index = "all",
     colour <- color
   index <- match.arg(index, c("all", "row", "col"))
   structure(.Data = list(index = index, bcols = bcols, row.height = row.height,
-                         col.height = col.height, colour = colour, size = size,
-                         linetype = linetype), class = "anno_tree")
+                         col.height = col.height, row.pos = row.pos, col.pos = col.pos,
+                         colour = colour, size = size, linetype = linetype),
+            class = "anno_tree")
 }
 
 #' Special annotation function for correlation link plot
