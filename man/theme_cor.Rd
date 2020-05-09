@@ -2,9 +2,15 @@
 % Please edit documentation in R/theme-cor.R
 \name{theme_cor}
 \alias{theme_cor}
+\alias{theme_anno}
+\alias{theme_anno2}
 \title{Create the default ggcor theme}
 \usage{
 theme_cor(legend.position = "right", ...)
+
+theme_anno()
+
+theme_anno2()
 }
 \arguments{
 \item{legend.position}{the position of legends ("none", "left", "right",

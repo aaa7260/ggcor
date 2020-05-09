@@ -29,3 +29,17 @@ theme_cor <- function(legend.position = "right",
     ...
   )
 }
+
+#' @rdname theme_cor
+#' @export
+theme_anno <- function()
+{
+  ggplot2::theme_bw() + theme(plot.margin = ggplot2::margin())
+}
+
+#' @rdname theme_cor
+#' @export
+theme_anno2 <- function()
+{
+  ggplot2::theme_void() + theme(plot.margin = ggplot2::margin())
+}
