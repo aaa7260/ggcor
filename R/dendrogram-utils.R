@@ -5,7 +5,8 @@
 dend_tbl <- function(dend,
                      bcols = NULL,
                      direction = "top",
-                     hrange = c(1, 3)) {
+                     hrange = c(1, 3),
+                     circular = FALSE) {
   direction <- match.arg(direction, c("top", "bottom", "left", "right"))
   if(!inherits(dend, "dendrogram")) {
     dend <- stats::as.dendrogram(dend)
@@ -152,14 +153,14 @@ build_dendro <- function(dend,
                    colour = colour,
                    size = size,
                    linetype = linetype,
-                   data = data)
+                   data = data, inherit.aes = FALSE)
     )
   }
   p <- ggplot(data, mapping = mapping) +
     geom_segment(colour = colour,
                  size = size,
                  linetype = linetype) +
-    ggplot2::theme_void()
+    theme_anno2()
   if(direction %in% c("top", "bottom")) {
     p <- p + scale_x_continuous(limits = c(0.5, n + 0.5), expand = c(0, 0))
     if(direction == "top") {
@@ -168,7 +169,7 @@ build_dendro <- function(dend,
       p <- p + scale_y_continuous(expand = c(0.05, 0))
     }
   } else {
-    p <- p + scale_y_continuous(limits = c(0.5, n + 0.5))
+    p <- p + scale_y_continuous(limits = c(0.5, n + 0.5), expand = c(0, 0))
     if(direction == "left") {
       p <- p + scale_x_continuous(expand = c(0.05, 0))
     } else {

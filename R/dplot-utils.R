@@ -35,13 +35,13 @@ as_dplot <- function(.plot) {
   }
   structure(.Data = .plot,
             .anno_info = list(row.anno = list(),
-                         col.anno = list(),
-                         width = NULL,
-                         height = NULL,
-                         r = 0,
-                         l = 0,
-                         t = 0,
-                         b = 0),
+                              col.anno = list(),
+                              width = NULL,
+                              height = NULL,
+                              r = 0,
+                              l = 0,
+                              t = 0,
+                              b = 0),
             class = c("dplot", class(.plot)))
 }
 
@@ -87,17 +87,15 @@ anno_row_custom <- function(obj,
   pos <- match.arg(pos, c("left", "right"))
   .anno_info <- attr(.plot, ".anno_info")
   if(pos == "left") {
-    idx <- paste0(".left-", .anno_info$l + 1)
     .anno_info$l <- .anno_info$l + 1
-    .anno_info$row.anno <- rlang::set_names(c(list(obj), .anno_info$row.anno),
-                                       c(idx, names(.anno_info$row.anno)))
     .anno_info$width <- c(width, .anno_info$width)
+    .anno_info$row.anno <- c(list(obj), .anno_info$row.anno)
+
   } else {
-    idx <- paste0(".right-", .anno_info$r + 1)
     .anno_info$r <- .anno_info$r + 1
-    .anno_info$row.anno <- rlang::set_names(c(.anno_info$row.anno, list(obj)),
-                                       c(names(.anno_info$row.anno), idx))
     .anno_info$width <- c(.anno_info$width, width)
+    .anno_info$row.anno <- c(.anno_info$row.anno, list(obj))
+
   }
   attr(.plot, ".anno_info") <- .anno_info
   .plot
@@ -116,12 +114,12 @@ anno_row_custom <- function(obj,
   .anno_info <- attr(.plot, ".anno_info")
   if(pos == "bottom") {
     .anno_info$b <- .anno_info$b + 1
-    .anno_info$height <- c(height, .anno_info$height)
-    .anno_info$col.anno <- c(list(obj), .anno_info$col.anno)
-  } else {
-    .anno_info$t <- .anno_info$t + 1
     .anno_info$height <- c(.anno_info$height, height)
     .anno_info$col.anno <- c(.anno_info$col.anno, list(obj))
+  } else {
+    .anno_info$t <- .anno_info$t + 1
+    .anno_info$height <- c(height, .anno_info$height)
+    .anno_info$col.anno <- c(list(obj), .anno_info$col.anno)
   }
   attr(.plot, ".anno_info") <- .anno_info
   .plot
@@ -210,29 +208,27 @@ print.dplot <- function(.plot,
     grid::grid.draw(.plot)
   }
 
-  n <- length(row.anno)
-  m <- length(col.anno)
+  n <- length(row.anno) + 1
+  m <- length(col.anno) + 1
 
-  plot.list <- vector("list", (m + 1) * (n + 1))
-  plot.list <- lapply(seq_len((m + 1) * (n + 1)), function(.id) {
+  plot.list <- vector("list", n * m)
+  plot.list <- lapply(seq_len(n * m), function(.id) {
     plot.list[[.id]] <- empty_plot()
   })
-  row.anno <- c(row.anno[seq_len(l)], list(.plot), row.anno[seq_len(r) + l])
-  col.anno <- c(col.anno[seq_len(b)], list(.plot), col.anno[seq_len(t) + b])
 
-  plot.list[t * (n + 1) + seq_len(n + 1)] <- row.anno
-  plot.list[l + 1 + (n + 1) * (seq(m + 1) - 1)] <- rev(col.anno)
-  width <- c(width[rev(seq_len(l))], 1, width[l + seq_len(r)])
-  height <- c(height[rev(b + seq_len(t))], 1, height[rev(seq_len(b))])
+  row.anno <- c(row.anno[rev(seq_len(l))], list(.plot), row.anno[seq_len(r) + l])
+  col.anno <- c(col.anno[rev(seq_len(t))], list(.plot), col.anno[seq_len(b) + t])
+  plot.list[t * n + seq_len(n)] <- row.anno
+  plot.list[l + 1 + n * (seq_len(m) - 1)] <- col.anno
+  width <- c(width[seq_len(l)], 1, width[l + seq_len(r)])
+  height <- c(height[rev(seq_len(t))], 1, height[seq_len(b) + t])
 
   if(!.plot$coordinates$is_free()) {
-    warning("'Height' and 'width' cannot be customized under",
-    "a coordinates with fixed ratio.", call. = FALSE)
     width <- height <- NULL
   }
   p <- Reduce("+", plot.list) +
-    plot_layout(ncol = n + 1,
-                nrow = m + 1,
+    plot_layout(ncol = n,
+                nrow = m,
                 byrow = TRUE,
                 widths = width,
                 heights = height,

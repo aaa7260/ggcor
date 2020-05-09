@@ -21,7 +21,7 @@ anno_row_tree <- function(bcols = NULL,
   if(!missing(color))
     colour <- color
   if(!is.null(pos)) {
-    pos <- match.arg("left", "right")
+    pos <- match.arg(pos, c("left", "right"))
   }
   structure(.Data = list(bcols = bcols, width = width, pos = pos,
                          colour = colour, size = size, linetype = linetype),
@@ -41,7 +41,7 @@ anno_col_tree <- function(bcols = NULL,
   if(!missing(color))
     colour <- color
   if(!is.null(pos)) {
-    pos <- match.arg("top", "bottom")
+    pos <- match.arg(pos, c("top", "bottom"))
   }
   structure(.Data = list(bcols = bcols, height = height, pos = pos,
                          colour = colour, size = size, linetype = linetype),

@@ -140,7 +140,8 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
             list(mapping = aes_string(x = "x", y = "y", label = "label"),
                  data = node.data, size = object$label.size,
                  colour = object$label.colour, family = object$label.family,
-                 fontface = object$fontface, nudge_x = nudge_x))
+                 fontface = object$fontface, nudge_x = nudge_x,
+                 inherit.aes = FALSE))
     )
   if(type == "full") {
     width <- object$width
@@ -151,8 +152,7 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
     p <- ggplot() + obj +
       scale_x_continuous(expand = expand) +
       scale_y_continuous(limits = c(0.5, m + 0.5), expand = c(0, 0)) +
-      theme_void() +
-      theme(plot.margin = ggplot2::margin())
+      theme_anno2()
     if(isTRUE(plot$plot_env$fixed.xy)) {
       p <- p + coord_fixed()
     }
@@ -161,58 +161,6 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
     plot <- plot + expand_axis(x = xrange, y = yrange)
     ggplot_add(object = obj, plot = plot)
   }
-}
-
-#' @importFrom ggplot2 ggplot_add
-#' @export
-ggplot_add.anno_link_label <- function(object, plot, object_name) {
-  link_tbl <- plot$plot_env$link_tbl
-  if(is.null(link_tbl)) {
-    warning("Can only be used after `anno_link()`.", call. = FALSE)
-    return(plot)
-  }
-
-  geom <- match.arg(object$geom, c("text", "label", "image"))
-  geom_fun <- switch (geom,
-                      text = get_function("ggplot2", "geom_text"),
-                      label = get_function("ggplot2", "geom_label"),
-                      image = get_function("ggimage", "geom_image"))
-
-  type <- get_type(plot$data)
-  data <- attr(link_tbl, "node.pos")
-
-  if(!is.null(object$is.start)) {
-    is.start <- NULL
-    if(isTRUE(object$is.start)) {
-      data <- dplyr::filter(data, is.start)
-    } else {
-      data <- dplyr::filter(data, !is.start)
-    }
-  }
-
-  if(type == "upper") {
-    data$hjust <- ifelse(data$is.start, 1, 0)
-    nudge_x <- ifelse(data$is.start, -object$nudge_x, object$nudge_x)
-  } else {
-    data$hjust <- ifelse(data$is.start, 0, 1)
-    nudge_x <- ifelse(data$is.start, object$nudge_x, -object$nudge_x)
-  }
-
-  mapping <- if(geom == "image") {
-    if(!"image" %in% names(object$params)) {
-      stop("Did you forget to set the 'image' parameter?", call. = FALSE)
-    }
-    aes_string(x = "x", y = "y")
-  } else {
-    aes_string(x = "x", y = "y", label = "label", hjust = "hjust")
-  }
-  mapping <- aes_modify(mapping, object$mapping)
-
-  args <- list(mapping = mapping, data = data, inherit.aes = FALSE,
-               nudge_x = nudge_x)
-  params <- modifyList(args, object$params)
-  obj <- do.call(geom_fun, params)
-  ggplot_add(obj, plot)
 }
 
 #' @importFrom ggplot2 ggplot_add geom_text
@@ -331,7 +279,7 @@ ggplot_add.anno_row_tree <- function(object, plot, object_name) {
   if(isTRUE(circular)) {
     ggplot_add(obj, plot)
   } else {
-    plot + anno_row_custom(obj, pos = pos, width = width)
+    .anno_row(plot, obj, pos = pos, width = width)
   }
 }
 
@@ -352,29 +300,29 @@ ggplot_add.anno_col_tree <- function(object, plot, object_name) {
 
   if(isTRUE(circular)) {
     args <- plot$plot_env$polar.args
-    pos <- "bottom"
-    hrange <- c(args$xlim[2], 0.5)
+    pos <- "top"
+    hrange <- c(0, 0.3 * (args$ylim[2] - n)) + n + 0.5
   } else {
     if(is.null(pos)) {
       pos <- switch (type, lower = "bottom", "top")
     }
-    hrange <- c(0.5, height * n + 0.5)
+    hrange <- if(pos == "bottom") c(- height * n + 0.5, 0.5) else c(0.5, height * n + 0.5) + n
   }
 
-  obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange)
+  obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange, circular)
   if(isTRUE(circular)) {
     ggplot_add(obj, plot)
   } else {
-    plot + anno_col_custom(obj, pos = pos, width = width)
+    .anno_col(plot, obj, pos = pos, height = height)
   }
 }
 
 #' @noRd
 check_tree_params <- function(index, hc) {
-  if(index == "row" && is.null(hc$row.hc)) {
+  if(index == "row" && is.null(hc)) {
     stop("Did you forget to cluster rows of the matrix?", call. = FALSE)
   }
-  if(index == "col" && is.null(hc$col.hc)) {
+  if(index == "col" && is.null(hc)) {
     stop("Did you forget to cluster columns of the matrix?", call. = FALSE)
   }
 }
