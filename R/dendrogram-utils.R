@@ -159,7 +159,7 @@ build_dendro <- function(dend,
     geom_segment(colour = colour,
                  size = size,
                  linetype = linetype) +
-    theme_void()
+    ggplot2::theme_void()
   if(direction %in% c("top", "bottom")) {
     p <- p + scale_x_continuous(limits = c(0.5, n + 0.5), expand = c(0, 0))
     if(direction == "top") {

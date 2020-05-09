@@ -1,9 +1,8 @@
 #' Annotation for correlation matrix plot
 #' @title Annotation for correlation matrix plot
-#' @param index one of "all", "row" or "col".
 #' @param bcols branch colours.
-#' @param row.height,col.height height of row/columns tree.
-#' @param row.pos,col.pos position of row/columns tree.
+#' @param width,height width or height of tree.
+#' @param pos position of tree.
 #' @param colour,color colour of segments.
 #' @param size width of segments.
 #' @param linetype line type of segments.
@@ -11,23 +10,42 @@
 #' @rdname anno_tree
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-anno_tree <- function(index = "all",
-                      bcols = NULL,
-                      row.height = NULL,
-                      col.height = NULL,
-                      row.pos = NULL,
-                      col.pos = NULL,
-                      colour = NULL,
-                      size = NULL,
-                      linetype = NULL,
-                      color) {
+anno_row_tree <- function(bcols = NULL,
+                          width = NULL,
+                          pos = NULL,
+                          colour = NULL,
+                          size = NULL,
+                          linetype = NULL,
+                          color
+                          ) {
   if(!missing(color))
     colour <- color
-  index <- match.arg(index, c("all", "row", "col"))
-  structure(.Data = list(index = index, bcols = bcols, row.height = row.height,
-                         col.height = col.height, row.pos = row.pos, col.pos = col.pos,
+  if(!is.null(pos)) {
+    pos <- match.arg("left", "right")
+  }
+  structure(.Data = list(bcols = bcols, width = width, pos = pos,
                          colour = colour, size = size, linetype = linetype),
-            class = "anno_tree")
+            class = "anno_row_tree")
+}
+
+#' @rdname anno_tree
+#' @export
+anno_col_tree <- function(bcols = NULL,
+                          height = NULL,
+                          pos = NULL,
+                          colour = NULL,
+                          size = NULL,
+                          linetype = NULL,
+                          color
+) {
+  if(!missing(color))
+    colour <- color
+  if(!is.null(pos)) {
+    pos <- match.arg("top", "bottom")
+  }
+  structure(.Data = list(bcols = bcols, height = height, pos = pos,
+                         colour = colour, size = size, linetype = linetype),
+            class = "anno_col_tree")
 }
 
 #' Special annotation function for correlation link plot
@@ -35,12 +53,13 @@ anno_tree <- function(index = "all",
 #' layers of curves, nodes, and labels.
 #' @param mapping aesthetic mappings parameters.
 #' @param data a data frame.
+#' @param width width of link plot.
+#' @param pos position of link plot.
 #' @param start.var,end.var character to specify which variable is the starting
 #' points and which is the ending points. if the variable is not character, it
 #' will be converted.
-#' @param geom one of "text", "label" or "image".
-#' @param nudge_x horizontal adjustment to nudge labels by.
-#' @param is.start NULL (default), TRUE or FALSE.
+#' @param label.size,label.colour,label.family,label.fontface parameters for label.
+#' @param nudge_x horizonal justification of label.
 #' @param ... extra parameters passing to layer function.
 #' @return a ggplot layer.
 #' @rdname anno_link
@@ -48,6 +67,13 @@ anno_tree <- function(index = "all",
 #' @export
 anno_link <- function(mapping = NULL,
                       data,
+                      width = 0.3,
+                      pos = "right",
+                      label.size = 3.5,
+                      label.colour = "black",
+                      label.family = "",
+                      label.fontface = "",
+                      nudge_x = 0.1,
                       start.var = NULL,
                       start.name = NULL,
                       end.var = NULL,
@@ -55,22 +81,11 @@ anno_link <- function(mapping = NULL,
 {
   start.var <- rlang::enquo(start.var)
   end.var <- rlang::enquo(end.var)
-  structure(.Data = list(mapping = mapping, data = data, start.var = start.var,
+  structure(.Data = list(mapping = mapping, data = data, label.size = label.size,
+                         label.colour = label.colour, label.family = label.family,
+                         label.fontface = label.fontface, start.var = start.var,
                          start.name = start.name, end.var = end.var,
                          params = list(...)), class = "anno_link")
-}
-
-#' @rdname anno_link
-#' @export
-anno_link_label <- function(mapping = NULL,
-                            nudge_x = 0.1,
-                            geom = "text",
-                            is.start = TRUE,
-                            ...)
-{
-  structure(.Data = list(mapping = mapping, nudge_x = nudge_x, geom = geom,
-                         is.start = is.start, params = list(...)),
-            class = "anno_link_label")
 }
 
 #' Square annotation

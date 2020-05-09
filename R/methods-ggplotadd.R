@@ -90,6 +90,9 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
 #' @importFrom ggplot2 ggplot_add aes_string
 #' @export
 ggplot_add.anno_link <- function(object, plot, object_name) {
+  if(isTRUE(plot$plot_env$circlar)) {
+    stop("`anno_link()` should be used in cartesian coordinates.", call. = FALSE)
+  }
   pdata <- plot$data
   type <- get_type(pdata)
   show.diag <- get_show_diag(pdata)
@@ -97,8 +100,7 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
   m <- length(get_row_name(pdata))
 
   data <- link_tbl(object$data, pdata, object$start.var, object$start.name, object$end.var)
-  plot$plot_env$link_tbl <- data
-
+  node.data <- attr(data, "node.pos")
   mapping <- aes_modify(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
                         object$mapping)
   params <- modifyList(list(data = data, mapping = mapping, inherit.aes = FALSE),
@@ -123,13 +125,42 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
       xrange <- c(0.5, max(xmax + 0.2 * n, n + 0.5))
       yrange <- c(0.5, n + 0.5)
     }
-  } else {
-    xrange <- c(n + 1.5, xmax + 0.2 * n)
-    yrange <- c(0.5, m + 0.5)
   }
-  plot <- plot + expand_axis(x = xrange, y = yrange)
-  obj <- do.call(geom_links2, params)
-  ggplot_add(object = obj, plot = plot)
+  nudge_x <- object$nudge_x
+  if(type == "upper") {
+    nudge_x <- - nudge_x
+  }
+  if(type == "full") {
+    if(object$pos == "left")
+      nudge_x <- - nudge_x
+  }
+  obj <- list(
+    do.call(geom_links2, params),
+    do.call(geom_text,
+            list(mapping = aes_string(x = "x", y = "y", label = "label"),
+                 data = node.data, size = object$label.size,
+                 colour = object$label.colour, family = object$label.family,
+                 fontface = object$fontface, nudge_x = nudge_x))
+    )
+  if(type == "full") {
+    width <- object$width
+    pos <- object$pos
+    if(is.null(object$expand)) {
+      expand <- if(pos == "left") c(0.5, 0.05) else c(0.05, 0.5)
+    }
+    p <- ggplot() + obj +
+      scale_x_continuous(expand = expand) +
+      scale_y_continuous(limits = c(0.5, m + 0.5), expand = c(0, 0)) +
+      theme_void() +
+      theme(plot.margin = ggplot2::margin())
+    if(isTRUE(plot$plot_env$fixed.xy)) {
+      p <- p + coord_fixed()
+    }
+    plot + anno_row_custom(p, width = width, pos = pos)
+  } else {
+    plot <- plot + expand_axis(x = xrange, y = yrange)
+    ggplot_add(object = obj, plot = plot)
+  }
 }
 
 #' @importFrom ggplot2 ggplot_add
@@ -272,77 +303,74 @@ ggplot_add.geom_number2 <- function(object, plot, object_name) {
 
 #' @importFrom ggplot2 ggplot_add
 #' @export
-ggplot_add.anno_tree <- function(object, plot, object_name) {
-  hc <- attr(pdata, "hclust")
-  index <- object$index
-  check_tree_params(index, hc)
+ggplot_add.anno_row_tree <- function(object, plot, object_name) {
+  hc <- attr(plot$data, "hclust")$row.hc
+  check_tree_params("row", hc)
 
   pdata <- plot$data
-  bcols <- object$bcols %||% plot$plot_env$bcols
-  row.bcols <- if(is.list(bcols)) bcols$row.bcols else bcols
-  col.bcols <- if(is.list(bcols)) bcols$col.bcols else bcols
+  n <- length(get_col_name(pdata))
+  type <- get_type(pdata)
   circular <- plot$plot_env$circular
-  row.height <- object$row.height
-  col.height <- object$col.height
-  row.pos <- object$row.pos
-  col.pos <- object$col.pos
-  n <- length(get_row_name(pdata))
-  m <- length(get_col_name(pdata))
+  bcols <- object$bcols %||% plot$plot_env$bcols
+  bcols <- if(is.list(bcols)) bcols$row.bcols else bcols
+  width <- object$width %||% 0.3
+  pos <- object$pos
 
   if(isTRUE(circular)) {
     args <- plot$plot_env$polar.args
-    row.pos <- "left"
-    col.pos <- "bottom"
-    row.hrange <- if(!is.null(row.height)) {
-      c(- m * row.height, 0.5)
-    } else {
-      c(- args$xlim[1], 0.5)
-    }
-
-    col.hrange <- if(!is.null(col.height)) {
-      c(- n * col.hrange, 0.5))
-    } else {
-      c(- 0.3 * (args$ylim[2] - n - 0.5), 0.5)
-    }
+    pos <- "left"
+    hrange <- c(args$xlim[1], 0.5)
   } else {
-    min <- min(n, m)
-    row.hrange <- if(is.null(row.height)) {
-      c(m + 0.5, 0.3 * min + m + 0.5)
-    } else {
-      c(m + 0.5, (1 + row.height) * m + 0.5)
+    if(is.null(pos)) {
+      pos <- switch (type, lower = "left", "right")
     }
-    col.hrange <- if(is.null(col.height)) {
-      c(n + 0.5, 0.3 * min + n + 0.5)
-    } else {
-      c(n + 0.5, (1 + col.height) * n + 0.5)
-    }
+    hrange <- c(0.5, width * n + 0.5)
   }
 
-  if(index == "all") {
-    row.obj <- plot_dendro(hc$row.hc, circular, row.bcols, row.pos,
-                           plot$plot_env$fixed.xy, row.hrange)
-    col.obj <- plot_dendro(hc$col.hc, circular, col.bcols, col.pos,
-                           plot$plot_env$fixed.xy, col.hrange)
-    ggplot_add(col.obj, ggplot_add(row.obj, plot))
+  obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange)
+  if(isTRUE(circular)) {
+    ggplot_add(obj, plot)
+  } else {
+    plot + anno_row_custom(obj, pos = pos, width = width)
   }
-  if(index == "row") {
-    row.obj <- plot_dendro(hc$row.hc, circular, row.bcols, row.pos,
-                           plot$plot_env$fixed.xy, row.hrange)
-    ggplot_add(row.obj, plot)
-  }
-  if(index == "col") {
-    col.obj <- plot_dendro(hc$col.hc, circular, col.bcols, col.pos,
-                           plot$plot_env$fixed.xy, col.hrange)
-    ggplot_add(col.obj, plot)
+}
+
+#' @importFrom ggplot2 ggplot_add
+#' @export
+ggplot_add.anno_col_tree <- function(object, plot, object_name) {
+  hc <- attr(plot$data, "hclust")$col.hc
+  check_tree_params("col", hc)
+
+  pdata <- plot$data
+  n <- length(get_row_name(pdata))
+  type <- get_type(pdata)
+  circular <- plot$plot_env$circular
+  bcols <- object$bcols %||% plot$plot_env$bcols
+  bcols <- if(is.list(bcols)) bcols$col.bcols else bcols
+  height <- object$height %||% 0.3
+  pos <- object$pos
+
+  if(isTRUE(circular)) {
+    args <- plot$plot_env$polar.args
+    pos <- "bottom"
+    hrange <- c(args$xlim[2], 0.5)
+  } else {
+    if(is.null(pos)) {
+      pos <- switch (type, lower = "bottom", "top")
+    }
+    hrange <- c(0.5, height * n + 0.5)
   }
 
+  obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange)
+  if(isTRUE(circular)) {
+    ggplot_add(obj, plot)
+  } else {
+    plot + anno_col_custom(obj, pos = pos, width = width)
+  }
 }
 
 #' @noRd
 check_tree_params <- function(index, hc) {
-  if(index == "all" && any(vapply(hc, is.null, logical(1)))) {
-    stop("Did you forget to cluster the matrix?", call. = FALSE)
-  }
   if(index == "row" && is.null(hc$row.hc)) {
     stop("Did you forget to cluster rows of the matrix?", call. = FALSE)
   }

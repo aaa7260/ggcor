@@ -2,23 +2,21 @@
 % Please edit documentation in R/annotation.R
 \name{anno_link}
 \alias{anno_link}
-\alias{anno_link_label}
 \title{Special annotation function for correlation link plot}
 \usage{
 anno_link(
   mapping = NULL,
   data,
+  width = 0.3,
+  pos = "right",
+  label.size = 3.5,
+  label.colour = "black",
+  label.family = "",
+  label.fontface = "",
+  nudge_x = 0.1,
   start.var = NULL,
   start.name = NULL,
   end.var = NULL,
-  ...
-)
-
-anno_link_label(
-  mapping = NULL,
-  nudge_x = 0.1,
-  geom = "text",
-  is.start = TRUE,
   ...
 )
 }
@@ -27,17 +25,19 @@ anno_link_label(
 
 \item{data}{a data frame.}
 
+\item{width}{width of link plot.}
+
+\item{pos}{position of link plot.}
+
+\item{label.size, label.colour, label.family, label.fontface}{parameters for label.}
+
+\item{nudge_x}{horizonal justification of label.}
+
 \item{start.var, end.var}{character to specify which variable is the starting
 points and which is the ending points. if the variable is not character, it
 will be converted.}
 
 \item{...}{extra parameters passing to layer function.}
-
-\item{nudge_x}{horizontal adjustment to nudge labels by.}
-
-\item{geom}{one of "text", "label" or "image".}
-
-\item{is.start}{NULL (default), TRUE or FALSE.}
 }
 \value{
 a ggplot layer.

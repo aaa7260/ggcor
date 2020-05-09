@@ -8,6 +8,7 @@
 #' points and which is the ending points. if the variable is not character, it
 #' is forced to be converted.
 #' @param start.name names of start point.
+#' @param pos position of link.
 #' @return a data frame.
 #' @importFrom rlang enquo eval_tidy set_names quo_is_null
 #' @importFrom dplyr filter
@@ -27,7 +28,8 @@ link_tbl <- function(data,
                      cor_tbl,
                      start.var = NULL,
                      start.name = NULL,
-                     end.var = NULL)
+                     end.var = NULL,
+                     pos = "right")
 {
   if(!is.data.frame(data))
     data <- as.data.frame(data)
@@ -62,15 +64,19 @@ link_tbl <- function(data,
   if(type == "full") {
     x1 <- max(length(col.names), n) * 0.45 + length(col.names)
     x2 <- length(col.names) + 1
+    if(pos == "left") {
+      temp <- x1
+      x1 <- x2
+      x2 <- x1
+    }
 
     start.pos <- set_names(seq(1, n, length.out = m + 2)[-c(1, m + 2)], spec.name)
     end.pos <- set_names(seq(1, n, length.out = n), row.names)
 
     edge.pos <- tibble(x = x1, y = start.pos[start], xend = x2, yend = end.pos[end])
-    node.pos <- tibble(x = rep(c(x1, x2), c(m, n)),
-                       y = c(start.pos[spec.name], end.pos[row.names]),
-                       label = c(spec.name, row.names),
-                       is.start = rep(c(TRUE, FALSE), c(m, n)))
+    node.pos <- tibble(x = rep(x1, m),
+                       y = start.pos[spec.name],
+                       label = spec.name)
   } else {
     if(type == "upper") {
       if(m == 1) {
@@ -116,10 +122,9 @@ link_tbl <- function(data,
     ## bind postion end data
     edge.pos <- tibble::tibble(x = x[start], y = y[start],
                                xend = xend[end], yend = yend[end])
-    node.pos <- tibble::tibble(x = c(x[spec.name], xend[row.names]),
-                               y = c(y[spec.name], yend[row.names]),
-                               label = c(spec.name, row.names),
-                               is.start = rep(c(TRUE, FALSE), c(m, n)))
+    node.pos <- tibble::tibble(x = x[spec.name],
+                               y = y[spec.name],
+                               label = spec.name)
   }
 
   structure(.Data = dplyr::bind_cols(edge.pos, data), node.pos = node.pos,

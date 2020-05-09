@@ -5,7 +5,14 @@
 \alias{add_link}
 \title{Transform data base on different layout}
 \usage{
-link_tbl(data, cor_tbl, start.var = NULL, start.name = NULL, end.var = NULL)
+link_tbl(
+  data,
+  cor_tbl,
+  start.var = NULL,
+  start.name = NULL,
+  end.var = NULL,
+  pos = "right"
+)
 }
 \arguments{
 \item{data}{a data frame.}
@@ -17,6 +24,8 @@ points and which is the ending points. if the variable is not character, it
 is forced to be converted.}
 
 \item{start.name}{names of start point.}
+
+\item{pos}{position of link.}
 }
 \value{
 a data frame.

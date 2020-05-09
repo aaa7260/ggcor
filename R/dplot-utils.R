@@ -13,7 +13,7 @@
 #' @param nbin a numeric specifying the number of bins for drawing the guide_colourbar.
 #' @return a "dplot" object.
 #' @rdname dplot_utils
-#' @importFrom ggplot2 ggplot geom_blank theme_viod ggplot_add
+#' @importFrom ggplot2 ggplot geom_blank theme_void ggplot_add
 #' @importFrom patchwork plot_layout
 #' @examples \dontrun{
 #' library(ggplot2)
@@ -141,9 +141,9 @@ ggplot_add.anno_col_custom <- function(object, plot, object_name) {
 #' @export
 empty_plot <- function()
 {
-  ggplot() +
-    geom_blank() +
-    theme_void()
+  ggplot2::ggplot() +
+    ggplot2::geom_blank() +
+    ggplot2::theme_void()
 }
 
 #' @noRd
