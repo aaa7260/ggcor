@@ -188,9 +188,10 @@ cor_tbl <- function(corr,
 #' @examples
 #' gcor_tbl(mtcars)
 #' gcor_tbl(mtcars, "var")
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 gcor_tbl <- function(x,
-                     name = NULL,
+                     name = "value",
                      extra.mat = list(),
                      ...)
 {

@@ -4,7 +4,7 @@
 \alias{gcor_tbl}
 \title{Create a general cor_tbl object}
 \usage{
-gcor_tbl(x, name = NULL, extra.mat = list(), ...)
+gcor_tbl(x, name = "value", extra.mat = list(), ...)
 }
 \arguments{
 \item{x}{a matrix-like object.}
@@ -24,4 +24,7 @@ Create a general cor_tbl object
 \examples{
 gcor_tbl(mtcars)
 gcor_tbl(mtcars, "var")
+}
+\author{
+Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }
