@@ -144,21 +144,6 @@ empty_plot <- function()
     ggplot2::theme_void()
 }
 
-#' @noRd
-liner_trans <- function (from, to)
-{
-  force(from)
-  force(to)
-  nm <- paste0("liner-trans:\nfrom ",
-               paste0("(", format(from[1]), "->", format(from[2]), ")"),
-               " to ",
-               paste0("(", format(to[1]), "->", format(to[2]), ")"))
-  trans <- function(x) scales::rescale(x, from = from, to = to)
-  inv <- function(x) scales::rescale(x, from = to, to = from)
-  scales::trans_new(nm,
-                    transform = trans, inverse = inv)
-}
-
 #' @rdname dplot_utils
 #' @export
 print.dplot <- function(.plot,
