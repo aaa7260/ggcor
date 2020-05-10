@@ -45,6 +45,20 @@ get_show_diag <- function(x) {
 
 #' @rdname get_attr
 #' @export
+nrows <- function(x) {
+  stopifnot(is_cor_tbl(x))
+  length(get_row_name(x))
+}
+
+#' @rdname get_attr
+#' @export
+ncols <- function(x) {
+  stopifnot(is_cor_tbl(x))
+  length(get_col_name(x))
+}
+
+#' @rdname get_attr
+#' @export
 is_cor_tbl <- function(x) {
   inherits(x, "cor_tbl")
 }

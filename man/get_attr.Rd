@@ -5,6 +5,8 @@
 \alias{get_col_name}
 \alias{get_type}
 \alias{get_show_diag}
+\alias{nrows}
+\alias{ncols}
 \alias{is_cor_tbl}
 \alias{is_general_cor_tbl}
 \title{Helper function of cor_tbl}
@@ -16,6 +18,10 @@ get_col_name(x)
 get_type(x)
 
 get_show_diag(x)
+
+nrows(x)
+
+ncols(x)
 
 is_cor_tbl(x)
 
