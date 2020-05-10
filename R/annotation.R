@@ -60,6 +60,7 @@ anno_col_tree <- function(bcols = NULL,
 #' will be converted.
 #' @param label.size,label.colour,label.family,label.fontface parameters for label.
 #' @param nudge_x horizonal justification of label.
+#' @param expand expansion of x axis.
 #' @param ... extra parameters passing to layer function.
 #' @return a ggplot layer.
 #' @rdname anno_link
@@ -74,6 +75,7 @@ anno_link <- function(mapping = NULL,
                       label.family = "",
                       label.fontface = "",
                       nudge_x = 0.1,
+                      expand = NULL,
                       start.var = NULL,
                       start.name = NULL,
                       end.var = NULL,

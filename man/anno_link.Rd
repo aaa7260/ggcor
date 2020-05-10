@@ -14,6 +14,7 @@ anno_link(
   label.family = "",
   label.fontface = "",
   nudge_x = 0.1,
+  expand = NULL,
   start.var = NULL,
   start.name = NULL,
   end.var = NULL,
@@ -32,6 +33,8 @@ anno_link(
 \item{label.size, label.colour, label.family, label.fontface}{parameters for label.}
 
 \item{nudge_x}{horizonal justification of label.}
+
+\item{expand}{expansion of x axis.}
 
 \item{start.var, end.var}{character to specify which variable is the starting
 points and which is the ending points. if the variable is not character, it
