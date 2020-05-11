@@ -202,11 +202,13 @@ print.dplot <- function(.plot,
   })
 
   row.anno <- c(row.anno[rev(seq_len(l))], list(.plot), row.anno[seq_len(r) + l])
-  col.anno <- c(col.anno[rev(seq_len(t))], list(.plot), col.anno[seq_len(b) + t])
+  col.anno <- c(col.anno[seq_len(t)], list(.plot), col.anno[seq_len(b) + t])
   plot.list[t * n + seq_len(n)] <- row.anno
   plot.list[l + 1 + n * (seq_len(m) - 1)] <- col.anno
+
   width <- c(width[seq_len(l)], 1, width[l + seq_len(r)])
-  height <- c(height[rev(seq_len(t))], 1, height[seq_len(b) + t])
+  height <- c(height[seq_len(t)], 1, height[seq_len(b) + t])
+
 
   if(!.plot$coordinates$is_free()) {
     width <- height <- NULL
