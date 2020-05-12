@@ -87,7 +87,7 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
   ggplot_add(object = obj, plot = plot)
 }
 
-#' @importFrom ggplot2 ggplot_add aes_string
+#' @importFrom ggplot2 ggplot_add aes_string expansion
 #' @export
 ggplot_add.anno_link <- function(object, plot, object_name) {
   if(isTRUE(plot$plot_env$circlar)) {
@@ -96,8 +96,8 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
   pdata <- plot$data
   type <- get_type(pdata)
   show.diag <- get_show_diag(pdata)
-  n <- length(get_col_name(pdata))
-  m <- length(get_row_name(pdata))
+  n <- ncols(pdata)
+  m <- nrows(pdata)
 
   data <- link_tbl(object$data, pdata, object$start.var, object$start.name, object$end.var)
   node.data <- attr(data, "node.pos")
@@ -127,6 +127,7 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
     }
   }
   nudge_x <- object$nudge_x
+  pos <- object$pos
   if(type == "upper") {
     nudge_x <- - nudge_x
   }
@@ -134,20 +135,24 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
     if(object$pos == "left")
       nudge_x <- - nudge_x
   }
+  hjust <- switch (type,
+    lower = 0,
+    upper = 1,
+    full = if(pos == "right") 0 else 1
+  )
   obj <- list(
     do.call(geom_links2, params),
     do.call(geom_text,
             list(mapping = aes_string(x = "x", y = "y", label = "label"),
-                 data = node.data, size = object$label.size,
+                 data = node.data, hjust = hjust, size = object$label.size,
                  colour = object$label.colour, family = object$label.family,
-                 fontface = object$fontface, nudge_x = nudge_x,
+                 fontface = object$label.fontface, nudge_x = nudge_x,
                  inherit.aes = FALSE))
     )
   if(type == "full") {
     width <- object$width
-    pos <- object$pos
     if(is.null(object$expand)) {
-      expand <- if(pos == "left") c(0.5, 0.05) else c(0.05, 0.5)
+      expand <- if(pos == "left") expansion(c(0.5, 0.05)) else expansion(c(0.05, 0.5))
     }
     p <- ggplot() + obj +
       scale_x_continuous(expand = expand) +

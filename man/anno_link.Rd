@@ -12,7 +12,7 @@ anno_link(
   label.size = 3.5,
   label.colour = "black",
   label.family = "",
-  label.fontface = "",
+  label.fontface = 1,
   nudge_x = 0.1,
   expand = NULL,
   start.var = NULL,

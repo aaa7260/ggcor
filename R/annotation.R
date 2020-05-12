@@ -73,7 +73,7 @@ anno_link <- function(mapping = NULL,
                       label.size = 3.5,
                       label.colour = "black",
                       label.family = "",
-                      label.fontface = "",
+                      label.fontface = 1,
                       nudge_x = 0.1,
                       expand = NULL,
                       start.var = NULL,
@@ -83,11 +83,12 @@ anno_link <- function(mapping = NULL,
 {
   start.var <- rlang::enquo(start.var)
   end.var <- rlang::enquo(end.var)
-  structure(.Data = list(mapping = mapping, data = data, label.size = label.size,
-                         label.colour = label.colour, label.family = label.family,
-                         label.fontface = label.fontface, start.var = start.var,
-                         start.name = start.name, end.var = end.var,
-                         params = list(...)), class = "anno_link")
+  structure(.Data = list(mapping = mapping, data = data, width = width, pos = pos,
+                         label.size = label.size, label.colour = label.colour,
+                         label.family = label.family, label.fontface = label.fontface,
+                         nudge_x = nudge_x, start.var = start.var, start.name = start.name,
+                         end.var = end.var, params = list(...)),
+            class = "anno_link")
 }
 
 #' Square annotation
