@@ -1,10 +1,21 @@
-#' @rdname link_tbl
+#' @rdname anno_link
 #' @format NULL
 #' @usage NULL
 #' @export
 add_link <- function(...) {
   warning("`add_link()` is deprecated. ",
           "Please see `?anno_link()` for more detail.", call. = FALSE)
+  NULL
+}
+
+#' @rdname anno_link
+#' @format NULL
+#' @usage NULL
+#' @export
+anno_link_label <- function(...) {
+  warning("`anno_link_label()` is deprecated. ",
+          "Please see `?anno_link()` for more detail.", call. = FALSE)
+  NULL
 }
 
 #' @rdname mantel_test
