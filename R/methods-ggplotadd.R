@@ -453,7 +453,7 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
 #' @importFrom ggplot2 scale_y_discrete
 #' @export
 ggplot_add.anno_bar2 <- function(object, plot, object_name) {
-  stopifnot(is_cor_tbl(plot$data))
+  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   data <- object$data
   trans <- object$trans
@@ -576,7 +576,7 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
 #' @importFrom ggplot2 geom_boxplot
 #' @export
 ggplot_add.anno_boxplot <- function(object, plot, object_name) {
-  stopifnot(is_cor_tbl(plot$data))
+  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   data <- object$data
   trans <- object$trans
@@ -673,7 +673,7 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
 #' @importFrom ggplot2 geom_point
 #' @export
 ggplot_add.anno_point <- function(object, plot, object_name) {
-  stopifnot(is_cor_tbl(plot$data))
+  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   data <- object$data
   pos <- object$pos
