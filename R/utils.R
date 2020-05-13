@@ -7,6 +7,18 @@ get_function <- function(pkg, fun) {
 }
 
 #' @noRd
+xrange <- function(.plot) {
+  stopifnot(inherits(.plot, "gg"))
+  ggplot_build(.plot)$layout$panel_params[[1]]$x.range
+}
+
+#' @noRd
+yrange <- function(.plot) {
+  stopifnot(inherits(.plot, "gg"))
+  ggplot_build(.plot)$layout$panel_params[[1]]$y.range
+}
+
+#' @noRd
 make_list_names <- function(x, pre = "X", sep = "")
 {
   stopifnot(is.list(x))
