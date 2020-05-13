@@ -356,3 +356,388 @@ ggplot_add.anno_hc_rect <- function(object, plot, object_name) {
                             colour = object$colour, size = object$size, inherit.aes = FALSE)
   ggplot_add(obj, plot)
 }
+
+#' @importFrom ggplot2 ggplot geom_bar scale_x_reverse scale_y_reverse
+#' @export
+ggplot_add.anno_bar <- function(object, plot, object_name) {
+  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
+  type <- get_type(plot$data)
+  trans <- object$trans
+  pos <- object$pos
+  if(is.null(pos)) {
+    if(!"y" %in% names(object$mapping)) {
+      pos <- switch (type, lower = "bottom", "top")
+    }
+    if(!"x" %in% names(object$mapping)) {
+      pos <- switch (type, lower = "left", "right")
+    }
+  }
+  vertical <- pos %in% c("bottom", "top")
+  nm <- if(vertical) rlang::as_name(object$mapping$x) else rlang::as_name(object$mapping$y)
+  if(isTRUE(object$align)) {
+    if(vertical) {
+      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+    } else {
+      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+    }
+  }
+  p <- ggplot(object$data, object$mapping) + do.call(geom_bar, object$params)
+
+  if(!plot$coordinates$is_free()) {
+    p <- p + coord_fixed()
+    if(is.null(trans)) {
+      from <- c(0, max(table(object$data[[nm]])))
+      to <- if(vertical) {
+        c(0, object$height * nrows(plot$data))
+      } else {
+        c(0, object$width * ncols(plot$data))
+      }
+      trans <- if(pos %in% c("top", "right")) {
+        liner_trans(from, to)
+      } else reverse_liner_trans(from, to)
+    }
+  }
+
+  if(vertical) {
+    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+    if(pos == "top") {
+      if(!is.null(trans)) {
+        p <- p + scale_y_continuous(trans = trans)
+      }
+    }
+    if(pos == "bottom") {
+      if(!is.null(trans)) {
+        p <- p + scale_y_continuous(trans = trans)
+      } else {
+        p <- p + scale_y_reverse()
+      }
+    }
+  } else {
+    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+    if(pos == "right") {
+      if(!is.null(trans)) {
+        p <- p + scale_x_continuous(trans = trans)
+      }
+    }
+    if(pos == "left") {
+      if(!is.null(trans)) {
+        p <- p + scale_x_continuous(trans = trans)
+      } else {
+        p <- p + scale_x_reverse()
+      }
+    }
+  }
+
+  if(is.character(object$theme)) {
+    p <- p + match.fun(object$theme)()
+  } else {
+    p <- p + object$theme
+  }
+  remove.axis <- if(object$remove.axis == "auto") {
+    if(vertical) "x" else "y"
+  } else object$remove.axis
+  if(object$remove.axis != "none")
+    p <- p + remove_axis(remove.axis)
+
+  if(vertical) {
+    .anno_col(plot, p, height = object$height, pos = pos)
+  } else {
+    .anno_row(plot, p, width = object$width, pos = pos)
+  }
+}
+
+#' @importFrom ggplot2 geom_col
+#' @importFrom ggplot2 scale_x_reverse
+#' @importFrom ggplot2 scale_y_reverse
+#' @importFrom ggplot2 scale_x_discrete
+#' @importFrom ggplot2 scale_y_discrete
+#' @export
+ggplot_add.anno_bar2 <- function(object, plot, object_name) {
+  stopifnot(is_cor_tbl(plot$data))
+  type <- get_type(plot$data)
+  data <- object$data
+  trans <- object$trans
+  pos <- object$pos
+  xname <- rlang::as_name(object$mapping$x)
+  yname <- rlang::as_name(object$mapping$y)
+  if((!is_binary(data[[xname]]) && !is_binary(data[[yname]])) ||
+     (is_binary(data[[xname]]) && is_binary(data[[yname]]))) {
+    stop("`anno_bar2()` should have one binary and one numeric position vars .",
+         call. = FALSE)
+  }
+  if(is.null(pos)) {
+    if(is_binary(data[[xname]])) {
+      pos <- switch (type, lower = "bottom", "top")
+    } else {
+      pos <- switch (type, lower = "left", "right")
+    }
+  }
+  vertical <- pos %in% c("bottom", "top")
+
+  if(isTRUE(object$align)) {
+    if(vertical) {
+      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+    } else {
+      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+    }
+  }
+
+  p <- ggplot(object$data, object$mapping) + do.call(geom_col, object$params)
+
+  if(!plot$coordinates$is_free()) {
+    p <- p + coord_fixed()
+    if(is.null(trans)) {
+      all_geq_zero <- if(vertical) all(data[[yname]] >= 0) else all(data[[xname]] >= 0)
+      all_leq_zero <- if(vertical) all(data[[yname]] <= 0) else all(data[[xname]] <= 0)
+      if(vertical) {
+        from <- if(all_geq_zero) {
+          c(0, max(data[[yname]], na.rm = TRUE))
+        } else if(all_leq_zero) {
+          c(min(data[[yname]], na.rm = TRUE), 0)
+        } else {
+          range(data[[yname]], na.rm = TRUE)
+        }
+        to <- if(all_geq_zero) {
+          c(0, object$height * nrows(plot$data))
+        } else if(all_leq_zero) {
+          c(- object$height * nrows(plot$data), 0)
+        } else {
+          c(from[1] / diff(from), from[2] / diff(from)) * object$height * nrows(plot$data)
+        }
+      } else {
+        from <- if(all_geq_zero) {
+          c(0, max(data[[xname]], na.rm = TRUE))
+        } else if(all_leq_zero) {
+          c(min(data[[xname]], na.rm = TRUE), 0)
+        } else {
+          range(data[[xname]], na.rm = TRUE)
+        }
+        to <- if(all_geq_zero) {
+          c(0, object$width * ncols(plot$data))
+        } else if(all_leq_zero) {
+          c(- object$width * ncols(plot$data), 0)
+        } else {
+          c(from[1] / diff(from), from[2] / diff(from)) * object$width * ncols(plot$data)
+        }
+      }
+      trans <- if(pos %in% c("top", "right")) {
+        liner_trans(from, to)
+      } else reverse_liner_trans(from, to)
+    }
+  }
+  if(vertical) {
+    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+    if(pos == "top") {
+      if(!is.null(trans)) {
+        p <- p + scale_y_continuous(trans = trans)
+      }
+    }
+    if(pos == "bottom") {
+      if(!is.null(trans)) {
+        p <- p + scale_y_continuous(trans = trans)
+      } else {
+        p <- p + scale_y_reverse()
+      }
+    }
+  } else {
+    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+    if(pos == "right") {
+      if(!is.null(trans)) {
+        p <- p + scale_x_continuous(trans = trans)
+      }
+    }
+    if(pos == "left") {
+      if(!is.null(trans)) {
+        p <- p + scale_x_continuous(trans = trans)
+      } else {
+        p <- p + scale_x_reverse()
+      }
+    }
+  }
+
+  if(is.character(object$theme)) {
+    p <- p + match.fun(object$theme)()
+  } else {
+    p <- p + object$theme
+  }
+  remove.axis <- if(object$remove.axis == "auto") {
+    if(vertical) "x" else "y"
+  } else object$remove.axis
+  if(object$remove.axis != "none")
+    p <- p + remove_axis(remove.axis)
+
+  if(vertical) {
+    .anno_col(plot, p, height = object$height, pos = pos)
+  } else {
+    .anno_row(plot, p, width = object$width, pos = pos)
+  }
+}
+
+#' @importFrom ggplot2 geom_boxplot
+#' @export
+ggplot_add.anno_boxplot <- function(object, plot, object_name) {
+  stopifnot(is_cor_tbl(plot$data))
+  type <- get_type(plot$data)
+  data <- object$data
+  trans <- object$trans
+  pos <- object$pos
+  xname <- rlang::as_name(object$mapping$x)
+  yname <- rlang::as_name(object$mapping$y)
+  if((!is_binary(data[[xname]]) && !is_binary(data[[yname]])) ||
+     (is_binary(data[[xname]]) && is_binary(data[[yname]]))) {
+    stop("`anno_boxplot()` should have one binary and one numeric position vars .",
+         call. = FALSE)
+  }
+  if(is.null(pos)) {
+    if(is_binary(data[[xname]])) {
+      pos <- switch (type, lower = "bottom", "top")
+    } else {
+      pos <- switch (type, lower = "left", "right")
+    }
+  }
+  vertical <- pos %in% c("bottom", "top")
+
+  if(isTRUE(object$align)) {
+    if(vertical) {
+      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+    } else {
+      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+    }
+  }
+
+  p <- ggplot(object$data, object$mapping) + do.call(geom_boxplot, object$params)
+
+  if(!plot$coordinates$is_free()) {
+    p <- p + coord_fixed()
+    if(is.null(trans)) {
+      if(vertical) {
+        from <- range(data[[yname]], na.rm = TRUE)
+        to <- c(from[1] / diff(from), from[2] / diff(from)) * object$height * nrows(plot$data)
+      } else {
+        from <- range(data[[xname]], na.rm = TRUE)
+        to <- c(from[1] / diff(from), from[2] / diff(from)) * object$width * ncols(plot$data)
+      }
+      trans <- if(pos %in% c("top", "right")) {
+        liner_trans(from, to)
+      } else reverse_liner_trans(from, to)
+    }
+  }
+  if(vertical) {
+    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+    if(pos == "top") {
+      if(!is.null(trans)) {
+        p <- p + scale_y_continuous(trans = trans)
+      }
+    }
+    if(pos == "bottom") {
+      if(!is.null(trans)) {
+        p <- p + scale_y_continuous(trans = trans)
+      } else {
+        p <- p + scale_y_reverse()
+      }
+    }
+  } else {
+    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+    if(pos == "right") {
+      if(!is.null(trans)) {
+        p <- p + scale_x_continuous(trans = trans)
+      }
+    }
+    if(pos == "left") {
+      if(!is.null(trans)) {
+        p <- p + scale_x_continuous(trans = trans)
+      } else {
+        p <- p + scale_x_reverse()
+      }
+    }
+  }
+
+  if(is.character(object$theme)) {
+    p <- p + match.fun(object$theme)()
+  } else {
+    p <- p + object$theme
+  }
+  remove.axis <- if(object$remove.axis == "auto") {
+    if(vertical) "x" else "y"
+  } else object$remove.axis
+  if(object$remove.axis != "none")
+    p <- p + remove_axis(remove.axis)
+
+  if(vertical) {
+    .anno_col(plot, p, height = object$height, pos = pos)
+  } else {
+    .anno_row(plot, p, width = object$width, pos = pos)
+  }
+}
+
+#' @importFrom ggplot2 geom_point
+#' @export
+ggplot_add.anno_point <- function(object, plot, object_name) {
+  stopifnot(is_cor_tbl(plot$data))
+  type <- get_type(plot$data)
+  data <- object$data
+  pos <- object$pos
+  xname <- rlang::as_name(object$mapping$x)
+  yname <- rlang::as_name(object$mapping$y)
+  if(!is_binary(data[[xname]]) || !is_binary(data[[yname]])) {
+    stop("`anno_point()` only support for binary position vars.",
+         call. = FALSE)
+  }
+  if(is.null(pos)) {
+    if(all(unique(data[[xname]]) %in% get_col_name(plot$data))) {
+      pos <- switch(type, lower = "bottom", "top")
+    } else {
+      pos <- switch(type, lower = "left", "right")
+    }
+  }
+  vertical <- pos %in% c("bottom", "top")
+
+  if(isTRUE(object$align)) {
+    if(vertical) {
+      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+    } else {
+      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+    }
+  }
+  p <- ggplot(object$data, object$mapping) + do.call(geom_point, object$params)
+
+  if(!plot$coordinates$is_free()) {
+    p <- p + coord_fixed()
+  }
+
+  if(vertical) {
+    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+  } else {
+    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+  }
+
+  if(is.character(object$theme)) {
+    p <- p + match.fun(object$theme)()
+  } else {
+    p <- p + object$theme
+  }
+  remove.axis <- if(object$remove.axis == "auto") {
+    if(vertical) "x" else "y"
+  } else object$remove.axis
+  if(object$remove.axis != "none")
+    p <- p + remove_axis(remove.axis)
+
+  if(vertical) {
+    .anno_col(plot, p, height = object$height, pos = pos)
+  } else {
+    .anno_row(plot, p, width = object$width, pos = pos)
+  }
+}
+
+#' @noRd
+is_binary <- function(x) {
+  is.character(x) || is.factor(x)
+}
+
+#' @noRd
+aes_factor_expr <- function(name, levels) {
+  levels <- deparse(substitute(levels))
+  str <- paste0("factor(", name, ",", "levels = ",
+         levels, ")")
+  as.expression(str)
+}

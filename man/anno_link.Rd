@@ -4,7 +4,8 @@
 \alias{anno_link}
 \alias{add_link}
 \alias{anno_link_label}
-\title{Special annotation function for correlation link plot}
+\title{Link annotation
+layers of curves, nodes, and labels.}
 \usage{
 anno_link(
   mapping = NULL,
@@ -48,8 +49,7 @@ will be converted.}
 a ggplot layer.
 }
 \description{
-a set of custom layer functions that quickly add
-layers of curves, nodes, and labels.
+Link annotation
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

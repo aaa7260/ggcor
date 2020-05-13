@@ -48,8 +48,8 @@ anno_col_tree <- function(bcols = NULL,
             class = "anno_col_tree")
 }
 
-#' Special annotation function for correlation link plot
-#' @description a set of custom layer functions that quickly add
+#' Link annotation
+#' @title Link annotation
 #' layers of curves, nodes, and labels.
 #' @param mapping aesthetic mappings parameters.
 #' @param data a data frame.
@@ -113,3 +113,97 @@ anno_hc_rect <- function(k = 2,
   structure(.Data = list(k = k, fill = fill, colour = colour,
                          size = size), class = "anno_hc_rect")
 }
+
+#' Custom annotation
+#' @title Custom annotation
+#' @param mapping aesthetic mappings parameters.
+#' @param data a data frame.
+#' @param align align base on main plot.
+#' @param pos position of annotation.
+#' @param width,height width and height of annotation.
+#' @param trans the name of a transformation object or the object itself.
+#' @param remove.axis one of "auto", "x", "y" or "none".
+#' @param theme theme object or the name.
+#' @param ... extra parameters.
+#' @return anno_* object.
+#' @rdname anno_special
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
+anno_bar <- function(mapping,
+                     data,
+                     align = TRUE,
+                     pos = NULL,
+                     width = 0.2,
+                     height = 0.2,
+                     trans = NULL,
+                     remove.axis = "auto",
+                     theme = theme_anno(),
+                     ...) {
+  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
+  structure(.Data = list(mapping = mapping, data = data, align = align,
+                         pos = pos, width = width, height = height,
+                         trans = trans, remove.axis = remove.axis,
+                         theme = theme, params = list(...)),
+            class = "anno_bar")
+}
+
+#' @rdname anno_special
+#' @export
+anno_bar2 <- function(mapping,
+                      data,
+                      align = TRUE,
+                      pos = NULL,
+                      width = 0.2,
+                      height = 0.2,
+                      trans = NULL,
+                      remove.axis = "auto",
+                      theme = theme_anno(),
+                      ...) {
+  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
+  structure(.Data = list(mapping = mapping, data = data, align = align,
+                         pos = pos, width = width, height = height,
+                         trans = trans, remove.axis = remove.axis,
+                         theme = theme, params = list(...)),
+            class = "anno_bar2")
+}
+
+#' @rdname anno_special
+#' @export
+anno_boxplot <- function(mapping,
+                         data,
+                         align = TRUE,
+                         pos = NULL,
+                         width = 0.2,
+                         height = 0.2,
+                         trans = NULL,
+                         remove.axis = "auto",
+                         theme = theme_anno(),
+                         ...) {
+  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
+  structure(.Data = list(mapping = mapping, data = data, align = align,
+                         pos = pos, width = width, height = height,
+                         trans = trans, remove.axis = remove.axis,
+                         theme = theme, params = list(...)),
+            class = "anno_boxplot")
+}
+
+#' @rdname anno_special
+#' @export
+anno_point <- function(mapping,
+                       data,
+                       align = TRUE,
+                       pos = NULL,
+                       width = 0.2,
+                       height = 0.2,
+                       remove.axis = "auto",
+                       theme = theme_anno(),
+                       ...) {
+  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
+  structure(.Data = list(mapping = mapping, data = data, align = align,
+                         pos = pos, width = width, height = height,
+                         remove.axis = remove.axis, theme = theme,
+                         params = list(...)),
+            class = "anno_point")
+}
+
+
