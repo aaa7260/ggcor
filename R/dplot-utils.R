@@ -1,6 +1,6 @@
 #' Decoration plot
 #' @title Decoration plot
-#' @param .plot a "gg" or "dplot" object.
+#' @param plot,x a "gg" or "dplot" object.
 #' @param obj a "gg" object.
 #' @param width,height scala numeric value.
 #' @param pos one of "left", "right", "bottom" or "top".
@@ -11,6 +11,7 @@
 #' @param labels labels of guide_colourbar.
 #' @param limits limits of guide_colourbar.
 #' @param nbin a numeric specifying the number of bins for drawing the guide_colourbar.
+#' @param ... extra parameters.
 #' @return a "dplot" object.
 #' @rdname dplot_utils
 #' @importFrom ggplot2 ggplot geom_blank theme_void ggplot_add
@@ -27,13 +28,13 @@
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-as_dplot <- function(.plot) {
-  if(is_dplot(.plot))
-    return(.plot)
-  if(!inherits(.plot, "gg")) {
-    stop("'.plot' must be a 'gg' object.", call. = FALSE)
+as_dplot <- function(plot) {
+  if(is_dplot(plot))
+    return(plot)
+  if(!inherits(plot, "gg")) {
+    stop("'plot' must be a 'gg' object.", call. = FALSE)
   }
-  structure(.Data = .plot,
+  structure(.Data = plot,
             .anno_info = list(row.anno = list(),
                               col.anno = list(),
                               width = NULL,
@@ -42,13 +43,13 @@ as_dplot <- function(.plot) {
                               l = 0,
                               t = 0,
                               b = 0),
-            class = c("dplot", class(.plot)))
+            class = c("dplot", class(plot)))
 }
 
 #' @rdname dplot_utils
 #' @export
-is_dplot <- function(.plot) {
-  inherits(.plot, "dplot")
+is_dplot <- function(plot) {
+  inherits(plot, "dplot")
 }
 
 #' @rdname dplot_utils
@@ -76,16 +77,16 @@ anno_row_custom <- function(obj,
 }
 
 #' @noRd
-.anno_row <- function(.plot,
+.anno_row <- function(plot,
                       obj,
                       width = 0.2,
                       pos = "right") {
-  .plot <- as_dplot(.plot)
+  plot <- as_dplot(plot)
   if(!inherits(obj, "gg")) {
     stop("'obj' must be a 'gg' object.", call. = FALSE)
   }
   pos <- match.arg(pos, c("left", "right"))
-  .anno_info <- attr(.plot, ".anno_info")
+  .anno_info <- attr(plot, ".anno_info")
   if(pos == "left") {
     .anno_info$l <- .anno_info$l + 1
     .anno_info$width <- c(width, .anno_info$width)
@@ -97,21 +98,21 @@ anno_row_custom <- function(obj,
     .anno_info$row.anno <- c(.anno_info$row.anno, list(obj))
 
   }
-  attr(.plot, ".anno_info") <- .anno_info
-  .plot
+  attr(plot, ".anno_info") <- .anno_info
+  plot
 }
 
 #' @noRd
-.anno_col <- function(.plot,
+.anno_col <- function(plot,
                       obj,
                       height = 0.2,
                       pos = "top") {
-  .plot <- as_dplot(.plot)
+  plot <- as_dplot(plot)
   if(!inherits(obj, "gg")) {
     stop("'obj' must be a 'gg' object.", call. = FALSE)
   }
   pos <- match.arg(pos, c("top", "bottom"))
-  .anno_info <- attr(.plot, ".anno_info")
+  .anno_info <- attr(plot, ".anno_info")
   if(pos == "bottom") {
     .anno_info$b <- .anno_info$b + 1
     .anno_info$height <- c(.anno_info$height, height)
@@ -121,8 +122,8 @@ anno_row_custom <- function(obj,
     .anno_info$height <- c(height, .anno_info$height)
     .anno_info$col.anno <- c(list(obj), .anno_info$col.anno)
   }
-  attr(.plot, ".anno_info") <- .anno_info
-  .plot
+  attr(plot, ".anno_info") <- .anno_info
+  plot
 }
 
 #' @export
@@ -144,19 +145,10 @@ empty_plot <- function()
     ggplot2::theme_void()
 }
 
-#' @rdname dplot_utils
+#' @importFrom ggplot2 ggplot_build
 #' @export
-print.dplot <- function(.plot,
-                        colours = getOption("ggcor.fill.pal"),
-                        style = getOption("ggcor.plot.style", "corrplot"),
-                        title = "corr",
-                        breaks = c(-1, -0.5, 0, 0.5, 1),
-                        labels = c(-1, -0.5, 0, 0.5, 1),
-                        limits = c(-1, 1),
-                        nbin = 40) {
-
-  .plot <- as_dplot(.plot)
-  .anno_info <- attr(.plot, ".anno_info")
+ggplot_build.dplot <- function(plot) {
+  .anno_info <- attr(plot, ".anno_info")
   row.anno <- .anno_info$row.anno
   col.anno <- .anno_info$col.anno
   r <- .anno_info$r
@@ -166,31 +158,9 @@ print.dplot <- function(.plot,
   width <- .anno_info$width
   height <- .anno_info$height
 
-  if(inherits(.plot, "quickcor")) {
-    style <- switch (style,
-                     corrplot = "corrplot",
-                     "ggplot2"
-    )
-    if(style == "corrplot") {
-      mapping <- unclass(.plot$mapping)
-      if(!is.null(mapping$fill) && is.null(.plot$scales$get_scales("fill"))) {
-        fill.var.name <- as.character(rlang::quo_get_expr(mapping$fill))
-        fill.var <- rlang::eval_tidy(mapping$fill, .plot$data)
-        if(!is_general_cor_tbl(.plot$data) && fill.var.name == "r" &&
-           is.numeric(fill.var)) {
-          .plot <- .plot + scale_fill_gradient2n(colours = colours,
-                                         breaks = breaks,
-                                         labels = labels,
-                                         limits = limits) +
-            guides(fill = guide_colourbar(title = title,
-                                          nbin  = nbin))
-        }
-      }
-    }
-  }
-  class(.plot) <- setdiff(class(.plot), "dplot")
+  class(plot) <- setdiff(class(plot), "dplot")
   if(length(row.anno) == 0 && length(col.anno) == 0) {
-    grid::grid.draw(.plot)
+    return(plot)
   }
 
   n <- length(row.anno) + 1
@@ -201,8 +171,8 @@ print.dplot <- function(.plot,
     plot.list[[.id]] <- empty_plot()
   })
 
-  row.anno <- c(row.anno[rev(seq_len(l))], list(.plot), row.anno[seq_len(r) + l])
-  col.anno <- c(col.anno[seq_len(t)], list(.plot), col.anno[seq_len(b) + t])
+  row.anno <- c(row.anno[rev(seq_len(l))], list(plot), row.anno[seq_len(r) + l])
+  col.anno <- c(col.anno[seq_len(t)], list(plot), col.anno[seq_len(b) + t])
   plot.list[t * n + seq_len(n)] <- row.anno
   plot.list[l + 1 + n * (seq_len(m) - 1)] <- col.anno
 
@@ -210,15 +180,50 @@ print.dplot <- function(.plot,
   height <- c(height[seq_len(t)], 1, height[seq_len(b) + t])
 
 
-  if(!.plot$coordinates$is_free()) {
+  if(!plot$coordinates$is_free()) {
     width <- height <- NULL
   }
-  p <- Reduce("+", plot.list) +
+  Reduce("+", plot.list) +
     plot_layout(ncol = n,
                 nrow = m,
                 byrow = TRUE,
                 widths = width,
                 heights = height,
                 guides = "collect")
-  grid::grid.draw(p)
+}
+#' @rdname dplot_utils
+#' @export
+print.dplot <- function(x,
+                        colours = getOption("ggcor.fill.pal"),
+                        style = getOption("ggcor.plot.style", "corrplot"),
+                        title = "corr",
+                        breaks = c(-1, -0.5, 0, 0.5, 1),
+                        labels = c(-1, -0.5, 0, 0.5, 1),
+                        limits = c(-1, 1),
+                        nbin = 40,
+                        ...) {
+  if(inherits(x, "quickcor")) {
+    style <- switch (style,
+                     corrplot = "corrplot",
+                     "ggplot2"
+    )
+    if(style == "corrplot") {
+      mapping <- unclass(x$mapping)
+      if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
+        fill.var.name <- as.character(rlang::quo_get_expr(mapping$fill))
+        fill.var <- rlang::eval_tidy(mapping$fill, x$data)
+        if(!is_general_cor_tbl(x$data) && fill.var.name == "r" &&
+           is.numeric(fill.var)) {
+          x <- x + scale_fill_gradient2n(colours = colours,
+                                         breaks = breaks,
+                                         labels = labels,
+                                         limits = limits) +
+            guides(fill = guide_colourbar(title = title,
+                                          nbin  = nbin))
+        }
+      }
+    }
+  }
+  x <- ggplot_build(x)
+  grid::grid.draw(x)
 }

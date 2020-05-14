@@ -9,9 +9,9 @@
 \alias{print.dplot}
 \title{Decoration plot}
 \usage{
-as_dplot(.plot)
+as_dplot(plot)
 
-is_dplot(.plot)
+is_dplot(plot)
 
 anno_col_custom(obj, height = 0.2, pos = "top")
 
@@ -20,18 +20,19 @@ anno_row_custom(obj, width = 0.2, pos = "right")
 empty_plot()
 
 \method{print}{dplot}(
-  .plot,
+  x,
   colours = getOption("ggcor.fill.pal"),
   style = getOption("ggcor.plot.style", "corrplot"),
   title = "corr",
   breaks = c(-1, -0.5, 0, 0.5, 1),
   labels = c(-1, -0.5, 0, 0.5, 1),
   limits = c(-1, 1),
-  nbin = 40
+  nbin = 40,
+  ...
 )
 }
 \arguments{
-\item{.plot}{a "gg" or "dplot" object.}
+\item{plot, x}{a "gg" or "dplot" object.}
 
 \item{obj}{a "gg" object.}
 
@@ -52,6 +53,8 @@ empty_plot()
 \item{limits}{limits of guide_colourbar.}
 
 \item{nbin}{a numeric specifying the number of bins for drawing the guide_colourbar.}
+
+\item{...}{extra parameters.}
 }
 \value{
 a "dplot" object.

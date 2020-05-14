@@ -58,6 +58,7 @@ anno_col_tree <- function(bcols = NULL,
 #' @param start.var,end.var character to specify which variable is the starting
 #' points and which is the ending points. if the variable is not character, it
 #' will be converted.
+#' @param start.name character vector.
 #' @param label.size,label.colour,label.family,label.fontface parameters for label.
 #' @param nudge_x horizonal justification of label.
 #' @param expand expansion of x axis.

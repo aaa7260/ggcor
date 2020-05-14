@@ -476,9 +476,9 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
 
   if(isTRUE(object$align)) {
     if(vertical) {
-      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+      object$mapping$x <- aes_factor_expr(xname, get_col_name(plot$data))
     } else {
-      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+      object$mapping$y <- aes_factor_expr(yname, levels = rev(get_row_name(plot$data)))
     }
   }
 
@@ -599,9 +599,9 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
 
   if(isTRUE(object$align)) {
     if(vertical) {
-      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+      object$mapping$x <- aes_factor_expr(xname, get_col_name(plot$data))
     } else {
-      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+      object$mapping$y <- aes_factor_expr(yname, levels = rev(get_row_name(plot$data)))
     }
   }
 
@@ -694,9 +694,9 @@ ggplot_add.anno_point <- function(object, plot, object_name) {
 
   if(isTRUE(object$align)) {
     if(vertical) {
-      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+      object$mapping$x <- aes_factor_expr(xname, get_col_name(plot$data))
     } else {
-      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+      object$mapping$y <- aes_factor_expr(yname, levels = rev(get_row_name(plot$data)))
     }
   }
   p <- ggplot(object$data, object$mapping) + do.call(geom_point, object$params)

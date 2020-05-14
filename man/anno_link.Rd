@@ -43,6 +43,8 @@ anno_link(
 points and which is the ending points. if the variable is not character, it
 will be converted.}
 
+\item{start.name}{character vector.}
+
 \item{...}{extra parameters passing to layer function.}
 }
 \value{
