@@ -24,7 +24,8 @@
 #'   geom_point(size = 3)
 #' quickcor(mtcars) +
 #'   geom_square() +
-#'   anno_row_custom(p)
+#'   anno_row_custom(p) +
+#'   anno_col_custom(p)
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export

@@ -71,7 +71,8 @@ p <- gcor_tbl(d, "var") \%>\%
   geom_point(size = 3)
 quickcor(mtcars) +
   geom_square() +
-  anno_row_custom(p)
+  anno_row_custom(p) +
+  anno_col_custom(p)
 }
 }
 \author{
