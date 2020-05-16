@@ -11,7 +11,7 @@ Maintainer: Houyun Huang <houyunhuang@163.com>
 Description: The 'ggcor' package can be used to visualize simply and directly a
     correlation matrix based on 'ggplot2'. It provides a solution for reordering the 
     correlation matrix, displaying the different significance level on the plot and 
-    other details. The most important parts, It also provides a graphical display of 
+    other details. The most important parts, it also provides a graphical display of 
     any correlation analysis and their combination (such as Mantel test, Partial 
     correlation analysis, and so on).
 License: GPL-2
