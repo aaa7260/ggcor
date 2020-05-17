@@ -365,6 +365,7 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
   trans <- object$trans
   pos <- object$pos
   flip <- object$flip
+
   if(is.null(pos)) {
     if(!"y" %in% names(object$mapping)) {
       pos <- switch (type, lower = "bottom", "top")
@@ -392,6 +393,10 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
     }
   }
 
+  if(!is.null(trans)) {
+    breaks <- labels <- pretty(c(0, max(table(object$data[[name]]))))
+  }
+
   if(vertical) {
     if(isTRUE(object$align)) {
       p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
@@ -399,7 +404,9 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
       p <- p + scale_x_discrete(expand = c(0, 0))
     }
     if(!is.null(trans)) {
-      p <- p + scale_y_continuous(trans = trans)
+      p <- p + scale_y_continuous(trans = trans,
+                                  breaks = breaks,
+                                  labels = labels)
     }
 
   } else {
@@ -409,7 +416,9 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
       p <- p + scale_y_discrete(expand = c(0, 0))
     }
     if(!is.null(trans)) {
-      p <- p + scale_x_continuous(trans = trans)
+      p <- p + scale_x_continuous(trans = trans,
+                                  breaks = breaks,
+                                  labels = labels)
     }
   }
 
@@ -511,6 +520,13 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
     }
   }
 
+  if(!is.null(trans)) {
+    if(vertical) {
+      breaks <- labels <- pretty(range(c(0, range(data[[yname]], na.rm = TRUE))))
+    } else {
+      breaks <- labels <- pretty(range(c(0, range(data[[xname]], na.rm = TRUE))))
+    }
+  }
   if(vertical) {
     if(isTRUE(object$align)) {
       p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
@@ -518,7 +534,9 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
       p <- p + scale_x_discrete(expand = c(0, 0))
     }
     if(!is.null(trans)) {
-      p <- p + scale_y_continuous(trans = trans)
+      p <- p + scale_y_continuous(trans = trans,
+                                  breaks = breaks,
+                                  labels = labels)
     }
 
   } else {
@@ -528,7 +546,9 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
       p <- p + scale_y_discrete(expand = c(0, 0))
     }
     if(!is.null(trans)) {
-      p <- p + scale_x_continuous(trans = trans)
+      p <- p + scale_x_continuous(trans = trans,
+                                  breaks = breaks,
+                                  labels = labels)
     }
   }
 
@@ -599,6 +619,14 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
     }
   }
 
+  if(!is.null(trans)) {
+    if(vertical) {
+      breaks <- labels <- pretty(range(data[[yname]], na.rm = TRUE))
+    } else {
+      breaks <- labels <- pretty(range(data[[xname]], na.rm = TRUE))
+    }
+  }
+
   if(vertical) {
     if(isTRUE(object$align)) {
       p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
@@ -606,7 +634,9 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
       p <- p + scale_x_discrete(expand = c(0, 0))
     }
     if(!is.null(trans)) {
-      p <- p + scale_y_continuous(trans = trans)
+      p <- p + scale_y_continuous(trans = trans,
+                                  breaks = breaks,
+                                  labels = labels)
     }
 
   } else {
@@ -616,7 +646,9 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
       p <- p + scale_y_discrete(expand = c(0, 0))
     }
     if(!is.null(trans)) {
-      p <- p + scale_x_continuous(trans = trans)
+      p <- p + scale_x_continuous(trans = trans,
+                                  breaks = breaks,
+                                  labels = labels)
     }
   }
 

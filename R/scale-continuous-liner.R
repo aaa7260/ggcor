@@ -40,7 +40,8 @@ liner_trans <- function (from, to)
   inv <- function(x) scales::rescale(x, from = to, to = from)
   scales::trans_new(nm,
                     transform = trans,
-                    inverse = inv)
+                    inverse = inv,
+                    minor_breaks = scales::regular_minor_breaks())
 }
 
 #' @noRd
