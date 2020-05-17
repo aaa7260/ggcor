@@ -145,7 +145,7 @@ anno_bar <- function(mapping,
                      ...) {
   remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
   structure(.Data = list(mapping = mapping, data = data, align = align,
-                         pos = pos, width = width, height = height,
+                         flip = flip, pos = pos, width = width, height = height,
                          trans = trans, remove.axis = remove.axis,
                          theme = theme, params = list(...)),
             class = "anno_bar")
@@ -166,7 +166,7 @@ anno_bar2 <- function(mapping,
                       ...) {
   remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
   structure(.Data = list(mapping = mapping, data = data, align = align,
-                         pos = pos, width = width, height = height,
+                         flip = flip, pos = pos, width = width, height = height,
                          trans = trans, remove.axis = remove.axis,
                          theme = theme, params = list(...)),
             class = "anno_bar2")

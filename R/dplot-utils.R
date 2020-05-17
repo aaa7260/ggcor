@@ -226,5 +226,5 @@ print.dplot <- function(x,
     }
   }
   x <- ggplot_build(x)
-  grid::grid.draw(x)
+  print(x)
 }

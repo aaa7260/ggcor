@@ -360,57 +360,66 @@ ggplot_add.anno_hc_rect <- function(object, plot, object_name) {
 #' @importFrom ggplot2 ggplot geom_bar scale_x_reverse scale_y_reverse
 #' @export
 ggplot_add.anno_bar <- function(object, plot, object_name) {
-  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
+  stopifnot(inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   trans <- object$trans
   pos <- object$pos
-  filp <- object$flip
+  flip <- object$flip
   if(is.null(pos)) {
     if(!"y" %in% names(object$mapping)) {
       pos <- switch (type, lower = "bottom", "top")
+      name <- rlang::as_name(object$mapping$x)
     }
     if(!"x" %in% names(object$mapping)) {
       pos <- switch (type, lower = "left", "right")
+      name <- rlang::as_name(object$mapping$y)
     }
   }
   vertical <- pos %in% c("bottom", "top")
-  name <- if(vertical) rlang::as_name(object$mapping$x) else rlang::as_name(object$mapping$y)
-  if(isTRUE(object$align)) {
-    if(vertical) {
-      object$mapping$x <- aes_factor_expr(name, get_col_name(plot$data))
-    } else {
-      object$mapping$y <- aes_factor_expr(name, levels = rev(get_row_name(plot$data)))
-    }
-  }
+
   p <- ggplot(object$data, object$mapping) + do.call(geom_bar, object$params)
 
   if(!plot$coordinates$is_free()) {
-    p <- p + coord_fixed()
     if(is.null(trans)) {
-      from <- c(0, max(table(object$data[[nm]])))
+      from <- c(0, max(table(object$data[[name]])))
       to <- if(vertical) {
         c(0, object$height * nrows(plot$data))
       } else {
         c(0, object$width * ncols(plot$data))
       }
 
-      trans <- if(isTRUE(flip)) {
-        reverse_liner_trans(from, to)
-      } else {
-        liner_trans(from, to)
-      }
+      trans <- if(isTRUE(flip)) reverse_liner_trans(from, to) else liner_trans(from, to)
     }
   }
 
   if(vertical) {
-    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
+    } else {
+      p <- p + scale_x_discrete(expand = c(0, 0))
+    }
     if(!is.null(trans)) {
       p <- p + scale_y_continuous(trans = trans)
     }
+
   } else {
-    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_y_discrete(limits = rev(get_row_name(plot$data)), expand = c(0, 0))
+    } else {
+      p <- p + scale_y_discrete(expand = c(0, 0))
+    }
     if(!is.null(trans)) {
       p <- p + scale_x_continuous(trans = trans)
+    }
+  }
+
+  if(!plot$coordinates$is_free()) {
+    if(isTRUE(object$align)) {
+      if(vertical) {
+        p <- p + coord_fixed(xlim = xrange(plot))
+      } else {
+        p <- p + coord_fixed(ylim = yrange(plot))
+      }
     }
   }
 
@@ -439,7 +448,7 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
 #' @importFrom ggplot2 scale_y_discrete
 #' @export
 ggplot_add.anno_bar2 <- function(object, plot, object_name) {
-  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
+  stopifnot(inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   data <- object$data
   trans <- object$trans
@@ -461,18 +470,9 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
   }
   vertical <- pos %in% c("bottom", "top")
 
-  if(isTRUE(object$align)) {
-    if(vertical) {
-      object$mapping$x <- aes_factor_expr(xname, get_col_name(plot$data))
-    } else {
-      object$mapping$y <- aes_factor_expr(yname, levels = rev(get_row_name(plot$data)))
-    }
-  }
-
   p <- ggplot(object$data, object$mapping) + do.call(geom_col, object$params)
 
   if(!plot$coordinates$is_free()) {
-    p <- p + coord_fixed()
     if(is.null(trans)) {
       all_geq_zero <- if(vertical) all(data[[yname]] >= 0) else all(data[[xname]] >= 0)
       all_leq_zero <- if(vertical) all(data[[yname]] <= 0) else all(data[[xname]] <= 0)
@@ -507,18 +507,38 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
           c(from[1] / diff(from), from[2] / diff(from)) * object$width * ncols(plot$data)
         }
       }
-      if(isTRUE(flip)) reverse_liner_trans(from, to) else liner_trans(from, to)
+      trans <- if(isTRUE(flip)) reverse_liner_trans(from, to) else liner_trans(from, to)
     }
   }
+
   if(vertical) {
-    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
+    } else {
+      p <- p + scale_x_discrete(expand = c(0, 0))
+    }
     if(!is.null(trans)) {
       p <- p + scale_y_continuous(trans = trans)
     }
+
   } else {
-    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_y_discrete(limits = rev(get_row_name(plot$data)), expand = c(0, 0))
+    } else {
+      p <- p + scale_y_discrete(expand = c(0, 0))
+    }
     if(!is.null(trans)) {
       p <- p + scale_x_continuous(trans = trans)
+    }
+  }
+
+  if(!plot$coordinates$is_free()) {
+    if(isTRUE(object$align)) {
+      if(vertical) {
+        p <- p + coord_fixed(xlim = xrange(plot))
+      } else {
+        p <- p + coord_fixed(ylim = yrange(plot))
+      }
     }
   }
 
@@ -543,7 +563,7 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
 #' @importFrom ggplot2 geom_boxplot
 #' @export
 ggplot_add.anno_boxplot <- function(object, plot, object_name) {
-  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
+  stopifnot(inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   data <- object$data
   trans <- object$trans
@@ -564,18 +584,9 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
   }
   vertical <- pos %in% c("bottom", "top")
 
-  if(isTRUE(object$align)) {
-    if(vertical) {
-      object$mapping$x <- aes_factor_expr(xname, get_col_name(plot$data))
-    } else {
-      object$mapping$y <- aes_factor_expr(yname, levels = rev(get_row_name(plot$data)))
-    }
-  }
-
   p <- ggplot(object$data, object$mapping) + do.call(geom_boxplot, object$params)
 
   if(!plot$coordinates$is_free()) {
-    p <- p + coord_fixed()
     if(is.null(trans)) {
       if(vertical) {
         from <- range(data[[yname]], na.rm = TRUE)
@@ -587,15 +598,35 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
       trans <- liner_trans(from, to)
     }
   }
+
   if(vertical) {
-    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
+    } else {
+      p <- p + scale_x_discrete(expand = c(0, 0))
+    }
     if(!is.null(trans)) {
       p <- p + scale_y_continuous(trans = trans)
     }
+
   } else {
-    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_y_discrete(limits = rev(get_row_name(plot$data)), expand = c(0, 0))
+    } else {
+      p <- p + scale_y_discrete(expand = c(0, 0))
+    }
     if(!is.null(trans)) {
       p <- p + scale_x_continuous(trans = trans)
+    }
+  }
+
+  if(!plot$coordinates$is_free()) {
+    if(isTRUE(object$align)) {
+      if(vertical) {
+        p <- p + coord_fixed(xlim = xrange(plot))
+      } else {
+        p <- p + coord_fixed(ylim = yrange(plot))
+      }
     }
   }
 
@@ -620,7 +651,7 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
 #' @importFrom ggplot2 geom_point
 #' @export
 ggplot_add.anno_point <- function(object, plot, object_name) {
-  stopifnot(inherits(plot, "quickcor") && isTRUE(plot$plot_env$circular))
+  stopifnot(inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   data <- object$data
   pos <- object$pos
@@ -631,21 +662,16 @@ ggplot_add.anno_point <- function(object, plot, object_name) {
          call. = FALSE)
   }
   if(is.null(pos)) {
-    if(all(unique(data[[xname]]) %in% get_col_name(plot$data))) {
+    if(all(unique(data[[xname]], TRUE) %in% get_col_name(plot$data))) {
       pos <- switch(type, lower = "bottom", "top")
-    } else {
+    } else if(all(unique(data[[yname]], TRUE) %in% get_row_name(plot$data))) {
       pos <- switch(type, lower = "left", "right")
+    } else {
+      stop("Please set the 'pos' params.", call. = FALSE)
     }
   }
   vertical <- pos %in% c("bottom", "top")
 
-  if(isTRUE(object$align)) {
-    if(vertical) {
-      object$mapping$x <- aes_factor_expr(xname, get_col_name(plot$data))
-    } else {
-      object$mapping$y <- aes_factor_expr(yname, levels = rev(get_row_name(plot$data)))
-    }
-  }
   p <- ggplot(object$data, object$mapping) + do.call(geom_point, object$params)
 
   if(!plot$coordinates$is_free()) {
@@ -653,9 +679,27 @@ ggplot_add.anno_point <- function(object, plot, object_name) {
   }
 
   if(vertical) {
-    p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
+    } else {
+      p <- p + scale_x_discrete(expand = c(0, 0))
+    }
   } else {
-    p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
+    if(isTRUE(object$align)) {
+      p <- p + scale_y_discrete(limits = rev(get_row_name(plot$data)), expand = c(0, 0))
+    } else {
+      p <- p + scale_y_discrete(expand = c(0, 0))
+    }
+  }
+
+  if(!plot$coordinates$is_free()) {
+    if(isTRUE(object$align)) {
+      if(vertical) {
+        p <- p + coord_fixed(xlim = xrange(plot))
+      } else {
+        p <- p + coord_fixed(ylim = yrange(plot))
+      }
+    }
   }
 
   if(is.character(object$theme)) {
@@ -681,10 +725,3 @@ is_binary <- function(x) {
   is.character(x) || is.factor(x)
 }
 
-#' @noRd
-aes_factor_expr <- function(name, levels) {
-  levels <- deparse(substitute(levels))
-  str <- paste0("factor(", name, ",", "levels = ",
-         levels, ")")
-  as.expression(str)
-}
