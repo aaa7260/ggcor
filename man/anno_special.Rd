@@ -11,6 +11,7 @@ anno_bar(
   mapping,
   data,
   align = TRUE,
+  flip = FALSE,
   pos = NULL,
   width = 0.2,
   height = 0.2,
@@ -24,6 +25,7 @@ anno_bar2(
   mapping,
   data,
   align = TRUE,
+  flip = FALSE,
   pos = NULL,
   width = 0.2,
   height = 0.2,
@@ -64,6 +66,9 @@ anno_point(
 \item{data}{a data frame.}
 
 \item{align}{align base on main plot.}
+
+\item{flip}{a logical value. If TRUE, the annotation on the left or on
+the bottom side will be flipped.}
 
 \item{pos}{position of annotation.}
 

@@ -364,6 +364,7 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
   type <- get_type(plot$data)
   trans <- object$trans
   pos <- object$pos
+  filp <- object$flip
   if(is.null(pos)) {
     if(!"y" %in% names(object$mapping)) {
       pos <- switch (type, lower = "bottom", "top")
@@ -373,12 +374,12 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
     }
   }
   vertical <- pos %in% c("bottom", "top")
-  nm <- if(vertical) rlang::as_name(object$mapping$x) else rlang::as_name(object$mapping$y)
+  name <- if(vertical) rlang::as_name(object$mapping$x) else rlang::as_name(object$mapping$y)
   if(isTRUE(object$align)) {
     if(vertical) {
-      object$mapping$x <- aes_factor_expr(nm, get_col_name(plot$data))
+      object$mapping$x <- aes_factor_expr(name, get_col_name(plot$data))
     } else {
-      object$mapping$y <- aes_factor_expr(nm, levels = rev(get_row_name(plot$data)))
+      object$mapping$y <- aes_factor_expr(name, levels = rev(get_row_name(plot$data)))
     }
   }
   p <- ggplot(object$data, object$mapping) + do.call(geom_bar, object$params)
@@ -392,39 +393,24 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
       } else {
         c(0, object$width * ncols(plot$data))
       }
-      trans <- if(pos %in% c("top", "right")) {
+
+      trans <- if(isTRUE(flip)) {
+        reverse_liner_trans(from, to)
+      } else {
         liner_trans(from, to)
-      } else reverse_liner_trans(from, to)
+      }
     }
   }
 
   if(vertical) {
     p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
-    if(pos == "top") {
-      if(!is.null(trans)) {
-        p <- p + scale_y_continuous(trans = trans)
-      }
-    }
-    if(pos == "bottom") {
-      if(!is.null(trans)) {
-        p <- p + scale_y_continuous(trans = trans)
-      } else {
-        p <- p + scale_y_reverse()
-      }
+    if(!is.null(trans)) {
+      p <- p + scale_y_continuous(trans = trans)
     }
   } else {
     p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
-    if(pos == "right") {
-      if(!is.null(trans)) {
-        p <- p + scale_x_continuous(trans = trans)
-      }
-    }
-    if(pos == "left") {
-      if(!is.null(trans)) {
-        p <- p + scale_x_continuous(trans = trans)
-      } else {
-        p <- p + scale_x_reverse()
-      }
+    if(!is.null(trans)) {
+      p <- p + scale_x_continuous(trans = trans)
     }
   }
 
@@ -458,6 +444,7 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
   data <- object$data
   trans <- object$trans
   pos <- object$pos
+  flip <- object$flip
   xname <- rlang::as_name(object$mapping$x)
   yname <- rlang::as_name(object$mapping$y)
   if((!is_binary(data[[xname]]) && !is_binary(data[[yname]])) ||
@@ -520,38 +507,18 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
           c(from[1] / diff(from), from[2] / diff(from)) * object$width * ncols(plot$data)
         }
       }
-      trans <- if(pos %in% c("top", "right")) {
-        liner_trans(from, to)
-      } else reverse_liner_trans(from, to)
+      if(isTRUE(flip)) reverse_liner_trans(from, to) else liner_trans(from, to)
     }
   }
   if(vertical) {
     p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
-    if(pos == "top") {
-      if(!is.null(trans)) {
-        p <- p + scale_y_continuous(trans = trans)
-      }
-    }
-    if(pos == "bottom") {
-      if(!is.null(trans)) {
-        p <- p + scale_y_continuous(trans = trans)
-      } else {
-        p <- p + scale_y_reverse()
-      }
+    if(!is.null(trans)) {
+      p <- p + scale_y_continuous(trans = trans)
     }
   } else {
     p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
-    if(pos == "right") {
-      if(!is.null(trans)) {
-        p <- p + scale_x_continuous(trans = trans)
-      }
-    }
-    if(pos == "left") {
-      if(!is.null(trans)) {
-        p <- p + scale_x_continuous(trans = trans)
-      } else {
-        p <- p + scale_x_reverse()
-      }
+    if(!is.null(trans)) {
+      p <- p + scale_x_continuous(trans = trans)
     }
   }
 
@@ -617,38 +584,18 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
         from <- range(data[[xname]], na.rm = TRUE)
         to <- c(from[1] / diff(from), from[2] / diff(from)) * object$width * ncols(plot$data)
       }
-      trans <- if(pos %in% c("top", "right")) {
-        liner_trans(from, to)
-      } else reverse_liner_trans(from, to)
+      trans <- liner_trans(from, to)
     }
   }
   if(vertical) {
     p <- p + scale_x_discrete(limits = xrange(plot), expand = c(0, 0))
-    if(pos == "top") {
-      if(!is.null(trans)) {
-        p <- p + scale_y_continuous(trans = trans)
-      }
-    }
-    if(pos == "bottom") {
-      if(!is.null(trans)) {
-        p <- p + scale_y_continuous(trans = trans)
-      } else {
-        p <- p + scale_y_reverse()
-      }
+    if(!is.null(trans)) {
+      p <- p + scale_y_continuous(trans = trans)
     }
   } else {
     p <- p + scale_y_discrete(limits = yrange(plot), expand = c(0, 0))
-    if(pos == "right") {
-      if(!is.null(trans)) {
-        p <- p + scale_x_continuous(trans = trans)
-      }
-    }
-    if(pos == "left") {
-      if(!is.null(trans)) {
-        p <- p + scale_x_continuous(trans = trans)
-      } else {
-        p <- p + scale_x_reverse()
-      }
+    if(!is.null(trans)) {
+      p <- p + scale_x_continuous(trans = trans)
     }
   }
 

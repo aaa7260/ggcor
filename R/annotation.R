@@ -120,6 +120,8 @@ anno_hc_rect <- function(k = 2,
 #' @param mapping aesthetic mappings parameters.
 #' @param data a data frame.
 #' @param align align base on main plot.
+#' @param flip a logical value. If TRUE, the annotation on the left or on
+#' the bottom side will be flipped.
 #' @param pos position of annotation.
 #' @param width,height width and height of annotation.
 #' @param trans the name of a transformation object or the object itself.
@@ -133,6 +135,7 @@ anno_hc_rect <- function(k = 2,
 anno_bar <- function(mapping,
                      data,
                      align = TRUE,
+                     flip = FALSE,
                      pos = NULL,
                      width = 0.2,
                      height = 0.2,
@@ -153,6 +156,7 @@ anno_bar <- function(mapping,
 anno_bar2 <- function(mapping,
                       data,
                       align = TRUE,
+                      flip = FALSE,
                       pos = NULL,
                       width = 0.2,
                       height = 0.2,
