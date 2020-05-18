@@ -2,32 +2,11 @@
 #' @title Scale continuous
 #' @param from input range.
 #' @param to output range.
-#' @param ... extra parameters.
 #' @return liner trans.
-#' @importFrom ggplot2 scale_x_continuous scale_x_continuous
 #' @importFrom scales trans_new
 #' @rdname liner_trans
-#' @examples \dontrun{
-#' library(ggplot2)
-#' df <- data.frame(x = sample(letters[1:10], 200, replace = TRUE))
-#' p <- ggplot(df, aes(x)) + geom_bar()
-#' from <- c(0, max(table(df$x)))
-#' p + scale_y_liner(from, c(0, 3)) + coord_fixed()
-#' }
-scale_x_liner <- function(from, to, ...) {
-  scale_x_continuous(..., trans = liner_trans(from, to))
-}
-scale_y_liner <- function(from, to, ...) {
-  scale_y_continuous(..., trans = liner_trans(from, to))
-}
-scale_x_liner_rev <- function(from, to, ...) {
-  scale_x_continuous(..., trans = reverse_liner_trans(from, to))
-}
-scale_y_liner_rev <- function(from, to, ...) {
-  scale_y_continuous(..., trans = reverse_liner_trans(from, to))
-}
-
-#' @noRd
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 liner_trans <- function (from, to)
 {
   force(from)
