@@ -369,14 +369,13 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
   if(is.null(pos)) {
     if(!"y" %in% names(object$mapping)) {
       pos <- switch (type, lower = "bottom", "top")
-      name <- rlang::as_name(object$mapping$x)
     }
     if(!"x" %in% names(object$mapping)) {
       pos <- switch (type, lower = "left", "right")
-      name <- rlang::as_name(object$mapping$y)
     }
   }
   vertical <- pos %in% c("bottom", "top")
+  name <- if(vertical) rlang::as_name(object$mapping$x) else rlang::as_name(object$mapping$y)
 
   p <- ggplot(object$data, object$mapping) + do.call(geom_bar, object$params)
 
@@ -429,6 +428,8 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
       } else {
         p <- p + coord_fixed(ylim = yrange(plot))
       }
+    } else {
+      p <- p + coord_fixed()
     }
   }
 
@@ -559,6 +560,8 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
       } else {
         p <- p + coord_fixed(ylim = yrange(plot))
       }
+    } else {
+      p <- p + coord_fixed()
     }
   }
 
@@ -659,6 +662,8 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
       } else {
         p <- p + coord_fixed(ylim = yrange(plot))
       }
+    } else {
+      p <- p + coord_fixed()
     }
   }
 
@@ -731,6 +736,8 @@ ggplot_add.anno_point <- function(object, plot, object_name) {
       } else {
         p <- p + coord_fixed(ylim = yrange(plot))
       }
+    } else {
+      p <- p + coord_fixed()
     }
   }
 
