@@ -12,7 +12,7 @@ correlate(
   cor.test = FALSE,
   p.adjust = FALSE,
   method = "pearson",
-  p.adjust.method = p.adjust.methods,
+  p.adjust.method = "holm",
   use = "everything",
   ...
 )
@@ -21,7 +21,7 @@ fast_correlate(
   x,
   y = NULL,
   p.adjust = FALSE,
-  p.adjust.method = p.adjust.methods,
+  p.adjust.method = "holm",
   use = "everything",
   ...
 )
@@ -30,7 +30,7 @@ fast_correlate2(
   x,
   method = "pearson",
   p.adjust = FALSE,
-  p.adjust.method = p.adjust.methods,
+  p.adjust.method = "holm",
   ...
 )
 }

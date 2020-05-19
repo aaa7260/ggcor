@@ -42,7 +42,7 @@ correlate <- function(x,
                       cor.test = FALSE,
                       p.adjust = FALSE,
                       method = "pearson",
-                      p.adjust.method = p.adjust.methods,
+                      p.adjust.method = "holm",
                       use = "everything",
                       ...)
 {
@@ -116,7 +116,7 @@ correlate <- function(x,
 fast_correlate <- function(x,
                            y = NULL,
                            p.adjust = FALSE,
-                           p.adjust.method = p.adjust.methods,
+                           p.adjust.method = "holm",
                            use = "everything",
                            ...)
 {
@@ -137,7 +137,7 @@ fast_correlate <- function(x,
 fast_correlate2 <- function (x,
                              method = "pearson",
                              p.adjust = FALSE,
-                             p.adjust.method = p.adjust.methods,
+                             p.adjust.method = "holm",
                              ...)
 {
   if(!requireNamespace("picante", quietly = TRUE)) {
