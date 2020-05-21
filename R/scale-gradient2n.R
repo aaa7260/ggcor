@@ -75,6 +75,21 @@ scale_fill_gradient2n <- function(...,
 }
 
 #' @noRd
+scale_fill_continuous <- function (...,
+                                   type = getOption("ggplot2.continuous.fill", default = "gradient"))
+{
+  if(is.function(type)) {
+    do.call(type, list(...))
+  } else if(identical(type, "gradient")) {
+    scale_fill_gradient(...)
+  } else if(identical(type, "viridis")) {
+    scale_fill_viridis_c(...)
+  } else {
+    rlang::abort("Unknown scale type")
+  }
+}
+
+#' @noRd
 mid_rescaler <- function(mid) {
   function(x, to = c(0, 1), from = range(x, na.rm = TRUE)) {
     scales::rescale_mid(x, to, from, mid)
