@@ -3,14 +3,8 @@
 \docType{data}
 \name{geom_pie2}
 \alias{geom_pie2}
-\alias{geom_upper_pie2}
-\alias{geom_lower_pie2}
 \alias{geom_ring}
-\alias{geom_upper_ring}
-\alias{geom_lower_ring}
 \alias{GeomRing}
-\alias{GeomUpperRing}
-\alias{GeomLowerRing}
 \title{Ring Geom}
 \usage{
 geom_pie2(
@@ -27,67 +21,9 @@ geom_pie2(
   inherit.aes = TRUE
 )
 
-geom_upper_pie2(
-  mapping = NULL,
-  data = NULL,
-  stat = "identity",
-  position = "identity",
-  ...,
-  remain.fill = NA,
-  end.radius = 0.5,
-  steps = 0.1,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
-geom_lower_pie2(
-  mapping = NULL,
-  data = NULL,
-  stat = "identity",
-  position = "identity",
-  ...,
-  remain.fill = NA,
-  end.radius = 0.5,
-  steps = 0.1,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
 geom_ring(
   mapping = NULL,
   data = NULL,
-  stat = "identity",
-  position = "identity",
-  ...,
-  remain.fill = NA,
-  start.radius = 0.25,
-  end.radius = 0.5,
-  steps = 0.1,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
-geom_upper_ring(
-  mapping = NULL,
-  data = get_data(type = "upper"),
-  stat = "identity",
-  position = "identity",
-  ...,
-  remain.fill = NA,
-  start.radius = 0.25,
-  end.radius = 0.5,
-  steps = 0.1,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
-geom_lower_ring(
-  mapping = NULL,
-  data = get_data(type = "lower"),
   stat = "identity",
   position = "identity",
   ...,
@@ -159,8 +95,7 @@ Ring Geom
 }
 \section{Aesthetics}{
 
-\code{geom_ring()}, \code{geom_upper_ring()} and \code{geom_lower_ring()}
-understands the following aesthetics (required aesthetics are in bold):
+\code{geom_ring()} understands the following aesthetics (required aesthetics are in bold):
     \itemize{
       \item \strong{\code{x}}
       \item \strong{\code{y}}
@@ -170,18 +105,6 @@ understands the following aesthetics (required aesthetics are in bold):
       \item \code{fill}
       \item \code{linetype}
       \item \code{size}
-      \item \code{upper_r0}
-      \item \code{upper_alpha}
-      \item \code{upper_colour}
-      \item \code{upper_fill}
-      \item \code{upper_linetype}
-      \item \code{upper_size}
-      \item \code{lower_r0}
-      \item \code{lower_alpha}
-      \item \code{lower_colour}
-      \item \code{lower_fill}
-      \item \code{lower_linetype}
-      \item \code{lower_size}
    }
 }
 

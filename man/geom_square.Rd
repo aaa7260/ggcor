@@ -3,38 +3,12 @@
 \docType{data}
 \name{geom_square}
 \alias{geom_square}
-\alias{geom_upper_square}
-\alias{geom_lower_square}
 \alias{GeomSquare}
-\alias{GeomUpperSquare}
-\alias{GeomLowerSquare}
 \title{Square Geom}
 \usage{
 geom_square(
   mapping = NULL,
   data = NULL,
-  stat = "identity",
-  position = "identity",
-  ...,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
-geom_upper_square(
-  mapping = NULL,
-  data = get_data(type = "upper"),
-  stat = "identity",
-  position = "identity",
-  ...,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
-geom_lower_square(
-  mapping = NULL,
-  data = get_data(type = "lower"),
   stat = "identity",
   position = "identity",
   ...,
@@ -94,8 +68,7 @@ Square Geom
 }
 \section{Aesthetics}{
 
-\code{geom_square()}, \code{geom_upper_square()} and \code{geom_lower_square()}
-understands the following aesthetics (required aesthetics are in bold):
+\code{geom_square()} understands the following aesthetics (required aesthetics are in bold):
     \itemize{
       \item \strong{\code{x}}
       \item \strong{\code{y}}
@@ -105,18 +78,6 @@ understands the following aesthetics (required aesthetics are in bold):
       \item \code{fill}
       \item \code{linetype}
       \item \code{size}
-      \item \code{upper_r0}
-      \item \code{upper_alpha}
-      \item \code{upper_colour}
-      \item \code{upper_fill}
-      \item \code{upper_linetype}
-      \item \code{upper_size}
-      \item \code{lower_r0}
-      \item \code{lower_alpha}
-      \item \code{lower_colour}
-      \item \code{lower_fill}
-      \item \code{lower_linetype}
-      \item \code{lower_size}
    }
 }
 

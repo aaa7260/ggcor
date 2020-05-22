@@ -3,11 +3,7 @@
 \docType{data}
 \name{geom_ellipse2}
 \alias{geom_ellipse2}
-\alias{geom_upper_ellipse2}
-\alias{geom_lower_ellipse2}
 \alias{GeomEllipse2}
-\alias{GeomUpperEllipse2}
-\alias{GeomLowerEllipse2}
 \title{Ellipse Geom}
 \usage{
 geom_ellipse2(
@@ -17,28 +13,6 @@ geom_ellipse2(
   position = "identity",
   ...,
   n = 60,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
-geom_upper_ellipse2(
-  mapping = NULL,
-  data = get_data(type = "upper"),
-  stat = "identity",
-  position = "identity",
-  ...,
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-)
-
-geom_lower_ellipse2(
-  mapping = NULL,
-  data = get_data(type = "lower"),
-  stat = "identity",
-  position = "identity",
-  ...,
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -97,8 +71,7 @@ Ellipse Geom
 }
 \section{Aesthetics}{
 
-\code{geom_ellipse2()}, \code{geom_upper_ellipse2()} and \code{geom_lower_ellipse2()}
-understands the following aesthetics (required aesthetics are in bold):
+\code{geom_ellipse2()} understands the following aesthetics (required aesthetics are in bold):
     \itemize{
       \item \strong{\code{x}}
       \item \strong{\code{y}}
@@ -108,18 +81,6 @@ understands the following aesthetics (required aesthetics are in bold):
       \item \code{fill}
       \item \code{linetype}
       \item \code{size}
-      \item \code{upper_r0}
-      \item \code{upper_alpha}
-      \item \code{upper_colour}
-      \item \code{upper_fill}
-      \item \code{upper_linetype}
-      \item \code{upper_size}
-      \item \code{lower_r0}
-      \item \code{lower_alpha}
-      \item \code{lower_colour}
-      \item \code{lower_fill}
-      \item \code{lower_linetype}
-      \item \code{lower_size}
    }
 }
 
