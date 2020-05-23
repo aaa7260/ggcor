@@ -127,8 +127,25 @@ draw_anno_tile <- function (data, params, size)
   grid::rectGrob(width = grid::unit(1, "npc") - grid::unit(lwd, "mm"),
            height = grid::unit(1, "npc") - grid::unit(lwd, "mm"),
            gp = grid::gpar(col = data$colour %||% NA,
-                     fill = scales::alpha(data$stuff %||% "grey20", data$alpha),
+                     fill = scales::alpha(data$row_fill %||% "grey20", data$alpha),
                      lty = data$linetype %||% 1, lwd = lwd * ggplot2::.pt,
                      linejoin = params$linejoin %||% "mitre",
                      lineend = if (identical(params$linejoin, "round")) "round" else "square"))
 }
+
+#' @noRd
+draw_anno_tile2 <- function (data, params, size)
+{
+  if (is.null(data$size)) {
+    data$size <- 0.5
+  }
+  lwd <- min(data$size, min(size)/4)
+  grid::rectGrob(width = grid::unit(1, "npc") - grid::unit(lwd, "mm"),
+                 height = grid::unit(1, "npc") - grid::unit(lwd, "mm"),
+                 gp = grid::gpar(col = data$colour %||% NA,
+                                 fill = scales::alpha(data$col_fill %||% "grey20", data$alpha),
+                                 lty = data$linetype %||% 1, lwd = lwd * ggplot2::.pt,
+                                 linejoin = params$linejoin %||% "mitre",
+                                 lineend = if (identical(params$linejoin, "round")) "round" else "square"))
+}
+
