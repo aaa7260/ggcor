@@ -104,7 +104,7 @@ Collate:
     'remove-axis.R'
     'scale-gradient2n.R'
     'scale-radius.R'
-    'triangle-colour-scale.R'
+    'scale-stuff.R'
     'theme-cor.R'
     'utils.R'
     'zzz.R'

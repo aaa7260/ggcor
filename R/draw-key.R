@@ -116,3 +116,19 @@ starGrob <- function(x = 0.5, y = 0.5, n = 5, r0 = 1,
   py <- zoom * xy$y + y
   grid::polygonGrob(px, py, gp = gp)
 }
+
+#' @noRd
+draw_anno_tile <- function (data, params, size)
+{
+  if (is.null(data$size)) {
+    data$size <- 0.5
+  }
+  lwd <- min(data$size, min(size)/4)
+  grid::rectGrob(width = grid::unit(1, "npc") - grid::unit(lwd, "mm"),
+           height = grid::unit(1, "npc") - grid::unit(lwd, "mm"),
+           gp = grid::gpar(col = data$colour %||% NA,
+                     fill = scales::alpha(data$stuff %||% "grey20", data$alpha),
+                     lty = data$linetype %||% 1, lwd = lwd * ggplot2::.pt,
+                     linejoin = params$linejoin %||% "mitre",
+                     lineend = if (identical(params$linejoin, "round")) "round" else "square"))
+}

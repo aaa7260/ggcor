@@ -63,8 +63,7 @@ guide_colourbar2 <- function(title = waiver(),
     default.unit = default.unit,
     reverse = reverse,
     order = order,
-    available_aes = c("upper_colour", "upper_fill",
-                      "lower_colour", "lower_fill"),
+    available_aes = "stuff",
     ..., name = "colourbar2"
   )
   class(guide) <- c("guide", "colourbar2", "colorbar")
@@ -82,12 +81,11 @@ guide_train.colourbar2 <- function(guide, scale, aesthetic = NULL) {
   if (length(intersect(scale$aesthetics, c(
     "upper_colour", "upper_fill",
     "lower_colour", "lower_fill"))) == 0) {
-    warning("colourbar2 guide needs upper_colour, upper_fill, ",
-            "lower_colour, lower_fill scales.")
+    warning("colourbar2 guide 'stuff' scales.", call. = FALSE)
     return(NULL)
   }
   if (scale$is_discrete()) {
-    warning("colourbar2 guide needs continuous scales.")
+    warning("colourbar2 guide needs continuous scales.", call. = FALSE)
     return(NULL)
   }
   breaks <- scale$get_breaks()

@@ -81,9 +81,9 @@ scale_fill_continuous <- function (...,
   if(is.function(type)) {
     do.call(type, list(...))
   } else if(identical(type, "gradient")) {
-    scale_fill_gradient(...)
+    ggplot2::scale_fill_gradient(...)
   } else if(identical(type, "viridis")) {
-    scale_fill_viridis_c(...)
+    ggplot2::scale_fill_viridis_c(...)
   } else {
     rlang::abort("Unknown scale type")
   }
