@@ -83,7 +83,7 @@ display_cor.cor_tbl <- function(x,
                                 coef = NULL,
                                 nice.format = TRUE,
                                 ...) {
-  if(is_general_cor_tbl(x)) {
+  if(is_gcor_tbl(x)) {
     if(is.null(coef)) {
       stop("Must set 'coef' parameter for general_cor_tbl.", call. = FALSE)
     }

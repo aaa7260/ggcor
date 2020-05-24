@@ -76,7 +76,7 @@ quickcor <- function(x,
                      ...)
 {
   data <- fortify_cor(x, y, ...)
-  is.general <- is_general_cor_tbl(data)
+  is.general <- is_gcor_tbl(data)
   type <- get_type(data)
   n <- length(get_row_name(data))
   m <- length(get_col_name(data))
@@ -183,7 +183,7 @@ print.quickcor <- function(x,
     if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
       fill.var.name <- as.character(quo_get_expr(mapping$fill))
       fill.var <- eval_tidy(mapping$fill, x$data)
-      if(!is_general_cor_tbl(x$data) && fill.var.name == "r" &&
+      if(!is_gcor_tbl(x$data) && fill.var.name == "r" &&
          is.numeric(fill.var)) {
         x <- x + scale_fill_gradient2n(colours = colours,
                                        breaks = breaks,

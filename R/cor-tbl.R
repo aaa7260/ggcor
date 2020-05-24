@@ -158,7 +158,7 @@ cor_tbl <- function(corr,
   new.order <- intersect(c(".row.names", ".col.names", name, ".row.id", ".col.id"),
                          names(data))
   cls <- if(missing.corr) {
-    c("general_cor_tbl", "cor_tbl", "tbl_df", "tbl", "data.frame")
+    c("gcor_tbl", "cor_tbl", "tbl_df", "tbl", "data.frame")
   } else {
     c("cor_tbl", "tbl_df", "tbl", "data.frame")
   }

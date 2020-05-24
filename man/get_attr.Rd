@@ -8,8 +8,8 @@
 \alias{nrows}
 \alias{ncols}
 \alias{is_cor_tbl}
-\alias{is_general_cor_tbl}
-\title{Helper function of cor_tbl}
+\alias{is_gcor_tbl}
+\title{Helper function for cor_tbl}
 \usage{
 get_row_name(x)
 
@@ -25,7 +25,7 @@ ncols(x)
 
 is_cor_tbl(x)
 
-is_general_cor_tbl(x)
+is_gcor_tbl(x)
 }
 \arguments{
 \item{x}{a cor_tbl.}
@@ -34,7 +34,7 @@ is_general_cor_tbl(x)
 return attribute value.
 }
 \description{
-Helper function of cor_tbl
+Helper function for cor_tbl
 }
 \examples{
 df <- fortify_cor(mtcars)

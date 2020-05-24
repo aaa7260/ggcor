@@ -1,4 +1,4 @@
-#' Helper function of cor_tbl
+#' Helper function for cor_tbl
 #' @param x a cor_tbl.
 #' @return return attribute value.
 #' @rdname get_attr
@@ -65,8 +65,8 @@ is_cor_tbl <- function(x) {
 
 #' @rdname get_attr
 #' @export
-is_general_cor_tbl <- function(x) {
-  inherits(x, "general_cor_tbl")
+is_gcor_tbl <- function(x) {
+  inherits(x, "gcor_tbl")
 }
 
 

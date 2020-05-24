@@ -37,7 +37,7 @@ as_cor_network.cor_tbl <- function(x,
                                    ...)
 {
 
-  if(is_general_cor_tbl(x)) {
+  if(is_gcor_tbl(x)) {
     edges <- if("p.value" %in% names(x) && is.finite(p.thres)) {
       dplyr::filter(x, p.value < p.thres)
     } else x
