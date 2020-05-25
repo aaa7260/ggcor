@@ -15,13 +15,13 @@ quickcor(
   open = 90,
   inner = 1,
   outer = 0.3,
-  bcols = NULL,
-  paxis = "all",
   fixed.xy = TRUE,
   axis.x.position = "auto",
   axis.y.position = "auto",
   axis.label.drop = TRUE,
   legend.position = "auto",
+  bcols,
+  paxis,
   ...
 )
 
@@ -52,10 +52,6 @@ quickcor(
 
 \item{inner, outer}{the ratio of inner circle and outer margin.}
 
-\item{bcols}{branch colours.}
-
-\item{paxis}{one of "all", "x", "y" or "none".}
-
 \item{fixed.xy}{if TRUE (default), the coordinates will with fixed aspect ratio.}
 
 \item{axis.x.position, axis.y.position}{the position of the axis. 'auto' (default)
@@ -67,6 +63,10 @@ or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
 label.}
 
 \item{legend.position}{position of legend.}
+
+\item{bcols}{ignore.}
+
+\item{paxis}{ignore.}
 
 \item{...}{ignore.}
 
@@ -123,7 +123,7 @@ print(p, colours = col, title = "Pearson's r")
 print(p, style = "ggplot")
 }
 \seealso{
-\code{\link[ggcor]{fortify_cor}}.
+\code{\link{fortify_cor}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

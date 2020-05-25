@@ -211,4 +211,47 @@ anno_point <- function(mapping,
             class = "anno_point")
 }
 
+#' @rdname anno_special
+#' @param geom one of "anno_tile", "anno_tile2" or "point".
+#' @param space scala numeric value.
+#' @param col.label logical value, if TRUE will add columns name on plot.
+#' @export
+anno_row_heat <- function(mapping,
+                          data,
+                          align = TRUE,
+                          geom = "anno_tile",
+                          space = 0.5,
+                          width = 1,
+                          col.label = TRUE,
+                          ...) {
+  if(!is_cor_tbl(data)) {
+    stop("Invalid data input.", call. = FALSE)
+  }
+  geom <- match.arg(geom, c("anno_tile", "point"))
+  structure(.Data = list(mapping = mapping, data = data, align = align,
+                         geom = geom, space = space, width = width,
+                         col.label = col.label, params = list(...)),
+            class = "anno_row_heat")
+}
 
+#' @rdname anno_special
+#' @param row.label logical value, if TRUE will add columns name on plot.
+#' @param height scala numeric value.
+#' @export
+anno_col_heat <- function(mapping,
+                          data,
+                          align = TRUE,
+                          geom = "anno_tile2",
+                          space = 0.5,
+                          height = 1,
+                          row.label = TRUE,
+                          ...) {
+  if(!is_cor_tbl(data)) {
+    stop("Invalid data input.", call. = FALSE)
+  }
+  geom <- match.arg(geom, c("anno_tile2", "point"))
+  structure(.Data = list(mapping = mapping, data = data, align = align,
+                         geom = geom, space = space, height = height,
+                         row.label = row.label, params = list(...)),
+            class = "anno_col_heat")
+}

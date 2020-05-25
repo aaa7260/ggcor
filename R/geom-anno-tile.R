@@ -49,12 +49,12 @@ geom_anno_tile <- function(mapping = NULL,
 #' @export
 geom_anno_tile2 <- function(mapping = NULL,
                             data = NULL,
-                           stat = "identity",
-                           position = "identity",
-                           ...,
-                           na.rm = FALSE,
-                           show.legend = NA,
-                           inherit.aes = TRUE) {
+                            stat = "identity",
+                            position = "identity",
+                            ...,
+                            na.rm = FALSE,
+                            show.legend = NA,
+                            inherit.aes = TRUE) {
   params <- list(na.rm = na.rm, ...)
   name <- names(params)
   if("fill" %in% name) {

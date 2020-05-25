@@ -264,7 +264,7 @@ ggplot_add.anno_row_tree <- function(object, plot, object_name) {
   n <- length(get_col_name(pdata))
   type <- get_type(pdata)
   circular <- plot$plot_env$circular
-  bcols <- object$bcols %||% plot$plot_env$bcols
+  bcols <- object$bcols
   bcols <- if(is.list(bcols)) bcols$row.bcols else bcols
   width <- object$width %||% 0.3
   pos <- object$pos
@@ -298,7 +298,7 @@ ggplot_add.anno_col_tree <- function(object, plot, object_name) {
   n <- length(get_row_name(pdata))
   type <- get_type(pdata)
   circular <- plot$plot_env$circular
-  bcols <- object$bcols %||% plot$plot_env$bcols
+  bcols <- object$bcols
   bcols <- if(is.list(bcols)) bcols$col.bcols else bcols
   height <- object$height %||% 0.3
   pos <- object$pos
@@ -762,5 +762,112 @@ ggplot_add.anno_point <- function(object, plot, object_name) {
 #' @noRd
 is_binary <- function(x) {
   is.character(x) || is.factor(x)
+}
+
+#' @export
+ggplot_add.anno_row_heat <- function(object, plot, object_name) {
+  if(!inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular)) {
+    stop("`anno_row_heat()` just support for circular plot.", call. = FALSE)
+  }
+  data <- object$data
+  if(isTRUE(object$align)) {
+    if(!identical(get_row_name(data), get_row_name(plot$data))) {
+      data$.row.id <- as.integer(factor(data$.row.names, levels = rev(get_row_name(plot$data))))
+    }
+  }
+
+  polar.args <- plot$plot_env$polar.args
+  row.shift <- polar.args$row.shift %||% 0
+  shift <- ncols(data) * object$width + object$space + row.shift
+  data$.col.id <- data$.col.id * object$width + ncols(plot$data) + object$space + row.shift
+  # reset y axis parameters
+  polar.args$yaxis_df$x <- polar.args$yaxis_df$x + ncols(data) * object$width + object$space
+  if(isTRUE(object$col.label)) {
+    df <- data.frame(x = seq_len(ncols(data)) * object$width + shift,
+                     y = unique(polar.args$xaxis_df$y),
+                     label = get_col_name(data),
+                     angle = 0,
+                     hjust = 0, stringsAsFactors = FALSE)
+    label <- geom_text(mapping = aes_string(x = "x", y = "y", label = "label",
+                                            angle = "angle", hjust = "hjust"),
+                       data = df, inherit.aes = FALSE)
+  }
+  polar.args$row.shift <- shift
+  plot$plot_env$polar.args <- polar.args
+
+  # calc the layer
+  mapping <- aes_modify(aes_string(x = ".col.id", y = ".row.id"), object$mapping)
+  params <- modifyList(list(mapping = mapping, data = data, inherit.aes = FALSE),
+                       object$params)
+  if(object$geom == "point") {
+    obj <- do.call(ggplot2::geom_point, params)
+    border <- geom_anno_tile(aes_string(x = ".col.id", y = ".row.id"), data = data,
+                             fill = NA, colour = "grey50", size = 0.25, inherit.aes = FALSE)
+    if(isTRUE(object$col.label)) {
+      obj <- list(border, obj, label)
+    }
+  } else {
+    params$width <- object$width
+    obj <- do.call(geom_anno_tile, params)
+    if(isTRUE(object$col.label)) {
+      obj <- list(obj, label)
+    }
+  }
+
+  ggplot_add(obj, plot)
+}
+
+#' @export
+ggplot_add.anno_col_heat <- function(object, plot, object_name) {
+  if(!inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular)) {
+    stop("`anno_col_heat()` just support for circular plot.", call. = FALSE)
+  }
+  data <- object$data
+  if(isTRUE(object$align)) {
+    if(!identical(get_col_name(data), get_col_name(plot$data))) {
+      data$.col.id <- as.integer(factor(data$.col.names, levels = get_col_name(plot$data)))
+    }
+  }
+
+  polar.args <- plot$plot_env$polar.args
+  col.shift <- polar.args$col.shift %||% 0
+  shift <- nrows(plot$data) + object$space + col.shift
+  data$.row.id <- data$.row.id * object$height + shift
+  # reset y axis parameters
+  if(isTRUE(object$row.label)) {
+    t <- (seq_len(nrows(data)) * object$height + col.shift) * 360 / diff(polar.args$ylim) + 90
+    df <- data.frame(x = 0.5 + 1.05 * cols,
+                     y = seq_len(nrows(data)) * object$height + shift,
+                     label = get_row_name(data),
+                     angle = ifelse(t > 90 & t < 270, t + 180, t) - 0.5 / ut.degree,
+                     hjust = ifelse(t > 90 & t < 270, 1, 0),
+                     stringsAsFactors = FALSE)
+    label <- geom_text(mapping = aes_string(x = "x", y = "y", label = "label",
+                                            angle = "angle", hjust = "hjust"),
+                       data = df, inherit.aes = FALSE)
+  }
+  plot$plot_env$polar.args$col.shift <- shift
+
+  # calc the layer
+  mapping <- aes_modify(aes_string(x = ".col.id", y = ".row.id"), object$mapping)
+  params <- modifyList(list(mapping = mapping, data = data, inherit.aes = FALSE),
+                       object$params)
+  if(object$geom == "point") {
+    obj <- do.call(ggplot2::geom_point, params)
+    border <- geom_anno_tile2(aes_string(x = ".col.id", y = ".row.id"), data = data,
+                             height = object$height, fill = NA, colour = "grey50",
+                             size = 0.25, inherit.aes = FALSE)
+    if(isTRUE(object$row.label)) {
+      obj <- list(border, obj, label)
+    }
+  } else {
+    params$height <- object$width
+    obj <- do.call(geom_anno_tile2, params)
+    if(isTRUE(object$row.label)) {
+      obj <- list(obj, label)
+    }
+  }
+
+  ggplot_add(obj, plot)
 }
 

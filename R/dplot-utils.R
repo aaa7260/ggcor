@@ -213,7 +213,7 @@ print.dplot <- function(x,
       if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
         fill.var.name <- as.character(rlang::quo_get_expr(mapping$fill))
         fill.var <- rlang::eval_tidy(mapping$fill, x$data)
-        if(!is_general_cor_tbl(x$data) && fill.var.name == "r" &&
+        if(!is_gcor_tbl(x$data) && fill.var.name == "r" &&
            is.numeric(fill.var)) {
           x <- x + scale_fill_gradient2n(colours = colours,
                                          breaks = breaks,

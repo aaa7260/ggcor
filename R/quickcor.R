@@ -6,8 +6,6 @@
 #' @param circular logical, if TRUE will draw in polar coordinates.
 #' @param open angle of opening (in degree).
 #' @param inner,outer the ratio of inner circle and outer margin.
-#' @param bcols  branch colours.
-#' @param paxis one of "all", "x", "y" or "none".
 #' @param fixed.xy if TRUE (default), the coordinates will with fixed aspect ratio.
 #' @param grid.colour colour of grid lines.
 #' @param grid.size size of grid lines.
@@ -18,6 +16,8 @@
 #'     or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
 #'     label.
 #' @param legend.position position of legend.
+#' @param bcols ignore.
+#' @param paxis ignore.
 #' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
 #' @importFrom ggplot2 ggplot_add
 #' @importFrom ggplot2 guides
@@ -54,7 +54,7 @@
 #'   geom_mark(data = get_data(type = "upper", show.diag = FALSE)) +
 #'   geom_abline(slope = -1, intercept = 12)
 #'
-#' @seealso \code{\link[ggcor]{fortify_cor}}.
+#' @seealso \code{\link{fortify_cor}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 quickcor <- function(x,
@@ -66,15 +66,21 @@ quickcor <- function(x,
                      open = 90,
                      inner = 1,
                      outer = 0.3,
-                     bcols = NULL,
-                     paxis = "all",
                      fixed.xy = TRUE,
                      axis.x.position = "auto",
                      axis.y.position = "auto",
                      axis.label.drop = TRUE,
                      legend.position = "auto",
+                     bcols,
+                     paxis,
                      ...)
 {
+  if(!missing(bcols)) {
+    message("'bcols' parameter is deprecated.")
+  }
+  if(!missing(paxis)) {
+    message("'paxis' parameter is deprecated.")
+  }
   data <- fortify_cor(x, y, ...)
   is.general <- is_gcor_tbl(data)
   type <- get_type(data)
@@ -106,15 +112,6 @@ quickcor <- function(x,
       coord_polar(theta = "y", start = polar.args$start, direction = -1) +
       theme_void()
     p$plot_env$polar.args <- polar.args
-    if(paxis == "all") {
-      p <- p + set_p_xaxis(bcols = bcols) + set_p_yaxis(bcols = bcols)
-    }
-    if (paxis == "x") {
-      p <- p + set_p_xaxis(bcols = bcols)
-    }
-    if(paxis == "y") {
-      p <- p + set_p_yaxis(bcols = bcols)
-    }
   } else {
     # handle legend setting
     if(legend.position == "auto")

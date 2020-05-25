@@ -249,3 +249,17 @@ scale_col_fill_manual <- function(...,
                                aesthetics = "col_fill") {
   manual_scale(aesthetics, values, ...)
 }
+
+#' @noRd
+manual_scale <- function (aesthetic, values, ...)
+{
+  pal <- function(n) {
+    if (n > length(values)) {
+      stop("Insufficient values in manual scale. ", n,
+           " needed but only ", length(values), " provided.",
+           call. = FALSE)
+    }
+    values
+  }
+  discrete_scale(aesthetic, "manual", pal, ...)
+}

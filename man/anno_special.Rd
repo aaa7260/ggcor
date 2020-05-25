@@ -5,6 +5,7 @@
 \alias{anno_bar2}
 \alias{anno_boxplot}
 \alias{anno_point}
+\alias{anno_row_heat}
 \title{Custom annotation}
 \usage{
 anno_bar(
@@ -59,6 +60,17 @@ anno_point(
   theme = theme_anno(),
   ...
 )
+
+anno_row_heat(
+  mapping,
+  data,
+  align = TRUE,
+  geom = "anno_tile",
+  space = 0.5,
+  width = 1,
+  col.label = TRUE,
+  ...
+)
 }
 \arguments{
 \item{mapping}{aesthetic mappings parameters.}
@@ -81,6 +93,12 @@ the bottom side will be flipped.}
 \item{theme}{theme object or the name.}
 
 \item{...}{extra parameters.}
+
+\item{geom}{one of "anno_tile" or "point".}
+
+\item{space}{scala numeric value.}
+
+\item{col.label}{logical value, if TRUE will add columns name on plot.}
 }
 \value{
 anno_* object.
