@@ -220,6 +220,7 @@ anno_row_heat <- function(mapping,
                           data,
                           align = TRUE,
                           geom = "anno_tile",
+                          mark = NULL,
                           space = 0.5,
                           width = 1,
                           col.label = TRUE,
@@ -227,10 +228,11 @@ anno_row_heat <- function(mapping,
   if(!is_cor_tbl(data)) {
     stop("Invalid data input.", call. = FALSE)
   }
-  geom <- match.arg(geom, c("anno_tile", "point"))
+  geom <- match.arg(geom, c("anno_tile", "anno_tile2", "point"))
   structure(.Data = list(mapping = mapping, data = data, align = align,
-                         geom = geom, space = space, width = width,
-                         col.label = col.label, params = list(...)),
+                         geom = geom, space = space, mark = mark,
+                         width = width, col.label = col.label,
+                         params = list(...)),
             class = "anno_row_heat")
 }
 
@@ -242,6 +244,7 @@ anno_col_heat <- function(mapping,
                           data,
                           align = TRUE,
                           geom = "anno_tile2",
+                          mark = NULL,
                           space = 0.5,
                           height = 1,
                           row.label = TRUE,
@@ -249,7 +252,7 @@ anno_col_heat <- function(mapping,
   if(!is_cor_tbl(data)) {
     stop("Invalid data input.", call. = FALSE)
   }
-  geom <- match.arg(geom, c("anno_tile2", "point"))
+  geom <- match.arg(geom, c("anno_tile", "anno_tile2", "point"))
   structure(.Data = list(mapping = mapping, data = data, align = align,
                          geom = geom, space = space, height = height,
                          row.label = row.label, params = list(...)),

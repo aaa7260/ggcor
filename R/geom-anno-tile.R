@@ -9,8 +9,8 @@
 #'       \item \strong{\code{y}}
 #'       \item \code{alpha}
 #'       \item \code{colour}
-#'       \item \code{row_fill}
-#'       \item \code{col_fill}
+#'       \item \code{fill0}
+#'       \item \code{fill2}
 #'       \item \code{linetype}
 #'       \item \code{size}
 #'    }
@@ -30,7 +30,7 @@ geom_anno_tile <- function(mapping = NULL,
   params <- list(na.rm = na.rm, ...)
   name <- names(params)
   if("fill" %in% name) {
-    name[which(name == "fill")] <- "row_fill"
+    name[which(name == "fill")] <- "fill0"
   }
   names(params) <- name
   layer(
@@ -58,7 +58,7 @@ geom_anno_tile2 <- function(mapping = NULL,
   params <- list(na.rm = na.rm, ...)
   name <- names(params)
   if("fill" %in% name) {
-    name[which(name == "fill")] <- "col_fill"
+    name[which(name == "fill")] <- "fill2"
   }
   names(params) <- name
   layer(
@@ -79,11 +79,11 @@ geom_anno_tile2 <- function(mapping = NULL,
 #' @export
 GeomAnnoTile <- ggproto(
   "GeomAnnoTile", GeomTile,
-  default_aes = aes(colour = NA, row_fill = "grey20", width = 1,
+  default_aes = aes(colour = NA, fill0 = "grey20", width = 1,
                     height = 1, size = 0.1, linetype = 1, alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord) {
-    data <- dplyr::rename(data, fill = row_fill)
+    data <- dplyr::rename(data, fill = fill0)
     GeomTile$draw_panel(data, panel_params, coord)
   },
   draw_key = draw_anno_tile
@@ -95,11 +95,11 @@ GeomAnnoTile <- ggproto(
 #' @export
 GeomAnnoTile2 <- ggproto(
   "GeomAnnoTile2", GeomTile,
-  default_aes = aes(colour = NA, col_fill = "grey20", width = 1,
+  default_aes = aes(colour = NA, fill2 = "grey20", width = 1,
                     height = 1, size = 0.1, linetype = 1, alpha = NA),
   required_aes = c("x", "y"),
   draw_panel = function(self, data, panel_params, coord) {
-    data <- dplyr::rename(data, fill = col_fill)
+    data <- dplyr::rename(data, fill = fill2)
     GeomTile$draw_panel(data, panel_params, coord)
   },
   draw_key = draw_anno_tile2

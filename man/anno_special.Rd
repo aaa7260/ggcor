@@ -6,6 +6,7 @@
 \alias{anno_boxplot}
 \alias{anno_point}
 \alias{anno_row_heat}
+\alias{anno_col_heat}
 \title{Custom annotation}
 \usage{
 anno_bar(
@@ -66,9 +67,22 @@ anno_row_heat(
   data,
   align = TRUE,
   geom = "anno_tile",
+  mark = NULL,
   space = 0.5,
   width = 1,
   col.label = TRUE,
+  ...
+)
+
+anno_col_heat(
+  mapping,
+  data,
+  align = TRUE,
+  geom = "anno_tile2",
+  mark = NULL,
+  space = 0.5,
+  height = 1,
+  row.label = TRUE,
   ...
 )
 }
@@ -86,6 +100,8 @@ the bottom side will be flipped.}
 
 \item{width, height}{width and height of annotation.}
 
+\item{height}{scala numeric value.}
+
 \item{trans}{the name of a transformation object or the object itself.}
 
 \item{remove.axis}{one of "auto", "x", "y" or "none".}
@@ -94,11 +110,13 @@ the bottom side will be flipped.}
 
 \item{...}{extra parameters.}
 
-\item{geom}{one of "anno_tile" or "point".}
+\item{geom}{one of "anno_tile", "anno_tile2" or "point".}
 
 \item{space}{scala numeric value.}
 
 \item{col.label}{logical value, if TRUE will add columns name on plot.}
+
+\item{row.label}{logical value, if TRUE will add columns name on plot.}
 }
 \value{
 anno_* object.

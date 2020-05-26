@@ -87,8 +87,8 @@ Annotation tile layer
       \item \strong{\code{y}}
       \item \code{alpha}
       \item \code{colour}
-      \item \code{row_fill}
-      \item \code{col_fill}
+      \item \code{fill0}
+      \item \code{fill2}
       \item \code{linetype}
       \item \code{size}
    }

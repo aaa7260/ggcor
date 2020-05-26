@@ -783,7 +783,7 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
   # reset y axis parameters
   polar.args$yaxis_df$x <- polar.args$yaxis_df$x + ncols(data) * object$width + object$space
   if(isTRUE(object$col.label)) {
-    df <- data.frame(x = seq_len(ncols(data)) * object$width + shift,
+    df <- data.frame(x = seq_len(ncols(data)) * object$width + ncols(plot$data) + object$space + row.shift,
                      y = unique(polar.args$xaxis_df$y),
                      label = get_col_name(data),
                      angle = 0,
