@@ -95,9 +95,12 @@ anno_link <- function(mapping = NULL,
 #' Square annotation
 #' @title Square annotation
 #' @description Draw the cluster square mark on the correlation matrix plot.
+#' @param pos position of the bar.
 #' @param k an integer scalar or vector with the desired number of groups.
-#' @param fill NA (default) or the fill colour of square.
-#' @param colour,color the colour of square boder.
+#' @param fill the colour of fill.
+#' @param colour,color the colour of boder.
+#' @param width,height width or height of the bar.
+#' @param space scala numeric value.
 #' @param size size of square boder line.
 #' @return square layer.
 #' @rdname anno_hc_rect
@@ -113,6 +116,25 @@ anno_hc_rect <- function(k = 2,
     colour <- color
   structure(.Data = list(k = k, fill = fill, colour = colour,
                          size = size), class = "anno_hc_rect")
+}
+
+#' @rdname anno_hc_rect
+#' @export
+anno_hc_bar <- function(k = 2,
+                        fill = NULL,
+                        size = 0.125,
+                        pos = "right",
+                        width = 1,
+                        height = 1,
+                        space = 0)
+{
+  if(is.null(fill)) {
+    fill <- sample(grDevices::colors(TRUE), k)
+  }
+  pos <- match.arg(pos, c("bottom", "top", "left", "right"))
+  structure(.Data = list(pos = pos, k = k, fill = fill, size = size,
+                         width = width, height = height, space = space),
+            class = "anno_hc_bar")
 }
 
 #' Custom annotation

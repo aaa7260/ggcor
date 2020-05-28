@@ -2,18 +2,35 @@
 % Please edit documentation in R/annotation.R
 \name{anno_hc_rect}
 \alias{anno_hc_rect}
+\alias{anno_hc_bar}
 \title{Square annotation}
 \usage{
 anno_hc_rect(k = 2, fill = NA, colour = "black", size = 2, color)
+
+anno_hc_bar(
+  k = 2,
+  fill = NULL,
+  size = 0.125,
+  pos = "right",
+  width = 1,
+  height = 1,
+  space = 0
+)
 }
 \arguments{
 \item{k}{an integer scalar or vector with the desired number of groups.}
 
-\item{fill}{NA (default) or the fill colour of square.}
+\item{fill}{the colour of fill.}
 
-\item{colour, color}{the colour of square boder.}
+\item{colour, color}{the colour of boder.}
 
 \item{size}{size of square boder line.}
+
+\item{pos}{position of the bar.}
+
+\item{width, height}{width or height of the bar.}
+
+\item{space}{scala numeric value.}
 }
 \value{
 square layer.

@@ -306,7 +306,10 @@ ggplot_add.anno_col_tree <- function(object, plot, object_name) {
   if(isTRUE(circular)) {
     args <- plot$plot_env$polar.args
     pos <- "top"
-    hrange <- c(0, 0.3 * (args$ylim[2] - n)) + n + 0.5
+    col.shift <- args$col.shift %||% 0
+    shift <- height * (args$ylim[2] - n)
+    hrange <- c(0, shift) + n + 0.5 + col.shift
+    plot$plot_env$polar.args$col.shift <- col.shift + shift
   } else {
     if(is.null(pos)) {
       pos <- switch (type, lower = "bottom", "top")
@@ -355,6 +358,71 @@ ggplot_add.anno_hc_rect <- function(object, plot, object_name) {
   obj <- ggplot2::geom_rect(mapping = mapping, data = data, fill = object$fill,
                             colour = object$colour, size = object$size, inherit.aes = FALSE)
   ggplot_add(obj, plot)
+}
+
+#' @export
+ggplot_add.anno_hc_bar <- function(object, plot, object_name) {
+  pdata <- plot$data
+  pos <- object$pos
+  k <- object$k
+  on.row <- pos %in% c("left", "right")
+  hc <- if(on.row) attr(pdata, "hclust")$row.hc else attr(pdata, "hclust")$col.hc
+  if(is.null(hc)) {
+    return(plot)
+  }
+  tree <- cutree(hc, k = k)
+  cv <- table(tree)[unique(tree[hc$order])]
+
+  mappping <- aes_string(x = "x", y = "y")
+  if(on.row) {
+    data <- data.frame(x = object$width,
+                       y = seq_len(nrows(pdata)))
+    fill <- rep(object$fill, times = rev(cv))
+    width <- object$width
+    height <- 1
+  } else {
+    data <- data.frame(x = seq_len(ncols(pdata)),
+                       y = object$height)
+    fill <- rep(object$fill, times = cv)
+    width <- 1
+    height <- object$height
+  }
+
+  if(isTRUE(plot$plot_env$circular)) {
+    polar.args <- plot$plot_env$polar.args
+    shift <- if(on.row) polar.args$row.shift %||% 0 else polar.args$col.shift %||% 0
+    half <- if(on.row) polar.args$row.half %||% 0.5 else polar.args$col.half %||% 0.5
+    adj <- if(on.row) - 0.5 * object$width + half else - 0.5 * object$height + half
+    if(on.row) {
+      data$x <- data$x + ncols(plot$data) + adj + object$space
+      polar.args$row.shift <- shift + object$width + adj + object$space
+      polar.args$row.half <- object$width / 2
+    } else {
+      data$y <- data$y + nrows(plot$data) + adj + object$space
+      polar.args$col.shift <- shift + object$height + adj + object$space
+      polar.args$col.half <- object$height / 2
+    }
+    obj <- geom_tile(mapping = mappping, data = data,
+                     fill = fill, colour = fill, size = object$size,
+                     width = width, height = height, inherit.aes = FALSE)
+    ggplot_add(obj, plot)
+  } else {
+
+    obj <- ggplot(data, mappping) +
+      geom_tile(fill = fill, colour = fill, size = object$size,
+                width = width, height = height)
+    if(on.row) {
+      obj <- obj +
+             scale_x_continuous(limits = c(0.5 * object$width, 1.5 * object$width), expand = c(0, 0)) +
+             scale_y_continuous(limits = yrange(plot), expand = c(0, 0))
+      .anno_row(plot, obj, object$width / ncols(plot$data), pos = pos)
+    } else {
+      obj <- obj +
+        scale_x_continuous(limits = xrange(plot), expand = c(0, 0)) +
+        scale_y_continuous(limits = c(0.5 * object$height, 1.5 * object$height), expand = c(0, 0))
+      .anno_col(plot, obj, object$height / nrows(plot$data), pos = pos)
+    }
+  }
 }
 
 #' @importFrom ggplot2 ggplot geom_bar scale_x_reverse scale_y_reverse
@@ -778,12 +846,15 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
 
   polar.args <- plot$plot_env$polar.args
   row.shift <- polar.args$row.shift %||% 0
-  shift <- ncols(data) * object$width + object$space + row.shift
-  data$.col.id <- data$.col.id * object$width + ncols(plot$data) + object$space + row.shift
+  half <- polar.args$row.half %||% 0.5
+  adj <- - 0.5 * object$width + half
+  polar.args$row.half <- 0.5 * object$width
+  data$.col.id <- data$.col.id * object$width + ncols(plot$data) +
+                  object$space + row.shift + adj
   # reset y axis parameters
-  polar.args$yaxis_df$x <- polar.args$yaxis_df$x + ncols(data) * object$width + object$space
+  polar.args$yaxis_df$x <- polar.args$yaxis_df$x + ncols(data) * object$width + object$space + adj
   if(isTRUE(object$col.label)) {
-    df <- data.frame(x = seq_len(ncols(data)) * object$width + ncols(plot$data) + object$space + row.shift,
+    df <- data.frame(x = seq_len(ncols(data)) * object$width + ncols(plot$data) + object$space + row.shift + adj,
                      y = unique(polar.args$xaxis_df$y),
                      label = get_col_name(data),
                      angle = 0,
@@ -792,7 +863,7 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
                                             angle = "angle", hjust = "hjust"),
                        data = df, inherit.aes = FALSE)
   }
-  polar.args$row.shift <- shift
+  polar.args$row.shift <- ncols(data) * object$width + object$space + row.shift + adj
   plot$plot_env$polar.args <- polar.args
 
   # calc the layer
@@ -808,12 +879,38 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
     }
   } else {
     params$width <- object$width
-    obj <- do.call(geom_anno_tile, params)
+    geom <- paste0("geom_", object$geom)
+    obj <- do.call(geom, params)
     if(isTRUE(object$col.label)) {
       obj <- list(obj, label)
     }
   }
+  if(!is.list(obj)) {
+    obj <- list(obj)
+  }
 
+  mark <- object$mark
+  if(is.null(mark)) mark <- as.list(NULL)
+  if(inherits(mark, "Layer")) mark <- list(mark)
+  if(is.list(mark)) {
+    is.layer <- vapply(mark, inherits, logical(1), "Layer")
+    if(length(mark) > sum(is.layer)) {
+      warning("'mark' should be layer object.", call. = FALSE)
+    }
+
+    mark <- mark[is.layer]
+    if(length(mark) > 0) {
+      mark <- lapply(mark, function(.mark) {
+        .mark$data <- data
+        .mark$mapping <- aes_modify(aes_string(x = ".col.id", y = ".row.id"), .mark$mapping)
+        .mark$inherit.aes <- FALSE
+        .mark
+      })
+      obj <- c(obj, mark)
+    }
+  } else {
+    warning("Invalid 'mark' type.", call. = FALSE)
+  }
   ggplot_add(obj, plot)
 }
 
@@ -831,22 +928,25 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
 
   polar.args <- plot$plot_env$polar.args
   col.shift <- polar.args$col.shift %||% 0
-  shift <- nrows(plot$data) + object$space + col.shift
-  data$.row.id <- data$.row.id * object$height + shift
+  half <- polar.args$col.half %||% 0.5
+  adj <- - 0.5 * object$height + half
+  data$.row.id <- data$.row.id * object$height + nrows(plot$data) + object$space + col.shift + adj
   # reset y axis parameters
   if(isTRUE(object$row.label)) {
-    t <- (seq_len(nrows(data)) * object$height + col.shift) * 360 / diff(polar.args$ylim) + 90
-    df <- data.frame(x = 0.5 + 1.05 * cols,
-                     y = seq_len(nrows(data)) * object$height + shift,
+    t <- (seq_len(nrows(data)) * object$height + col.shift + nrows(plot$data) + adj) * 360 / diff(polar.args$ylim) + 90
+    df <- data.frame(x = 0.5 + 1.05 * ncols(plot$data),
+                     y = seq_len(nrows(data)) * object$height + nrows(plot$data) + object$space + col.shift + adj,
                      label = get_row_name(data),
-                     angle = ifelse(t > 90 & t < 270, t + 180, t) - 0.5 / ut.degree,
+                     angle = ifelse(t > 90 & t < 270, t + 180, t) -
+                             0.5 / diff(polar.args$ylim) * 360,
                      hjust = ifelse(t > 90 & t < 270, 1, 0),
                      stringsAsFactors = FALSE)
     label <- geom_text(mapping = aes_string(x = "x", y = "y", label = "label",
                                             angle = "angle", hjust = "hjust"),
                        data = df, inherit.aes = FALSE)
   }
-  plot$plot_env$polar.args$col.shift <- shift
+  plot$plot_env$polar.args$col.shift <- nrows(data) + object$space + col.shift + adj
+  plot$plot_env$polar.args$col.half <- 0.5 * object$height
 
   # calc the layer
   mapping <- aes_modify(aes_string(x = ".col.id", y = ".row.id"), object$mapping)
@@ -861,11 +961,38 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
       obj <- list(border, obj, label)
     }
   } else {
-    params$height <- object$width
-    obj <- do.call(geom_anno_tile2, params)
+    params$width <- object$width
+    geom <- paste0("geom_", object$geom)
+    obj <- do.call(geom, params)
     if(isTRUE(object$row.label)) {
       obj <- list(obj, label)
     }
+  }
+  if(!is.list(obj)) {
+    obj <- list(obj)
+  }
+
+  mark <- object$mark
+  if(is.null(mark)) mark <- as.list(NULL)
+  if(inherits(mark, "Layer")) mark <- list(mark)
+  if(is.list(mark)) {
+    is.layer <- vapply(mark, inherits, logical(1), "Layer")
+    if(length(mark) > sum(is.layer)) {
+      warning("'mark' should be layer object.", call. = FALSE)
+    }
+
+    mark <- mark[is.layer]
+    if(length(mark) > 0) {
+      mark <- lapply(mark, function(.mark) {
+        .mark$data <- data
+        .mark$mapping <- aes_modify(aes_string(x = ".col.id", y = ".row.id"), .mark$mapping)
+        .mark$inherit.aes <- FALSE
+        .mark
+      })
+      obj <- c(obj, mark)
+    }
+  } else {
+    warning("Invalid 'mark' type.", call. = FALSE)
   }
 
   ggplot_add(obj, plot)
