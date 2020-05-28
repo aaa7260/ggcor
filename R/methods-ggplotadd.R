@@ -377,13 +377,13 @@ ggplot_add.anno_hc_bar <- function(object, plot, object_name) {
   if(on.row) {
     data <- data.frame(x = object$width,
                        y = seq_len(nrows(pdata)))
-    fill <- rep(object$fill, times = rev(cv))
+    fill <- rep(rev(object$fill), times = rev(cv))
     width <- object$width
     height <- 1
   } else {
     data <- data.frame(x = seq_len(ncols(pdata)),
                        y = object$height)
-    fill <- rep(object$fill, times = cv)
+    fill <- rep(rev(object$fill), times = cv)
     width <- 1
     height <- object$height
   }
@@ -394,14 +394,20 @@ ggplot_add.anno_hc_bar <- function(object, plot, object_name) {
     half <- if(on.row) polar.args$row.half %||% 0.5 else polar.args$col.half %||% 0.5
     adj <- if(on.row) - 0.5 * object$width + half else - 0.5 * object$height + half
     if(on.row) {
-      data$x <- data$x + ncols(plot$data) + adj + object$space
-      polar.args$row.shift <- shift + object$width + adj + object$space
-      polar.args$row.half <- object$width / 2
+      data$x <- data$x + ncols(plot$data) + adj + object$space + shift
+      if(isTRUE(object$shift)) {
+        polar.args$row.shift <- shift + object$width + adj + object$space
+        polar.args$row.half <- object$width / 2
+        polar.args$yaxis_df$x <- polar.args$yaxis_df$x + object$width + object$space + adj
+      }
     } else {
-      data$y <- data$y + nrows(plot$data) + adj + object$space
-      polar.args$col.shift <- shift + object$height + adj + object$space
-      polar.args$col.half <- object$height / 2
+      data$y <- data$y + nrows(plot$data) + adj + object$space + shift
+      if(isTRUE(object$shift)) {
+        polar.args$col.shift <- shift + object$height + adj + object$space
+        polar.args$col.half <- object$height / 2
+      }
     }
+    plot$plot_env$polar.args <- polar.args
     obj <- geom_tile(mapping = mappping, data = data,
                      fill = fill, colour = fill, size = object$size,
                      width = width, height = height, inherit.aes = FALSE)
@@ -945,7 +951,7 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
                                             angle = "angle", hjust = "hjust"),
                        data = df, inherit.aes = FALSE)
   }
-  plot$plot_env$polar.args$col.shift <- nrows(data) + object$space + col.shift + adj
+  plot$plot_env$polar.args$col.shift <- nrows(data) * object$height + object$space + col.shift + adj
   plot$plot_env$polar.args$col.half <- 0.5 * object$height
 
   # calc the layer

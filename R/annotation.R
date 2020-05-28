@@ -102,6 +102,7 @@ anno_link <- function(mapping = NULL,
 #' @param width,height width or height of the bar.
 #' @param space scala numeric value.
 #' @param size size of square boder line.
+#' @param shift logical value.
 #' @return square layer.
 #' @rdname anno_hc_rect
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
@@ -126,14 +127,16 @@ anno_hc_bar <- function(k = 2,
                         pos = "right",
                         width = 1,
                         height = 1,
-                        space = 0)
+                        space = 0,
+                        shift = TRUE)
 {
   if(is.null(fill)) {
     fill <- sample(grDevices::colors(TRUE), k)
   }
   pos <- match.arg(pos, c("bottom", "top", "left", "right"))
   structure(.Data = list(pos = pos, k = k, fill = fill, size = size,
-                         width = width, height = height, space = space),
+                         width = width, height = height, space = space,
+                         shift = shift),
             class = "anno_hc_bar")
 }
 
