@@ -95,50 +95,6 @@ export_cor_network.pro_tbl <- function(x,
 
 #' @rdname  export_cor_network
 #' @export
-#' @method export_cor_network matrix
-export_cor_network.matrix <- function(x,
-                                      file = "",
-                                      what = "edges",
-                                      sep = ",",
-                                      row.names = NULL,
-                                      col.names = NULL,
-                                      rm.dup = TRUE,
-                                      simplify = TRUE,
-                                      r.thres = 0.6,
-                                      r.absolute = TRUE,
-                                      ...)
-{
-  what <- match.arg(what, c("edges", "nodes"))
-  x <- as_cor_network(x, row.names = row.names, col.names = col.names,
-                      rm.dup = rm.dup, simplify = simplify, r.thres = r.thres,
-                      r.absolute = r.absolute)
-  export_cor_network(x, file, what, sep, ...)
-}
-
-#' @rdname  export_cor_network
-#' @export
-#' @method export_cor_network data.frame
-export_cor_network.data.frame <- function(x,
-                                          file = "",
-                                          what = "edges",
-                                          sep = ",",
-                                          row.names = NULL,
-                                          col.names = NULL,
-                                          rm.dup = TRUE,
-                                          simplify = TRUE,
-                                          r.thres = 0.6,
-                                          r.absolute = TRUE,
-                                          ...)
-{
-  what <- match.arg(what, c("edges", "nodes"))
-  x <- as_cor_network(x, row.names = row.names, col.names = col.names,
-                      rm.dup = rm.dup, simplify = simplify, r.thres = r.thres,
-                      r.absolute = r.absolute)
-  export_cor_network(x, file, what, sep, ...)
-}
-
-#' @rdname  export_cor_network
-#' @export
 #' @method export_cor_network correlate
 export_cor_network.correlate <- function(x,
                                          file = "",

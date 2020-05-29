@@ -6,8 +6,6 @@
 \alias{export_cor_network.cor_tbl}
 \alias{export_cor_network.mantel_tbl}
 \alias{export_cor_network.pro_tbl}
-\alias{export_cor_network.matrix}
-\alias{export_cor_network.data.frame}
 \alias{export_cor_network.correlate}
 \alias{export_cor_network.rcorr}
 \alias{export_cor_network.corr.test}
@@ -50,34 +48,6 @@ export_cor_network(x, file = "", what = "edges", sep = ",", ...)
   r.thres = 0.6,
   r.absolute = TRUE,
   p.thres = 0.05,
-  ...
-)
-
-\method{export_cor_network}{matrix}(
-  x,
-  file = "",
-  what = "edges",
-  sep = ",",
-  row.names = NULL,
-  col.names = NULL,
-  rm.dup = TRUE,
-  simplify = TRUE,
-  r.thres = 0.6,
-  r.absolute = TRUE,
-  ...
-)
-
-\method{export_cor_network}{data.frame}(
-  x,
-  file = "",
-  what = "edges",
-  sep = ",",
-  row.names = NULL,
-  col.names = NULL,
-  rm.dup = TRUE,
-  simplify = TRUE,
-  r.thres = 0.6,
-  r.absolute = TRUE,
   ...
 )
 
