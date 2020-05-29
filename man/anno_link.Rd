@@ -12,7 +12,7 @@ anno_link(
   data,
   width = 0.3,
   pos = "right",
-  label.size = 3.5,
+  label.size = 3.88,
   label.colour = "black",
   label.family = "",
   label.fontface = 1,

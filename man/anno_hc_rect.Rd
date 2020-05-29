@@ -14,7 +14,8 @@ anno_hc_bar(
   pos = "right",
   width = 1,
   height = 1,
-  space = 0
+  space = 0,
+  shift = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ anno_hc_bar(
 \item{width, height}{width or height of the bar.}
 
 \item{space}{scala numeric value.}
+
+\item{shift}{logical value.}
 }
 \value{
 square layer.

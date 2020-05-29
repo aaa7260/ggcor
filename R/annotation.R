@@ -71,7 +71,7 @@ anno_link <- function(mapping = NULL,
                       data,
                       width = 0.3,
                       pos = "right",
-                      label.size = 3.5,
+                      label.size = 3.88,
                       label.colour = "black",
                       label.family = "",
                       label.fontface = 1,
@@ -150,136 +150,125 @@ anno_hc_bar <- function(k = 2,
 #' @param pos position of annotation.
 #' @param width,height width and height of annotation.
 #' @param trans the name of a transformation object or the object itself.
-#' @param remove.axis one of "auto", "x", "y" or "none".
+#' @param scale scale object.
 #' @param theme theme object or the name.
+#' @param label.size,label.colour,label.family,label.fontface parameters for label.
 #' @param ... extra parameters.
 #' @return anno_* object.
 #' @rdname anno_special
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-anno_bar <- function(mapping,
-                     data,
+anno_bar <- function(data,
+                     mapping,
                      align = TRUE,
                      flip = FALSE,
                      pos = NULL,
                      width = 0.2,
                      height = 0.2,
                      trans = NULL,
-                     remove.axis = "auto",
-                     theme = theme_anno(),
+                     scale = NULL,
+                     theme = NULL,
                      ...) {
-  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
   structure(.Data = list(mapping = mapping, data = data, align = align,
                          flip = flip, pos = pos, width = width, height = height,
-                         trans = trans, remove.axis = remove.axis,
-                         theme = theme, params = list(...)),
+                         trans = trans, scale = scale, theme = theme,
+                         params = list(...)),
             class = "anno_bar")
 }
 
 #' @rdname anno_special
 #' @export
-anno_bar2 <- function(mapping,
-                      data,
+anno_bar2 <- function(data,
+                      mapping,
                       align = TRUE,
                       flip = FALSE,
                       pos = NULL,
                       width = 0.2,
                       height = 0.2,
                       trans = NULL,
-                      remove.axis = "auto",
-                      theme = theme_anno(),
+                      scale = NULL,
+                      theme = NULL,
                       ...) {
-  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
   structure(.Data = list(mapping = mapping, data = data, align = align,
                          flip = flip, pos = pos, width = width, height = height,
-                         trans = trans, remove.axis = remove.axis,
-                         theme = theme, params = list(...)),
+                         trans = trans, scale = scale, theme = theme,
+                         params = list(...)),
             class = "anno_bar2")
 }
 
 #' @rdname anno_special
 #' @export
-anno_boxplot <- function(mapping,
-                         data,
+anno_boxplot <- function(data,
+                         mapping,
                          align = TRUE,
                          pos = NULL,
                          width = 0.2,
                          height = 0.2,
                          trans = NULL,
-                         remove.axis = "auto",
-                         theme = theme_anno(),
+                         scale = NULL,
+                         theme = NULL,
                          ...) {
-  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
   structure(.Data = list(mapping = mapping, data = data, align = align,
                          pos = pos, width = width, height = height,
-                         trans = trans, remove.axis = remove.axis,
-                         theme = theme, params = list(...)),
+                         trans = trans, scale = scale, theme = theme,
+                         params = list(...)),
             class = "anno_boxplot")
 }
 
 #' @rdname anno_special
-#' @export
-anno_point <- function(mapping,
-                       data,
-                       align = TRUE,
-                       pos = NULL,
-                       width = 0.2,
-                       height = 0.2,
-                       remove.axis = "auto",
-                       theme = theme_anno(),
-                       ...) {
-  remove.axis <- match.arg(remove.axis, c("auto", "x", "y", "all", "none"))
-  structure(.Data = list(mapping = mapping, data = data, align = align,
-                         pos = pos, width = width, height = height,
-                         remove.axis = remove.axis, theme = theme,
-                         params = list(...)),
-            class = "anno_point")
-}
-
-#' @rdname anno_special
 #' @param geom one of "anno_tile", "anno_tile2" or "point".
+#' @param mark a layer instance.
 #' @param space scala numeric value.
-#' @param col.label logical value, if TRUE will add columns name on plot.
+#' @param label logical value, if TRUE will add label on plot.
 #' @export
-anno_row_heat <- function(mapping,
-                          data,
+anno_row_heat <- function(data,
+                          mapping = NULL,
                           align = TRUE,
                           geom = "anno_tile",
                           mark = NULL,
                           space = 0.5,
                           width = 1,
-                          col.label = TRUE,
+                          label = TRUE,
+                          label.size = 3.88,
+                          label.colour = "black",
+                          label.family = "",
+                          label.fontface = 1,
                           ...) {
   if(!is_cor_tbl(data)) {
     stop("Invalid data input.", call. = FALSE)
   }
   geom <- match.arg(geom, c("anno_tile", "anno_tile2", "point"))
-  structure(.Data = list(mapping = mapping, data = data, align = align,
+  structure(.Data = list(data = data, mapping = mapping, align = align,
                          geom = geom, space = space, mark = mark,
-                         width = width, col.label = col.label,
-                         params = list(...)),
+                         width = width, label = label, label.size = label.size,
+                         label.colour = label.colour, label.family = label.family,
+                         label.fontface = label.fontface, params = list(...)),
             class = "anno_row_heat")
 }
 
 #' @rdname anno_special
-#' @param row.label logical value, if TRUE will add columns name on plot.
-#' @param height scala numeric value.
 #' @export
-anno_col_heat <- function(mapping,
-                          data,
+anno_col_heat <- function(data,
+                          mapping = NULL,
                           align = TRUE,
                           geom = "anno_tile2",
                           mark = NULL,
                           space = 0.5,
                           height = 1,
-                          row.label = TRUE,
+                          label = TRUE,
+                          label.size = 3.88,
+                          label.colour = "black",
+                          label.family = "",
+                          label.fontface = 1,
                           ...) {
   if(!is_cor_tbl(data)) {
     stop("Invalid data input.", call. = FALSE)
   }
   geom <- match.arg(geom, c("anno_tile", "anno_tile2", "point"))
-  structure(.Data = list(mapping = mapping, data = data, align = align,
+  structure(.Data = list(data = data, mapping = mapping, align = align,
                          geom = geom, space = space, height = height,
-                         row.label = row.label, params = list(...)),
+                         label = label, label.size = label.size,
+                         label.colour = label.colour, label.family = label.family,
+                         label.fontface = label.fontface, params = list(...)),
             class = "anno_col_heat")
 }

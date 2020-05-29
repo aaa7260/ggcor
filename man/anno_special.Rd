@@ -4,92 +4,87 @@
 \alias{anno_bar}
 \alias{anno_bar2}
 \alias{anno_boxplot}
-\alias{anno_point}
 \alias{anno_row_heat}
 \alias{anno_col_heat}
 \title{Custom annotation}
 \usage{
 anno_bar(
-  mapping,
   data,
+  mapping,
   align = TRUE,
   flip = FALSE,
   pos = NULL,
   width = 0.2,
   height = 0.2,
   trans = NULL,
-  remove.axis = "auto",
-  theme = theme_anno(),
+  scale = NULL,
+  theme = NULL,
   ...
 )
 
 anno_bar2(
-  mapping,
   data,
+  mapping,
   align = TRUE,
   flip = FALSE,
   pos = NULL,
   width = 0.2,
   height = 0.2,
   trans = NULL,
-  remove.axis = "auto",
-  theme = theme_anno(),
+  scale = NULL,
+  theme = NULL,
   ...
 )
 
 anno_boxplot(
-  mapping,
   data,
+  mapping,
   align = TRUE,
   pos = NULL,
   width = 0.2,
   height = 0.2,
   trans = NULL,
-  remove.axis = "auto",
-  theme = theme_anno(),
-  ...
-)
-
-anno_point(
-  mapping,
-  data,
-  align = TRUE,
-  pos = NULL,
-  width = 0.2,
-  height = 0.2,
-  remove.axis = "auto",
-  theme = theme_anno(),
+  scale = NULL,
+  theme = NULL,
   ...
 )
 
 anno_row_heat(
-  mapping,
   data,
+  mapping = NULL,
   align = TRUE,
   geom = "anno_tile",
   mark = NULL,
   space = 0.5,
   width = 1,
-  col.label = TRUE,
+  label = TRUE,
+  label.size = 3.88,
+  label.colour = "black",
+  label.family = "",
+  label.fontface = 1,
   ...
 )
 
 anno_col_heat(
-  mapping,
   data,
+  mapping = NULL,
   align = TRUE,
   geom = "anno_tile2",
   mark = NULL,
   space = 0.5,
   height = 1,
-  row.label = TRUE,
+  label = TRUE,
+  label.size = 3.88,
+  label.colour = "black",
+  label.family = "",
+  label.fontface = 1,
   ...
 )
 }
 \arguments{
-\item{mapping}{aesthetic mappings parameters.}
-
 \item{data}{a data frame.}
+
+\item{mapping}{aesthetic mappings parameters.}
 
 \item{align}{align base on main plot.}
 
@@ -100,11 +95,9 @@ the bottom side will be flipped.}
 
 \item{width, height}{width and height of annotation.}
 
-\item{height}{scala numeric value.}
-
 \item{trans}{the name of a transformation object or the object itself.}
 
-\item{remove.axis}{one of "auto", "x", "y" or "none".}
+\item{scale}{scale object.}
 
 \item{theme}{theme object or the name.}
 
@@ -112,11 +105,13 @@ the bottom side will be flipped.}
 
 \item{geom}{one of "anno_tile", "anno_tile2" or "point".}
 
+\item{mark}{a layer instance.}
+
 \item{space}{scala numeric value.}
 
-\item{col.label}{logical value, if TRUE will add columns name on plot.}
+\item{label}{logical value, if TRUE will add label on plot.}
 
-\item{row.label}{logical value, if TRUE will add columns name on plot.}
+\item{label.size, label.colour, label.family, label.fontface}{parameters for label.}
 }
 \value{
 anno_* object.

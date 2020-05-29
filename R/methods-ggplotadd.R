@@ -507,16 +507,24 @@ ggplot_add.anno_bar <- function(object, plot, object_name) {
     }
   }
 
+  if(!is.null(object$scale)) {
+    p <- p + object$scale
+  }
+
+  p <- p + theme_anno()
   if(is.character(object$theme)) {
     p <- p + match.fun(object$theme)()
   } else {
     p <- p + object$theme
   }
-  remove.axis <- if(object$remove.axis == "auto") {
-    if(vertical) "x" else "y"
-  } else object$remove.axis
-  if(object$remove.axis != "none")
-    p <- p + remove_axis(remove.axis)
+
+  if(isTRUE(object$align)) {
+    if(vertical) {
+      p <- p + remove_x_axis()
+    } else {
+      p <- p + remove_y_axis()
+    }
+  }
 
   if(vertical) {
     .anno_col(plot, p, height = object$height, pos = pos)
@@ -639,16 +647,24 @@ ggplot_add.anno_bar2 <- function(object, plot, object_name) {
     }
   }
 
+  if(!is.null(object$scale)) {
+    p <- p + object$scale
+  }
+
+  p <- p + theme_anno()
   if(is.character(object$theme)) {
     p <- p + match.fun(object$theme)()
   } else {
     p <- p + object$theme
   }
-  remove.axis <- if(object$remove.axis == "auto") {
-    if(vertical) "x" else "y"
-  } else object$remove.axis
-  if(object$remove.axis != "none")
-    p <- p + remove_axis(remove.axis)
+
+  if(isTRUE(object$align)) {
+    if(vertical) {
+      p <- p + remove_x_axis()
+    } else {
+      p <- p + remove_y_axis()
+    }
+  }
 
   if(vertical) {
     .anno_col(plot, p, height = object$height, pos = pos)
@@ -741,101 +757,30 @@ ggplot_add.anno_boxplot <- function(object, plot, object_name) {
     }
   }
 
+  if(!is.null(object$scale)) {
+    p <- p + object$scale
+  }
+
+  p <- p + theme_anno()
   if(is.character(object$theme)) {
     p <- p + match.fun(object$theme)()
   } else {
     p <- p + object$theme
   }
-  remove.axis <- if(object$remove.axis == "auto") {
-    if(vertical) "x" else "y"
-  } else object$remove.axis
-  if(object$remove.axis != "none")
-    p <- p + remove_axis(remove.axis)
+
+  if(isTRUE(object$align)) {
+    if(vertical) {
+      p <- p + remove_x_axis()
+    } else {
+      p <- p + remove_y_axis()
+    }
+  }
 
   if(vertical) {
     .anno_col(plot, p, height = object$height, pos = pos)
   } else {
     .anno_row(plot, p, width = object$width, pos = pos)
   }
-}
-
-#' @importFrom ggplot2 geom_point
-#' @export
-ggplot_add.anno_point <- function(object, plot, object_name) {
-  stopifnot(inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular))
-  type <- get_type(plot$data)
-  data <- object$data
-  pos <- object$pos
-  xname <- rlang::as_name(object$mapping$x)
-  yname <- rlang::as_name(object$mapping$y)
-  if(!is_binary(data[[xname]]) || !is_binary(data[[yname]])) {
-    stop("`anno_point()` only support for binary position vars.",
-         call. = FALSE)
-  }
-  if(is.null(pos)) {
-    if(all(unique(data[[xname]], TRUE) %in% get_col_name(plot$data))) {
-      pos <- switch(type, lower = "bottom", "top")
-    } else if(all(unique(data[[yname]], TRUE) %in% get_row_name(plot$data))) {
-      pos <- switch(type, lower = "left", "right")
-    } else {
-      stop("Please set the 'pos' params.", call. = FALSE)
-    }
-  }
-  vertical <- pos %in% c("bottom", "top")
-
-  p <- ggplot(object$data, object$mapping) + do.call(geom_point, object$params)
-
-  if(!plot$coordinates$is_free()) {
-    p <- p + coord_fixed()
-  }
-
-  if(vertical) {
-    if(isTRUE(object$align)) {
-      p <- p + scale_x_discrete(limits = get_col_name(plot$data), expand = c(0, 0))
-    } else {
-      p <- p + scale_x_discrete(expand = c(0, 0))
-    }
-  } else {
-    if(isTRUE(object$align)) {
-      p <- p + scale_y_discrete(limits = rev(get_row_name(plot$data)), expand = c(0, 0))
-    } else {
-      p <- p + scale_y_discrete(expand = c(0, 0))
-    }
-  }
-
-  if(!plot$coordinates$is_free()) {
-    if(isTRUE(object$align)) {
-      if(vertical) {
-        p <- p + coord_fixed(xlim = xrange(plot))
-      } else {
-        p <- p + coord_fixed(ylim = yrange(plot))
-      }
-    } else {
-      p <- p + coord_fixed()
-    }
-  }
-
-  if(is.character(object$theme)) {
-    p <- p + match.fun(object$theme)()
-  } else {
-    p <- p + object$theme
-  }
-  remove.axis <- if(object$remove.axis == "auto") {
-    if(vertical) "x" else "y"
-  } else object$remove.axis
-  if(object$remove.axis != "none")
-    p <- p + remove_axis(remove.axis)
-
-  if(vertical) {
-    .anno_col(plot, p, height = object$height, pos = pos)
-  } else {
-    .anno_row(plot, p, width = object$width, pos = pos)
-  }
-}
-
-#' @noRd
-is_binary <- function(x) {
-  is.character(x) || is.factor(x)
 }
 
 #' @export
@@ -859,15 +804,17 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
                   object$space + row.shift + adj
   # reset y axis parameters
   polar.args$yaxis_df$x <- polar.args$yaxis_df$x + ncols(data) * object$width + object$space + adj
-  if(isTRUE(object$col.label)) {
+  if(isTRUE(object$label)) {
     df <- data.frame(x = seq_len(ncols(data)) * object$width + ncols(plot$data) + object$space + row.shift + adj,
                      y = unique(polar.args$xaxis_df$y),
                      label = get_col_name(data),
                      angle = 0,
                      hjust = 0, stringsAsFactors = FALSE)
     label <- geom_text(mapping = aes_string(x = "x", y = "y", label = "label",
-                                            angle = "angle", hjust = "hjust"),
-                       data = df, inherit.aes = FALSE)
+                                            angle = "angle", hjust = "hjust"), data = df,
+                       label.size = object$label.size, label.colour = object$label.colour,
+                       label.family = object$label.family, label.fontface = object$label.fontface,
+                       inherit.aes = FALSE)
   }
   polar.args$row.shift <- ncols(data) * object$width + object$space + row.shift + adj
   plot$plot_env$polar.args <- polar.args
@@ -880,14 +827,14 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
     obj <- do.call(ggplot2::geom_point, params)
     border <- geom_anno_tile(aes_string(x = ".col.id", y = ".row.id"), data = data,
                              fill = NA, colour = "grey50", size = 0.25, inherit.aes = FALSE)
-    if(isTRUE(object$col.label)) {
+    if(isTRUE(object$label)) {
       obj <- list(border, obj, label)
     }
   } else {
     params$width <- object$width
     geom <- paste0("geom_", object$geom)
     obj <- do.call(geom, params)
-    if(isTRUE(object$col.label)) {
+    if(isTRUE(object$label)) {
       obj <- list(obj, label)
     }
   }
@@ -938,7 +885,7 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
   adj <- - 0.5 * object$height + half
   data$.row.id <- data$.row.id * object$height + nrows(plot$data) + object$space + col.shift + adj
   # reset y axis parameters
-  if(isTRUE(object$row.label)) {
+  if(isTRUE(object$label)) {
     t <- (seq_len(nrows(data)) * object$height + col.shift + nrows(plot$data) + adj) * 360 / diff(polar.args$ylim) + 90
     df <- data.frame(x = 0.5 + 1.05 * ncols(plot$data),
                      y = seq_len(nrows(data)) * object$height + nrows(plot$data) + object$space + col.shift + adj,
@@ -948,8 +895,10 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
                      hjust = ifelse(t > 90 & t < 270, 1, 0),
                      stringsAsFactors = FALSE)
     label <- geom_text(mapping = aes_string(x = "x", y = "y", label = "label",
-                                            angle = "angle", hjust = "hjust"),
-                       data = df, inherit.aes = FALSE)
+                                            angle = "angle", hjust = "hjust"), data = df,
+                       label.size = object$label.size, label.colour = object$label.colour,
+                       label.family = object$label.family, label.fontface = object$label.fontface,
+                       inherit.aes = FALSE)
   }
   plot$plot_env$polar.args$col.shift <- nrows(data) * object$height + object$space + col.shift + adj
   plot$plot_env$polar.args$col.half <- 0.5 * object$height
@@ -963,14 +912,14 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
     border <- geom_anno_tile2(aes_string(x = ".col.id", y = ".row.id"), data = data,
                              height = object$height, fill = NA, colour = "grey50",
                              size = 0.25, inherit.aes = FALSE)
-    if(isTRUE(object$row.label)) {
+    if(isTRUE(object$label)) {
       obj <- list(border, obj, label)
     }
   } else {
     params$width <- object$width
     geom <- paste0("geom_", object$geom)
     obj <- do.call(geom, params)
-    if(isTRUE(object$row.label)) {
+    if(isTRUE(object$label)) {
       obj <- list(obj, label)
     }
   }
@@ -1003,4 +952,3 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
 
   ggplot_add(obj, plot)
 }
-
