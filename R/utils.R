@@ -9,12 +9,18 @@ get_function <- function(pkg, fun) {
 #' @noRd
 xrange <- function(.plot) {
   stopifnot(inherits(.plot, "gg"))
+  if(is_dplot(.plot)) {
+    class(.plot) <- setdiff(class(.plot), "dplot")
+  }
   ggplot_build(.plot)$layout$panel_params[[1]]$x.range
 }
 
 #' @noRd
 yrange <- function(.plot) {
   stopifnot(inherits(.plot, "gg"))
+  if(is_dplot(.plot)) {
+    class(.plot) <- setdiff(class(.plot), "dplot")
+  }
   ggplot_build(.plot)$layout$panel_params[[1]]$y.range
 }
 

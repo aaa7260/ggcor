@@ -42,6 +42,7 @@ Suggests:
     dendextend,
     ggimage,
     ggraph,
+    ggtree,
     knitr,
     latex2exp,
     rmarkdown,

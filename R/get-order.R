@@ -3,14 +3,14 @@
 #' @param x any \code{R} object.
 #' @param name old name.
 #' @param ... ignore.
-#' @return a character or numeric vector.
+#' @return a numeric vector.
 #' @rdname get_order
 #' @examples
 #' hc <- hclust(dist(mtcars))
 #' get_order(hc)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-get_order <- function(x, ...) {
+get_order <- function(x, name = NULL, ...) {
   UseMethod("get_order")
 }
 
@@ -45,4 +45,16 @@ get_order.hclust <- function(x, ...) {
 #' @method get_order dendrogram
 get_order.dendrogram <- function(x, ...) {
   get_order(stats::as.hclust(x))
+}
+
+#' @rdname get_order
+#' @export
+#' @method get_order ggtree
+get_order.ggtree <- function(x, name = NULL, ...) {
+  data <- x$data
+  order <- with(data, {
+    idx <- order(y, decreasing = TRUE)
+    label[idx][isTip[idx]]
+  })
+  get_order(order, name = name)
 }

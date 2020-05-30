@@ -6,9 +6,10 @@
 \alias{get_order.character}
 \alias{get_order.hclust}
 \alias{get_order.dendrogram}
+\alias{get_order.ggtree}
 \title{Extract order}
 \usage{
-get_order(x, ...)
+get_order(x, name = NULL, ...)
 
 \method{get_order}{numeric}(x, ...)
 
@@ -17,16 +18,18 @@ get_order(x, ...)
 \method{get_order}{hclust}(x, ...)
 
 \method{get_order}{dendrogram}(x, ...)
+
+\method{get_order}{ggtree}(x, name = NULL, ...)
 }
 \arguments{
 \item{x}{any \code{R} object.}
 
-\item{...}{ignore.}
-
 \item{name}{old name.}
+
+\item{...}{ignore.}
 }
 \value{
-a character or numeric vector.
+a numeric vector.
 }
 \description{
 Extract order

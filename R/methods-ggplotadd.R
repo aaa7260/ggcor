@@ -254,14 +254,14 @@ ggplot_add.geom_number2 <- function(object, plot, object_name) {
   ggplot_add(obj, plot)
 }
 
-#' @importFrom ggplot2 ggplot_add
+#' @importFrom ggplot2 ggplot_add coord_flip
 #' @export
 ggplot_add.anno_row_tree <- function(object, plot, object_name) {
   hc <- attr(plot$data, "hclust")$row.hc
   check_tree_params("row", hc)
 
   pdata <- plot$data
-  n <- length(get_col_name(pdata))
+  n <- ncols(pdata)
   type <- get_type(pdata)
   circular <- plot$plot_env$circular
   bcols <- object$bcols
@@ -269,18 +269,46 @@ ggplot_add.anno_row_tree <- function(object, plot, object_name) {
   width <- object$width %||% 0.3
   pos <- object$pos
 
-  if(isTRUE(circular)) {
-    args <- plot$plot_env$polar.args
-    pos <- "left"
-    hrange <- c(args$xlim[1], 0.5)
-  } else {
-    if(is.null(pos)) {
-      pos <- switch (type, lower = "left", "right")
+  if(inherits(hc, "ggtree")) {
+    if(isTRUE(circular)) {
+      stop("Now, circular plot don't support for 'ggtree' object.", call. = FALSE)
     }
-    hrange <- c(0.5, width * n + 0.5)
+    pos <- pos %||% "right"
+    obj <- hc +
+           scale_y_continuous(limits = yrange(plot), expand = c(0, 0)) +
+           theme(plot.margin = ggplot2::margin())
+    if(!plot$coordinates$is_free()) {
+      mrsd <- hc$plot_env$mrsd
+      if(!is.null(mrsd) && class(hc$data$x) == "Date") {
+        xtrans <- if(pos == "left") {
+          liner_trans(xrange(hc), c(0, width * n))
+        } else {
+          liner_trans(xrange(hc), c(width * n, 0))
+        }
+        obj <-  obj +
+          scale_x_continuous(trans = xtrans) +
+          coord_fixed()
+      }
+    } else {
+      if(pos == "right") {
+        obj <- obj + scale_x_reverse()
+      }
+    }
+  } else {
+    if(isTRUE(circular)) {
+      args <- plot$plot_env$polar.args
+      pos <- "left"
+      hrange <- c(args$xlim[1], 0.5)
+    } else {
+      if(is.null(pos)) {
+        pos <- switch (type, lower = "left", "right")
+      }
+      hrange <- c(0.5, width * n + 0.5)
+    }
+
+    obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange)
   }
 
-  obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange)
   if(isTRUE(circular)) {
     ggplot_add(obj, plot)
   } else {
@@ -295,29 +323,57 @@ ggplot_add.anno_col_tree <- function(object, plot, object_name) {
   check_tree_params("col", hc)
 
   pdata <- plot$data
-  n <- length(get_row_name(pdata))
+  n <- nrows(pdata)
   type <- get_type(pdata)
   circular <- plot$plot_env$circular
   bcols <- object$bcols
   bcols <- if(is.list(bcols)) bcols$col.bcols else bcols
   height <- object$height %||% 0.3
   pos <- object$pos
-
-  if(isTRUE(circular)) {
-    args <- plot$plot_env$polar.args
-    pos <- "top"
-    col.shift <- args$col.shift %||% 0
-    shift <- height * (args$ylim[2] - n)
-    hrange <- c(0, shift) + n + 0.5 + col.shift
-    plot$plot_env$polar.args$col.shift <- col.shift + shift
-  } else {
-    if(is.null(pos)) {
-      pos <- switch (type, lower = "bottom", "top")
+  if(inherits(hc, "ggtree")) {
+    if(isTRUE(circular)) {
+      stop("Now, circular plot don't support for 'ggtree' object.", call. = FALSE)
     }
-    hrange <- if(pos == "bottom") c(- height * n + 0.5, 0.5) else c(0.5, height * n + 0.5) + n
+    pos <- pos %||% "top"
+    obj <- hc +
+           scale_y_reverse(expand = c(0, 0)) +
+           ggplot2::expand_limits(y = xrange(plot)) +
+           coord_flip() +
+           theme(plot.margin = ggplot2::margin())
+
+    if(!plot$coordinates$is_free()) {
+      mrsd <- hc$plot_env$mrsd
+      if(!is.null(mrsd) && class(hc$data$x) == "Date") {
+        xtrans <- if(pos == "top") {
+          liner_trans(xrange(hc), c(n * height, 0))
+        } else {
+          liner_trans(xrange(hc), c(0, n * height))
+        }
+        obj <- obj + scale_x_continuous(trans = xtrans) + theme(aspect.ratio = 1)
+      }
+    } else {
+      if(pos == "top") {
+        obj <- obj + scale_x_reverse()
+      }
+    }
+  } else {
+    if(isTRUE(circular)) {
+      args <- plot$plot_env$polar.args
+      pos <- "top"
+      col.shift <- args$col.shift %||% 0
+      shift <- height * (args$ylim[2] - n)
+      hrange <- c(0, shift) + n + 0.5 + col.shift
+      plot$plot_env$polar.args$col.shift <- col.shift + shift
+    } else {
+      if(is.null(pos)) {
+        pos <- switch (type, lower = "bottom", "top")
+      }
+      hrange <- if(pos == "bottom") c(- height * n + 0.5, 0.5) else c(0.5, height * n + 0.5) + n
+    }
+
+    obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange, circular)
   }
 
-  obj <- build_dendro(hc, circular, bcols, pos, plot$plot_env$fixed.xy, hrange, circular)
   if(isTRUE(circular)) {
     ggplot_add(obj, plot)
   } else {

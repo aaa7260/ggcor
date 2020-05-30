@@ -116,18 +116,20 @@ cor_tbl <- function(corr,
       warning("'row/col.order' has been specified, cluster will not be used.", call. = FALSE)
       cluster <- FALSE
     }
-    row.ord <- 1:length(row.names)
-    col.ord <- 1:length(col.names)
+    row.ord <- seq_along(row.names)
+    col.ord <- seq_along(col.names)
     if(!is.null(row.order)) {
       row.ord <- get_order(row.order, name = row.names)
-      if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram")) {
+      if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram") ||
+         inherits(row.order, "ggtree")) {
         row.hc <- row.order
       }
     }
 
     if(!is.null(col.order)) {
       col.ord <- get_order(col.order, name = col.names)
-      if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram")) {
+      if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram") ||
+         inherits(col.order, "ggtree")) {
         col.hc <- col.order
       }
     }
