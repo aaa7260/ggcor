@@ -13,6 +13,7 @@
 #' rand_forest(spec, env)
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
 rand_forest <- function(spec,
                         env,
                         byrow = FALSE,
@@ -30,8 +31,8 @@ rand_forest <- function(spec,
   if(any(n < 1, m < 1)) {
     stop("Zero length data.", call. = FALSE)
   }
-  randomForest <- get_function("randomForest", "randomForest")
-  importance <- get_function("randomForest", "importance")
+  rfPermute <- get_function("rfPermute", "rfPermute")
+  rp.importance <- get_function("rfPermute", "rp.importance")
   set.seed(seed)
   seeds <- as.integer(stats::runif(n) * 10000)
 
@@ -41,10 +42,16 @@ rand_forest <- function(spec,
   } else {
     importance <- matrix(NA, nrow = m, ncol = n, dimnames = list(names(env), names(spec)))
   }
+  if(byrow) {
+    p.value <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
+  } else {
+    p.value <- matrix(NA, nrow = m, ncol = n, dimnames = list(names(env), names(spec)))
+  }
   for (i in seq_len(n)) {
     set.seed(seeds[i])
-    rf <- randomForest(spec[[i]] ~ ., data = env, importance = TRUE, ...)
+    rf <- rfPermute(spec[[i]] ~ ., data = env, importance = TRUE, ...)
     type <- rf$type
+    imp <- rp.importance(rf, scale = TRUE)
     if(type == "classification") {
       explained[i] <- 100 - 100 * rf$err.rate[rf$ntree, "OOB"]
     } else {
@@ -52,28 +59,37 @@ rand_forest <- function(spec,
     }
     if(isTRUE(byrow)) {
       if(type == "classification") {
-        importance[i, ] <- importance(rf)[, "MeanDecreaseAccuracy"]
+        importance[i, ] <- imp[, "MeanDecreaseAccuracy"]
+        p.value[i, ] <- imp[, "MeanDecreaseAccuracy.pval"]
       } else {
-        importance[i, ] <- importance(rf)[, "%IncMSE"]
+        importance[i, ] <- imp[, "%IncMSE"]
+        p.value[i, ] <- imp[, "%IncMSE.pval"]
       }
     } else {
       if(type == "classification") {
-        importance[, i] <- importance(rf)[, "MeanDecreaseAccuracy"]
+        importance[, i] <- imp[, "MeanDecreaseAccuracy"]
+        p.value[, i] <- imp[, "MeanDecreaseAccuracy.pval"]
       } else {
-        importance[, i] <- importance(rf)[, "%IncMSE"]
+        importance[, i] <- imp[, "%IncMSE"]
+        p.value[, i] <- imp[, "%IncMSE.pval"]
       }
     }
   }
   structure(.Data = list(explained = as.data.frame(explained),
-                         importance = as.data.frame(importance)),
+                         importance = as.data.frame(importance),
+                         p.value = p.value),
             class = "rand_forest")
 }
 
 #' @rdname rand_forest
+#' @export
 print.rand_forest <- function(x, ...) {
   cat("Var explained (%):\n")
   print(x$explained)
   cat("\n")
   cat("Var importance:\n")
   print(x$importance)
+  cat("\n")
+  cat("Var importance p value:\n")
+  print(x$p.value)
 }

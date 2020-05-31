@@ -46,7 +46,7 @@ Suggests:
     knitr,
     latex2exp,
     relaimpo,
-    randomForest,
+    rfPermute,
     rmarkdown,
     picante,
     vegan,
