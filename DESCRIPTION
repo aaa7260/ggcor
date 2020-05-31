@@ -45,6 +45,7 @@ Suggests:
     ggtree,
     knitr,
     latex2exp,
+    randomForest,
     rmarkdown,
     picante,
     vegan,
@@ -102,6 +103,7 @@ Collate:
     'procrutes-test.R'
     'quickcor.R'
     'rand-correlate.R'
+    'rand-forest.R'
     'reexport.R'
     'remove-axis.R'
     'scale-fill.R'
