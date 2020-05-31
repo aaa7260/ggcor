@@ -65,9 +65,7 @@ rand_forest <- function(spec,
       }
     }
   }
-  structure(.Data = list(spec = spec,
-                         env = env,
-                         explained = as.data.frame(explained),
+  structure(.Data = list(explained = as.data.frame(explained),
                          importance = as.data.frame(importance)),
             class = "rand_forest")
 }
