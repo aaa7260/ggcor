@@ -40,6 +40,8 @@ as_dplot <- function(plot) {
                               col.anno = list(),
                               width = NULL,
                               height = NULL,
+                              multi = list(),
+                              and = list(),
                               r = 0,
                               l = 0,
                               t = 0,
@@ -149,6 +151,96 @@ empty_plot <- function()
 #' @importFrom ggplot2 ggplot_build
 #' @export
 ggplot_build.dplot <- function(plot) {
+  plot <- dplot_build(plot)
+  ggplot_build(plot)
+}
+#' @rdname dplot_utils
+#' @export
+print.dplot <- function(x,
+                        colours = getOption("ggcor.fill.pal"),
+                        style = getOption("ggcor.plot.style", "corrplot"),
+                        title = "corr",
+                        breaks = c(-1, -0.5, 0, 0.5, 1),
+                        labels = c(-1, -0.5, 0, 0.5, 1),
+                        limits = c(-1, 1),
+                        nbin = 40,
+                        ...) {
+  if(inherits(x, "quickcor")) {
+    style <- switch (style,
+                     corrplot = "corrplot",
+                     "ggplot2"
+    )
+    if(style == "corrplot") {
+      mapping <- unclass(x$mapping)
+      if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
+        fill.var.name <- as.character(rlang::quo_get_expr(mapping$fill))
+        fill.var <- rlang::eval_tidy(mapping$fill, x$data)
+        if(!is_gcor_tbl(x$data) && fill.var.name == "r" &&
+           is.numeric(fill.var)) {
+          x <- x + scale_fill_gradient2n(colours = colours,
+                                         breaks = breaks,
+                                         labels = labels,
+                                         limits = limits) +
+            guides(fill = guide_colourbar(title = title,
+                                          nbin  = nbin))
+        }
+      }
+    }
+  }
+  x <- dplot_build(x)
+  class(x)
+  print(x)
+}
+
+#' @importFrom ggplot2 is.theme
+#' @noRd
+#' @export
+`&.gg` <- function(e1, e2) {
+  if(is_dplot(e1)) {
+    .anno_info <- attr(e1, ".anno_info")
+    .anno_info$and <- c(.anno_info$and, list(e2))
+    attr(e1, ".anno_info") <- .anno_info
+    return(e1)
+  }
+  if (is_patchwork(e1)) {
+    if (is.theme(e2)) {
+      e1$patches$annotation$theme <- e1$patches$annotation$theme +
+        e2
+    }
+    e1$patches$plots <- lapply(e1$patches$plots, function(p) {
+      if (is_patchwork(p)) {
+        p <- p & e2
+      }
+      else {
+        p <- p + e2
+      }
+      p
+    })
+  }
+  e1 + e2
+}
+
+#' @noRd
+#' @export
+`*.gg` <- function(e1, e2) {
+  if(is_dplot(e1)) {
+    .anno_info <- attr(e1, ".anno_info")
+    .anno_info$multi <- c(.anno_info$multi, list(e2))
+    attr(e1, ".anno_info") <- .anno_info
+    return(e1)
+  }
+  if (is_patchwork(e1)) {
+    e1$patches$plots <- lapply(e1$patches$plots, function(p) {
+      if (!is_patchwork(p))
+        p <- p + e2
+      p
+    })
+  }
+  e1 + e2
+}
+
+#' @noRd
+dplot_build <- function(plot) {
   .anno_info <- attr(plot, ".anno_info")
   row.anno <- .anno_info$row.anno
   col.anno <- .anno_info$col.anno
@@ -184,47 +276,23 @@ ggplot_build.dplot <- function(plot) {
   if(!plot$coordinates$is_free()) {
     width <- height <- NULL
   }
-  Reduce("+", plot.list) +
+  p <- Reduce("+", plot.list) +
     plot_layout(ncol = n,
                 nrow = m,
                 byrow = TRUE,
                 widths = width,
                 heights = height,
                 guides = "collect")
-}
-#' @rdname dplot_utils
-#' @export
-print.dplot <- function(x,
-                        colours = getOption("ggcor.fill.pal"),
-                        style = getOption("ggcor.plot.style", "corrplot"),
-                        title = "corr",
-                        breaks = c(-1, -0.5, 0, 0.5, 1),
-                        labels = c(-1, -0.5, 0, 0.5, 1),
-                        limits = c(-1, 1),
-                        nbin = 40,
-                        ...) {
-  if(inherits(x, "quickcor")) {
-    style <- switch (style,
-                     corrplot = "corrplot",
-                     "ggplot2"
-    )
-    if(style == "corrplot") {
-      mapping <- unclass(x$mapping)
-      if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
-        fill.var.name <- as.character(rlang::quo_get_expr(mapping$fill))
-        fill.var <- rlang::eval_tidy(mapping$fill, x$data)
-        if(!is_gcor_tbl(x$data) && fill.var.name == "r" &&
-           is.numeric(fill.var)) {
-          x <- x + scale_fill_gradient2n(colours = colours,
-                                         breaks = breaks,
-                                         labels = labels,
-                                         limits = limits) +
-            guides(fill = guide_colourbar(title = title,
-                                          nbin  = nbin))
-        }
-      }
-    }
+  if(length(.anno_info$multi) > 0) {
+    p <- Reduce("*", .anno_info$multi, init = p)
   }
-  x <- ggplot_build(x)
-  print(x)
+  if(length(.anno_info$and) > 0) {
+    p <- Reduce("&", .anno_info$and, init = p)
+  }
+  p
+}
+
+#' @noRd
+is_patchwork <- function(.plot) {
+  inherits(.plot, "patchwork")
 }
