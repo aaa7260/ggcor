@@ -13,7 +13,6 @@
 #' rand_forest(spec, env)
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
-#' @export
 rand_forest <- function(spec,
                         env,
                         byrow = FALSE,
@@ -71,7 +70,6 @@ rand_forest <- function(spec,
 }
 
 #' @rdname rand_forest
-#' @export
 print.rand_forest <- function(x, ...) {
   cat("Var explained (%):\n")
   print(x$explained)

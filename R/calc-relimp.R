@@ -13,7 +13,6 @@
 #' calc_relimp(spec, env)
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
-#' @export
 calc_relimp <- function(spec,
                         env,
                         type = "lmg",
@@ -54,7 +53,6 @@ calc_relimp <- function(spec,
 }
 
 #' @rdname calc_relimp
-#' @export
 print.calc_relimp <- function(x, ...) {
   cat("Var explained (%):\n")
   print(x$explained)
