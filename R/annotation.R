@@ -67,8 +67,8 @@ anno_col_tree <- function(bcols = NULL,
 #' @rdname anno_link
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-anno_link <- function(mapping = NULL,
-                      data,
+anno_link <- function(data,
+                      mapping = NULL,
                       width = 0.3,
                       pos = "right",
                       label.size = 3.88,
