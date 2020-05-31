@@ -45,6 +45,7 @@ Suggests:
     ggtree,
     knitr,
     latex2exp,
+    relaimpo,
     randomForest,
     rmarkdown,
     picante,
@@ -59,6 +60,7 @@ Collate:
     'as-igraph.R'
     'as-matrix.R'
     'as-tbl-graph.R'
+    'calc-relimp.R'
     'circular-utils.R'
     'colour-pal-utils.R'
     'cor-network.R'
