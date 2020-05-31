@@ -8,8 +8,8 @@
 layers of curves, nodes, and labels.}
 \usage{
 anno_link(
-  mapping = NULL,
   data,
+  mapping = NULL,
   width = 0.3,
   pos = "right",
   label.size = 3.88,
@@ -25,9 +25,9 @@ anno_link(
 )
 }
 \arguments{
-\item{mapping}{aesthetic mappings parameters.}
-
 \item{data}{a data frame.}
+
+\item{mapping}{aesthetic mappings parameters.}
 
 \item{width}{width of link plot.}
 

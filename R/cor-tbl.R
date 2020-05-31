@@ -119,7 +119,7 @@ cor_tbl <- function(corr,
     row.ord <- seq_along(row.names)
     col.ord <- seq_along(col.names)
     if(!is.null(row.order)) {
-      row.ord <- get_order(row.order, name = row.names)
+      row.ord <- get_order(row.order, index = "row", name = row.names)
       if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram") ||
          inherits(row.order, "ggtree")) {
         row.hc <- row.order
@@ -127,7 +127,7 @@ cor_tbl <- function(corr,
     }
 
     if(!is.null(col.order)) {
-      col.ord <- get_order(col.order, name = col.names)
+      col.ord <- get_order(col.order, index = "column", name = col.names)
       if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram") ||
          inherits(col.order, "ggtree")) {
         col.hc <- col.order

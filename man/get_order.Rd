@@ -7,6 +7,8 @@
 \alias{get_order.hclust}
 \alias{get_order.dendrogram}
 \alias{get_order.ggtree}
+\alias{get_order.cor_tbl}
+\alias{get_order.quickcor}
 \title{Extract order}
 \usage{
 get_order(x, name = NULL, ...)
@@ -20,6 +22,10 @@ get_order(x, name = NULL, ...)
 \method{get_order}{dendrogram}(x, ...)
 
 \method{get_order}{ggtree}(x, name = NULL, ...)
+
+\method{get_order}{cor_tbl}(x, index = "row", name = NULL, ...)
+
+\method{get_order}{quickcor}(x, index = "row", name = NULL, ...)
 }
 \arguments{
 \item{x}{any \code{R} object.}
@@ -27,6 +33,8 @@ get_order(x, name = NULL, ...)
 \item{name}{old name.}
 
 \item{...}{ignore.}
+
+\item{index}{one of "row" or "column".}
 }
 \value{
 a numeric vector.

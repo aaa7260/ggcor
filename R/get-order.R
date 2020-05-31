@@ -1,6 +1,7 @@
 #' Extract order
 #' @title Extract order
 #' @param x any \code{R} object.
+#' @param index one of "row" or "column".
 #' @param name old name.
 #' @param ... ignore.
 #' @return a numeric vector.
@@ -57,4 +58,29 @@ get_order.ggtree <- function(x, name = NULL, ...) {
     label[idx][isTip[idx]]
   })
   get_order(order, name = name)
+}
+
+#' @rdname get_order
+#' @export
+#' @method get_order cor_tbl
+get_order.cor_tbl <- function(x,
+                              index = "row",
+                              name = NULL,
+                              ...) {
+  index <- match.arg(index, c("row", "column"))
+  order <- if(index == "row") get_row_name(x) else get_col_name(x)
+  get_order(order, name = name)
+}
+
+#' @rdname get_order
+#' @export
+#' @method get_order quickcor
+get_order.quickcor <- function(x,
+                               index = "row",
+                               name = NULL,
+                               ...) {
+  x <- plot$data
+  index <- match.arg(index, c("row", "column"))
+  order <- if(index == "row") get_row_name(x) else get_col_name(x)
+  get_order(order, index = index, name = name)
 }
