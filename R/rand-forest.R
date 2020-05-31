@@ -43,7 +43,7 @@ rand_forest <- function(spec,
   randomForest <- get_function("randomForest", "randomForest")
   importance <- get_function("randomForest", "importance")
   set.seed(seed)
-  seeds <- as.integer(runif(n) * 10000)
+  seeds <- as.integer(stats::runif(n) * 10000)
 
   explained <- structure(.Data = vector(length = n), names = names(spec), class = "numeric")
   if(byrow) {

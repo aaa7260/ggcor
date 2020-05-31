@@ -11,7 +11,7 @@
 \alias{get_order.quickcor}
 \title{Extract order}
 \usage{
-get_order(x, name = NULL, ...)
+get_order(x, ...)
 
 \method{get_order}{numeric}(x, ...)
 
@@ -30,9 +30,9 @@ get_order(x, name = NULL, ...)
 \arguments{
 \item{x}{any \code{R} object.}
 
-\item{name}{old name.}
-
 \item{...}{ignore.}
+
+\item{name}{old name.}
 
 \item{index}{one of "row" or "column".}
 }

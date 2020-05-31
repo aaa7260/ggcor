@@ -11,7 +11,7 @@
 #' get_order(hc)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-get_order <- function(x, name = NULL, ...) {
+get_order <- function(x, ...) {
   UseMethod("get_order")
 }
 
@@ -79,8 +79,8 @@ get_order.quickcor <- function(x,
                                index = "row",
                                name = NULL,
                                ...) {
-  x <- plot$data
+  x <- x$data
   index <- match.arg(index, c("row", "column"))
   order <- if(index == "row") get_row_name(x) else get_col_name(x)
-  get_order(order, index = index, name = name)
+  get_order(order, name = name)
 }
