@@ -12,13 +12,13 @@ calc_relimp(spec, env, type = "lmg", byrow = FALSE, ...)
 \arguments{
 \item{spec, env}{a data.frame object.}
 
+\item{type}{one of "lmg", "last", "first", "betasq", "pratt", "genizi" or "car".}
+
 \item{byrow}{a logical value, if TRUE, the 'spec' on the rows.}
 
 \item{...}{extra parameters.}
 
 \item{x}{a calc_relimp object.}
-
-\item{seed}{a integer value.}
 }
 \value{
 a calc_relimp object.

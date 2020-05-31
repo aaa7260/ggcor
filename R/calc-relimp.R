@@ -1,8 +1,8 @@
 #' Relative importance
 #' @title Relative importance
 #' @param spec,env a data.frame object.
+#' @param type one of "lmg", "last", "first", "betasq", "pratt", "genizi" or "car".
 #' @param byrow a logical value, if TRUE, the 'spec' on the rows.
-#' @param seed a integer value.
 #' @param x a calc_relimp object.
 #' @param ... extra parameters.
 #' @return a calc_relimp object.
@@ -41,11 +41,11 @@ calc_relimp <- function(spec,
   }
   for (i in seq_len(n)) {
     cr <- calc.relimp(spec[[i]] ~ ., data = env, importance = TRUE, ...)
-    explained[i] <- extrac_s4(cr, "R2") * 100
+    explained[i] <- extract_s4(cr, "R2") * 100
     if(isTRUE(byrow)) {
-      importance[i, ] <- extrac_s4(cr, type)
+      importance[i, ] <- extract_s4(cr, type)
     } else {
-      importance[, i] <- extrac_s4(cr, type)
+      importance[, i] <- extract_s4(cr, type)
     }
   }
   structure(.Data = list(explained = as.data.frame(explained),
@@ -64,6 +64,6 @@ print.calc_relimp <- function(x, ...) {
 }
 
 #' @noRd
-extrac_s4 <- function(x, e) {
+extract_s4 <- function(x, e) {
   do.call("@", list(x, e))
 }
