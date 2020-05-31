@@ -25,20 +25,11 @@ rand_forest <- function(spec,
     spec <- as.data.frame(spec)
   if(!is.data.frame(env))
     env <- as.data.frame(env)
-  sid <- vapply(spec, is.numeric, logical(1))
-  eid <- vapply(env, is.numeric, logical(1))
-  if(!all(sid)) {
-    warning("Just supports for numeric variable.", call. = FALSE)
-    spec <- spec[sid]
-  }
-  if(!all(eid)) {
-    warning("Just supports for numeric variable.", call. = FALSE)
-    env <- env[eid]
-  }
+
   n <- length(spec)
   m <- length(env)
   if(any(n < 1, m < 1)) {
-    stop("Zero length of valid data.", call. = FALSE)
+    stop("Zero length data.", call. = FALSE)
   }
   randomForest <- get_function("randomForest", "randomForest")
   importance <- get_function("randomForest", "importance")
@@ -54,11 +45,24 @@ rand_forest <- function(spec,
   for (i in seq_len(n)) {
     set.seed(seeds[i])
     rf <- randomForest(spec[[i]] ~ ., data = env, importance = TRUE, ...)
-    explained[i] <- 100 * rf$rsq[length(rf$rsq)]
-    if(isTRUE(byrow)) {
-      importance[i, ] <- importance(rf)[, 1]
+    type <- rf$type
+    if(type == "classification") {
+      explained[i] <- 100 - 100 * rf$err.rate[rf$ntree, "OOB"]
     } else {
-      importance[ , i] <- importance(rf)[, 1]
+      explained[i] <- 100 * rf$rsq[length(rf$rsq)]
+    }
+    if(isTRUE(byrow)) {
+      if(type == "classification") {
+        importance[i, ] <- importance(rf)[, "MeanDecreaseAccuracy"]
+      } else {
+        importance[i, ] <- importance(rf)[, "%IncMSE"]
+      }
+    } else {
+      if(type == "classification") {
+        importance[, i] <- importance(rf)[, "MeanDecreaseAccuracy"]
+      } else {
+        importance[, i] <- importance(rf)[, "%IncMSE"]
+      }
     }
   }
   structure(.Data = list(spec = spec,
