@@ -59,7 +59,6 @@ mantel <- mantel_test(varespec, varechem,
 quickcor(varechem, type = "upper") +
   geom_square() +
   anno_link(aes(colour = pd, size = rd), data = mantel) +
-  anno_link_label(geom = "label") +
   scale_size_manual(values = c(0.5, 1, 2)) +
   scale_colour_manual(values = c("#D95F02", "#1B9E77", "#A2A2A288")) +
   guides(size = guide_legend(title = "Mantel's r",
@@ -77,9 +76,12 @@ quickcor(varechem, type = "upper") +
 
 ``` r
 rand_correlate(100, 8) %>% ## require ambient packages
-  quickcor(circular = TRUE, cluster = TRUE) +
+  quickcor(circular = TRUE, cluster = TRUE, open = 45) +
   geom_colour(colour = "white", size = 0.125) +
-  anno_tree()
+  anno_row_tree() +
+  anno_col_tree() +
+  set_p_xaxis() +
+  set_p_yaxis()
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
@@ -87,14 +89,23 @@ rand_correlate(100, 8) %>% ## require ambient packages
 ## General heatmap
 
 ``` r
-cols <- RColorBrewer::brewer.pal(4, "Set2")
-rand_dataset(vars = 8) %>% ## require ambient packages
-  gcor_tbl("var", cluster = TRUE) %>% 
-  quickcor(circular = TRUE, cluster = TRUE, open = 30, 
-           bcols = list(row.bcols = cols)) +
-  geom_colour(aes(fill = var), colour = NA) +
-  anno_tree() +
-  scale_fill_viridis_c()
+dd <- rand_dataset(10, 120) %>% 
+  gcor_tbl(cluster = TRUE)
+dd1 <- rand_dataset(3, 120, col.names = LETTERS[1:3]) %>% 
+  gcor_tbl(cluster = TRUE, "LETTERS")
+dd2 <- rand_dataset(10, 3, row.names = letters[1:3]) %>% 
+  gcor_tbl(cluster = TRUE, "letters")
+quickcor(dd, inner = 1.2, outer = 0.8, open = 60, circular = TRUE) +
+  geom_colour(aes(fill = value), colour = NA) +
+  anno_row_heat(dd1, aes(fill0 = LETTERS), width = 1.2) +
+  anno_col_heat(dd2, aes(colour = letters), height = 1.2, geom = "point") +
+  anno_row_tree(bcols = c("#E41A1C", "#377EB8", "#4DAF4A")) +
+  anno_col_tree() +
+  set_p_xaxis(size = 2.8) +
+  set_p_yaxis(size = 2.8) +
+  scale_fill_distiller() +
+  scale_fill0_gradientn(colours = red_blue()) +
+  scale_colour_viridis_b()
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />
@@ -105,7 +116,7 @@ To cite the `ggcor` package in publications
 use:
 
 ``` 
-  Houyun Huang, Lei Zhou, Jian Chen and Taiyun Wei(2020). ggcor: Extended tools for correlation analysis and visualization. R package version 0.9.6.
+  Houyun Huang, Lei Zhou, Jian Chen and Taiyun Wei(2020). ggcor: Extended tools for correlation analysis and visualization. R package version 0.9.7.
 ```
 
 A BibTeX entry for LaTeX users is
@@ -116,7 +127,7 @@ A BibTeX entry for LaTeX users is
     title  = {ggcor: Extended tools for correlation analysis and visualization},
     author = {Houyun Huang, Lei Zhou, Jian Chen and Taiyun Wei},
     year   = {2020},
-    note   = {R package version 0.9.6},
+    note   = {R package version 0.9.7},
     url    = {https://github.com/houyunhuang/ggcor},
   }
 ```
