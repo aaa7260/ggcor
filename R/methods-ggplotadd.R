@@ -868,8 +868,8 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
                      hjust = 0, stringsAsFactors = FALSE)
     label <- geom_text(mapping = aes_string(x = "x", y = "y", label = "label",
                                             angle = "angle", hjust = "hjust"), data = df,
-                       label.size = object$label.size, label.colour = object$label.colour,
-                       label.family = object$label.family, label.fontface = object$label.fontface,
+                       size = object$label.size, colour = object$label.colour,
+                       family = object$label.family, fontface = object$label.fontface,
                        inherit.aes = FALSE)
   }
   polar.args$row.shift <- ncols(data) * object$width + object$space + row.shift + adj
@@ -952,8 +952,8 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
                      stringsAsFactors = FALSE)
     label <- geom_text(mapping = aes_string(x = "x", y = "y", label = "label",
                                             angle = "angle", hjust = "hjust"), data = df,
-                       label.size = object$label.size, label.colour = object$label.colour,
-                       label.family = object$label.family, label.fontface = object$label.fontface,
+                       size = object$label.size, colour = object$label.colour,
+                       family = object$label.family, fontface = object$label.fontface,
                        inherit.aes = FALSE)
   }
   plot$plot_env$polar.args$col.shift <- nrows(data) * object$height + object$space + col.shift + adj
