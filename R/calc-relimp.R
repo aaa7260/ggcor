@@ -38,7 +38,7 @@ calc_relimp <- function(spec,
   sid <- vapply(spec, is.numeric, logical(1))
 
   calc.relimp <- get_function("relaimpo", "calc.relimp")
-  explained <- structure(.Data = vector(length = n), names = names(spec), class = "numeric")
+  explained <- vector(length = n)
   if(byrow) {
     importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
   } else {
@@ -66,7 +66,9 @@ calc_relimp <- function(spec,
       p.value[, i] <- sm$coefficients[, "Pr(>|t|)"][-1]
     }
   }
-  structure(.Data = list(explained = as.data.frame(explained),
+  structure(.Data = list(explained = data.frame(name = names(spec),
+                                                explained = explained,
+                                                stringsAsFactors = FALSE),
                          importance = as.data.frame(importance),
                          p.value = p.value),
             class = "calc_relimp")

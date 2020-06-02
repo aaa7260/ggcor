@@ -139,7 +139,7 @@ is_symmet <- function(x) {
 #' @seealso \code{\link[dplyr]{filter}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-get_data <- function(..., type = "full", show.diag = FALSE)
+get_data <- function(..., type = "full", show.diag = TRUE)
 {
   type <- match.arg(type, c("full", "upper", "lower", "diag"))
   function(data) {

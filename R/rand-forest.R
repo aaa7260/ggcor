@@ -36,7 +36,7 @@ rand_forest <- function(spec,
   set.seed(seed)
   seeds <- as.integer(stats::runif(n) * 10000)
 
-  explained <- structure(.Data = vector(length = n), names = names(spec), class = "numeric")
+  explained <- vector(length = n)
   if(byrow) {
     importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
   } else {
@@ -75,7 +75,9 @@ rand_forest <- function(spec,
       }
     }
   }
-  structure(.Data = list(explained = as.data.frame(explained),
+  structure(.Data = list(explained = data.frame(name = names(spec),
+                                                explained = explained,
+                                                stringsAsFactors = FALSE),
                          importance = as.data.frame(importance),
                          p.value = p.value),
             class = "rand_forest")
