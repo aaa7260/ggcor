@@ -57,3 +57,13 @@ add_diag_label <- function(...) {
           "Use `geom_diag_label()` instead.", call. = FALSE)
   geom_diag_label(...)
 }
+
+#' @rdname anno_tree
+#' @format NULL
+#' @usage NULL
+#' @export
+anno_tree <- function(...) {
+  warning("`anno_tree()` is deprecated. ",
+          "Use `anno_row_tree()` or `anno_col_tree()` instead.", call. = FALSE)
+  NULL
+}
