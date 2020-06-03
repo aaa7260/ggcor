@@ -4,7 +4,7 @@
 \alias{get_data}
 \title{Create cor_tbl extractor function}
 \usage{
-get_data(..., type = "full", show.diag = FALSE)
+get_data(..., type = "full", show.diag = TRUE)
 }
 \arguments{
 \item{...}{extra filter params, see Details.}
