@@ -91,6 +91,7 @@ Collate:
     'geom-panel-grid.R'
     'geom-pie2.R'
     'geom-ring.R'
+    'geom-segment2.R'
     'geom-shade.R'
     'geom-square.R'
     'geom-star.R'
