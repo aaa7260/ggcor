@@ -14,7 +14,7 @@
 #'       \item \code{edge_linetype}
 #'       \item \code{edge_width}
 #'    }
-#' @importFrom ggplot2 layer ggproto geom_segment GeomSegment aes draw_key_path
+#' @importFrom ggplot2 layer ggproto geom_segment GeomSegment aes
 #' @rdname geom_segment2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export

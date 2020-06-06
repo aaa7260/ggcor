@@ -89,6 +89,7 @@ Collate:
     'geom-mark.R'
     'geom-num.R'
     'geom-panel-grid.R'
+    'geom-path2.R'
     'geom-pie2.R'
     'geom-ring.R'
     'geom-segment2.R'
