@@ -79,7 +79,7 @@ GeomSegment2 <- ggproto(
                  )
            )
   },
-  draw_key = draw_key_path
+  draw_key = draw_key_path2
 )
 
 #' @noRd

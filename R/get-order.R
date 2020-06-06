@@ -31,7 +31,7 @@ get_order.character <- function(x, name = NULL, ...) {
   } else {
     order <- order(rlang::set_names(seq_along(x), x)[name])
   }
-  unname(order)
+  unname(order)[seq_along(x)]
 }
 
 #' @rdname get_order

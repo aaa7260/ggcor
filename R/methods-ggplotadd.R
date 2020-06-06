@@ -1008,3 +1008,44 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
 
   ggplot_add(obj, plot)
 }
+
+#' @importFrom ggplot2 geom_point
+#' @export
+ggplot_add.anno_network <- function(object, plot, object_name) {
+  if(!inherits(plot, "quickcor") || !isTRUE(plot$plot_env$circular)) {
+    stop("`anno_network()` just support for circular plot.", call. = FALSE)
+  }
+  data <- object$data
+  if(!inherits(data, "cor_network"))
+    data <- as_cor_network(data)
+
+  row.name <- rev(get_row_name(plot$data))
+  id <- rlang::set_names(seq_len(nrows(plot$data)), row.name)
+  id2 <- get_order(data$nodes$name, row.name)
+nodes <- data.frame(x = 0.5 - object$space,
+                    y = id2,
+                    name = row.name[id2],
+                    stringsAsFactors = FALSE)
+edges <- data.frame(x = 0.5 - object$space,
+                    y = id[data$edges$from],
+                    xend = 0.5 - object$space,
+                    yend = id[data$edges$to])
+edges <- cbind(edges, data$edges[setdiff(names(data$edges), c("from", "to"))])
+
+args <- object$params
+name <- names(args)
+edge.name <- c("edge_width", "edge_colour", "edge_linetype", "edge_alpha", "arrow",
+               "arrow.fill", "lineend", "linejion", "na.rm")
+params <- args[name %in% edge.name]
+params2 <- args[!(name %in% edge.name) || (name == "na.rm")]
+mapping <- aes_modify(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
+                      object$mapping)
+mapping2 <- aes_modify(aes_string(x = "x", y = "y"), object$mapping2)
+params <- modifyList(list(mapping = mapping, data = edges, inherit.aes = FALSE), params)
+params2 <- modifyList(list(mapping = mapping2, data = nodes, inherit.aes = FALSE), params2)
+obj <- list(
+  do.call(geom_segment2, params),
+  do.call(geom_point, params2)
+)
+ggplot_add(obj, plot, object_name)
+}

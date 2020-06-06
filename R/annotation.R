@@ -273,3 +273,25 @@ anno_col_heat <- function(data,
             class = "anno_col_heat")
 }
 
+#' Network annotation
+#' @title Network annotation
+#' @param data a cor_network object.
+#' @param mapping aesthetic mappings parameters for edges.
+#' @param mapping2 aesthetic mappings parameters for nodes.
+#' @param space gap between heatmap and network nodes.
+#' @param ... extra parameters.
+#' @return a anno_network object.
+#' @note Loading the \code{ggraph} package first makes this function even more functional.
+#' @rdname anno_network
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
+#' @export
+
+anno_network <- function(data,
+                         mapping = NULL,
+                         mapping2 = NULL,
+                         space = 0.5,
+                         ...) {
+  structure(.Data = list(data = data, mapping = mapping,
+                         mapping2 = mapping2, space = space,
+                         params = list(...)), class = "anno_network")
+}

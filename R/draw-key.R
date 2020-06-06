@@ -149,3 +149,20 @@ draw_anno_tile2 <- function (data, params, size)
                                  lineend = if (identical(params$linejoin, "round")) "round" else "square"))
 }
 
+#' @noRd
+draw_key_path2 <- function (data, params, size)
+{
+  if (is.null(data$edge_linetype)) {
+    data$edge_linetype <- 0
+  } else {
+    data$edge_linetype[is.na(data$edge_linetype)] <- 0
+  }
+  grid::segmentsGrob(
+    0.1, 0.5, 0.9, 0.5,
+    gp = grid::gpar(col = scales::alpha(data$edge_colour %||% "black", data$edge_alpha),
+              lwd = (data$edge_width %||% 0.5) * ggplot2::.pt,
+              lty = data$edge_linetype %||% 1,
+              lineend = "butt"),
+    arrow = params$arrow)
+}
+
