@@ -117,6 +117,12 @@ is_binary <- function(x) {
 }
 
 #' @noRd
+empty <- function (df)
+{
+  is.null(df) || nrow(df) == 0 || ncol(df) == 0
+}
+
+#' @noRd
 `%||%` <- function(x, y)
 {
   if(is.null(x)) y else x

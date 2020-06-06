@@ -272,3 +272,4 @@ anno_col_heat <- function(data,
                          label.fontface = label.fontface, params = list(...)),
             class = "anno_col_heat")
 }
+
