@@ -34,7 +34,7 @@ geom_segment2 <- function(mapping = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = rename_params(
+    params = short_to_long(
       list(
         na.rm = na.rm,
         ...
@@ -49,7 +49,7 @@ geom_segment2 <- function(mapping = NULL,
 #' @export
 GeomSegment2 <- ggproto(
   "GeomSegment2", GeomSegment,
-  default_aes = aes(edge_colour = "grey35", edge_width = 0.25, edge_linetype = 1,
+  default_aes = aes(edge_colour = "grey35", edge_width = 0.5, edge_linetype = 1,
                     edge_alpha = NA),
   required_aes = c("x", "y", "xend", "yend"),
   draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
@@ -83,7 +83,7 @@ GeomSegment2 <- ggproto(
 )
 
 #' @noRd
-rename_params <- function(params) {
+short_to_long <- function(params) {
   nm <- names(params)
   if("color" %in% nm) {
     nm[which(nm == "color")] <- "colour"

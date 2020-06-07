@@ -9,14 +9,12 @@
 #'       \item \strong{\code{y}}
 #'       \item \strong{\code{xend}}
 #'       \item \strong{\code{yend}}
-#'       \item \code{alpha}
-#'       \item \code{colour}
-#'       \item \code{fill}
-#'       \item \code{group}
-#'       \item \code{linetype}
-#'       \item \code{size}
+#'       \item \code{edge_alpha}
+#'       \item \code{edge_colour}
+#'       \item \code{edge_linetype}
+#'       \item \code{edge_width}
 #'   }
-#' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint draw_key_path
+#' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint
 #' @importFrom grid gTree
 #' @rdname geom_links2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
@@ -43,15 +41,17 @@ geom_links2 <- function(mapping = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(
-      curvature = curvature,
-      angle = angle,
-      ncp = ncp,
-      arrow = arrow,
-      arrow.fill = arrow.fill,
-      lineend = lineend,
-      na.rm = na.rm,
-      ...
+    params = short_to_long(
+      list(
+        curvature = curvature,
+        angle = angle,
+        ncp = ncp,
+        arrow = arrow,
+        arrow.fill = arrow.fill,
+        lineend = lineend,
+        na.rm = na.rm,
+        ...
+      )
     )
   )
 }
@@ -62,10 +62,18 @@ geom_links2 <- function(mapping = NULL,
 #' @export
 GeomLinks2 <- ggproto(
   "GeomLinks2", GeomCurve,
+  default_aes = aes(edge_colour = "grey35", edge_width = 0.25, edge_linetype = 1,
+                    edge_alpha = NA),
+  required_aes = c("x", "y", "xend", "yend"),
+
   draw_panel = function(self, data, panel_params, coord, rm.dup = TRUE,
                         node.shape = 21, node.colour = "blue", node.fill = "red",
                         node.size = 2, curvature = 0, angle = 90, ncp = 5, arrow = NULL,
                         arrow.fill = NULL, lineend = "butt", na.rm = FALSE) {
+    if(empty(data)) {
+      return(ggplot2::zeroGrob())
+    }
+    data <- long_to_short(data)
     aesthetics <- setdiff(names(data), c("x", "y", "xend", "yend", "colour",
                                          "fill", "size", "linetype"))
     start.colour <- node.colour[1]
@@ -113,5 +121,20 @@ GeomLinks2 <- ggproto(
       )
     )
   },
-  draw_key = draw_key_path
+  draw_key = draw_key_path2
 )
+
+#' @noRd
+long_to_short <- function(params) {
+  nm <- names(params)
+  if("edge_color" %in% nm) {
+    nm[which(nm == "edge_color")] <- "edge_colour"
+  }
+  if("edge_width" %in% nm) {
+    nm[which(nm == "edge_width")] <- "edge_size"
+  }
+  id <- nm %in% c("edge_colour", "edge_size", "edge_linetype", "edge_alpha")
+  nm[id] <- sub("edge_", "", nm[id], fixed = TRUE)
+  names(params) <- nm
+  params
+}

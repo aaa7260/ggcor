@@ -100,12 +100,10 @@ Links layer
       \item \strong{\code{y}}
       \item \strong{\code{xend}}
       \item \strong{\code{yend}}
-      \item \code{alpha}
-      \item \code{colour}
-      \item \code{fill}
-      \item \code{group}
-      \item \code{linetype}
-      \item \code{size}
+      \item \code{edge_alpha}
+      \item \code{edge_colour}
+      \item \code{edge_linetype}
+      \item \code{edge_width}
   }
 }
 

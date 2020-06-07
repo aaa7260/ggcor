@@ -64,6 +64,7 @@ anno_col_tree <- function(bcols = NULL,
 #' @param expand expansion of x axis.
 #' @param ... extra parameters passing to layer function.
 #' @return a ggplot layer.
+#' @note Loading the \code{ggraph} package first makes this function even more functional.
 #' @rdname anno_link
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
@@ -84,11 +85,18 @@ anno_link <- function(data,
 {
   start.var <- rlang::enquo(start.var)
   end.var <- rlang::enquo(end.var)
+  if(!is.null(mapping)) {
+    mapping <- short_to_long(mapping)
+  }
+  params <- list(...)
+  if(!is.null(params)) {
+    params <- short_to_long(params)
+  }
   structure(.Data = list(mapping = mapping, data = data, width = width, pos = pos,
                          label.size = label.size, label.colour = label.colour,
                          label.family = label.family, label.fontface = label.fontface,
                          nudge_x = nudge_x, start.var = start.var, start.name = start.name,
-                         end.var = end.var, params = list(...)),
+                         end.var = end.var, params = params),
             class = "anno_link")
 }
 
@@ -283,6 +291,7 @@ anno_col_heat <- function(data,
 #' @return a anno_network object.
 #' @note Loading the \code{ggraph} package first makes this function even more functional.
 #' @rdname anno_network
+#' @seealso \code{\link{geom_links2}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 

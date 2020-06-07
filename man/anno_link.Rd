@@ -53,6 +53,9 @@ a ggplot layer.
 \description{
 Link annotation
 }
+\note{
+Loading the \code{ggraph} package first makes this function even more functional.
+}
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }
