@@ -71,7 +71,7 @@ cor_network <- function(corr,
   if(!is.null(p.value))
     edges$p.value <- as.vector(p.value)
   if(is.symmet && rm.dup) {
-    edges <- dplyr::filter(edges, lower.tri(corr))
+    edges <- dplyr::filter(edges, as.vector(lower.tri(corr)))
   }
   edges <- if(is.finite(r.thres)) {
     if(r.abs) {
