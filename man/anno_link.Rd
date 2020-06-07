@@ -10,6 +10,7 @@ layers of curves, nodes, and labels.}
 anno_link(
   data,
   mapping = NULL,
+  geom = "links",
   width = 0.3,
   pos = "right",
   label.size = 3.88,
@@ -28,6 +29,8 @@ anno_link(
 \item{data}{a data frame.}
 
 \item{mapping}{aesthetic mappings parameters.}
+
+\item{geom}{one of "links" (default) or "links2".}
 
 \item{width}{width of link plot.}
 
