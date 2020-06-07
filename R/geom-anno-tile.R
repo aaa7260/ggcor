@@ -86,7 +86,7 @@ GeomAnnoTile <- ggproto(
     data <- dplyr::rename(data, fill = fill0)
     GeomTile$draw_panel(data, panel_params, coord)
   },
-  draw_key = draw_anno_tile
+  draw_key = draw_key_tile
 )
 
 #' @rdname geom_anno_tile
@@ -102,6 +102,6 @@ GeomAnnoTile2 <- ggproto(
     data <- dplyr::rename(data, fill = fill2)
     GeomTile$draw_panel(data, panel_params, coord)
   },
-  draw_key = draw_anno_tile2
+  draw_key = draw_key_tile2
 )
 

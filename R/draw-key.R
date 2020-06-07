@@ -118,7 +118,7 @@ starGrob <- function(x = 0.5, y = 0.5, n = 5, r0 = 1,
 }
 
 #' @noRd
-draw_anno_tile <- function (data, params, size)
+draw_key_tile <- function (data, params, size)
 {
   if (is.null(data$size)) {
     data$size <- 0.5
@@ -134,7 +134,7 @@ draw_anno_tile <- function (data, params, size)
 }
 
 #' @noRd
-draw_anno_tile2 <- function (data, params, size)
+draw_key_tile2 <- function (data, params, size)
 {
   if (is.null(data$size)) {
     data$size <- 0.5
