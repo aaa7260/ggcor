@@ -139,7 +139,7 @@ quickcor <- function(x,
   p
 }
 
-#' Print method for quickcor object.
+#' Print and plot method for quickcor object.
 #' @param colours colour palette for filling.
 #' @param style style of plot, one of "corrplot" (default) or "ggplot".
 #' @param title guide title.
@@ -197,5 +197,13 @@ print.quickcor <- function(x,
 
 #' @importFrom graphics plot
 #' @method print quickcor
+#' @rdname quick_cor
 #' @export
 plot.quickcor <- print.quickcor
+
+#' @rdname quick_cor
+#' @export
+is_quickcor <- function(x) {
+  inherits(x, "quickcor")
+}
+

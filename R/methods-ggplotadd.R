@@ -174,6 +174,7 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
 #' @importFrom stats order.dendrogram as.dendrogram cutree as.hclust
 #' @export
 ggplot_add.p_xaxis <- function(object, plot, object_name) {
+  stopifnot(is_quickcor(plot))
   if(!isTRUE(plot$plot_env$circular)) {
     stop("Only supports for polar coordinates.", call. = FALSE)
   }
@@ -202,6 +203,7 @@ ggplot_add.p_xaxis <- function(object, plot, object_name) {
 #' @importFrom stats order.dendrogram as.dendrogram cutree as.hclust
 #' @export
 ggplot_add.p_yaxis <- function(object, plot, object_name) {
+  stopifnot(is_quickcor(plot))
   if(!isTRUE(plot$plot_env$circular)) {
     stop("Only supports for polar coordinates.", call. = FALSE)
   }
@@ -227,6 +229,7 @@ ggplot_add.p_yaxis <- function(object, plot, object_name) {
 #' @importFrom ggplot2 ggplot_add
 #' @export
 ggplot_add.geom_mark2 <- function(object, plot, object_name) {
+  stopifnot(is_quickcor(plot))
   args <- plot$plot_env$polar.args
   if(!isTRUE(plot$plot_env$circular)) {
     warning("`geom_mark2()` only supports for polar coordinates, ",
@@ -243,6 +246,7 @@ ggplot_add.geom_mark2 <- function(object, plot, object_name) {
 #' @importFrom ggplot2 ggplot_add
 #' @export
 ggplot_add.geom_number2 <- function(object, plot, object_name) {
+  stopifnot(is_quickcor(plot))
   args <- plot$plot_env$polar.args
   if(!isTRUE(plot$plot_env$circular)) {
     warning("`geom_number2()` only supports for polar coordinates, ",
@@ -492,7 +496,7 @@ ggplot_add.anno_hc_bar <- function(object, plot, object_name) {
 #' @importFrom ggplot2 ggplot geom_bar scale_x_reverse scale_y_reverse
 #' @export
 ggplot_add.anno_bar <- function(object, plot, object_name) {
-  stopifnot(inherits(plot, "quickcor") && !isTRUE(plot$plot_env$circular))
+  stopifnot(is_quickcor(plot) && !isTRUE(plot$plot_env$circular))
   type <- get_type(plot$data)
   trans <- object$trans
   pos <- object$pos

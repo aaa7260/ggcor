@@ -3,6 +3,8 @@
 \name{quickcor}
 \alias{quickcor}
 \alias{print.quickcor}
+\alias{plot.quickcor}
+\alias{is_quickcor}
 \title{Plot Correlation Matrix Quickly}
 \usage{
 quickcor(
@@ -36,6 +38,20 @@ quickcor(
   nbin = 40,
   ...
 )
+
+\method{print}{quickcor}(
+  x,
+  colours = getOption("ggcor.fill.pal"),
+  style = getOption("ggcor.plot.style", "corrplot"),
+  title = "corr",
+  breaks = c(-1, -0.5, 0, 0.5, 1),
+  labels = c(-1, -0.5, 0, 0.5, 1),
+  limits = c(-1, 1),
+  nbin = 40,
+  ...
+)
+
+is_quickcor(x)
 }
 \arguments{
 \item{x, y}{matrix, data frame or quickcor object in \code{print()}.}
