@@ -1,12 +1,14 @@
 #' Random forests
 #' @title Random forests
 #' @param spec,env a data.frame object.
+#' @param use one of "everything", "complete" or "pairwise", used to handle missing value.
 #' @param byrow a logical value, if TRUE, the 'spec' on the rows.
 #' @param seed a integer value.
 #' @param x a rand_forest object.
 #' @param ... extra parameters.
 #' @return a rand_forest object.
 #' @rdname rand_forest
+#' @importFrom stats complete.cases
 #' @examples \dontrun{
 #' spec <- mtcars[c(1, 3, 4, 5)]
 #' env <- mtcars[6:11]
@@ -16,6 +18,7 @@
 #' @export
 rand_forest <- function(spec,
                         env,
+                        use = "everything",
                         byrow = FALSE,
                         seed = 123,
                         ...)
@@ -31,6 +34,24 @@ rand_forest <- function(spec,
   if(any(n < 1, m < 1)) {
     stop("Zero length data.", call. = FALSE)
   }
+
+  if(nrow(spec) != nrow(env)) {
+    stop("'env' shold have the same rows as 'spec'.", call. = FALSE)
+  }
+
+  use <- match.arg(use, c("everything", "complete", "pairwise"))
+  if(use == "complete") {
+    non_na <- complete.cases(spec) & complete.cases(env)
+    spec <- spec[non_na, , drop = FALSE]
+    env <- env[non_na, , drop = FALSE]
+  }
+  if(use == "pairwise") {
+    non_na_env <- complete.cases(env)
+    non_na <- lapply(spec, function(.x) {
+      !is.na(.x) & non_na_env
+    })
+  }
+
   rfPermute <- get_function("rfPermute", "rfPermute")
   rp.importance <- get_function("rfPermute", "rp.importance")
   set.seed(seed)
@@ -49,9 +70,15 @@ rand_forest <- function(spec,
   }
   for (i in seq_len(n)) {
     set.seed(seeds[i])
-    rf <- rfPermute(spec[[i]] ~ ., data = env, importance = TRUE, ...)
+    if(use == "pairwise") {
+      rf <- rfPermute(spec[non_na[[i]], drop = FALSE][[i]] ~ .,
+                      data = env[non_na[[i]], drop = FALSE], importance = TRUE, ...)
+    } else {
+      rf <- rfPermute(spec[[i]] ~ ., data = env, importance = TRUE, ...)
+    }
+
     type <- rf$type
-    imp <- rp.importance(rf, scale = TRUE)
+    imp <- rp.importance(rf, scale = TRUE)[names(env), , drop = FALSE]
     if(type == "classification") {
       explained[i] <- 100 - 100 * rf$err.rate[rf$ntree, "OOB"]
     } else {

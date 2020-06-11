@@ -1,13 +1,12 @@
 #' Relative importance
 #' @title Relative importance
 #' @param spec,env a data.frame object.
-#' @param family family function.
+#' @param use one of "everything", "complete" or "pairwise", used to handle missing value.
 #' @param type one of "lmg", "last", "first", "betasq", "pratt", "genizi" or "car".
 #' @param byrow a logical value, if TRUE, the 'spec' on the rows.
 #' @param x a calc_relimp object.
 #' @param ... extra parameters.
 #' @return a calc_relimp object.
-#' @importFrom stats lm glm binomial
 #' @rdname calc_relimp
 #' @examples \dontrun{
 #' spec <- mtcars[c(1, 3, 4, 5)]
@@ -18,7 +17,7 @@
 #' @export
 calc_relimp <- function(spec,
                         env,
-                        family = binomial(link = "logit"),
+                        use = "everything",
                         type = "lmg",
                         byrow = FALSE,
                         ...)
@@ -35,7 +34,21 @@ calc_relimp <- function(spec,
     stop("Zero length data.", call. = FALSE)
   }
 
-  sid <- vapply(spec, is.numeric, logical(1))
+  if(nrow(spec) != nrow(env)) {
+    stop("'env' shold have the same rows as 'spec'.", call. = FALSE)
+  }
+
+  if(!all(vapply(spec, is.numeric, logical(1))) &&
+     !all(vapply(env, is.numeric, logical(1)))) {
+    stop("Only support numeric variable.", call. = FALSE)
+  }
+
+  use <- match.arg(use, c("everything", "complete", "pairwise"))
+  if(use == "complete") {
+    non_na <- complete.cases(spec) & complete.cases(env)
+    spec <- spec[non_na, , drop = FALSE]
+    env <- env[non_na, , drop = FALSE]
+  }
 
   calc.relimp <- get_function("relaimpo", "calc.relimp")
   explained <- vector(length = n)
@@ -50,11 +63,12 @@ calc_relimp <- function(spec,
     p.value <- matrix(NA, nrow = m, ncol = n, dimnames = list(names(env), names(spec)))
   }
   for (i in seq_len(n)) {
-    lm <- if(sid[i]) {
-      stats::lm(spec[[i]] ~ ., data = env)
+    if(use == "pairwise") {
+      lm <- stats::lm(spec[non_na[[i]], drop = FALSE][[i]] ~ ., data = env[non_na[[i]], drop = FALSE])
     } else {
-      stats::glm(spec[[i]] ~ ., data = env, family = family)
+      lm <- stats::lm(spec[[i]] ~ ., data = env)
     }
+
     sm <- summary(lm)
     cr <- calc.relimp(lm, type = type, ...)
     explained[i] <- extract_s4(cr, "R2") * 100

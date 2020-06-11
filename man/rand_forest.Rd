@@ -5,12 +5,14 @@
 \alias{print.rand_forest}
 \title{Random forests}
 \usage{
-rand_forest(spec, env, byrow = FALSE, seed = 123, ...)
+rand_forest(spec, env, use = "everything", byrow = FALSE, seed = 123, ...)
 
 \method{print}{rand_forest}(x, ...)
 }
 \arguments{
 \item{spec, env}{a data.frame object.}
+
+\item{use}{one of "everything", "complete" or "pairwise", used to handle missing value.}
 
 \item{byrow}{a logical value, if TRUE, the 'spec' on the rows.}
 
