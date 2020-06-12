@@ -1,4 +1,4 @@
-#' Links layer with custom aesthetics
+#' Curve layer with custom aesthetics
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_curve

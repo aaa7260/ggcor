@@ -1,4 +1,4 @@
-#' Links layer
+#' Curve layer
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_curve
@@ -63,7 +63,7 @@ GeomLinks <- ggproto(
   default_aes = aes(colour = "grey35", size = 0.5, linetype = 1,
                     alpha = NA),
   required_aes = c("x", "y", "xend", "yend"),
-  
+
   draw_panel = function(self, data, panel_params, coord, rm.dup = TRUE,
                         node.shape = 21, node.colour = "blue", node.fill = "red",
                         node.size = 2, curvature = 0, angle = 90, ncp = 5, arrow = NULL,

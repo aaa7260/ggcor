@@ -4,7 +4,7 @@
 \name{geom_links2}
 \alias{geom_links2}
 \alias{GeomLinks2}
-\title{Links layer with custom aesthetics}
+\title{Curve layer with custom aesthetics}
 \usage{
 geom_links2(
   mapping = NULL,
@@ -90,7 +90,7 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-Links layer with custom aesthetics
+Curve layer with custom aesthetics
 }
 \section{Aesthetics}{
 

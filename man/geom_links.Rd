@@ -4,7 +4,7 @@
 \name{geom_links}
 \alias{geom_links}
 \alias{GeomLinks}
-\title{Links layer}
+\title{Curve layer}
 \usage{
 geom_links(
   mapping = NULL,
@@ -90,7 +90,7 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-Links layer
+Curve layer
 }
 \section{Aesthetics}{
 

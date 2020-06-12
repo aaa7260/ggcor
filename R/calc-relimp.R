@@ -40,7 +40,7 @@ calc_relimp <- function(spec,
 
   if(!all(vapply(spec, is.numeric, logical(1))) &&
      !all(vapply(env, is.numeric, logical(1)))) {
-    stop("Only support numeric variable.", call. = FALSE)
+    stop("Only support for numeric variable.", call. = FALSE)
   }
 
   use <- match.arg(use, c("everything", "complete", "pairwise"))
@@ -52,16 +52,9 @@ calc_relimp <- function(spec,
 
   calc.relimp <- get_function("relaimpo", "calc.relimp")
   explained <- vector(length = n)
-  if(byrow) {
-    importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
-  } else {
-    importance <- matrix(NA, nrow = m, ncol = n, dimnames = list(names(env), names(spec)))
-  }
-  if(byrow) {
-    p.value <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
-  } else {
-    p.value <- matrix(NA, nrow = m, ncol = n, dimnames = list(names(env), names(spec)))
-  }
+  importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
+  p.value <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
+
   for (i in seq_len(n)) {
     if(use == "pairwise") {
       lm <- stats::lm(spec[non_na[[i]], drop = FALSE][[i]] ~ ., data = env[non_na[[i]], drop = FALSE])
@@ -72,14 +65,15 @@ calc_relimp <- function(spec,
     sm <- summary(lm)
     cr <- calc.relimp(lm, type = type, ...)
     explained[i] <- extract_s4(cr, "R2") * 100
-    if(isTRUE(byrow)) {
-      importance[i, ] <- extract_s4(cr, type)
-      p.value[i, ] <- sm$coefficients[, "Pr(>|t|)"][-1]
-    } else {
-      importance[, i] <- extract_s4(cr, type)
-      p.value[, i] <- sm$coefficients[, "Pr(>|t|)"][-1]
-    }
+    importance[i, ] <- extract_s4(cr, type)
+    p.value[i, ] <- sm$coefficients[, "Pr(>|t|)"][-1]
   }
+
+  if(isFALSE(byrow)) {
+    importance <- t(importance)
+    p.value <- t(importance)
+  }
+
   structure(.Data = list(explained = data.frame(name = names(spec),
                                                 explained = explained,
                                                 stringsAsFactors = FALSE),

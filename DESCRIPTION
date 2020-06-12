@@ -103,7 +103,7 @@ Collate:
     'procrutes-test.R'
     'quickcor.R'
     'rand-correlate.R'
-    'rand-forest.R'
+    'random-forest.R'
     'reexport.R'
     'remove-axis.R'
     'scale-fill.R'
