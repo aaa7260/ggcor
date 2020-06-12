@@ -7,7 +7,7 @@
 #' @param x a rand_forest object.
 #' @param ... extra parameters.
 #' @return a rand_forest object.
-#' @rdname rand_forest
+#' @rdname random_forest
 #' @importFrom stats complete.cases
 #' @examples \dontrun{
 #' spec <- mtcars[c(1, 3, 4, 5)]
@@ -16,14 +16,13 @@
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-rand_forest <- function(spec,
+random_forest <- function(spec,
                         env,
                         use = "everything",
                         byrow = FALSE,
                         seed = 123,
                         ...)
 {
-
   if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
   if(!is.data.frame(env))
@@ -58,16 +57,9 @@ rand_forest <- function(spec,
   seeds <- as.integer(stats::runif(n) * 10000)
 
   explained <- vector(length = n)
-  if(byrow) {
-    importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
-  } else {
-    importance <- matrix(NA, nrow = m, ncol = n, dimnames = list(names(env), names(spec)))
-  }
-  if(byrow) {
-    p.value <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
-  } else {
-    p.value <- matrix(NA, nrow = m, ncol = n, dimnames = list(names(env), names(spec)))
-  }
+  importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
+  p.value <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
+
   for (i in seq_len(n)) {
     set.seed(seeds[i])
     if(use == "pairwise") {
@@ -84,35 +76,30 @@ rand_forest <- function(spec,
     } else {
       explained[i] <- 100 * rf$rsq[length(rf$rsq)]
     }
-    if(isTRUE(byrow)) {
-      if(type == "classification") {
-        importance[i, ] <- imp[, "MeanDecreaseAccuracy"]
-        p.value[i, ] <- imp[, "MeanDecreaseAccuracy.pval"]
-      } else {
-        importance[i, ] <- imp[, "%IncMSE"]
-        p.value[i, ] <- imp[, "%IncMSE.pval"]
-      }
+    if(type == "classification") {
+      importance[i, ] <- imp[, "MeanDecreaseAccuracy"]
+      p.value[i, ] <- imp[, "MeanDecreaseAccuracy.pval"]
     } else {
-      if(type == "classification") {
-        importance[, i] <- imp[, "MeanDecreaseAccuracy"]
-        p.value[, i] <- imp[, "MeanDecreaseAccuracy.pval"]
-      } else {
-        importance[, i] <- imp[, "%IncMSE"]
-        p.value[, i] <- imp[, "%IncMSE.pval"]
-      }
+      importance[i, ] <- imp[, "%IncMSE"]
+      p.value[i, ] <- imp[, "%IncMSE.pval"]
     }
+  }
+
+  if(isFALSE(byrow)) {
+    importance <- t(importance)
+    p.value <- t(p.value)
   }
   structure(.Data = list(explained = data.frame(name = names(spec),
                                                 explained = explained,
                                                 stringsAsFactors = FALSE),
                          importance = as.data.frame(importance),
                          p.value = p.value),
-            class = "rand_forest")
+            class = "random_forest")
 }
 
-#' @rdname rand_forest
+#' @rdname random_forest
 #' @export
-print.rand_forest <- function(x, ...) {
+print.random_forest <- function(x, ...) {
   cat("Var explained (%):\n")
   print(x$explained)
   cat("\n")
