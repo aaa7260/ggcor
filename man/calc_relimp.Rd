@@ -5,14 +5,12 @@
 \alias{print.calc_relimp}
 \title{Relative importance}
 \usage{
-calc_relimp(spec, env, use = "everything", type = "lmg", byrow = FALSE, ...)
+calc_relimp(spec, env, type = "lmg", byrow = FALSE, ...)
 
 \method{print}{calc_relimp}(x, ...)
 }
 \arguments{
 \item{spec, env}{a data.frame object.}
-
-\item{use}{one of "everything", "complete" or "pairwise", used to handle missing value.}
 
 \item{type}{one of "lmg", "last", "first", "betasq", "pratt", "genizi" or "car".}
 

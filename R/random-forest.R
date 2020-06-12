@@ -1,7 +1,6 @@
 #' Random forests
 #' @title Random forests
 #' @param spec,env a data.frame object.
-#' @param use one of "everything", "complete" or "pairwise", used to handle missing value.
 #' @param byrow a logical value, if TRUE, the 'spec' on the rows.
 #' @param seed a integer value.
 #' @param x a rand_forest object.
@@ -18,7 +17,6 @@
 #' @export
 random_forest <- function(spec,
                         env,
-                        use = "everything",
                         byrow = FALSE,
                         seed = 123,
                         ...)
@@ -38,19 +36,6 @@ random_forest <- function(spec,
     stop("'env' shold have the same rows as 'spec'.", call. = FALSE)
   }
 
-  use <- match.arg(use, c("everything", "complete", "pairwise"))
-  if(use == "complete") {
-    non_na <- complete.cases(spec) & complete.cases(env)
-    spec <- spec[non_na, , drop = FALSE]
-    env <- env[non_na, , drop = FALSE]
-  }
-  if(use == "pairwise") {
-    non_na_env <- complete.cases(env)
-    non_na <- lapply(spec, function(.x) {
-      !is.na(.x) & non_na_env
-    })
-  }
-
   rfPermute <- get_function("rfPermute", "rfPermute")
   rp.importance <- get_function("rfPermute", "rp.importance")
   set.seed(seed)
@@ -62,12 +47,7 @@ random_forest <- function(spec,
 
   for (i in seq_len(n)) {
     set.seed(seeds[i])
-    if(use == "pairwise") {
-      rf <- rfPermute(spec[non_na[[i]], drop = FALSE][[i]] ~ .,
-                      data = env[non_na[[i]], drop = FALSE], importance = TRUE, ...)
-    } else {
-      rf <- rfPermute(spec[[i]] ~ ., data = env, importance = TRUE, ...)
-    }
+    rf <- rfPermute(spec[[i]] ~ ., data = env, importance = TRUE, ...)
 
     type <- rf$type
     imp <- rp.importance(rf, scale = TRUE)[names(env), , drop = FALSE]

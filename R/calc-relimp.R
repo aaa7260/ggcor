@@ -1,7 +1,6 @@
 #' Relative importance
 #' @title Relative importance
 #' @param spec,env a data.frame object.
-#' @param use one of "everything", "complete" or "pairwise", used to handle missing value.
 #' @param type one of "lmg", "last", "first", "betasq", "pratt", "genizi" or "car".
 #' @param byrow a logical value, if TRUE, the 'spec' on the rows.
 #' @param x a calc_relimp object.
@@ -17,7 +16,6 @@
 #' @export
 calc_relimp <- function(spec,
                         env,
-                        use = "everything",
                         type = "lmg",
                         byrow = FALSE,
                         ...)
@@ -43,24 +41,13 @@ calc_relimp <- function(spec,
     stop("Only support for numeric variable.", call. = FALSE)
   }
 
-  use <- match.arg(use, c("everything", "complete", "pairwise"))
-  if(use == "complete") {
-    non_na <- complete.cases(spec) & complete.cases(env)
-    spec <- spec[non_na, , drop = FALSE]
-    env <- env[non_na, , drop = FALSE]
-  }
-
   calc.relimp <- get_function("relaimpo", "calc.relimp")
   explained <- vector(length = n)
   importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
   p.value <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
 
   for (i in seq_len(n)) {
-    if(use == "pairwise") {
-      lm <- stats::lm(spec[non_na[[i]], drop = FALSE][[i]] ~ ., data = env[non_na[[i]], drop = FALSE])
-    } else {
-      lm <- stats::lm(spec[[i]] ~ ., data = env)
-    }
+    lm <- stats::lm(spec[[i]] ~ ., data = env)
 
     sm <- summary(lm)
     cr <- calc.relimp(lm, type = type, ...)
