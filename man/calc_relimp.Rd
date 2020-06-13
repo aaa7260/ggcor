@@ -5,7 +5,15 @@
 \alias{print.calc_relimp}
 \title{Relative importance}
 \usage{
-calc_relimp(spec, env, type = "lmg", byrow = FALSE, ...)
+calc_relimp(
+  spec,
+  env,
+  type = "lmg",
+  family = gaussian,
+  na.action = na.exclude,
+  byrow = FALSE,
+  ...
+)
 
 \method{print}{calc_relimp}(x, ...)
 }
@@ -13,6 +21,10 @@ calc_relimp(spec, env, type = "lmg", byrow = FALSE, ...)
 \item{spec, env}{a data.frame object.}
 
 \item{type}{one of "lmg", "last", "first", "betasq", "pratt", "genizi" or "car".}
+
+\item{family}{a link function to be used in the model, see \code{\link[stats]{family}}.}
+
+\item{na.action}{a function which indicates what should happen when the data contain NAs.}
 
 \item{byrow}{a logical value, if TRUE, the 'spec' on the rows.}
 

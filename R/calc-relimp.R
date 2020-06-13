@@ -2,10 +2,13 @@
 #' @title Relative importance
 #' @param spec,env a data.frame object.
 #' @param type one of "lmg", "last", "first", "betasq", "pratt", "genizi" or "car".
+#' @param family 	a link function to be used in the model, see \code{\link[stats]{family}}.
+#' @param na.action a function which indicates what should happen when the data contain NAs.
 #' @param byrow a logical value, if TRUE, the 'spec' on the rows.
 #' @param x a calc_relimp object.
 #' @param ... extra parameters.
 #' @return a calc_relimp object.
+#' @importFrom stats glm gaussian na.exclude
 #' @rdname calc_relimp
 #' @examples \dontrun{
 #' spec <- mtcars[c(1, 3, 4, 5)]
@@ -17,6 +20,8 @@
 calc_relimp <- function(spec,
                         env,
                         type = "lmg",
+                        family = gaussian,
+                        na.action = na.exclude,
                         byrow = FALSE,
                         ...)
 {
@@ -36,24 +41,22 @@ calc_relimp <- function(spec,
     stop("'env' shold have the same rows as 'spec'.", call. = FALSE)
   }
 
-  if(!all(vapply(spec, is.numeric, logical(1))) &&
-     !all(vapply(env, is.numeric, logical(1)))) {
-    stop("Only support for numeric variable.", call. = FALSE)
-  }
-
   calc.relimp <- get_function("relaimpo", "calc.relimp")
   explained <- vector(length = n)
-  importance <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
-  p.value <- matrix(NA, nrow = n, ncol = m, dimnames = list(names(spec), names(env)))
+  importance <- p.value <- NULL
 
   for (i in seq_len(n)) {
-    lm <- stats::lm(spec[[i]] ~ ., data = env)
-
+    lm <- stats::glm(spec[[i]] ~ ., data = env, na.action = na.action, family = family)
     sm <- summary(lm)
     cr <- calc.relimp(lm, type = type, ...)
     explained[i] <- extract_s4(cr, "R2") * 100
-    importance[i, ] <- extract_s4(cr, type)
-    p.value[i, ] <- sm$coefficients[, "Pr(>|t|)"][-1]
+    if(i == 1) {
+      importance <- extract_s4(cr, type)
+      p.value <- sm$coefficients[, "Pr(>|t|)"][-1]
+    } else {
+      importance <- rbind(importance, extract_s4(cr, type))
+      p.value <- rbind(p.value, sm$coefficients[, "Pr(>|t|)"][-1])
+    }
   }
 
   if(isFALSE(byrow)) {
