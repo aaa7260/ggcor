@@ -17,7 +17,7 @@
 #' @export
 random_forest <- function(spec,
                         env,
-                        byrow = FALSE,
+                        byrow = TRUE,
                         seed = 123,
                         ...)
 {
@@ -73,7 +73,7 @@ random_forest <- function(spec,
                                                 explained = explained,
                                                 stringsAsFactors = FALSE),
                          importance = as.data.frame(importance),
-                         p.value = p.value),
+                         p.value = as.data.frame(p.value)),
             class = "random_forest")
 }
 

@@ -22,7 +22,7 @@ calc_relimp <- function(spec,
                         type = "lmg",
                         family = gaussian,
                         na.action = na.exclude,
-                        byrow = FALSE,
+                        byrow = TRUE,
                         ...)
 {
   type <- match.arg(type, c("lmg", "last", "first", "betasq", "pratt", "genizi", "car"))
@@ -69,7 +69,7 @@ calc_relimp <- function(spec,
                                                 explained = explained,
                                                 stringsAsFactors = FALSE),
                          importance = as.data.frame(importance),
-                         p.value = p.value),
+                         p.value = as.data.frame(p.value)),
             class = "calc_relimp")
 }
 

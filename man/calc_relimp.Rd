@@ -11,7 +11,7 @@ calc_relimp(
   type = "lmg",
   family = gaussian,
   na.action = na.exclude,
-  byrow = FALSE,
+  byrow = TRUE,
   ...
 )
 

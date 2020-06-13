@@ -5,7 +5,7 @@
 \alias{print.random_forest}
 \title{Random forests}
 \usage{
-random_forest(spec, env, byrow = FALSE, seed = 123, ...)
+random_forest(spec, env, byrow = TRUE, seed = 123, ...)
 
 \method{print}{random_forest}(x, ...)
 }
