@@ -188,7 +188,6 @@ print.dplot <- function(x,
     }
   }
   x <- dplot_build(x)
-  class(x)
   print(x)
 }
 
