@@ -58,10 +58,11 @@ calc_relimp <- function(spec,
       p.value <- rbind(p.value, sm$coefficients[, "Pr(>|t|)"][-1])
     }
   }
+  rownames(importance) <- rownames(p.value) <- names(spec)
 
   if(isFALSE(byrow)) {
     importance <- t(importance)
-    p.value <- t(importance)
+    p.value <- t(p.value)
   }
 
   structure(.Data = list(explained = data.frame(name = names(spec),
