@@ -10,12 +10,14 @@
 #'      \item{\code{"procuste.rtest"} will use \code{ade4::procuste.rtest()}.}
 #'   }
 #' @param spec.select,env.select NULL (default), numeric or character vector index of columns.
+#' @param use one of "everything", "complete" or "pairwise".
 #' @param spec.pre.fun,env.pre.fun string, function name of transform the input data.
 #' @param spec.pre.params,env.pre.params list, extra parameters for \code{spec/env.pre.fun}.
+#' @param seed a integer value.
 #' @param ... extra params passing to \code{procrutes.fun}.
 #' @return a data frame.
 #' @importFrom dplyr %>% mutate
-#' @importFrom purrr map map2 pmap_dfr
+#' @importFrom purrr map pmap pmap_dfr
 #' @rdname procrutes_test
 #' @examples \dontrun{
 #' library(vegan)
@@ -40,10 +42,12 @@ procrutes_test <- function(spec,
                            procrutes.fun = "protest",
                            spec.select = NULL, # a list of index vector
                            env.select = NULL,
+                           use = "everything",
                            spec.pre.fun = "identity",
                            spec.pre.params = list(),
                            env.pre.fun = spec.pre.fun,
                            env.pre.params = spec.pre.params,
+                           seed = 123,
                            ...)
 {
   if(!is.data.frame(spec))
@@ -68,7 +72,7 @@ procrutes_test <- function(spec,
                           spec.select = spec.select, env.select = env.select,
                           spec.pre.fun = spec.pre.fun, spec.pre.params = spec.pre.params,
                           env.pre.fun = env.pre.fun, env.pre.params = env.pre.params,
-                          ...) %>%
+                          use = use, seed = seed, ...) %>%
             dplyr::mutate(.group = .group)
           })
       )
@@ -77,7 +81,7 @@ procrutes_test <- function(spec,
                           spec.select = spec.select, env.select = env.select,
                           spec.pre.fun = spec.pre.fun, spec.pre.params = spec.pre.params,
                           env.pre.fun = env.pre.fun, env.pre.params = env.pre.params,
-                          ...)
+                          use = use, seed = seed, ...)
   }
   grouped <- if(!is.null(group)) TRUE else FALSE
   attr(df, "grouped") <- grouped
@@ -88,12 +92,14 @@ procrutes_test <- function(spec,
 .procrutes_test <- function(spec,
                             env,
                             procrutes.fun = "protest",
-                            spec.select = NULL, # a list of index vector
+                            spec.select = NULL,
                             env.select = NULL,
+                            use = "everything",
                             spec.pre.fun = "identity",
                             spec.pre.params = list(),
                             env.pre.fun = spec.pre.fun,
-                            env.pre.params = spec.pre.params,
+                            env.pre.params = list(),
+                            seed = 123,
                             ...)
 {
   .FUN <- switch (procrutes.fun,
@@ -102,6 +108,7 @@ procrutes_test <- function(spec,
                   procuste.rtest = get_function("ade4", "procuste.rtest"),
                   stop("Invalid 'procrutes.fun' parameter.", call. = FALSE)
   )
+  use <- match.arg(use, c("everything", "complete", "pairwise"))
   if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
   if(!is.data.frame(env))
@@ -118,6 +125,12 @@ procrutes_test <- function(spec,
     spec.select <- list(spec = 1:ncol(spec))
   }
 
+  if(use == "complete") {
+    non.na <- complete.cases(spec) & complete.cases(env)
+    spec <- spec[non.na, , drop = FALSE]
+    env <- env[non.na, , drop = FALSE]
+  }
+
   if(is.null(env.select)) {
     env.select <- as.list(setNames(1:ncol(env), names(env)))
   }
@@ -130,9 +143,19 @@ procrutes_test <- function(spec,
   env <- purrr::map(env.select, function(.x) {
     subset(env, select = .x, drop = FALSE)})
 
-  rp <- purrr::map2(spec.name, env.name, function(.x, .y) {
-    .x <- do.call(spec.pre.fun, modifyList(list(spec[[.x]]), spec.pre.params))
-    .y <- do.call(env.pre.fun, modifyList(list(env[[.y]]), env.pre.params))
+  set.seed(seed)
+  seeds <- 10000 * round(runif(length(spec.name)))
+
+  rp <- purrr::pmap(list(spec.name, env.name, seeds), function(.x, .y, .seed) {
+    .spec <- spec[[.x]]
+    .env <- env[[.y]]
+    if(use == "pairwise") {
+      .non.na <- complete.cases(.spec) & complete.cases(.env)
+      .spec <- .spec[.non.na, , drop = FALSE]
+      .env <- .env[.non.na, , drop = FALSE]
+    }
+    .x <- do.call(spec.pre.fun, modifyList(list(.spec), spec.pre.params))
+    .y <- do.call(env.pre.fun, modifyList(list(.env), env.pre.params))
 
     if(procrutes.fun != "protest") {
       if(!is.data.frame(.x)) {
@@ -143,6 +166,7 @@ procrutes_test <- function(spec,
       }
     }
 
+    set.seed(.seed)
     .FUN(.x, .y, ...)
   }) %>% extract_procrutes(procrutes.fun)
 

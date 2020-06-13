@@ -11,14 +11,17 @@
 #'      \item{\code{"mantel.partial"} will use \code{vegan::mantel.partial()} (default).}
 #'   }
 #' @param spec.select,env.select NULL (default), numeric or character vector index of columns.
+#' @param use one of "everything", "complete" or "pairwise".
 #' @param spec.dist.method dissimilarity index (default is 'bray'), passing to \code{method}
 #'     params of \code{vegan::vegdist}.
 #' @param env.dist.method dissimilarity index (default is euclidean'), passing to \code{method}
 #'     params of \code{vegan::vegdist()}.
+#' @param seed a integer value.
 #' @param ... extra params passing to \code{mantel.fun}.
 #' @return a data.frame.
 #' @importFrom dplyr %>% mutate
-#' @importFrom purrr pmap_dfr
+#' @importFrom purrr pmap pmap_dfr
+#' @importFrom stats complete.cases
 #' @rdname mantel_test
 #' @examples \dontrun{
 #' library(vegan)
@@ -43,8 +46,10 @@ mantel_test <- function(spec,
                         mantel.fun = "mantel",
                         spec.select = NULL, # a list of index vector
                         env.select = NULL,
+                        use = "everything",
                         spec.dist.method = "bray",
                         env.dist.method = "euclidean",
+                        seed = 123,
                         ...)
 {
   if(!is.data.frame(spec))
@@ -81,7 +86,7 @@ mantel_test <- function(spec,
           .mantel_test(spec = .spec, env = .env, env.ctrl = .env.ctrl,
                        mantel.fun = mantel.fun, spec.select = spec.select,
                        env.select = env.select, spec.dist.method = spec.dist.method,
-                       env.dist.method = env.dist.method, ...) %>%
+                       env.dist.method = env.dist.method, use = use, seed = seed, ...) %>%
             dplyr::mutate(.group = .group)
           })
       )
@@ -89,7 +94,7 @@ mantel_test <- function(spec,
     df <- .mantel_test(spec = spec, env = env, env.ctrl = env.ctrl,
                        mantel.fun = mantel.fun, spec.select = spec.select,
                        env.select = env.select, spec.dist.method = spec.dist.method,
-                       env.dist.method = env.dist.method, ...)
+                       env.dist.method = env.dist.method, use = use, seed = seed, ...)
   }
   grouped <- if(!is.null(group)) TRUE else FALSE
   attr(df, "grouped") <- grouped
@@ -103,8 +108,10 @@ mantel_test <- function(spec,
                         mantel.fun = "mantel",
                         spec.select = NULL, # a list of index vector
                         env.select = NULL,
+                        use = "everything",
                         spec.dist.method = "bray",
                         env.dist.method = "euclidean",
+                        seed = 123,
                         ...)
 {
   .FUN <- switch (mantel.fun,
@@ -114,6 +121,8 @@ mantel_test <- function(spec,
     mantel.rtest = get_function("ade4", "mantel.rtest"),
     stop("Invalid 'mantel.fun' parameter.", call. = FALSE)
   )
+  use <- match.arg(use, c("everything", "complete", "pairwise"))
+
   if(!is.data.frame(spec))
     spec <- as.data.frame(spec)
   if(!is.data.frame(env))
@@ -137,22 +146,52 @@ mantel_test <- function(spec,
   if(is.null(env.select)) {
     env.select <- as.list(setNames(1:ncol(env), names(env)))
   }
+
+  if(use == "complete") {
+    non.na <- complete.cases(spec) & complete.cases(env)
+    if(mantel.fun == "mantel.partial") {
+      non.na <- non.na & complete.cases(env.ctrl)
+    }
+    spec <- spec[non.na, , drop = FALSE]
+    env <- env[non.na, , drop = FALSE]
+    if(mantel.fun == "mantel.partial") {
+      env.ctrl <- env.ctrl[non.na, , drop = FALSE]
+    }
+  }
+
   spec.select <- make_list_names(spec.select, "spec")
   env.select <- make_list_names(env.select, "env")
   spec.name <- rep(names(spec.select), each = length(env.select))
   env.name <- rep(names(env.select), length(spec.select))
+
+  set.seed(seed)
+  seeds <- 10000 * round(runif(length(spec.name)))
+
   spec <- purrr::map(spec.select, function(.x) {
     subset(spec, select = .x, drop = FALSE)})
   env <- purrr::map(env.select, function(.x) {
     subset(env, select = .x, drop = FALSE)})
 
-  rp <- purrr::map2(spec.name, env.name, function(.x, .y) {
-    spec.dist <- vegan::vegdist(spec[[.x]], method = spec.dist.method)
-    env.dist <- vegan::vegdist(env[[.y]], method = env.dist.method)
+  rp <- purrr::pmap(list(spec.name, env.name, seeds), function(.x, .y, .seed) {
+    .spec <- spec[[.x]]
+    .env <- env[[.y]]
+    if(use == "pairwise") {
+      .non.na <- complete.cases(.spec) & complete.cases(.env)
+      if(mantel.fun == "mantel.partial") {
+        .non.na <- .non.na & complete.cases(env.ctrl)
+      }
+      .spec <- .spec[.non.na, , drop = FALSE]
+      .env <- .env[.non.na, , drop = FALSE]
+      if(mantel.fun == "mantel.partial") {
+        env.ctrl <- env.ctrl[.non.na, , drop = FALSE]
+      }
+    }
+    spec.dist <- vegan::vegdist(.spec, method = spec.dist.method)
+    env.dist <- vegan::vegdist(.env, method = env.dist.method)
+
+    set.seed(.seed)
     if(mantel.fun == "mantel.partial") {
       env.ctrl.dist <- vegan::vegdist(env.ctrl, method = env.dist.method)
-    }
-    if(mantel.fun == "mantel.partial") {
       .FUN(spec.dist, env.dist, env.ctrl.dist, ...)
     } else {
       .FUN(spec.dist, env.dist, ...)

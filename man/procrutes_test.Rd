@@ -12,10 +12,12 @@ procrutes_test(
   procrutes.fun = "protest",
   spec.select = NULL,
   env.select = NULL,
+  use = "everything",
   spec.pre.fun = "identity",
   spec.pre.params = list(),
   env.pre.fun = spec.pre.fun,
   env.pre.params = spec.pre.params,
+  seed = 123,
   ...
 )
 }
@@ -35,9 +37,13 @@ procrutes_test(
 
 \item{spec.select, env.select}{NULL (default), numeric or character vector index of columns.}
 
+\item{use}{one of "everything", "complete" or "pairwise".}
+
 \item{spec.pre.fun, env.pre.fun}{string, function name of transform the input data.}
 
 \item{spec.pre.params, env.pre.params}{list, extra parameters for \code{spec/env.pre.fun}.}
+
+\item{seed}{a integer value.}
 }
 \value{
 a data frame.
