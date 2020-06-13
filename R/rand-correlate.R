@@ -60,7 +60,7 @@ rand_dataset <- function(vars = 12,
                          seed = NULL,
                          ...) {
   if(!requireNamespace("ambient", quietly = TRUE)) {
-    stop("'make_data()' needs 'ambient' package.", call. = TRUE)
+    stop("'rand_dataset()' needs 'ambient' package.", call. = TRUE)
   }
   type <- match.arg(type, c("perlin", "cubic", "simplex", "value", "worley", "white"))
   f <- get_function("ambient", paste0("noise_", type))
@@ -79,7 +79,7 @@ rand_dataset <- function(vars = 12,
     row.ord <- sample(obs)
     set.seed(seed)
     col.ord <- sample(vars)
-    m <- m[row.ord, col.ord]
+    m <- m[row.ord, col.ord, drop = FALSE]
   }
   n <- max(floor(frequency * vars), floor(0.4 * vars))
   if(n >= 1) {
