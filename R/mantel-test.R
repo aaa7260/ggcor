@@ -21,7 +21,7 @@
 #' @return a data.frame.
 #' @importFrom dplyr %>% mutate
 #' @importFrom purrr pmap pmap_dfr
-#' @importFrom stats complete.cases
+#' @importFrom stats complete.cases runif
 #' @rdname mantel_test
 #' @examples \dontrun{
 #' library(vegan)

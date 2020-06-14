@@ -103,18 +103,6 @@ filter.cor_network <- function(.data,
                          edges = edges), class = "cor_network")
 }
 
-#' @importFrom dplyr filter
-#' @importFrom igraph as.igraph
-#' @export
-filter.igraph <- function(.data,
-                          ...,
-                          what = "nodes",
-                          simplify = TRUE)
-{
-  .data <- filter(as_cor_network(.data, ..., what = what, simplify = simplify))
-  as.igraph(.data)
-}
-
 #' @importFrom dplyr mutate
 #' @export
 mutate.cor_network <- function(.data, what = "nodes", ...)
@@ -126,15 +114,6 @@ mutate.cor_network <- function(.data, what = "nodes", ...)
     .data$edges <- dplyr::mutate(.data$edges, ...)
   }
   .data
-}
-
-#' @importFrom dplyr mutate
-#' @importFrom igraph as.igraph
-#' @export
-mutate.igraph <- function(.data, ..., what = "nodes")
-{
-  .data <- mutate(as_cor_network(.data), what = what, ...)
-  as.igraph(.data)
 }
 
 #' @noRd
