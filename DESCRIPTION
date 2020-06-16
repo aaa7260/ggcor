@@ -58,7 +58,6 @@ Collate:
     'as-cor-network.R'
     'as-cor-tbl.R'
     'as-igraph.R'
-    'as-matrix.R'
     'as-tbl-graph.R'
     'calc-relimp.R'
     'cor-network.R'
