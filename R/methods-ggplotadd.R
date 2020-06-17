@@ -482,7 +482,8 @@ ggplot_add.anno_hc_bar <- function(object, plot, object_name) {
     if(on.row) {
       obj <- obj +
              scale_x_continuous(limits = c(0.5 * object$width, 1.5 * object$width), expand = c(0, 0)) +
-             scale_y_continuous(limits = yrange(plot), expand = c(0, 0))
+             scale_y_continuous(limits = yrange(plot), expand = c(0, 0)) +
+             theme_void()
       .anno_row(plot, obj, object$width / ncols(plot$data), pos = pos)
     } else {
       obj <- obj +

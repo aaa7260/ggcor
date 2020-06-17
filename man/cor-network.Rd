@@ -60,7 +60,7 @@ to "weight".}
 \item{...}{extra params for printing.}
 }
 \value{
-a tbl_graph (default), igraph or list object.
+a tbl_graph (default), igraph or list of nodes and edges.
 }
 \description{
 The function calculates correlation coefficient, statistical

@@ -23,7 +23,7 @@
 #'    }
 #' @param n number of rows to show.
 #' @param ... extra params for printing.
-#' @return a tbl_graph (default), igraph or list object.
+#' @return a tbl_graph (default), igraph or list of nodes and edges.
 #' @importFrom dplyr filter rename %>%
 #' @importFrom tibble tibble
 #' @importFrom tidygraph tbl_graph
