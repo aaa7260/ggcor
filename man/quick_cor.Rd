@@ -27,29 +27,9 @@ quickcor(
   ...
 )
 
-\method{print}{quickcor}(
-  x,
-  colours = getOption("ggcor.fill.pal"),
-  style = getOption("ggcor.plot.style", "corrplot"),
-  title = "corr",
-  breaks = c(-1, -0.5, 0, 0.5, 1),
-  labels = c(-1, -0.5, 0, 0.5, 1),
-  limits = c(-1, 1),
-  nbin = 40,
-  ...
-)
+\method{print}{quickcor}(x, ...)
 
-\method{print}{quickcor}(
-  x,
-  colours = getOption("ggcor.fill.pal"),
-  style = getOption("ggcor.plot.style", "corrplot"),
-  title = "corr",
-  breaks = c(-1, -0.5, 0, 0.5, 1),
-  labels = c(-1, -0.5, 0, 0.5, 1),
-  limits = c(-1, 1),
-  nbin = 40,
-  ...
-)
+\method{print}{quickcor}(x, ...)
 
 is_quickcor(x)
 }
@@ -84,21 +64,7 @@ label.}
 
 \item{paxis}{ignore.}
 
-\item{...}{ignore.}
-
-\item{colours}{colour palette for filling.}
-
-\item{style}{style of plot, one of "corrplot" (default) or "ggplot".}
-
-\item{title}{guide title.}
-
-\item{breaks}{breaks of guide_colourbar.}
-
-\item{labels}{labels of guide_colourbar.}
-
-\item{limits}{limits of guide_colourbar.}
-
-\item{nbin}{a numeric specifying the number of bins for drawing the guide_colourbar.}
+\item{...}{extra params for \code{\link[ggcor]{fortify_cor}}.}
 }
 \description{
 quickcor is convenient wrapper for creating a number of different types
@@ -131,12 +97,6 @@ quickcor(mtcars, cor.test = TRUE) +
   geom_mark(data = get_data(type = "upper", show.diag = FALSE)) +
   geom_abline(slope = -1, intercept = 12)
 
-## print quickcor object
-p <- quickcor(mtcars) + geom_colour()
-col <- c("blue", "white", "red")
-print(p, colours = col)
-print(p, colours = col, title = "Pearson's r")
-print(p, style = "ggplot")
 }
 \seealso{
 \code{\link{fortify_cor}}.

@@ -108,6 +108,7 @@ Collate:
     'scale-fill.R'
     'scale-gradient2n.R'
     'scale-radius.R'
+    'set-style.R'
     'theme-cor.R'
     'utils-circular.R'
     'utils-colour-pal.R'

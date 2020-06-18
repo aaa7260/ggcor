@@ -133,62 +133,19 @@ quickcor <- function(x,
         theme_cor(legend.position = legend.position)
     }
   }
+  if(!is.null(options("ggcor.style"))) {
+    p <- p + options("ggcor.style")
+  }
   class(p) <- c("quickcor", class(p))
   p
 }
 
-#' Print and plot method for quickcor object.
-#' @param colours colour palette for filling.
-#' @param style style of plot, one of "corrplot" (default) or "ggplot".
-#' @param title guide title.
-#' @param breaks breaks of guide_colourbar.
-#' @param labels labels of guide_colourbar.
-#' @param limits limits of guide_colourbar.
-#' @param nbin a numeric specifying the number of bins for drawing the guide_colourbar.
-#' @param ... ignore.
-#' @importFrom ggplot2 ggplot_add scale_fill_gradientn
-#' @importFrom grid grid.draw
-#' @importFrom rlang quo_get_expr eval_tidy
+
 #' @rdname quick_cor
-#' @examples
-#' ## print quickcor object
-#' p <- quickcor(mtcars) + geom_colour()
-#' col <- c("blue", "white", "red")
-#' print(p, colours = col)
-#' print(p, colours = col, title = "Pearson's r")
-#' print(p, style = "ggplot")
 #' @method print quickcor
 #' @export
-print.quickcor <- function(x,
-                           colours = getOption("ggcor.fill.pal"),
-                           style = getOption("ggcor.plot.style", "corrplot"),
-                           title = "corr",
-                           breaks = c(-1, -0.5, 0, 0.5, 1),
-                           labels = c(-1, -0.5, 0, 0.5, 1),
-                           limits = c(-1, 1),
-                           nbin = 40,
-                           ...)
+print.quickcor <- function(x, ...)
 {
-  style <- switch (style,
-                   corrplot = "corrplot",
-                   "ggplot2"
-  )
-  if(style == "corrplot") {
-    mapping <- unclass(x$mapping)
-    if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
-      fill.var.name <- as.character(quo_get_expr(mapping$fill))
-      fill.var <- eval_tidy(mapping$fill, x$data)
-      if(!is_gcor_tbl(x$data) && fill.var.name == "r" &&
-         is.numeric(fill.var)) {
-        x <- x + scale_fill_gradient2n(colours = colours,
-                                       breaks = breaks,
-                                       labels = labels,
-                                       limits = limits) +
-          guides(fill = guide_colourbar(title = title,
-                                        nbin  = nbin))
-      }
-    }
-  }
   class(x) <- setdiff(class(x), "quickcor")
   print(x, ...)
 }
