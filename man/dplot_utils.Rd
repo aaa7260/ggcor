@@ -19,17 +19,7 @@ anno_row_custom(obj, width = 0.2, pos = "right")
 
 empty_plot()
 
-\method{print}{dplot}(
-  x,
-  colours = getOption("ggcor.fill.pal"),
-  style = getOption("ggcor.plot.style", "corrplot"),
-  title = "corr",
-  breaks = c(-1, -0.5, 0, 0.5, 1),
-  labels = c(-1, -0.5, 0, 0.5, 1),
-  limits = c(-1, 1),
-  nbin = 40,
-  ...
-)
+\method{print}{dplot}(x, ...)
 }
 \arguments{
 \item{plot, x}{a "gg" or "dplot" object.}
@@ -39,20 +29,6 @@ empty_plot()
 \item{pos}{one of "left", "right", "bottom" or "top".}
 
 \item{width, height}{scala numeric value.}
-
-\item{colours}{colour palette for filling.}
-
-\item{style}{style of plot, one of "corrplot" (default) or "ggplot".}
-
-\item{title}{guide title.}
-
-\item{breaks}{breaks of guide_colourbar.}
-
-\item{labels}{labels of guide_colourbar.}
-
-\item{limits}{limits of guide_colourbar.}
-
-\item{nbin}{a numeric specifying the number of bins for drawing the guide_colourbar.}
 
 \item{...}{extra parameters.}
 }

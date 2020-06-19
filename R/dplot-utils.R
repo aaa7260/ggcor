@@ -4,13 +4,6 @@
 #' @param obj a "gg" object.
 #' @param width,height scala numeric value.
 #' @param pos one of "left", "right", "bottom" or "top".
-#' @param colours colour palette for filling.
-#' @param style style of plot, one of "corrplot" (default) or "ggplot".
-#' @param title guide title.
-#' @param breaks breaks of guide_colourbar.
-#' @param labels labels of guide_colourbar.
-#' @param limits limits of guide_colourbar.
-#' @param nbin a numeric specifying the number of bins for drawing the guide_colourbar.
 #' @param ... extra parameters.
 #' @return a "dplot" object.
 #' @rdname dplot_utils
@@ -156,37 +149,7 @@ ggplot_build.dplot <- function(plot) {
 }
 #' @rdname dplot_utils
 #' @export
-print.dplot <- function(x,
-                        colours = getOption("ggcor.fill.pal"),
-                        style = getOption("ggcor.plot.style", "corrplot"),
-                        title = "corr",
-                        breaks = c(-1, -0.5, 0, 0.5, 1),
-                        labels = c(-1, -0.5, 0, 0.5, 1),
-                        limits = c(-1, 1),
-                        nbin = 40,
-                        ...) {
-  if(inherits(x, "quickcor")) {
-    style <- switch (style,
-                     corrplot = "corrplot",
-                     "ggplot2"
-    )
-    if(style == "corrplot") {
-      mapping <- unclass(x$mapping)
-      if(!is.null(mapping$fill) && is.null(x$scales$get_scales("fill"))) {
-        fill.var.name <- as.character(rlang::quo_get_expr(mapping$fill))
-        fill.var <- rlang::eval_tidy(mapping$fill, x$data)
-        if(!is_gcor_tbl(x$data) && fill.var.name == "r" &&
-           is.numeric(fill.var)) {
-          x <- x + scale_fill_gradient2n(colours = colours,
-                                         breaks = breaks,
-                                         labels = labels,
-                                         limits = limits) +
-            guides(fill = guide_colourbar(title = title,
-                                          nbin  = nbin))
-        }
-      }
-    }
-  }
+print.dplot <- function(x, ...) {
   x <- dplot_build(x)
   print(x)
 }

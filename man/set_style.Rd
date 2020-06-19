@@ -6,7 +6,7 @@
 \title{Set style}
 \usage{
 set_style(
-  colours = NULL,
+  pal = NULL,
   type = "gradient2n",
   legend.title = "Corr",
   nbin = 40,
@@ -16,7 +16,7 @@ set_style(
 reset_style()
 }
 \arguments{
-\item{colours}{NULL or colours.}
+\item{pal}{NULL or colours.}
 
 \item{type}{a scale function or character of scale name (should be one of 
 "gradient", "viridis" or "gradient2n").}

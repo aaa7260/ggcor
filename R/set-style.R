@@ -1,6 +1,6 @@
 #' Set the style of correlation matrix plot
 #' @title Set style
-#' @param colours NULL or colours.
+#' @param pal NULL or colours.
 #' @param type a scale function or character of scale name (should be one of 
 #' "gradient", "viridis" or "gradient2n").
 #' @param legend.title a string of colour bar title.
@@ -13,7 +13,7 @@
 #' quickcor(mtcars) + geom_square()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-set_style <- function(colours = NULL,
+set_style <- function(pal = NULL,
                       type = "gradient2n",
                       legend.title = "Corr",
                       nbin = 40,
@@ -34,13 +34,13 @@ set_style <- function(colours = NULL,
   } else if(identical(type, "viridis")) {
     scale_fill_viridis_c(...)
   } else {
-    scale_fill_gradient2n(colours = colours, ...)
+    scale_fill_gradient2n(colours = pal, ...)
   }
   guide <- if(inherits(scale, "ScaleBinned")) {
-    guides(fill = guide_colorsteps(title = legend.title,
-                                            nbin  = nbin))
-  } else {
     guides(fill = ggplot2::guide_colorsteps(title = legend.title))
+  } else {
+    guides(fill = guide_colourbar(title = legend.title,
+                                   nbin  = nbin))
   }
   options(ggcor.style = list(scale, guide))
 }
