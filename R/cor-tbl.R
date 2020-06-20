@@ -214,7 +214,7 @@ check_extra_mat_name <- function(l)
     if(is.null(name) || length(unique(name)) != n) {
       stop(
         "Names of extra.mat check:", "\n",
-        "The elements of 'extra.mat' must with unique name.",
+        "The elements of 'extra.mat' must have unique name.",
         call. = FALSE)
     }
     if(any(name %in% c("r", "p.value"))) {
