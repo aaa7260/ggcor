@@ -858,17 +858,19 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
     }
   }
 
+  width <- ncols(plot$data) * object$width / ncols(data)
+
   polar.args <- plot$plot_env$polar.args
   row.shift <- polar.args$row.shift %||% 0
   half <- polar.args$row.half %||% 0.5
-  adj <- - 0.5 * object$width + half
-  polar.args$row.half <- 0.5 * object$width
-  data$.col.id <- data$.col.id * object$width + ncols(plot$data) +
+  adj <- - 0.5 * width + half
+  polar.args$row.half <- 0.5 * width
+  data$.col.id <- data$.col.id * width + ncols(plot$data) +
                   object$space + row.shift + adj
   # reset y axis parameters
-  polar.args$yaxis_df$x <- polar.args$yaxis_df$x + ncols(data) * object$width + object$space + adj
+  polar.args$yaxis_df$x <- polar.args$yaxis_df$x + ncols(data) * width + object$space + adj
   if(isTRUE(object$label)) {
-    df <- data.frame(x = seq_len(ncols(data)) * object$width + ncols(plot$data) + object$space + row.shift + adj,
+    df <- data.frame(x = seq_len(ncols(data)) * width + ncols(plot$data) + object$space + row.shift + adj,
                      y = unique(polar.args$xaxis_df$y),
                      label = get_col_name(data),
                      angle = 0,
@@ -879,7 +881,7 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
                        family = object$label.family, fontface = object$label.fontface,
                        inherit.aes = FALSE)
   }
-  polar.args$row.shift <- ncols(data) * object$width + object$space + row.shift + adj
+  polar.args$row.shift <- ncols(data) * width + object$space + row.shift + adj
   plot$plot_env$polar.args <- polar.args
 
   # calc the layer
@@ -888,13 +890,13 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
                        object$params)
   if(object$geom == "point") {
     obj <- do.call(ggplot2::geom_point, params)
-    border <- geom_anno_tile(aes_string(x = ".col.id", y = ".row.id"), data = data,
-                             fill = NA, colour = "grey50", size = 0.25, inherit.aes = FALSE)
+    border <- geom_tile(aes_string(x = ".col.id", y = ".row.id"), data = data,
+                        fill = NA, colour = "grey50", size = 0.25, inherit.aes = FALSE)
     if(isTRUE(object$label)) {
       obj <- list(border, obj, label)
     }
   } else {
-    params$width <- object$width
+    params$width <- width
     geom <- paste0("geom_", object$geom)
     obj <- do.call(geom, params)
     if(isTRUE(object$label)) {
@@ -927,7 +929,10 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
   } else {
     warning("Invalid 'mark' type.", call. = FALSE)
   }
-  ggplot_add(obj, plot)
+
+  new_scale <- new_scales(c("fill", "colour", "alpha", "size"))
+  obj <- c(new_scale, obj)
+  ggplot_add(obj, plot, object_name)
 }
 
 #' @export
@@ -942,16 +947,17 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
     }
   }
 
+  height <- nrows(plot$data) * object$height / nrows(data)
   polar.args <- plot$plot_env$polar.args
   col.shift <- polar.args$col.shift %||% 0
   half <- polar.args$col.half %||% 0.5
-  adj <- - 0.5 * object$height + half
-  data$.row.id <- data$.row.id * object$height + nrows(plot$data) + object$space + col.shift + adj
+  adj <- - 0.5 * height + half
+  data$.row.id <- data$.row.id * height + nrows(plot$data) + object$space + col.shift + adj
   # reset y axis parameters
   if(isTRUE(object$label)) {
-    t <- (seq_len(nrows(data)) * object$height + col.shift + nrows(plot$data) + adj) * 360 / diff(polar.args$ylim) + 90
+    t <- (seq_len(nrows(data)) * height + col.shift + nrows(plot$data) + adj) * 360 / diff(polar.args$ylim) + 90
     df <- data.frame(x = 0.5 + 1.05 * ncols(plot$data),
-                     y = seq_len(nrows(data)) * object$height + nrows(plot$data) + object$space + col.shift + adj,
+                     y = seq_len(nrows(data)) * height + nrows(plot$data) + object$space + col.shift + adj,
                      label = get_row_name(data),
                      angle = ifelse(t > 90 & t < 270, t + 180, t) -
                              0.5 / diff(polar.args$ylim) * 360,
@@ -963,8 +969,8 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
                        family = object$label.family, fontface = object$label.fontface,
                        inherit.aes = FALSE)
   }
-  plot$plot_env$polar.args$col.shift <- nrows(data) * object$height + object$space + col.shift + adj
-  plot$plot_env$polar.args$col.half <- 0.5 * object$height
+  plot$plot_env$polar.args$col.shift <- nrows(data) * height + object$space + col.shift + adj
+  plot$plot_env$polar.args$col.half <- 0.5 * height
 
   # calc the layer
   mapping <- aes_modify(aes_string(x = ".col.id", y = ".row.id"), object$mapping)
@@ -972,14 +978,14 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
                        object$params)
   if(object$geom == "point") {
     obj <- do.call(ggplot2::geom_point, params)
-    border <- geom_anno_tile2(aes_string(x = ".col.id", y = ".row.id"), data = data,
-                             height = object$height, fill = NA, colour = "grey50",
-                             size = 0.25, inherit.aes = FALSE)
+    border <- geom_tile(aes_string(x = ".col.id", y = ".row.id"), data = data,
+                        height = height, fill = NA, colour = "grey50",
+                        size = 0.25, inherit.aes = FALSE)
     if(isTRUE(object$label)) {
       obj <- list(border, obj, label)
     }
   } else {
-    params$width <- object$width
+    params$height <- height
     geom <- paste0("geom_", object$geom)
     obj <- do.call(geom, params)
     if(isTRUE(object$label)) {
@@ -1013,7 +1019,9 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
     warning("Invalid 'mark' type.", call. = FALSE)
   }
 
-  ggplot_add(obj, plot)
+  new_scale <- new_scales(c("fill", "colour", "alpha", "size"))
+  obj <- c(new_scale, obj)
+  ggplot_add(obj, plot, object_name)
 }
 
 #' @importFrom ggplot2 geom_point

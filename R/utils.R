@@ -1,12 +1,4 @@
 #' @noRd
-get_function <- function(pkg, fun) {
-  if(!requireNamespace(pkg, quietly = TRUE)) {
-    stop(pkg, " package has not been installed", call. = FALSE)
-  }
-  eval(parse(text = paste0(pkg, "::", fun)))
-}
-
-#' @noRd
 xrange <- function(.plot) {
   stopifnot(inherits(.plot, "gg"))
   if(is_dplot(.plot)) {

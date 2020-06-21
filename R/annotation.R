@@ -232,7 +232,7 @@ anno_boxplot <- function(data,
 #' @param data a data frame.
 #' @param align align base on main plot.
 #' the bottom side will be flipped.
-#' @param width width and height of annotation.
+#' @param width,height width and height of annotation.
 #' @param geom one of "anno_tile", "anno_tile2" or "point".
 #' @param mark a layer instance.
 #' @param space scala numeric value.
@@ -246,10 +246,10 @@ anno_boxplot <- function(data,
 anno_row_heat <- function(data,
                           mapping = NULL,
                           align = TRUE,
-                          geom = "anno_tile",
+                          geom = "tile",
                           mark = NULL,
                           space = 0.5,
-                          width = 1,
+                          width = 0.2,
                           label = TRUE,
                           label.size = 3.88,
                           label.colour = "black",
@@ -259,7 +259,7 @@ anno_row_heat <- function(data,
   if(!is_cor_tbl(data)) {
     stop("Invalid data input.", call. = FALSE)
   }
-  geom <- match.arg(geom, c("anno_tile", "anno_tile2", "point"))
+  geom <- match.arg(geom, c("tile", "point"))
   structure(.Data = list(data = data, mapping = mapping, align = align,
                          geom = geom, space = space, mark = mark,
                          width = width, label = label, label.size = label.size,
@@ -273,10 +273,10 @@ anno_row_heat <- function(data,
 anno_col_heat <- function(data,
                           mapping = NULL,
                           align = TRUE,
-                          geom = "anno_tile2",
+                          geom = "tile",
                           mark = NULL,
                           space = 0.5,
-                          height = 1,
+                          height = 0.2,
                           label = TRUE,
                           label.size = 3.88,
                           label.colour = "black",
@@ -286,7 +286,7 @@ anno_col_heat <- function(data,
   if(!is_cor_tbl(data)) {
     stop("Invalid data input.", call. = FALSE)
   }
-  geom <- match.arg(geom, c("anno_tile", "anno_tile2", "point"))
+  geom <- match.arg(geom, c("tile", "point"))
   structure(.Data = list(data = data, mapping = mapping, align = align,
                          geom = geom, space = space, height = height,
                          label = label, label.size = label.size,

@@ -9,10 +9,10 @@ anno_row_heat(
   data,
   mapping = NULL,
   align = TRUE,
-  geom = "anno_tile",
+  geom = "tile",
   mark = NULL,
   space = 0.5,
-  width = 1,
+  width = 0.2,
   label = TRUE,
   label.size = 3.88,
   label.colour = "black",
@@ -25,10 +25,10 @@ anno_col_heat(
   data,
   mapping = NULL,
   align = TRUE,
-  geom = "anno_tile2",
+  geom = "tile",
   mark = NULL,
   space = 0.5,
-  height = 1,
+  height = 0.2,
   label = TRUE,
   label.size = 3.88,
   label.colour = "black",
@@ -51,7 +51,7 @@ the bottom side will be flipped.}
 
 \item{space}{scala numeric value.}
 
-\item{width}{width and height of annotation.}
+\item{width, height}{width and height of annotation.}
 
 \item{label}{logical value, if TRUE will add label on plot.}
 

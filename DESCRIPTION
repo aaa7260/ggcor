@@ -1,7 +1,7 @@
 Package: ggcor
 Type: Package
 Title: Extended tools for correlation analysis and visualization
-Version: 0.9.7.5
+Version: 0.9.7.6
 Authors@R: c(
     person("Houyun", "Huang", email = "houyunhuang@163.com", role = c("aut", "cre")),
     person("Lei", "Zhou", email = "zhoulei@scau.edu.cn", role = "aut"),
@@ -41,6 +41,7 @@ Suggests:
     ambient,
     dendextend,
     ggimage,
+    ggnewscale,
     ggraph,
     ggtree,
     knitr,
@@ -54,6 +55,7 @@ Suggests:
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Collate: 
+    'aaa.R'
     'annotation.R'
     'as-cor-network.R'
     'as-cor-tbl.R'
@@ -71,7 +73,6 @@ Collate:
     'expand-axis.R'
     'export-cor-network.R'
     'fortify-cor.R'
-    'geom-anno-tile.R'
     'geom-circle2.R'
     'geom-colour.R'
     'geom-conf.R'
@@ -105,7 +106,6 @@ Collate:
     'random-forest.R'
     'reexport.R'
     'remove-axis.R'
-    'scale-fill.R'
     'scale-gradient2n.R'
     'scale-radius.R'
     'set-style.R'
