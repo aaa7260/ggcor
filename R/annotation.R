@@ -151,8 +151,8 @@ anno_hc_bar <- function(k = 2,
             class = "anno_hc_bar")
 }
 
-#' Custom annotation
-#' @title Custom annotation
+#' Bar and boxplot annotation
+#' @title Bar and boxplot annotation
 #' @param mapping aesthetic mappings parameters.
 #' @param data a data frame.
 #' @param align align base on main plot.
@@ -163,10 +163,9 @@ anno_hc_bar <- function(k = 2,
 #' @param trans the name of a transformation object or the object itself.
 #' @param scale scale object.
 #' @param theme theme object or the name.
-#' @param label.size,label.colour,label.family,label.fontface parameters for label.
 #' @param ... extra parameters.
-#' @return anno_* object.
-#' @rdname anno_special
+#' @return a anno_* object.
+#' @rdname anno_bar
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 anno_bar <- function(data,
@@ -187,7 +186,7 @@ anno_bar <- function(data,
             class = "anno_bar")
 }
 
-#' @rdname anno_special
+#' @rdname anno_bar
 #' @export
 anno_bar2 <- function(data,
                       mapping,
@@ -207,7 +206,7 @@ anno_bar2 <- function(data,
             class = "anno_bar2")
 }
 
-#' @rdname anno_special
+#' @rdname anno_bar
 #' @export
 anno_boxplot <- function(data,
                          mapping,
@@ -226,11 +225,23 @@ anno_boxplot <- function(data,
             class = "anno_boxplot")
 }
 
-#' @rdname anno_special
+
+#' Heatmap annotation
+#' @title Heatmap annotation
+#' @param mapping aesthetic mappings parameters.
+#' @param data a data frame.
+#' @param align align base on main plot.
+#' the bottom side will be flipped.
+#' @param width width and height of annotation.
 #' @param geom one of "anno_tile", "anno_tile2" or "point".
 #' @param mark a layer instance.
 #' @param space scala numeric value.
 #' @param label logical value, if TRUE will add label on plot.
+#' @param label.size,label.colour,label.family,label.fontface parameters for label.
+#' @param ... extra parameters.
+#' @return a anno_*_heat object.
+#' @rdname anno_heatmap
+#' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 anno_row_heat <- function(data,
                           mapping = NULL,
@@ -257,7 +268,7 @@ anno_row_heat <- function(data,
             class = "anno_row_heat")
 }
 
-#' @rdname anno_special
+#' @rdname anno_heatmap
 #' @export
 anno_col_heat <- function(data,
                           mapping = NULL,

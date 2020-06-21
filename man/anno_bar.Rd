@@ -4,9 +4,7 @@
 \alias{anno_bar}
 \alias{anno_bar2}
 \alias{anno_boxplot}
-\alias{anno_row_heat}
-\alias{anno_col_heat}
-\title{Custom annotation}
+\title{Bar and boxplot annotation}
 \usage{
 anno_bar(
   data,
@@ -48,38 +46,6 @@ anno_boxplot(
   theme = NULL,
   ...
 )
-
-anno_row_heat(
-  data,
-  mapping = NULL,
-  align = TRUE,
-  geom = "anno_tile",
-  mark = NULL,
-  space = 0.5,
-  width = 1,
-  label = TRUE,
-  label.size = 3.88,
-  label.colour = "black",
-  label.family = "",
-  label.fontface = 1,
-  ...
-)
-
-anno_col_heat(
-  data,
-  mapping = NULL,
-  align = TRUE,
-  geom = "anno_tile2",
-  mark = NULL,
-  space = 0.5,
-  height = 1,
-  label = TRUE,
-  label.size = 3.88,
-  label.colour = "black",
-  label.family = "",
-  label.fontface = 1,
-  ...
-)
 }
 \arguments{
 \item{data}{a data frame.}
@@ -102,22 +68,12 @@ the bottom side will be flipped.}
 \item{theme}{theme object or the name.}
 
 \item{...}{extra parameters.}
-
-\item{geom}{one of "anno_tile", "anno_tile2" or "point".}
-
-\item{mark}{a layer instance.}
-
-\item{space}{scala numeric value.}
-
-\item{label}{logical value, if TRUE will add label on plot.}
-
-\item{label.size, label.colour, label.family, label.fontface}{parameters for label.}
 }
 \value{
-anno_* object.
+a anno_* object.
 }
 \description{
-Custom annotation
+Bar and boxplot annotation
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
