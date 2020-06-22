@@ -141,9 +141,8 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
     full = if(pos == "right") 0 else 1
   )
 
-  geom <- paste0("geom_", object$geom)
   obj <- list(
-    do.call(geom, params),
+    do.call(geom_curve2, params),
     do.call(geom_text,
             list(mapping = aes_string(x = "x", y = "y", label = "label"),
                  data = node.data, hjust = hjust, size = object$label.size,
@@ -166,7 +165,11 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
     plot + anno_row_custom(p, width = width, pos = pos)
   } else {
     plot <- plot + expand_axis(x = xrange, y = yrange)
-    ggplot_add(object = obj, plot = plot)
+
+    # reset scale
+    new_scale <- new_scales(c("colour", "size", "linetype", "alpha"))
+    obj <- c(new_scale, obj)
+    ggplot_add(object = obj, plot = plot, object_name = object_name)
   }
 }
 
@@ -196,7 +199,7 @@ ggplot_add.p_xaxis <- function(object, plot, object_name) {
   args <- list(mapping = aes_modify(ggplot2::aes_all(names(data)), object$mapping),
                data = data, inherit.aes = FALSE)
   obj <- do.call(geom_text, modifyList(args, object$params))
-  ggplot_add(obj, plot)
+  ggplot_add(obj, plot, object_name)
 }
 
 #' @importFrom ggplot2 ggplot_add geom_text
@@ -1054,7 +1057,7 @@ ggplot_add.anno_network <- function(object, plot, object_name) {
   name <- names(args)
   edge.name <- c("edge_width", "edge_colour", "edge_linetype", "edge_alpha", "arrow",
                  "arrow.fill", "lineend", "linejion", "na.rm")
-  params <- args[name %in% edge.name]
+  params <- long_to_short(args[name %in% edge.name])
   params2 <- args[!(name %in% edge.name) || (name == "na.rm")]
   mapping <- aes_modify(aes_string(x = "x", y = "y", xend = "xend", yend = "yend"),
                         object$mapping)
@@ -1062,8 +1065,26 @@ ggplot_add.anno_network <- function(object, plot, object_name) {
   params <- modifyList(list(mapping = mapping, data = edges, inherit.aes = FALSE), params)
   params2 <- modifyList(list(mapping = mapping2, data = nodes, inherit.aes = FALSE), params2)
   obj <- list(
+    new_scales("size", "colour", "linetype", "alpha"),
     do.call(geom_segment2, params),
+    new_scales("size", "colour", "fill", "shape"),
     do.call(geom_point, params2)
   )
+
   ggplot_add(obj, plot, object_name)
+}
+
+#' @noRd
+long_to_short <- function(params) {
+  nm <- names(params)
+  if("edge_color" %in% nm) {
+    nm[which(nm == "edge_color")] <- "edge_colour"
+  }
+  if("edge_width" %in% nm) {
+    nm[which(nm == "edge_width")] <- "edge_size"
+  }
+  id <- nm %in% c("edge_colour", "edge_size", "edge_linetype", "edge_alpha")
+  nm[id] <- sub("edge_", "", nm[id], fixed = TRUE)
+  names(params) <- nm
+  params
 }

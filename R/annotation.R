@@ -50,10 +50,8 @@ anno_col_tree <- function(bcols = NULL,
 
 #' Link annotation
 #' @title Link annotation
-#' layers of curves, nodes, and labels.
-#' @param mapping aesthetic mappings parameters.
 #' @param data a data frame.
-#' @param geom one of "links" (default) or "links2".
+#' @param mapping aesthetic mappings parameters.
 #' @param width width of link plot.
 #' @param pos position of link plot.
 #' @param start.var,end.var character to specify which variable is the starting
@@ -71,7 +69,6 @@ anno_col_tree <- function(bcols = NULL,
 #' @export
 anno_link <- function(data,
                       mapping = NULL,
-                      geom = "links",
                       width = 0.3,
                       pos = "right",
                       label.size = 3.88,
@@ -85,21 +82,13 @@ anno_link <- function(data,
                       end.var = NULL,
                       ...)
 {
-  geom <- match.arg(geom, c("links", "links2"))
   start.var <- rlang::enquo(start.var)
   end.var <- rlang::enquo(end.var)
-  if(!is.null(mapping) && geom == "links2") {
-    mapping <- short_to_long(mapping)
-  }
-  params <- list(...)
-  if(!is.null(params) && geom == "links2") {
-    params <- short_to_long(params)
-  }
-  structure(.Data = list(mapping = mapping, data = data, geom = geom, width = width,
-                         pos = pos, label.size = label.size, label.colour = label.colour,
+  structure(.Data = list(mapping = mapping, data = data, width = width, pos = pos,
+                         label.size = label.size, label.colour = label.colour,
                          label.family = label.family, label.fontface = label.fontface,
                          nudge_x = nudge_x, start.var = start.var, start.name = start.name,
-                         end.var = end.var, params = params),
+                         end.var = end.var, params = list(...)),
             class = "anno_link")
 }
 
@@ -305,7 +294,7 @@ anno_col_heat <- function(data,
 #' @return a anno_network object.
 #' @note Loading the \code{ggraph} package first makes this function even more functional.
 #' @rdname anno_network
-#' @seealso \code{\link{geom_links2}}.
+#' @seealso \code{\link{geom_segment2}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 

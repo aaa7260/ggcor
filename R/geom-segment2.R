@@ -9,18 +9,18 @@
 #'       \item \strong{\code{y}}
 #'       \item \strong{\code{xend}}
 #'       \item \strong{\code{yend}}
-#'       \item \code{edge_alpha}
-#'       \item \code{edge_colour}
-#'       \item \code{edge_linetype}
-#'       \item \code{edge_width}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{linetype}
+#'       \item \code{width}
 #'    }
-#' @importFrom ggplot2 layer ggproto geom_segment GeomSegment aes
+#' @importFrom ggplot2 layer ggproto geom_segment GeomSegment aes draw_key_path
 #' @rdname geom_segment2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_segment2 <- function(mapping = NULL, 
+geom_segment2 <- function(mapping = NULL,
                           data = NULL,
-                          stat = "identity", 
+                          stat = "identity",
                           position = "identity",
                           ...,
                           na.rm = FALSE,
@@ -34,11 +34,9 @@ geom_segment2 <- function(mapping = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = short_to_long(
-      list(
-        na.rm = na.rm,
-        ...
-      )
+    params = list(
+      na.rm = na.rm,
+      ...
     )
   )
 }
@@ -49,8 +47,7 @@ geom_segment2 <- function(mapping = NULL,
 #' @export
 GeomSegment2 <- ggproto(
   "GeomSegment2", GeomSegment,
-  default_aes = aes(edge_colour = "grey35", edge_width = 0.5, edge_linetype = 1,
-                    edge_alpha = NA),
+  default_aes = aes(colour = "grey35", size = 0.5, linetype = 1, alpha = NA),
   required_aes = c("x", "y", "xend", "yend"),
   draw_panel = function(data, panel_params, coord, arrow = NULL, arrow.fill = NULL,
                         lineend = "butt", linejoin = "round", na.rm = FALSE) {
@@ -68,10 +65,10 @@ GeomSegment2 <- ggproto(
            grid::segmentsGrob(coords$x, coords$y, coords$xend, coords$yend,
                  default.units = "native",
                  gp = grid::gpar(
-                   col = scales::alpha(coords$edge_colour, coords$edge_alpha),
-                   fill = scales::alpha(arrow.fill, coords$edge_alpha),
-                   lwd = coords$edge_width * ggplot2::.pt,
-                   lty = coords$edge_linetype,
+                   col = scales::alpha(coords$colour, coords$alpha),
+                   fill = scales::alpha(arrow.fill, coords$alpha),
+                   lwd = coords$size * ggplot2::.pt,
+                   lty = coords$linetype,
                    lineend = lineend,
                    linejoin = linejoin
                  ),
@@ -79,20 +76,5 @@ GeomSegment2 <- ggproto(
                  )
            )
   },
-  draw_key = draw_key_path2
+  draw_key = draw_key_path
 )
-
-#' @noRd
-short_to_long <- function(params) {
-  nm <- names(params)
-  if("color" %in% nm) {
-    nm[which(nm == "color")] <- "colour"
-  }
-  if("size" %in% nm) {
-    nm[which(nm == "size")] <- "width"
-  }
-  id <- nm %in% c("colour", "width", "linetype", "size")
-  nm[id] <- paste0("edge_", nm[id])
-  names(params) <- nm
-  params
-}

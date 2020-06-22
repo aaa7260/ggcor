@@ -23,9 +23,9 @@ Depends:
     R (>= 3.5.0)
 Imports:
     dplyr,
-    digest,
     ggplot2 (>= 3.0.0),
     grid,
+    ggnewscale,
     igraph,
     patchwork,
     purrr,
@@ -41,7 +41,6 @@ Suggests:
     ambient,
     dendextend,
     ggimage,
-    ggnewscale,
     ggraph,
     ggtree,
     knitr,
@@ -77,10 +76,9 @@ Collate:
     'geom-colour.R'
     'geom-conf.R'
     'geom-cross.R'
+    'geom-curve2.R'
     'geom-diag-label.R'
     'geom-ellipse2.R'
-    'geom-links.R'
-    'geom-links2.R'
     'geom-mark.R'
     'geom-num.R'
     'geom-panel-grid.R'
@@ -94,7 +92,6 @@ Collate:
     'get-order.R'
     'ggcor-packages.R'
     'ggcor.R'
-    'guide-colourbar2.R'
     'liner-trans.R'
     'link-tbl.R'
     'matrix-order.R'

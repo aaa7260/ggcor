@@ -1,25 +1,25 @@
-#' Curve layer with custom aesthetics
+#' Curve layer
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_curve
 #' @section Aesthetics:
-#' \code{geom_links2()} understands the following aesthetics (required aesthetics are in bold):
+#' \code{geom_links()} understands the following aesthetics (required aesthetics are in bold):
 #'     \itemize{
 #'       \item \strong{\code{x}}
 #'       \item \strong{\code{y}}
 #'       \item \strong{\code{xend}}
 #'       \item \strong{\code{yend}}
-#'       \item \code{edge_alpha}
-#'       \item \code{edge_colour}
-#'       \item \code{edge_linetype}
-#'       \item \code{edge_width}
+#'       \item \code{alpha}
+#'       \item \code{colour}
+#'       \item \code{linetype}
+#'       \item \code{size}
 #'   }
-#' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint
+#' @importFrom ggplot2 layer ggproto GeomCurve GeomPoint draw_key_path
 #' @importFrom grid gTree
-#' @rdname geom_links2
+#' @rdname geom_curve2
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-geom_links2 <- function(mapping = NULL,
+geom_curve2 <- function(mapping = NULL,
                         data = NULL,
                         stat = "identity",
                         position = "identity",
@@ -37,33 +37,31 @@ geom_links2 <- function(mapping = NULL,
     data = data,
     mapping = mapping,
     stat = stat,
-    geom = GeomLinks2,
+    geom = GeomCurve2,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = short_to_long(
-      list(
-        curvature = curvature,
-        angle = angle,
-        ncp = ncp,
-        arrow = arrow,
-        arrow.fill = arrow.fill,
-        lineend = lineend,
-        na.rm = na.rm,
-        ...
-      )
+    params = list(
+      curvature = curvature,
+      angle = angle,
+      ncp = ncp,
+      arrow = arrow,
+      arrow.fill = arrow.fill,
+      lineend = lineend,
+      na.rm = na.rm,
+      ...
     )
   )
 }
 
-#' @rdname geom_links2
+#' @rdname geom_curve2
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomLinks2 <- ggproto(
-  "GeomLinks2", GeomCurve,
-  default_aes = aes(edge_colour = "grey35", edge_width = 0.5, edge_linetype = 1,
-                    edge_alpha = NA),
+GeomCurve2 <- ggproto(
+  "GeomCurve2", GeomCurve,
+  default_aes = aes(colour = "grey35", size = 0.5, linetype = 1,
+                    alpha = NA),
   required_aes = c("x", "y", "xend", "yend"),
 
   draw_panel = function(self, data, panel_params, coord, rm.dup = TRUE,
@@ -73,7 +71,6 @@ GeomLinks2 <- ggproto(
     if(empty(data)) {
       return(ggplot2::zeroGrob())
     }
-    data <- long_to_short(data)
     aesthetics <- setdiff(names(data), c("x", "y", "xend", "yend", "colour",
                                          "fill", "size", "linetype"))
     start.colour <- node.colour[1]
@@ -108,7 +105,7 @@ GeomLinks2 <- ggproto(
       end.data <- cbind(end.data, data[aesthetics])
     }
     ggname(
-      "geom_links2",
+      "geom_curve2",
       grid::gTree(
         children = grid::gList(
           GeomCurve$draw_panel(data, panel_params, coord, curvature = curvature,
@@ -121,20 +118,5 @@ GeomLinks2 <- ggproto(
       )
     )
   },
-  draw_key = draw_key_path2
+  draw_key = draw_key_path
 )
-
-#' @noRd
-long_to_short <- function(params) {
-  nm <- names(params)
-  if("edge_color" %in% nm) {
-    nm[which(nm == "edge_color")] <- "edge_colour"
-  }
-  if("edge_width" %in% nm) {
-    nm[which(nm == "edge_width")] <- "edge_size"
-  }
-  id <- nm %in% c("edge_colour", "edge_size", "edge_linetype", "edge_alpha")
-  nm[id] <- sub("edge_", "", nm[id], fixed = TRUE)
-  names(params) <- nm
-  params
-}

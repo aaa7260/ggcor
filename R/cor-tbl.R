@@ -11,10 +11,10 @@
 #' @param row.order,col.order row/column order of correlation matrix.
 #' @param cluster a logical value indicating whether reorder the correlation matrix
 #'     by clustering, default is FALSE.
-#' @param ... extra params passing to \code{\link[ggcor]{cor_tbl}}.
-#' @details \code{cluster = TRUE} just supports for symmetric correlation matrix.
+#' @param ... extra params passing to \code{\link{matrix_order}}.
 #' @return a cor_tbl object.
 #' @importFrom utils modifyList
+#' @importFrom stats setNames
 #' @rdname cor_tbl
 #' @examples
 #' cor_tbl(cor(mtcars))

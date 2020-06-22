@@ -37,7 +37,7 @@ lower triangular or upper triangular matrix.}
 \item{cluster}{a logical value indicating whether reorder the correlation matrix
 by clustering, default is FALSE.}
 
-\item{...}{extra params passing to \code{\link[ggcor]{cor_tbl}}.}
+\item{...}{extra params passing to \code{\link{matrix_order}}.}
 }
 \value{
 a cor_tbl object.
@@ -47,8 +47,6 @@ Functions to create cor_tbl object from correlation matrix.
 }
 \details{
 Create a cor_tbl object
-
-\code{cluster = TRUE} just supports for symmetric correlation matrix.
 }
 \examples{
 cor_tbl(cor(mtcars))

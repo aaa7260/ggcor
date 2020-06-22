@@ -27,7 +27,7 @@ Network annotation
 Loading the \code{ggraph} package first makes this function even more functional.
 }
 \seealso{
-\code{\link{geom_links2}}.
+\code{\link{geom_segment2}}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
