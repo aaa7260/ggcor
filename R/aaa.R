@@ -10,7 +10,7 @@ get_function <- function(pkg, fun) {
 #' @noRd
 new_scales <- function(...) {
   scales <- list(...)
-  if(length(...) == 0) 
+  if(length(scales) == 0) 
     return(NULL)
   lapply(scales, new_scale)
 }

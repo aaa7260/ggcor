@@ -136,8 +136,8 @@ quickcor <- function(x,
         theme_cor(legend.position = legend.position)
     }
   }
-  if(!is.null(options("ggcor.style"))) {
-    p <- p + options("ggcor.style")
+  if(!is.null(options("ggcor.scale"))) {
+    p <- p + options("ggcor.scale")
   }
   class(p) <- c("quickcor", class(p))
   p

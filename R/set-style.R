@@ -1,22 +1,20 @@
-#' Set the style of correlation matrix plot
-#' @title Set style
+#' Set the continuous fill scale of correlation matrix plot
+#' @title Set scale
 #' @param pal NULL or colours.
-#' @param type a scale function or character of scale name (should be one of 
+#' @param type a scale function or character of scale name (should be one of
 #' "gradient", "viridis" or "gradient2n").
 #' @param legend.title a string of colour bar title.
 #' @param nbin a scala integer.
 #' @param ... extra parameters for scale function.
 #' @importFrom ggplot2 guides guide_colorbar scale_fill_gradient scale_fill_viridis_c
-#' @rdname set_style
-#' @examples 
-#' set_style()
+#' @rdname set_scale
+#' @examples
+#' set_scale()
 #' quickcor(mtcars) + geom_square()
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-set_style <- function(pal = NULL,
+set_scale <- function(pal = NULL,
                       type = "gradient2n",
-                      legend.title = "Corr",
-                      nbin = 40,
                       ...
                       ) {
   if(!is.function(type)) {
@@ -36,17 +34,11 @@ set_style <- function(pal = NULL,
   } else {
     scale_fill_gradient2n(colours = pal, ...)
   }
-  guide <- if(inherits(scale, "ScaleBinned")) {
-    guides(fill = ggplot2::guide_colorsteps(title = legend.title))
-  } else {
-    guides(fill = guide_colourbar(title = legend.title,
-                                   nbin  = nbin))
-  }
-  options(ggcor.style = list(scale, guide))
+  options(ggcor.scale = scale)
 }
 
 #' @rdname set_style
 #' @export
-reset_style <- function() {
-  options(ggcor.style = NULL)
+reset_scale <- function() {
+  options(ggcor.scale = NULL)
 }

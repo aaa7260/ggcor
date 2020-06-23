@@ -167,7 +167,7 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
     plot <- plot + expand_axis(x = xrange, y = yrange)
 
     # reset scale
-    new_scale <- new_scales(c("colour", "size", "linetype", "alpha"))
+    new_scale <- new_scales("colour", "size", "linetype", "alpha")
     obj <- c(new_scale, obj)
     ggplot_add(object = obj, plot = plot, object_name = object_name)
   }
@@ -933,7 +933,7 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
     warning("Invalid 'mark' type.", call. = FALSE)
   }
 
-  new_scale <- new_scales(c("fill", "colour", "alpha", "size"))
+  new_scale <- new_scales("fill", "colour", "alpha", "size")
   obj <- c(new_scale, obj)
   ggplot_add(obj, plot, object_name)
 }
@@ -1022,7 +1022,7 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
     warning("Invalid 'mark' type.", call. = FALSE)
   }
 
-  new_scale <- new_scales(c("fill", "colour", "alpha", "size"))
+  new_scale <- new_scales("fill", "colour", "alpha", "size")
   obj <- c(new_scale, obj)
   ggplot_add(obj, plot, object_name)
 }
