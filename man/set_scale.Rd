@@ -2,9 +2,12 @@
 % Please edit documentation in R/set-style.R
 \name{set_scale}
 \alias{set_scale}
+\alias{reset_scale}
 \title{Set scale}
 \usage{
 set_scale(pal = NULL, type = "gradient2n", ...)
+
+reset_scale()
 }
 \arguments{
 \item{pal}{NULL or colours.}

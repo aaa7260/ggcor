@@ -125,8 +125,8 @@ quickcor <- function(x,
     }
 
     # add theme and coord
-    xlim <- c(0.5 - 0.002 * m, m + 0.5 + 0.002 * m)
-    ylim <- c(0.5 - 0.002 * n, n + 0.5 + 0.002 * n)
+    xlim <- c(0.5, m + 0.5)
+    ylim <- c(0.5, n + 0.5)
 
     if(isTRUE(fixed.xy)) {
       p <- p + coord_fixed(xlim = xlim, ylim = ylim) +

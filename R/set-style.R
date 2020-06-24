@@ -37,7 +37,7 @@ set_scale <- function(pal = NULL,
   options(ggcor.scale = scale)
 }
 
-#' @rdname set_style
+#' @rdname set_scale
 #' @export
 reset_scale <- function() {
   options(ggcor.scale = NULL)

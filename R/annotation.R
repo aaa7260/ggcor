@@ -217,8 +217,8 @@ anno_boxplot <- function(data,
 
 #' Heatmap annotation
 #' @title Heatmap annotation
-#' @param mapping aesthetic mappings parameters.
 #' @param data a data frame.
+#' @param mapping aesthetic mappings parameters.
 #' @param align align base on main plot.
 #' the bottom side will be flipped.
 #' @param width,height width and height of annotation.

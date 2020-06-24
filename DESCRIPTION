@@ -98,6 +98,7 @@ Collate:
     'mantel-test.R'
     'methods-ggplotadd.R'
     'procrutes-test.R'
+    'qheatmap.R'
     'quickcor.R'
     'rand-correlate.R'
     'random-forest.R'
