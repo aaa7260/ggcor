@@ -106,7 +106,7 @@ Collate:
     'remove-axis.R'
     'scale-gradient2n.R'
     'scale-radius.R'
-    'set-style.R'
+    'set-scale.R'
     'theme-cor.R'
     'utils-circular.R'
     'utils-colour-pal.R'

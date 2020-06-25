@@ -3,8 +3,6 @@
 #' @param pal NULL or colours.
 #' @param type a scale function or character of scale name (should be one of
 #' "gradient", "viridis" or "gradient2n").
-#' @param legend.title a string of colour bar title.
-#' @param nbin a scala integer.
 #' @param ... extra parameters for scale function.
 #' @importFrom ggplot2 guides guide_colorbar scale_fill_gradient scale_fill_viridis_c
 #' @rdname set_scale
