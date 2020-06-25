@@ -5,7 +5,7 @@ ggplot_add.geom_panel_grid <- function(object, plot, object_name) {
                       data = get_grid_data(plot$data, drop = drop),
                       colour = object$colour, size = object$size,
                       inherit.aes = FALSE)
-  ggplot_add(object = obj, plot = plot)
+  ggplot_add(object = obj, plot = plot, object_name = object_name)
 }
 
 #' @noRd
@@ -487,11 +487,18 @@ ggplot_add.anno_hc_bar <- function(object, plot, object_name) {
              scale_x_continuous(limits = c(0.5 * object$width, 1.5 * object$width), expand = c(0, 0)) +
              scale_y_continuous(limits = yrange(plot), expand = c(0, 0)) +
              theme_void()
+      if(!plot$coordinates$is_free()) {
+        obj <- obj + coord_fixed()
+      }
       .anno_row(plot, obj, object$width / ncols(plot$data), pos = pos)
     } else {
       obj <- obj +
         scale_x_continuous(limits = xrange(plot), expand = c(0, 0)) +
-        scale_y_continuous(limits = c(0.5 * object$height, 1.5 * object$height), expand = c(0, 0))
+        scale_y_continuous(limits = c(0.5 * object$height, 1.5 * object$height), expand = c(0, 0)) +
+        theme_void()
+      if(!plot$coordinates$is_free()) {
+        obj <- obj + coord_fixed()
+      }
       .anno_col(plot, obj, object$height / nrows(plot$data), pos = pos)
     }
   }

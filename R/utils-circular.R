@@ -34,11 +34,11 @@ calc_polar_params <- function(cor_tbl,
   open <- open %% 360
   ratio <- open / 360
   xlim <- c(- cols * inner, cols * (1 + outer)) + 0.5
-  ylim <- c(0, max(rows / (1 - ratio), rows + 0.5))
+  ylim <- c(0.5, max(rows / (1 - ratio) + 0.5, rows + 0.5))
 
-  start <- - (1 - ratio) * pi / rows + one_degree()
+  start <- one_degree()
   ut.degree <- diff(ylim) / 360
-  t <- 1:rows * 360 / diff(ylim) + 90
+  t <- (1:rows) * 360 / diff(ylim) + 90
 
   yaxis_df <- new_data_frame(
     list(x = 0.5 + 1.05 * cols,
