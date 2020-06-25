@@ -929,8 +929,6 @@ ggplot_add.anno_row_heat <- function(object, plot, object_name) {
       })
       obj <- c(obj, mark)
     }
-  } else {
-    warning("Invalid 'mark' type.", call. = FALSE)
   }
 
   new_scale <- new_scales("fill", "colour", "alpha", "size")
@@ -1018,8 +1016,6 @@ ggplot_add.anno_col_heat <- function(object, plot, object_name) {
       })
       obj <- c(obj, mark)
     }
-  } else {
-    warning("Invalid 'mark' type.", call. = FALSE)
   }
 
   new_scale <- new_scales("fill", "colour", "alpha", "size")
