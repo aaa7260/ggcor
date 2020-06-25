@@ -87,7 +87,7 @@ ggplot_add.geom_diag_label <- function(object, plot, object_name) {
   ggplot_add(object = obj, plot = plot)
 }
 
-#' @importFrom ggplot2 ggplot_add aes_string expansion
+#' @importFrom ggplot2 ggplot_add aes_string
 #' @export
 ggplot_add.anno_link <- function(object, plot, object_name) {
   if(isTRUE(plot$plot_env$circlar)) {
@@ -153,7 +153,7 @@ ggplot_add.anno_link <- function(object, plot, object_name) {
   if(type == "full") {
     width <- object$width
     if(is.null(object$expand)) {
-      expand <- if(pos == "left") expansion(c(0.5, 0.05)) else expansion(c(0.05, 0.5))
+      expand <- if(pos == "left") c(0.5, 0, 0.05, 0) else c(0.05, 0, 0.5, 0)
     }
     p <- ggplot() + obj +
       scale_x_continuous(expand = expand) +
