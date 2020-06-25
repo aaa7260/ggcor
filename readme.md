@@ -19,6 +19,7 @@ devtools::install_github("houyunhuang/ggcor")
 ``` r
 library(ggplot2)
 library(ggcor)
+set_scale()
 quickcor(mtcars) + geom_square()
 ```
 
@@ -43,6 +44,7 @@ quickcor(mtcars, cor.test = TRUE) +
 
 ``` r
 library(dplyr)
+#> Warning: package 'dplyr' was built under R version 3.6.2
 data("varechem", package = "vegan")
 data("varespec", package = "vegan")
 
@@ -82,6 +84,7 @@ rand_correlate(100, 8) %>% ## require ambient packages
   anno_col_tree() +
   set_p_xaxis() +
   set_p_yaxis()
+#> Warning: Removed 8 rows containing missing values (geom_text).
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
@@ -89,23 +92,23 @@ rand_correlate(100, 8) %>% ## require ambient packages
 ## General heatmap
 
 ``` r
-dd <- rand_dataset(10, 120) %>% 
+d1 <- rand_dataset(20, 30) %>% 
   gcor_tbl(cluster = TRUE)
-dd1 <- rand_dataset(3, 120, col.names = LETTERS[1:3]) %>% 
-  gcor_tbl(cluster = TRUE, "LETTERS")
-dd2 <- rand_dataset(10, 3, row.names = letters[1:3]) %>% 
-  gcor_tbl(cluster = TRUE, "letters")
-quickcor(dd, inner = 1.2, outer = 0.8, open = 60, circular = TRUE) +
-  geom_colour(aes(fill = value), colour = NA) +
-  anno_row_heat(dd1, aes(fill0 = LETTERS), width = 1.2) +
-  anno_col_heat(dd2, aes(colour = letters), height = 1.2, geom = "point") +
-  anno_row_tree(bcols = c("#E41A1C", "#377EB8", "#4DAF4A")) +
-  anno_col_tree() +
-  set_p_xaxis(size = 2.8) +
-  set_p_yaxis(size = 2.8) +
-  scale_fill_distiller() +
-  scale_fill0_gradientn(colours = red_blue()) +
-  scale_colour_viridis_b()
+p <- matrix(sample(LETTERS[1:4], 90, replace = TRUE), nrow = 30,
+             dimnames = list(paste0("sample", 1:30), paste0("Type", 1:3))) %>% 
+  gcor_tbl(name = "Type", row.order = d1) %>% 
+  qheatmap(aes(fill = Type)) + coord_fixed() + remove_y_axis()
+d2 <- data.frame(x = sample(paste0("var", 1:20), 200, replace = TRUE))
+
+set_scale()
+quickcor(d1) +
+  geom_colour(aes(fill = value)) +
+  anno_hc_bar(width = 1) +
+  anno_row_custom(p) +
+  anno_row_tree() +
+  anno_hc_bar(pos = "top") +
+  anno_bar(d2, aes(x = x), height = 0.12) +
+  anno_col_tree(height = 0.12)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />
