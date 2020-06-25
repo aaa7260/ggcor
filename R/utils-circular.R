@@ -48,7 +48,7 @@ calc_polar_params <- function(cor_tbl,
          hjust = ifelse(t > 90 & t < 270, 1, 0)))
   xaxis_df <- new_data_frame(
     list(x = 1:cols,
-         y = max(0.5 - ut.degree, 0),
+         y = ylim[2] - ut.degree,
          label = col.names,
          angle = 0,
          hjust = 0)
