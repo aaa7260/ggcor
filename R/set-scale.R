@@ -32,11 +32,12 @@ set_scale <- function(pal = NULL,
   } else {
     scale_fill_gradient2n(colours = pal, ...)
   }
-  options(ggcor.scale = scale)
+
+  options(scale_fill_continuous = scale)
 }
 
 #' @rdname set_scale
 #' @export
 reset_scale <- function() {
-  options(ggcor.scale = NULL)
+  options(scale_fill_continuous = NULL)
 }

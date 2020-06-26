@@ -136,8 +136,10 @@ quickcor <- function(x,
         theme_cor(legend.position = legend.position)
     }
   }
-  if(!is.null(options("ggcor.scale"))) {
-    p <- p + options("ggcor.scale")
+
+  scale_fill_continuous <- options("scale_fill_continuous")
+  if(!is.null(scale_fill_continuous)) {
+    p <- p + scale_fill_continuous
   }
   class(p) <- c("quickcor", class(p))
   p
