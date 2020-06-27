@@ -24,6 +24,7 @@ Depends:
 Imports:
     dplyr,
     ggplot2 (>= 3.0.0),
+    graphics,
     grid,
     ggnewscale,
     igraph,
