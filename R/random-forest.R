@@ -7,7 +7,6 @@
 #' @param ... extra parameters.
 #' @return a rand_forest object.
 #' @rdname random_forest
-#' @importFrom stats complete.cases
 #' @examples \dontrun{
 #' spec <- mtcars[c(1, 3, 4, 5)]
 #' env <- mtcars[6:11]
