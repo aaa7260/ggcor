@@ -3,6 +3,7 @@
 \name{calc_relimp}
 \alias{calc_relimp}
 \alias{print.calc_relimp}
+\alias{plot.calc_relimp}
 \title{Relative importance}
 \usage{
 calc_relimp(
@@ -16,6 +17,8 @@ calc_relimp(
 )
 
 \method{print}{calc_relimp}(x, ...)
+
+\method{plot}{calc_relimp}(x, ...)
 }
 \arguments{
 \item{spec, env}{a data.frame object.}

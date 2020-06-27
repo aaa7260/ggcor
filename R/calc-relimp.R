@@ -70,9 +70,11 @@ calc_relimp <- function(spec,
                                                 stringsAsFactors = FALSE),
                          importance = as.data.frame(importance),
                          p.value = as.data.frame(p.value)),
+            byrow = byrow,
             class = "calc_relimp")
 }
 
+#' @method print calc_relimp
 #' @rdname calc_relimp
 #' @export
 print.calc_relimp <- function(x, ...) {
@@ -85,6 +87,26 @@ print.calc_relimp <- function(x, ...) {
   cat("Var importance p value:\n")
   print(x$p.value)
 }
+
+#' @method plot calc_relimp
+#' @rdname calc_relimp
+#' @importFrom graphics plot
+#' @export
+plot.calc_relimp <- function(x, ...) {
+  byrow <- attr(x, "byrow")
+  data <- gcor_tbl(x$importance, "importance", p.value = x$p.value)
+  importance <- p.value <- explained <- name <- NULL
+  p <- quickcor(data) +
+    geom_colour(aes(fill = importance)) +
+    geom_cross(aes(p.value = p.value))
+  if(isTRUE(byrow)) {
+    p <- p + anno_bar2(x$explained, aes(x = explained, y = name))
+  } else {
+    p <- p + anno_bar2(x$explained, aes(x = name, y = explained))
+  }
+  p
+}
+
 
 #' @noRd
 extract_s4 <- function(x, e) {

@@ -11,7 +11,7 @@
 #' @examples \dontrun{
 #' spec <- mtcars[c(1, 3, 4, 5)]
 #' env <- mtcars[6:11]
-#' rand_forest(spec, env)
+#' random_forest(spec, env)
 #' }
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
@@ -74,9 +74,11 @@ random_forest <- function(spec,
                                                 stringsAsFactors = FALSE),
                          importance = as.data.frame(importance),
                          p.value = as.data.frame(p.value)),
+            byrow = byrow,
             class = "random_forest")
 }
 
+#' @method print random_forest
 #' @rdname random_forest
 #' @export
 print.random_forest <- function(x, ...) {
@@ -88,4 +90,23 @@ print.random_forest <- function(x, ...) {
   cat("\n")
   cat("Var importance p value:\n")
   print(x$p.value)
+}
+
+#' @method plot random_forest
+#' @rdname random_forest
+#' @importFrom graphics plot
+#' @export
+plot.random_forest <- function(x, ...) {
+  byrow <- attr(x, "byrow")
+  data <- gcor_tbl(x$importance, "importance", p.value = x$p.value)
+  importance <- p.value <- explained <- name <- NULL
+  p <- quickcor(data) +
+    geom_colour(aes(fill = importance)) +
+    geom_cross(aes(p.value = p.value))
+  if(isTRUE(byrow)) {
+    p <- p + anno_bar2(x$explained, aes(x = explained, y = name))
+  } else {
+    p <- p + anno_bar2(x$explained, aes(x = name, y = explained))
+  }
+  p
 }

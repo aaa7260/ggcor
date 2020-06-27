@@ -3,11 +3,14 @@
 \name{random_forest}
 \alias{random_forest}
 \alias{print.random_forest}
+\alias{plot.random_forest}
 \title{Random forests}
 \usage{
 random_forest(spec, env, byrow = TRUE, seed = 123, ...)
 
 \method{print}{random_forest}(x, ...)
+
+\method{plot}{random_forest}(x, ...)
 }
 \arguments{
 \item{spec, env}{a data.frame object.}
@@ -30,7 +33,7 @@ Random forests
 \dontrun{
 spec <- mtcars[c(1, 3, 4, 5)]
 env <- mtcars[6:11]
-rand_forest(spec, env)
+random_forest(spec, env)
 }
 }
 \author{
