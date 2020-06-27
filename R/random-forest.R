@@ -104,9 +104,9 @@ plot.random_forest <- function(x, ...) {
     geom_colour(aes(fill = importance)) +
     geom_cross(aes(p.value = p.value))
   if(isTRUE(byrow)) {
-    p <- p + anno_bar2(x$explained, aes(x = explained, y = name))
+    p <- p + anno_bar2(x$explained, aes(x = explained, y = name), fill = "#377EB8")
   } else {
-    p <- p + anno_bar2(x$explained, aes(x = name, y = explained))
+    p <- p + anno_bar2(x$explained, aes(x = name, y = explained), fill = "#377EB8")
   }
   p
 }
