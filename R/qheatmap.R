@@ -11,9 +11,19 @@
 #' @examples
 #' data <- gcor_tbl(mtcars)
 #' qheatmap(data, aes(fill = value))
+#'
+#' library(ggplot2)
+#' p <- matrix(sample(LETTERS[1:3], 33, replace = TRUE), nrow = 11) %>%
+#'      gcor_tbl() %>%
+#'      qheatmap(aes(fill = value), zoom_x = 0.5) +
+#'      remove_y_axis() +
+#'      coord_fixed()
+#' quickcor(mtcars) +
+#'   geom_square() +
+#'   anno_row_custom(p)
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-qheatmap <- function(data, 
+qheatmap <- function(data,
                      mapping = NULL,
                      geom = "tile",
                      zoom_x = 1,
@@ -37,15 +47,15 @@ qheatmap <- function(data,
     params <- modifyList(list(width = zoom_x, height = zoom_y), params)
   }
   obj <- do.call(geom, params)
-  p <- ggplot(data = data, mapping = mapping) + 
-    obj + 
+  p <- ggplot(data = data, mapping = mapping) +
+    obj +
     scale_x_continuous(limits = c(0.5, m + 0.5) * zoom_x,
-                       breaks = xbrks, 
-                       labels = xlabel, 
+                       breaks = xbrks,
+                       labels = xlabel,
                        expand = c(0, 0)) +
     scale_y_continuous(limits = c(0.5, n + 0.5) * zoom_y,
-                       breaks = ybrks, 
-                       labels = ylabel, 
+                       breaks = ybrks,
+                       labels = ylabel,
                        expand = c(0, 0)) +
     theme_cor(plot.margin = ggplot2::margin())
   p

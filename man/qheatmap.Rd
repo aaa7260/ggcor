@@ -29,6 +29,16 @@ This function is mainly used to add annotation.
 \examples{
 data <- gcor_tbl(mtcars)
 qheatmap(data, aes(fill = value))
+
+library(ggplot2)
+p <- matrix(sample(LETTERS[1:3], 33, replace = TRUE), nrow = 11) \%>\%
+     gcor_tbl() \%>\%
+     qheatmap(aes(fill = value), zoom_x = 0.5) +
+     remove_y_axis() +
+     coord_fixed()
+quickcor(mtcars) +
+  geom_square() +
+  anno_row_custom(p)
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
