@@ -1,16 +1,16 @@
 #' Matrix of Correlations, P-values and confidence intervals
 #' @description \code{correlate} uses \code{cor} to find the correlations and use \code{cor.test} to find
-#'     the p values, confidence intervals for all possible pairs of columns ofmatrix.
+#' the p values, confidence intervals for all possible pairs of columns ofmatrix.
 #' @param x,y a matrix object or NULL.
 #' @param cor.test logical, if TRUE (default) will test for correlation.
-#' @param p.adjust logical, if TRUE (default) will adjust p value for multiple comparisons.
 #' @param method a character string indicating which correlation coefficient is to be used
-#'     for the test. One of "pearson", "kendall", or "spearman".
-#' @param p.adjust.method correction method.
+#' for the test. One of "pearson", "kendall", or "spearman".
 #' @param use an optional character string giving a method for computing covariances in the presence of missing values.
+#' @param p.adjust logical, if TRUE (default) will adjust p value for multiple comparisons.
+#' @param p.adjust.method correction method.
 #' @param ... extra params, see Details.
 #' @details The columns of 'x' will be tested for each pair when y is NULL(the default),
-#'     otherwise each column in 'x' and each column in 'y' is tested for each pair.
+#' otherwise each column in 'x' and each column in 'y' is tested for each pair.
 #' @return a list with correlation matrix, P values matrix, confidence intervals matrix.
 #' @importFrom stats cor cor.test p.adjust p.adjust.methods
 #' @importFrom purrr walk2
@@ -40,10 +40,10 @@
 correlate <- function(x,
                       y = NULL,
                       cor.test = FALSE,
-                      p.adjust = FALSE,
                       method = "pearson",
-                      p.adjust.method = "holm",
                       use = "everything",
+                      p.adjust = FALSE,
+                      p.adjust.method = "holm",
                       ...)
 {
   missing.y <- is.null(y)

@@ -64,7 +64,7 @@ Collate:
     'calc-relimp.R'
     'cor-network.R'
     'cor-tbl.R'
-    'cor-test.R'
+    'correlate.R'
     'deprecated.R'
     'display-cor.R'
     'dplot-utils.R'
