@@ -89,22 +89,12 @@ cor_tbl <- function(corr,
     stop("'col.names' must have same length as columns of matrix.", call. = FALSE)
 
   ## check type
-  if(missing.corr) {
-    if(nrow(first) != ncol(first)) {
-      if(type != "full") {
-        warning("'type=", type,
-                "' just supports for square matrix.", call. = FALSE)
-        type <- "full"
-        if(type == "full") show.diag <- TRUE
-      }
-    }
-  } else {
-    if(!isSymmetric(first) || any(colnames(first) != rownames(first))) {
-      if(type != "full") {
-        warning("'type=", type, "' just supports for symmetric matrix.", call. = FALSE)
-        type <- "full"
-        if(type == "full") show.diag <- TRUE
-      }
+  symmet <- isSymmetric(first) && identical(colnames(first), rownames(first))
+  if(!symmet) {
+    if(type != "full") {
+      warning("'type=", type, "' just supports for symmetric matrix.", call. = FALSE)
+      type <- "full"
+      if(type == "full") show.diag <- TRUE
     }
   }
 
@@ -173,7 +163,7 @@ cor_tbl <- function(corr,
                     grouped = FALSE,
                     class = cls)
   switch (type,
-          full = data,
+          full = if(isTRUE(show.diag)) data else get_diag_tri(data),
           upper = get_upper_data(data, show.diag = show.diag),
           lower = get_lower_data(data, show.diag = show.diag)
   )
