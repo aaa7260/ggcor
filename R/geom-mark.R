@@ -29,6 +29,8 @@
 #'       \item \code{fontface}
 #'       \item \code{lineheight}
 #'    }
+#' @note \code{geom_mark} is good in cartesian coordinates, and \code{geom_mark2}
+#' is good in polar coordinates.
 #' @importFrom ggplot2 layer ggproto GeomText aes draw_key_text
 #' @rdname geom_mark
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

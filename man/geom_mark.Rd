@@ -102,6 +102,10 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 \description{
 Significant marks Geom
 }
+\note{
+\code{geom_mark} is good in cartesian coordinates, and \code{geom_mark2}
+is good in polar coordinates.
+}
 \section{Aesthetics}{
 
     \code{geom_mark()} understands the following aesthetics (required
