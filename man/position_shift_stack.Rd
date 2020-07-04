@@ -3,10 +3,21 @@
 \docType{data}
 \name{position_shift_stack}
 \alias{position_shift_stack}
+\alias{position_shift_fill}
 \alias{PositionShiftStack}
+\alias{PositionShiftFill}
 \title{Pisition function with some shift and re-scale}
 \usage{
 position_shift_stack(
+  vjust = 1,
+  xshift = NA,
+  yshift = NA,
+  xscale = NULL,
+  yscale = NULL,
+  reverse = FALSE
+)
+
+position_shift_fill(
   vjust = 1,
   xshift = NA,
   yshift = NA,

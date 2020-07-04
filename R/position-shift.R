@@ -21,19 +21,37 @@
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 position_shift_stack <- function(vjust = 1,
-                           xshift = NA,
-                           yshift = NA,
-                           xscale = NULL,
-                           yscale = NULL,
-                           reverse = FALSE) {
+                                 xshift = NA,
+                                 yshift = NA,
+                                 xscale = NULL,
+                                 yscale = NULL,
+                                 reverse = FALSE) {
   ggproto(NULL,
           PositionShiftStack,
           vjust = vjust,
-          reverse = reverse,
           xshift = xshift,
           yshift = yshift,
           xscale = xscale,
-          yscale = yscale)
+          yscale = yscale,
+          reverse = reverse)
+}
+
+#' @export
+#' @rdname position_shift_stack
+position_shift_fill <- function(vjust = 1,
+                                xshift = NA,
+                                yshift = NA,
+                                xscale = NULL,
+                                yscale = NULL,
+                                reverse = FALSE) {
+  ggproto(NULL,
+          PositionShiftFill,
+          vjust = vjust,
+          xshift = xshift,
+          yshift = yshift,
+          xscale = xscale,
+          yscale = yscale,
+          reverse = reverse)
 }
 
 #' @rdname position_shift_stack
@@ -154,6 +172,15 @@ PositionShiftStack <- ggproto(
 
     data <- data.frame(data, check.names=FALSE)
   }
+)
+
+#' @rdname position_shift_stack
+#' @format NULL
+#' @usage NULL
+#' @export
+PositionShiftFill <- ggproto("PositionShiftFill",
+                             PositionShiftStack,
+                             fill = TRUE
 )
 
 #' Shift dodge position function for annotation.
