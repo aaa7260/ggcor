@@ -1,3 +1,11 @@
+## These functions are inspired by the functions in the ggtreeExtra package
+## and have been subtly modified for ggcor.
+
+## Shuangbin Xu and Guangchuang Yu (2020). ggtreeExtra: An R Package To Add Geom
+##   Layers On Circular Or Other Layout Tree Of "ggtree". R package version 0.0.0.9.
+##   https://github.com/YuLab-SMU/ggtreeExtra/
+
+
 #' Shift stack position function for annotation.
 #' @title Pisition function with some shift and re-scale
 #' @inheritParams ggplot2::position_stack
@@ -390,7 +398,6 @@ PositionShiftIdentity <- ggproto(
   },
 
   compute_layer = function(self, data, params, layout) {
-    print(data)
     data <- pos_shift_identity(data,
                                xshift = params$xshift,
                                yshift = params$yshift,
