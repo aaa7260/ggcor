@@ -10,7 +10,7 @@ fortify_cor(
   is.cor = FALSE,
   group = NULL,
   type = "full",
-  show.diag = FALSE,
+  show.diag = TRUE,
   cor.test = FALSE,
   cluster = FALSE,
   cluster.method = "complete",
@@ -34,10 +34,10 @@ lower triangular or upper triangular matrix.}
 
 \item{show.diag}{a logical value indicating whether keep the diagonal.}
 
-\item{cor.test}{logical value (default is FALSE) indicating whether test
+\item{cor.test}{logical value (default to TRUE) indicating whether test
 for the correlation.}
 
-\item{cluster}{logical value (default is FALSE) indicating whether reorder
+\item{cluster}{logical value (default to FALSE) indicating whether reorder
 the correlation matrix by cluster.}
 
 \item{cluster.method}{the agglomeration method to be used. This should be

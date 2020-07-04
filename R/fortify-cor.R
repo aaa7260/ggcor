@@ -12,9 +12,9 @@
 #' @param type a string, "full" (default), "upper" or "lower", display full,
 #' lower triangular or upper triangular matrix.
 #' @param show.diag a logical value indicating whether keep the diagonal.
-#' @param cor.test logical value (default is FALSE) indicating whether test
+#' @param cor.test logical value (default to TRUE) indicating whether test
 #' for the correlation.
-#' @param cluster logical value (default is FALSE) indicating whether reorder
+#' @param cluster logical value (default to FALSE) indicating whether reorder
 #' the correlation matrix by cluster.
 #' @param cluster.method the agglomeration method to be used. This should be
 #' (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
@@ -39,7 +39,7 @@ fortify_cor <- function(x,
                         is.cor = FALSE,
                         group = NULL,
                         type = "full",
-                        show.diag = FALSE,
+                        show.diag = TRUE,
                         cor.test = FALSE,
                         cluster = FALSE,
                         cluster.method = "complete",
