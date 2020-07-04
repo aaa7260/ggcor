@@ -1,5 +1,5 @@
-## These functions are inspired by the functions in the ggtreeExtra package
-## and have been subtly modified for ggcor.
+## These functions are inspired by the position_*() functions in the ggtreeExtra
+## package and have been subtly modified for ggcor.
 
 ## Shuangbin Xu and Guangchuang Yu (2020). ggtreeExtra: An R Package To Add Geom
 ##   Layers On Circular Or Other Layout Tree Of "ggtree". R package version 0.0.0.9.
