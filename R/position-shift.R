@@ -151,21 +151,25 @@ PositionShiftStack <- ggproto(
       }
     }
     if(!is.null(params$yscale)){
-      yrange <- range(data$ymin, data$ymax, na.rm = TRUE)
+      yrange <- range(data$ymin, data$ymax, data$y, na.rm = TRUE)
+      data$y <- scales::rescale(data$y, c(0, params$yscale), yrange)
       data$ymin <- scales::rescale(data$ymin, c(0, params$yscale), yrange)
       data$ymax <- scales::rescale(data$ymax, c(0, params$yscale), yrange)
     }
     if(!is.null(params$xscale)){
-      xrange <- range(data$xmin, data$xmax, na.rm = TRUE)
+      xrange <- range(data$xmin, data$xmax, data$x, na.rm = TRUE)
+      data$x <- scales::rescale(data$x, c(0, params$xscale), xrange)
       data$xmin <- scales::rescale(data$xmin, c(0, params$xscale), xrange)
       data$xmax <- scales::rescale(data$xmax, c(0, params$xscale), xrange)
     }
 
     if(!is.na(params$yshift)){
+      data$y <- data$y + params$yshift
       data$ymin <- data$ymin + params$yshift
       data$ymax <- data$ymax + params$yshift
     }
     if(!is.na(params$xshift)){
+      data$x <- data$x + params$xshift
       data$xmin <- data$xmin + params$xshift
       data$xmax <- data$xmax + params$xshift
     }
