@@ -4,14 +4,12 @@
 \name{position_shift_identity}
 \alias{position_shift_identity}
 \alias{PositionShiftIdentity}
-\title{identity function with some shift and re-scale}
+\title{identity position with some shift}
 \usage{
-position_shift_identity(xshift = NA, yshift = NA, xscale = NULL, yscale = NULL)
+position_shift_identity(xshift = NA, yshift = NA)
 }
 \arguments{
 \item{xshift, yshift}{the offsets on x-axis and y-axis.}
-
-\item{xscale, yscale}{the range of the charts.}
 }
 \value{
 a position object.

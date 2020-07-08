@@ -4,14 +4,12 @@
 \name{position_shift_dodge}
 \alias{position_shift_dodge}
 \alias{PositionShiftDodge}
-\title{Dodge function with some shift and re-scale}
+\title{Dodge position with some shift}
 \usage{
 position_shift_dodge(
   width = NULL,
   xshift = NA,
   yshift = NA,
-  xscale = NULL,
-  yscale = NULL,
   preserve = c("total", "single")
 )
 }
@@ -21,8 +19,6 @@ elements. This is useful when you want to align narrow geoms with wider
 geoms. See the examples.}
 
 \item{xshift, yshift}{the offsets on x-axis and y-axis.}
-
-\item{xscale, yscale}{the range of the charts.}
 
 \item{preserve}{Should dodging preserve the total width of all elements
 at a position, or the width of a single element?}

@@ -4,15 +4,13 @@
 \name{position_shift_dodge2}
 \alias{position_shift_dodge2}
 \alias{PositionShiftDodge2}
-\title{Dodge2 function with some shift and re-scale}
+\title{Dodge2 position with some shift}
 \usage{
 position_shift_dodge2(
   width = NULL,
   preserve = c("total", "single"),
   xshift = NA,
   yshift = NA,
-  xscale = NULL,
-  yscale = NULL,
   padding = 0.1,
   reverse = FALSE
 )
@@ -26,8 +24,6 @@ geoms. See the examples.}
 at a position, or the width of a single element?}
 
 \item{xshift, yshift}{the offsets on x-axis and y-axis.}
-
-\item{xscale, yscale}{the range of the charts.}
 
 \item{padding}{Padding between elements at the same position. Elements are
 shrunk by this proportion to allow space between them. Defaults to 0.1.}

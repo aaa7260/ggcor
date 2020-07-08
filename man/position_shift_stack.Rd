@@ -6,25 +6,11 @@
 \alias{position_shift_fill}
 \alias{PositionShiftStack}
 \alias{PositionShiftFill}
-\title{Pisition function with some shift and re-scale}
+\title{Pisition function with some shift}
 \usage{
-position_shift_stack(
-  vjust = 1,
-  xshift = NA,
-  yshift = NA,
-  xscale = NULL,
-  yscale = NULL,
-  reverse = FALSE
-)
+position_shift_stack(vjust = 1, xshift = NA, yshift = NA, reverse = FALSE)
 
-position_shift_fill(
-  vjust = 1,
-  xshift = NA,
-  yshift = NA,
-  xscale = NULL,
-  yscale = NULL,
-  reverse = FALSE
-)
+position_shift_fill(vjust = 1, xshift = NA, yshift = NA, reverse = FALSE)
 }
 \arguments{
 \item{vjust}{Vertical adjustment for geoms that have a position
@@ -33,8 +19,6 @@ position_shift_fill(
 and \code{1} (the default) for the top.}
 
 \item{xshift, yshift}{the offsets on x-axis and y-axis.}
-
-\item{xscale, yscale}{the range of the charts.}
 
 \item{reverse}{If \code{TRUE}, will reverse the default stacking order.
 This is useful if you're rotating both the plot and legend.}
