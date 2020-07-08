@@ -23,9 +23,6 @@ geom_diag_label(..., geom = "text", remove.axis = TRUE)
 quickcor(mtcars, type = "upper") + geom_colour() + geom_diag_label()
 quickcor(mtcars, type = "lower") + geom_colour() + geom_diag_label()
 }
-\seealso{
-\code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_label}}.
-}
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 }

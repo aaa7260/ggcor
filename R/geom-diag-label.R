@@ -5,12 +5,11 @@
 #' @param geom one of "text", "label" or "image".
 #' @param remove.axis if TRUE, will remove the axis.
 #' @param ... extra parameters.
-#' @importFrom ggplot2 aes_string
+#' @importFrom ggplot2 aes_string geom_label
 #' @rdname geom_diag_label
 #' @examples
 #' quickcor(mtcars, type = "upper") + geom_colour() + geom_diag_label()
 #' quickcor(mtcars, type = "lower") + geom_colour() + geom_diag_label()
-#' @seealso \code{\link[ggplot2]{geom_text}}, \code{\link[ggplot2]{geom_label}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 geom_diag_label <- function(..., geom = "text", remove.axis = TRUE)

@@ -57,7 +57,7 @@ format_cor(
 \arguments{
 \item{x}{any \code{R} object.}
 
-\item{...}{extra params passing to \code{\link[ggcor]{format_cor}}.}
+\item{...}{extra params passing to \code{format_cor}.}
 
 \item{type}{a string, "full" (default), "upper" or "lower", display full,
 lower triangular or upper triangular matrix.}

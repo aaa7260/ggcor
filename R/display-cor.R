@@ -19,7 +19,7 @@
 #'    is a general_cor_tbl.
 #' @param nice.format a logical value indicating whether the output needs to be
 #'     automatically optimized.
-#' @param ... extra params passing to \code{\link[ggcor]{format_cor}}.
+#' @param ... extra params passing to \code{format_cor}.
 #' @return a data frame.
 #' @rdname display_cor
 #' @examples

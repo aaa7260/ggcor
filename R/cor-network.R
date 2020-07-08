@@ -29,7 +29,7 @@
 #' @importFrom tidygraph tbl_graph
 #' @importFrom igraph graph_from_data_frame
 #' @importFrom rlang sym !!
-#' @rdname cor-network
+#' @rdname cor_network
 #' @examples
 #' cor_network(cor(mtcars))
 #' corr <- correlate(mtcars, cor.test = TRUE)
@@ -116,7 +116,7 @@ cor_network <- function(corr,
   )
 }
 
-#' @rdname cor-network
+#' @rdname cor_network
 #' @export
 print.cor_network <- function(x, n = 3, ...)
 {
