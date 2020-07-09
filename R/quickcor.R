@@ -105,8 +105,8 @@ quickcor <- function(x,
     polar.args <- calc_polar_params(data, open = open, inner = inner, outer = outer)
     p <- ggplot(data, mapping = mapping) +
       geom_panel_grid(colour = grid.colour, size = grid.size) +
-      scale_x_continuous(limits = polar.args$xlim) +
-      scale_y_continuous(limits = polar.args$ylim) +
+      scale_x_continuous(limits = polar.args$xlim, expand = c(0, 0)) +
+      scale_y_continuous(limits = polar.args$ylim, expand = c(0, 0)) +
       coord_polar(theta = "y", start = polar.args$start, direction = -1) +
       theme_void()
     p$plot_env$polar.args <- polar.args
