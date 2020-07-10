@@ -57,6 +57,7 @@ VignetteBuilder: knitr
 Collate: 
     'aaa.R'
     'annotation.R'
+    'anno-circular.R'
     'as-cor-network.R'
     'as-cor-tbl.R'
     'as-igraph.R'
