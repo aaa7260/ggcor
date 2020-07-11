@@ -359,7 +359,7 @@ pos_shift_dodge <- function(data, xshift, yshift){
   name <- names(data)
   ypos <- intersect(c("ymin", "ymax", "lower", "middle", "upper", "y", "notchupper",
                       "notchlower", "outliers", "ymin_final", "ymax_final"), name)
-  xpos <- intersect(c("xmin", "xmax", "xlower", "xmiddle", "xupper", "notchupper",
+  xpos <- intersect(c("xmin", "xmax", "xlower", "xmiddle", "xupper", "x", "notchupper",
                       "notchlower", "outliers", "xmin_final", "xmax_final"), name)
 
   if(!is.na(yshift)){

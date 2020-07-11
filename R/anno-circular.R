@@ -37,15 +37,18 @@ ggplot_add.anno_circular <- function(object, plot, object_name) {
   y <- rlang::eval_tidy(mapping$y, data)
   xnm <- rlang::as_name(mapping$x)
   ynm <- rlang::as_name(mapping$y)
-
+  aes_name <- names(mapping)
   if(geom %in% c("col", "violin", "boxplot")) {
-    aes_name <- names(mapping)
     if(!is_binary(x) && !is_binary(y)) {
       stop(paste0("geom = ", geom), "only supports for adding on rows.",
            call. = FALSE)
     }
     orientation <- "y"
     data[[ynm]] <- as.integer(factor(y, levels = rev(get_row_name(pdata))))
+    if(geom %in% c("violin", "boxplot")) {
+      data$group <- as.integer(factor(y, levels = rev(get_row_name(pdata))))
+      mapping <- aes_modify(mapping, aes_string(group = "group"))
+    }
   }
 
   if(geom %in% c("point", "tile")) {
@@ -98,7 +101,6 @@ ggplot_add.anno_circular <- function(object, plot, object_name) {
         }
       }
     }
-
   }
 
   if(orientation == "x") {
@@ -120,6 +122,9 @@ ggplot_add.anno_circular <- function(object, plot, object_name) {
     scale <- ncols(pdata) * object$width
     rng <- range(data[[xnm]], na.rm = TRUE)
     if(geom == "col") {
+      if(inherits(object$position, "position_shift_stack") || identical(object$position, "auto")){
+        rng <- get_range_col(x, y)
+      }
       data[[xnm]] <- scales::rescale(data[[xnm]], rng / diff(rng) * scale,
                                      from = range(data[[xnm]], na.rm = TRUE))
       if(rng[1] < 0) {
@@ -146,7 +151,7 @@ ggplot_add.anno_circular <- function(object, plot, object_name) {
   }
 
   geom <- paste0("geom_", object$geom)
-  obj <- if(geom %in% c("geom_bar", "geom_violin", "geom_boxplot")) {
+  obj <- if(geom %in% c("geom_col", "geom_violin", "geom_boxplot")) {
     do.call(geom, c(list(mapping = mapping, data = data, position = position,
                          orientation = orientation, inherit.aes = FALSE),
                     object$params))
@@ -155,4 +160,25 @@ ggplot_add.anno_circular <- function(object, plot, object_name) {
                          inherit.aes = FALSE), object$params))
   }
   ggplot_add(obj, plot, object_name)
+}
+
+
+#' @importFrom dplyr summarize group_by
+get_range_col <- function(xx, yy) {
+  if(!is.numeric(x)) {
+    temp <- xx
+    xx <- yy
+    yy <- temp
+  }
+  if(all(xx >= 0) || all(xx <= 0)) {
+    rng <-  range(tapply(xx, yy, sum, na.rm = TRUE, simplify = TRUE), na.rm = TRUE)
+    rng <- if(rng[1] >= 0)  c(0, rng[2]) else c(rng[1], 0)
+  } else {
+    id <- xx >= 0
+    rng1 <- min(tapply(xx[!id], yy[!id], sum, na.rm = TRUE, simplify = TRUE), na.rm = TRUE)
+    rng2 <- max(tapply(xx[id], yy[id], sum, na.rm = TRUE, simplify = TRUE), na.rm = TRUE)
+    rng <- c(rng1, rng2)
+  }
+  unname(rng)
+
 }
