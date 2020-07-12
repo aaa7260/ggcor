@@ -39,8 +39,9 @@ ggplot_add.anno_circular <- function(object, plot, object_name) {
   ynm <- rlang::as_name(mapping$y)
   aes_name <- names(mapping)
   if(geom %in% c("col", "violin", "boxplot")) {
-    if(!is_binary(x) && !is_binary(y)) {
-      stop(paste0("geom = ", geom), "only supports for adding on rows.",
+    if(is_binary(x) || !is_binary(y)) {
+      stop("`anno_circular` error: ",
+           geom, "annotation only supports for adding on rows.",
            call. = FALSE)
     }
     orientation <- "y"
