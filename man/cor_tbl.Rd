@@ -14,7 +14,7 @@ cor_tbl(
   col.names = NULL,
   row.order = NULL,
   col.order = NULL,
-  cluster = FALSE,
+  cluster = "none",
   ...
 )
 }
@@ -34,8 +34,8 @@ lower triangular or upper triangular matrix.}
 
 \item{row.order, col.order}{row/column order of correlation matrix.}
 
-\item{cluster}{a logical value indicating whether reorder the correlation matrix
-by clustering, default is FALSE.}
+\item{cluster}{one of "all", "row", "col" or "none". If is logical value,
+TRUE value means "all", and FALSE means "none".}
 
 \item{...}{extra params passing to \code{\link{matrix_order}}.}
 }

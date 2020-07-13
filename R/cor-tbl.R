@@ -9,8 +9,8 @@
 #' @param show.diag a logical value indicating whether keep the diagonal.
 #' @param row.names,col.names row/column names of correlation matrix.
 #' @param row.order,col.order row/column order of correlation matrix.
-#' @param cluster a logical value indicating whether reorder the correlation matrix
-#'     by clustering, default is FALSE.
+#' @param cluster one of "all", "row", "col" or "none". If is logical value,
+#' TRUE value means "all", and FALSE means "none".
 #' @param ... extra params passing to \code{\link{matrix_order}}.
 #' @return a cor_tbl object.
 #' @importFrom utils modifyList
@@ -46,10 +46,18 @@ cor_tbl <- function(corr,
                     col.names = NULL,
                     row.order = NULL,
                     col.order = NULL,
-                    cluster = FALSE,
+                    cluster = "none",
                     ...)
 {
   type <- match.arg(type, c("full", "upper", "lower"))
+  if(isTRUE(cluster)) {
+    cluster <- "all"
+  } else {
+    if(!cluster %in% c("all", "row", "col", "none")) {
+      cluster <- "none"
+    }
+  }
+
   check_extra_mat_name(extra.mat)
   ## exclude NULL
   missing.corr <- missing(corr)
@@ -88,58 +96,74 @@ cor_tbl <- function(corr,
   if(length(col.names) != ncol(first))
     stop("'col.names' must have same length as columns of matrix.", call. = FALSE)
 
-  ## check type
-  symmet <- isSymmetric(first) && identical(colnames(first), rownames(first))
-  if(!symmet) {
-    if(type != "full") {
-      warning("'type=", type, "' just supports for symmetric matrix.", call. = FALSE)
-      type <- "full"
-      if(type == "full") show.diag <- TRUE
-    }
-  }
-
   ## check cluster and row/col.order
-  not.null.order <- any(!is.null(row.order), !is.null(col.order))
+  row.ord <- seq_along(row.names)
+  col.ord <- seq_along(col.names)
   row.hc <- col.hc <- NULL
-  if(not.null.order) {
-    if(isTRUE(cluster)) {
-      warning("'row/col.order' has been specified, cluster will not be used.", call. = FALSE)
-      cluster <- FALSE
-    }
-    row.ord <- seq_along(row.names)
-    col.ord <- seq_along(col.names)
-    if(!is.null(row.order)) {
-      row.ord <- get_order(row.order, index = "row", name = row.names)
-      if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram") ||
-         inherits(row.order, "ggtree")) {
-        row.hc <- row.order
-      }
+  if(!is.null(row.order)) {
+    if(cluster %in% c("row", "all")) {
+      warning("'row.order' has been specified, ",
+              "cluster = ", cluster, " will not be used to clustering rows.", call. = FALSE)
+      cluster <- if(cluster == "all") "col" else "none"
     }
 
-    if(!is.null(col.order)) {
-      col.ord <- get_order(col.order, index = "column", name = col.names)
-      if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram") ||
-         inherits(col.order, "ggtree")) {
-        col.hc <- col.order
-      }
+    row.ord <- get_order(row.order, index = "row", name = row.names)
+    if(inherits(row.order, "hclust") || inherits(row.order, "dendrogram") ||
+       inherits(row.order, "ggtree")) {
+      row.hc <- row.order
     }
   }
 
-  if(isTRUE(cluster)) {
+  if(!is.null(col.order)) {
+    if(cluster %in% c("col", "all")) {
+      warning("'col.order' has been specified, ",
+              "cluster = ", cluster, " will not be used to clustering cols.", call. = FALSE)
+      cluster <- if(cluster == "all") {
+        if(!is.null(row.order)) "none" else "row"
+        } else "none"
+    }
+
+    col.ord <- get_order(col.order, index = "col", name = col.names)
+    if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram") ||
+       inherits(col.order, "ggtree")) {
+      col.hc <- col.order
+    }
+  }
+
+  if(cluster == "all") {
     hc <- matrix_order(first, is.cor = !missing.corr, ...)
     row.hc <- hc$row.hc
     col.hc <- hc$col.hc
     row.ord <- row.hc$order
     col.ord <- col.hc$order
+  } else if(cluster == "row") {
+    hc <- matrix_order(first, is.cor = !missing.corr, ...)
+    row.hc <- hc$row.hc
+    row.ord <- row.hc$order
+  } else if(cluster == "col") {
+    hc <- matrix_order(first, is.cor = !missing.corr, ...)
+    col.hc <- hc$col.hc
+    col.ord <- col.hc$order
   }
 
-  if(not.null.order || isTRUE(cluster)) {
-    corr <- lapply(corr, function(.x) {
-      .x[row.ord, col.ord]
-    })
-    row.names <- row.names[row.ord]
-    col.names <- col.names[col.ord]
+  ## Todo: check the cluster and row/col.order
+  corr <- lapply(corr, function(.x) {
+    .x[row.ord, col.ord]
+  })
+  row.names <- row.names[row.ord]
+  col.names <- col.names[col.ord]
+
+  ## check type
+  first <- first[row.ord, col.ord]
+  symmet <- isSymmetric(first) && identical(colnames(first), rownames(first))
+  if(!symmet) {
+    if(type != "full") {
+      warning("'type = ", type, "' just supports for symmetric matrix.", call. = FALSE)
+      type <- "full"
+      if(type == "full") show.diag <- TRUE
+    }
   }
+
   id <- list(
     .row.names = rep(row.names, ncol(first)),
     .col.names = rep(col.names, each = nrow(first)),
