@@ -9,7 +9,7 @@
 #' @param r.thres a numeric value.
 #' @param r.abs logical value (defaults to TRUE).
 #' @param p.thres a numeric value.
-#' @param ... extra params passing to \code{\link[ggcor]{cor_network}}.
+#' @param ... extra params passing to \code{cor_network}.
 #' @return a cor_network object.
 #' @importFrom dplyr filter rename %>%
 #' @importFrom tibble tibble

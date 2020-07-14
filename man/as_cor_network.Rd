@@ -45,7 +45,7 @@ as_cor_network(x, ...)
 \arguments{
 \item{x}{any \code{R} object.}
 
-\item{...}{extra params passing to \code{\link[ggcor]{cor_network}}.}
+\item{...}{extra params passing to \code{cor_network}.}
 
 \item{directed}{logical value, whether or not to create a directed graph.}
 

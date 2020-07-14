@@ -28,6 +28,7 @@ Imports:
     grid,
     ggnewscale,
     igraph,
+    magrittr,
     patchwork,
     purrr,
     RColorBrewer,

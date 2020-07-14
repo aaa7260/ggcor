@@ -19,7 +19,7 @@
 #' @param seed a integer value.
 #' @param ... extra params passing to \code{mantel.fun}.
 #' @return a data.frame.
-#' @importFrom dplyr %>% mutate
+#' @importFrom dplyr mutate
 #' @importFrom purrr pmap pmap_dfr
 #' @importFrom stats complete.cases runif
 #' @rdname mantel_test

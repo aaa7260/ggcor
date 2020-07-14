@@ -16,7 +16,7 @@
 #' @param seed a integer value.
 #' @param ... extra params passing to \code{procrutes.fun}.
 #' @return a data frame.
-#' @importFrom dplyr %>% mutate
+#' @importFrom dplyr mutate
 #' @importFrom purrr map pmap pmap_dfr
 #' @rdname procrutes_test
 #' @examples \dontrun{

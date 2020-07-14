@@ -22,7 +22,8 @@
 #' or "centroid" (= UPGMC).
 #' @param ... extra params passing to \code{matrix_order}.
 #' @return cor_tbl object.
-#' @importFrom dplyr %>% mutate
+#' @importFrom dplyr mutate
+#' @importFrom magrittr %>%
 #' @rdname fortify_cor
 #' @examples
 #' fortify_cor(mtcars)
