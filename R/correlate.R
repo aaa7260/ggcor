@@ -26,6 +26,9 @@
 #' ## test for correlation matrix
 #' correlate(m1, m2, cor.test = TRUE)
 #'
+#' ## adjust p value
+#' correlate(m1, m2, cor.test = TRUE, p.adjust = TRUE)
+#'
 #' ## fast compute correlation
 #' \dontrun{
 #' require(WGCNA)
