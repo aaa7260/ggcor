@@ -22,8 +22,6 @@ quickcor(
   axis.y.position = "auto",
   axis.label.drop = TRUE,
   legend.position = "auto",
-  bcols,
-  paxis,
   ...
 )
 
@@ -60,11 +58,7 @@ label.}
 
 \item{legend.position}{position of legend.}
 
-\item{bcols}{ignore.}
-
-\item{paxis}{ignore.}
-
-\item{...}{extra params for \code{\link[ggcor]{fortify_cor}}.}
+\item{...}{extra params for \code{fortify_cor}.}
 }
 \description{
 quickcor is convenient wrapper for creating a number of different types
@@ -99,7 +93,7 @@ quickcor(mtcars, cor.test = TRUE) +
 
 }
 \seealso{
-\code{\link{fortify_cor}}.
+\code{fortify_cor}.
 }
 \author{
 Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei

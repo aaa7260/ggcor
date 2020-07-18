@@ -16,9 +16,7 @@
 #'     or 'lower' and 'show.diag' is FALSE, do you need to remove the blank coordinate
 #'     label.
 #' @param legend.position position of legend.
-#' @param bcols ignore.
-#' @param paxis ignore.
-#' @param ... extra params for \code{\link[ggcor]{fortify_cor}}.
+#' @param ... extra params for \code{fortify_cor}.
 #' @importFrom ggplot2 ggplot_add
 #' @importFrom ggplot2 guides
 #' @importFrom ggplot2 guide_colourbar
@@ -26,7 +24,7 @@
 #' @importFrom ggplot2 coord_cartesian
 #' @importFrom ggplot2 coord_polar
 #' @importFrom ggplot2 theme_void
-#' @rdname quick_cor
+#' @rdname quickcor
 #' @examples
 #' require(ggplot2, quietly = TRUE)
 #'
@@ -54,7 +52,7 @@
 #'   geom_mark(data = get_data(type = "upper", show.diag = FALSE)) +
 #'   geom_abline(slope = -1, intercept = 12)
 #'
-#' @seealso \code{\link{fortify_cor}}.
+#' @seealso \code{fortify_cor}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 quickcor <- function(x,
@@ -71,16 +69,8 @@ quickcor <- function(x,
                      axis.y.position = "auto",
                      axis.label.drop = TRUE,
                      legend.position = "auto",
-                     bcols,
-                     paxis,
                      ...)
 {
-  if(!missing(bcols)) {
-    message("'bcols' parameter is deprecated.")
-  }
-  if(!missing(paxis)) {
-    message("'paxis' parameter is deprecated.")
-  }
   data <- fortify_cor(x, y, ...)
   is.general <- is_gcor_tbl(data)
   type <- get_type(data)
@@ -146,7 +136,7 @@ quickcor <- function(x,
 }
 
 
-#' @rdname quick_cor
+#' @rdname quickcor
 #' @method print quickcor
 #' @export
 print.quickcor <- function(x, ...)
@@ -157,11 +147,11 @@ print.quickcor <- function(x, ...)
 
 #' @importFrom graphics plot
 #' @method print quickcor
-#' @rdname quick_cor
+#' @rdname quickcor
 #' @export
 plot.quickcor <- print.quickcor
 
-#' @rdname quick_cor
+#' @rdname quickcor
 #' @export
 is_quickcor <- function(x) {
   inherits(x, "quickcor")
