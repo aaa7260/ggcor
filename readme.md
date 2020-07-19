@@ -14,6 +14,15 @@ ggcor from [GitHub](https://github.com/) with:
 devtools::install_github("houyunhuang/ggcor")
 ```
 
+If you are in the mainland of China, you can install ggcor from
+[Gitee](https://gitee.com) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_git("houyunhuang/ggcor")
+devtools::install_git("https://gitee.com/houyunhuang/ggcor.git")
+```
+
 ## Correlation plot
 
 ``` r
@@ -84,7 +93,6 @@ rand_correlate(100, 8) %>% ## require ambient packages
   anno_col_tree() +
   set_p_xaxis() +
   set_p_yaxis()
-#> Warning: Removed 8 rows containing missing values (geom_text).
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
