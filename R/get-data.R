@@ -139,10 +139,13 @@ is_symmet <- function(x) {
 #' @seealso \code{\link[dplyr]{filter}}.
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
-get_data <- function(..., type = "full", show.diag = TRUE)
+get_data <- function(..., type = "full", show.diag = NULL)
 {
   type <- match.arg(type, c("full", "upper", "lower", "diag"))
   function(data) {
+    if(is.null(show.diag)) {
+      show.diag <- if(is_symmet(data)) FALSE else TRUE
+    }
     data <- dplyr::filter(data, ...)
     switch (type,
             full  = if(isTRUE(show.diag)) data else get_diag_tri(data),

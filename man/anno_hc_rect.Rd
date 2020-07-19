@@ -5,7 +5,17 @@
 \alias{anno_hc_bar}
 \title{Square annotation}
 \usage{
-anno_hc_rect(k = 2, fill = NA, colour = "black", size = 2, color)
+anno_hc_rect(
+  k = 2,
+  labels = "",
+  fill = NA,
+  colour = "black",
+  size = 2,
+  rows = NULL,
+  cols = NULL,
+  mapping = NULL,
+  color
+)
 
 anno_hc_bar(
   k = 2,
@@ -21,11 +31,17 @@ anno_hc_bar(
 \arguments{
 \item{k}{an integer scalar or vector with the desired number of groups.}
 
+\item{labels}{label of the rect.}
+
 \item{fill}{the colour of fill.}
 
 \item{colour, color}{the colour of boder.}
 
 \item{size}{size of square boder line.}
+
+\item{rows, cols}{id of rows or columns.}
+
+\item{mapping}{aesthetic mappings parameters.}
 
 \item{pos}{position of the bar.}
 

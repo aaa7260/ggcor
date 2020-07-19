@@ -97,8 +97,11 @@ anno_link <- function(data,
 #' @description Draw the cluster square mark on the correlation matrix plot.
 #' @param pos position of the bar.
 #' @param k an integer scalar or vector with the desired number of groups.
+#' @param labels label of the rect.
 #' @param fill the colour of fill.
 #' @param colour,color the colour of boder.
+#' @param rows,cols id of rows or columns.
+#' @param mapping aesthetic mappings parameters.
 #' @param width,height width or height of the bar.
 #' @param space scala numeric value.
 #' @param size size of square boder line.
@@ -108,15 +111,20 @@ anno_link <- function(data,
 #' @author Houyun Huang, Lei Zhou, Jian Chen, Taiyun Wei
 #' @export
 anno_hc_rect <- function(k = 2,
+                         labels = "",
                          fill = NA,
                          colour = "black",
                          size = 2,
+                         rows = NULL,
+                         cols = NULL,
+                         mapping = NULL,
                          color)
 {
   if(!missing(color))
     colour <- color
-  structure(.Data = list(k = k, fill = fill, colour = colour,
-                         size = size), class = "anno_hc_rect")
+  structure(.Data = list(k = k, labels = labels, fill = fill, colour = colour,
+                         size = size, rows = rows, cols = cols, mapping = mapping),
+            class = "anno_hc_rect")
 }
 
 #' @rdname anno_hc_rect

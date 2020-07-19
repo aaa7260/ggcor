@@ -405,24 +405,104 @@ check_tree_params <- function(index, hc) {
 #' @export
 ggplot_add.anno_hc_rect <- function(object, plot, object_name) {
   pdata <- plot$data
-  if(!is_symmet(pdata)) {
-    stop("Just supports for symmetric correlation matrix.", call. = FALSE)
+  rows <- object$rows
+  cols <- object$cols
+  manual <- !is.null(rows) || !is.null(cols)
+  if(manual) {
+    if(is.null(rows)) {
+      rows <- 1:nrows(pdata)
+    }
+    if(is.null(cols)) {
+      cols <- 1:ncols(pdata)
+    }
+    if(is.atomic(rows)) {
+      rows <- list(rows)
+    }
+    if(is.atomic(cols)) {
+      cols <- list(cols)
+    }
+
+    row_nm <- if(is.null(names(rows))) {
+      rep_len("", length(rows) * length(cols))
+    } else {
+      rep(names(rows), length(cols))
+    }
+
+    col_nm <- if(is.null(names(cols))) {
+      rep_len("", length(rows) * length(cols))
+    } else {
+      rep(names(cols), each = length(rows))
+    }
+    nn <- length(rows)
+    rows <- rep(rows, length(cols))
+    cols <- rep(cols, each = nn)
+
+    rows <- purrr::map(rows, function(.rows) {
+      if(is.character(.rows)) {
+        rlang::set_names(1:nrows(pdata), get_row_name(pdata))[.rows]
+      } else {
+        if(!is.numeric(.rows)) {
+          stop("Invalid `rows` type.", call. = FALSE)
+        }
+        .rows
+      }
+    })
+    cols <- purrr::map(cols, function(.cols) {
+      if(is.character(.cols)) {
+        rlang::set_names(1:ncols(pdata), get_col_name(pdata))[.cols]
+      } else {
+        if(!is.numeric(.cols)) {
+          stop("Invalid `cols` type.", call. = FALSE)
+        }
+        .cols
+      }
+    })
+
+    data <- purrr::map_dfr(1:length(rows), function(.id) {
+      .rows <- rev(nrows(pdata) - range(rows[[.id]], na.rm = TRUE) + 1)
+      .cols <- range(cols[[.id]], na.rm = TRUE)
+      tibble::tibble(xmin = max(.cols[1] - 0.5, 0.5),
+                     ymin = max(.rows[1] - 0.5, 0.5),
+                     xmax = min(.cols[2] + 0.5, ncols(pdata) + 0.5),
+                     ymax = min(.rows[2] + 0.5, nrows(pdata) + 0.5),
+                     label = paste(row_nm[[.id]], col_nm[.id], sep = "-"))
+    })
+  } else {
+    if(!is_symmet(pdata)) {
+      stop("Just supports for symmetric correlation matrix.", call. = FALSE)
+    }
+    hc <- attr(pdata, "hclust")$row.hc %||% attr(pdata, "hclust")$col.hc
+    if(is.null(hc)) {
+      return(plot)
+    }
+    n <- length(get_col_name(pdata))
+    k <- object$k
+    labels <- rep_len(object$labels, k)
+    tree <- cutree(hc, k = k)
+    v <- table(tree)[unique(tree[hc$order])]
+    cv <- c(0, cumsum(v))
+    data <- tibble::tibble(xmin = cv[-(k + 1)] + 0.5,
+                           ymin = n - cv[-(k + 1)] + 0.5,
+                           xmax = cv[-1] + 0.5,
+                           ymax = n - cv[-1] + 0.5,
+                           label = labels)
   }
-  hc <- attr(pdata, "hclust")$row.hc %||% attr(pdata, "hclust")$col.hc
-  if(is.null(hc)) {
-    return(plot)
-  }
-  n <- length(get_col_name(pdata))
-  k <- object$k
-  tree <- cutree(hc, k = k)
-  v <- table(tree)[unique(tree[hc$order])]
-  cv <- c(0, cumsum(v))
-  data <- data.frame(xmin = cv[-(k + 1)] + 0.5, ymin = n - cv[-(k + 1)] + 0.5,
-                     xmax = cv[-1] + 0.5, ymax = n - cv[-1] + 0.5)
-  mapping <- aes_string(xmin = "xmin", ymin = "ymin", xmax = "xmax", ymax = "ymax")
-  obj <- ggplot2::geom_rect(mapping = mapping, data = data, fill = object$fill,
-                            colour = object$colour, size = object$size, inherit.aes = FALSE)
-  ggplot_add(obj, plot)
+
+  mapping <- aes_modify(aes_string(xmin = "xmin",
+                                   ymin = "ymin",
+                                   xmax = "xmax",
+                                   ymax = "ymax"), object$mapping)
+
+  params <- list(mapping = mapping, data = data, fill = object$fill,
+                 colour = object$colour, size = object$size, inherit.aes = FALSE)
+  purrr::walk(c("colour", "fill", "size"), function(.aes) {
+    if(.aes %in% names(mapping)) {
+      params[[.aes]] <<- NULL
+    }
+  })
+
+  obj <- do.call(ggplot2::geom_rect, params)
+  ggplot_add(obj, plot, object_name)
 }
 
 #' @export
