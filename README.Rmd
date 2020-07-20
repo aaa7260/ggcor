@@ -30,9 +30,7 @@ If you are in the mainland of China, you can install ggcor from
 [Gitee](https://gitee.com) with:
 ``` r
 # install.packages("devtools")
-devtools::install_git("houyunhuang/ggcor")
 devtools::install_git("https://gitee.com/houyunhuang/ggcor.git")
-
 ```
 
 ## Correlation plot

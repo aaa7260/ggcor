@@ -19,7 +19,6 @@ If you are in the mainland of China, you can install ggcor from
 
 ``` r
 # install.packages("devtools")
-devtools::install_git("houyunhuang/ggcor")
 devtools::install_git("https://gitee.com/houyunhuang/ggcor.git")
 ```
 
