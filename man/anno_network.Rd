@@ -23,9 +23,6 @@ a anno_network object.
 \description{
 Network annotation
 }
-\note{
-Loading the \code{ggraph} package first makes this function even more functional.
-}
 \seealso{
 \code{\link{geom_segment2}}.
 }

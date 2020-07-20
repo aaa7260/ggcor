@@ -55,7 +55,7 @@ GeomSegment2 <- ggproto(
       return(ggplot2::zeroGrob())
     }
     coords <- coord$transform(data, panel_params)
-    arrow.fill <- arrow.fill %||% coords$edge_colour
+    arrow.fill <- arrow.fill %||% coords$colour
     x <- y <- xend <- yend <- NULL
     ends <- dplyr::rename(data[setdiff(names(data), c("x", "y"))], x = xend, y = yend)
     ends <- coord$transform(ends, panel_params)
