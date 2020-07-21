@@ -84,3 +84,11 @@ get_order.quickcor <- function(x,
   order <- if(index == "row") get_row_name(x) else get_col_name(x)
   get_order(order, name = name)
 }
+
+#' @rdname get_order
+#' @export
+#' @method get_order dist
+get_order.dist <- function(x, ...) {
+  hc <- hclust(x)
+  hc$order
+}

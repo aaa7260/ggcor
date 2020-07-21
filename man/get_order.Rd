@@ -9,6 +9,7 @@
 \alias{get_order.ggtree}
 \alias{get_order.cor_tbl}
 \alias{get_order.quickcor}
+\alias{get_order.dist}
 \title{Extract order}
 \usage{
 get_order(x, ...)
@@ -26,6 +27,8 @@ get_order(x, ...)
 \method{get_order}{cor_tbl}(x, index = "row", name = NULL, ...)
 
 \method{get_order}{quickcor}(x, index = "row", name = NULL, ...)
+
+\method{get_order}{dist}(x, ...)
 }
 \arguments{
 \item{x}{any \code{R} object.}
