@@ -112,6 +112,9 @@ cor_tbl <- function(corr,
        inherits(row.order, "ggtree")) {
       row.hc <- row.order
     }
+    if(inherits(row.order, "dist")) {
+      row.hc <- hclust(row.order)
+    }
   }
 
   if(!is.null(col.order)) {
@@ -127,6 +130,9 @@ cor_tbl <- function(corr,
     if(inherits(col.order, "hclust") || inherits(col.order, "dendrogram") ||
        inherits(col.order, "ggtree")) {
       col.hc <- col.order
+    }
+    if(inherits(col.order, "dist")) {
+      col.hc <- hclust(col.order)
     }
   }
 
